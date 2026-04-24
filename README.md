@@ -1,4 +1,4 @@
-# 🎨 Athena Product Design Team — AI Skill Pack
+# Athena Product Design Team — AI Skill Pack
 
 A multi-role AI product design team skill for B2B cross-platform (Web / App) product design workflows.
 
@@ -6,7 +6,7 @@ A multi-role AI product design team skill for B2B cross-platform (Web / App) pro
 
 ---
 
-## 📖 這是什麼？
+## 這是什麼？
 
 這套 Skill Pack 把 Claude 變成一個完整的**產品設計團隊**。每個 Skill 是一個有專業角色定位、工作流程和輸出格式的 AI 成員。你可以根據任務需要呼叫對應的角色，或讓 `design-lead` 幫你分派。
 
@@ -21,35 +21,35 @@ A multi-role AI product design team skill for B2B cross-platform (Web / App) pro
 
 ## 👥 團隊成員（14 角色）
 
-### 🔎 Discovery Cluster（前期調研群）
+### Discovery Cluster（前期調研群）
 | 角色 | Skill 名稱 | 核心職責 | 何時呼叫 |
 |------|-----------|---------|---------|
-| 📨 需求分析師 | `requirement-analyst` | PRD / ticket 解析、gap 識別、風險提醒 | 收到 PM 需求或 Jira / Linear / GitHub issue 時 |
-| 🔬 UX 研究員 | `ux-researcher` | 使用者訪談、persona、JTBD、journey map | 需要質性洞察、使用者動機時 |
-| 🌐 市場洞察分析師 | `market-insight-analyst` | 競品分析、產業 benchmark、趨勢 | 定位或差異化決策前 |
-| 📊 數據分析師 | `data-analyst` | Funnel、retention、行為量化 | 需要量化佐證設計決策時 |
+| 需求分析師 | `requirement-analyst` | PRD / ticket 解析、gap 識別、風險提醒 | 收到 PM 需求或 Jira / Linear / GitHub issue 時 |
+| UX 研究員 | `ux-researcher` | 使用者訪談、persona、JTBD、journey map | 需要質性洞察、使用者動機時 |
+| 市場洞察分析師 | `market-insight-analyst` | 競品分析、產業 benchmark、趨勢 | 定位或差異化決策前 |
+| 數據分析師 | `data-analyst` | Funnel、retention、行為量化 | 需要量化佐證設計決策時 |
 
-### 🧠 Strategy & Design Cluster（策略與設計群）
+### Strategy & Design Cluster（策略與設計群）
 | 角色 | Skill 名稱 | 核心職責 | 何時呼叫 |
 |------|-----------|---------|---------|
-| 🎬 設計總監 | `design-lead` | 任務分派、critique、流程統籌 | 不知從哪開始、需要審核方向 |
-| 📐 產品策略師 | `product-strategist` | 問題框架、成功指標、MVP 範圍 | 研究後、設計前的策略決策 |
-| 🔀 互動設計師 | `interaction-designer` | User flow、IA、wireframe、state | 策略確定後進入結構設計 |
-| 🎨 視覺設計師 | `ui-designer` | 版面、typography、color、component 應用 | 互動確定後進入視覺設計 |
-| ✍️ UX 文案 | `ux-writer` | Microcopy、error、onboarding、voice & tone | 有 UI 骨架後的文案撰寫 |
-| 🕹️ 原型設計師 | `prototyper` | Figma prototype、motion、互動驗證 | 需要可點擊原型或動效規範 |
-| 🧱 設計系統架構師 | `design-system-architect` | Token、component spec、variant、governance | 建立或擴充 DS 時 |
+| 設計總監 | `design-lead` | 任務分派、critique、流程統籌 | 不知從哪開始、需要審核方向 |
+| 產品策略師 | `product-strategist` | 問題框架、成功指標、MVP 範圍 | 研究後、設計前的策略決策 |
+| 互動設計師 | `interaction-designer` | User flow、IA、wireframe、state | 策略確定後進入結構設計 |
+| 視覺設計師 | `ui-designer` | 版面、typography、color、component 應用 | 互動確定後進入視覺設計 |
+| UX 文案 | `ux-writer` | Microcopy、error、onboarding、voice & tone | 有 UI 骨架後的文案撰寫 |
+| 原型設計師 | `prototyper` | Figma prototype、motion、互動驗證 | 需要可點擊原型或動效規範 |
+| 設計系統架構師 | `design-system-architect` | Token、component spec、variant、governance | 建立或擴充 DS 時 |
 
-### ✅ Validation & Delivery Cluster（驗證與交付群）
+### Validation & Delivery Cluster（驗證與交付群）
 | 角色 | Skill 名稱 | 核心職責 | 何時呼叫 |
 |------|-----------|---------|---------|
-| 🧪 可用性測試師 | `usability-tester` | 測試計畫、腳本、發現合成、嚴重度評級 | 需要驗證設計時 |
-| ♿ 無障礙審查員 | `accessibility-reviewer` | WCAG 2.1 AA 檢查、remediation 建議 | Handoff 前的 a11y 審查 |
-| 🚚 設計交付 | `design-ops` | Handoff spec、Figma↔GitHub 對接、Dev QA | 交付給工程前 |
+| 可用性測試師 | `usability-tester` | 測試計畫、腳本、發現合成、嚴重度評級 | 需要驗證設計時 |
+| 無障礙審查員 | `accessibility-reviewer` | WCAG 2.1 AA 檢查、remediation 建議 | Handoff 前的 a11y 審查 |
+| 設計交付 | `design-ops` | Handoff spec、Figma↔GitHub 對接、Dev QA | 交付給工程前 |
 
 ---
 
-## 🔄 常見工作流程
+## 常見工作流程
 
 ### 新功能完整設計流程
 ```
@@ -89,7 +89,7 @@ data-analyst → ux-researcher → usability-tester → interaction-designer
 
 ---
 
-## 🛠️ 工具鏈整合
+## 工具鏈整合（後續將持續調整）
 
 預設搭配的工具：
 
@@ -106,7 +106,7 @@ data-analyst → ux-researcher → usability-tester → interaction-designer
 
 ---
 
-## 🎯 設計原則
+## 設計原則
 
 - **角色分工明確**：每個 Skill 只做自己負責的事，不越界
 - **上下游銜接**：每個角色的輸出格式，都是下一個角色需要的輸入格式
@@ -117,7 +117,7 @@ data-analyst → ux-researcher → usability-tester → interaction-designer
 
 ---
 
-## ⚙️ 如何使用
+## 如何使用
 
 快速入門：
 1. Clone 這個 repo
@@ -133,14 +133,8 @@ data-analyst → ux-researcher → usability-tester → interaction-designer
 
 ---
 
-## 🗒️ 客製化建議
+## 客製化建議
 
 - **產品類型**：預設是 B2B Web / App 跨平台。若轉 B2C 或單一平台，請調整 `product-strategist` 與 `interaction-designer` 的預設假設。
 - **方法論偏好**：預設 Double Diamond + Lean UX 混用。可在 `product-strategist` 內指定特定方法論。
 - **平台優先序**：預設 Web / App 並重。若有明確主力平台，於 `design-lead` 的預設偏好中指定。
-
----
-
-## 📄 授權
-
-MIT License — 歡迎自由使用、修改與分享。本 skill pack 改編自 [jinggreen15/ai-design-team](https://github.com/jinggreen15/ai-design-team) 的內容創作團隊設計模式，轉化為產品設計團隊的情境。
