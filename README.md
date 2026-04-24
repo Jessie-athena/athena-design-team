@@ -19,7 +19,7 @@ A multi-role AI product design team skill for B2B cross-platform (Web / App) pro
 
 ---
 
-## 👥 團隊成員（14 角色）
+## 團隊成員（14 角色）
 
 ### Discovery Cluster（前期調研群）
 | 角色 | Skill 名稱 | 核心職責 | 何時呼叫 |
