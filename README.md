@@ -117,7 +117,7 @@ data-analyst → ux-researcher → usability-tester → interaction-designer
 
 ---
 
-## 如何使用
+## 如何使用（需測試）
 
 快速入門：
 1. Clone 這個 repo
