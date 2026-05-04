@@ -2,7 +2,7 @@
 
 ## 1. 前置需求
 
-- [Claude.ai](https://claude.ai) 帳號（建議 Pro 方案）**或** Claude Code CLI
+- [Claude.ai](https://claude.ai) 帳號（建議 付費 方案）**或** Claude Code CLI
 - Figma 帳號（含 Dev Mode，供 design-system-architect 與 design-ops 使用）
 - Notion workspace（研究筆記、PRD、Handoff doc）
 - GitHub access（讀 issue / PR）
