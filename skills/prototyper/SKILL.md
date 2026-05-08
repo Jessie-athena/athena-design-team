@@ -97,6 +97,7 @@ description: Turn a module spec (PM doc, sibling module, or chat description) in
 - 「這份 PM 文件 [path] 轉成 prototype」
 - 「參考 [既有模組].html 做一個類似的 [新模組]」
 - 「補一個 tweaks panel 讓 reviewer 切換狀態」
+- 「讀取此份 PRD 並產出互動功能及前端頁面」
 
 ## 7. 檔案結構
 
