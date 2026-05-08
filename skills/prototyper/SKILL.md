@@ -1,177 +1,118 @@
 ---
 name: prototyper
-description: Build Figma prototypes, define motion specs, validate interactions, and prepare stakeholder walkthroughs. Use when static screens need to come alive — for usability testing, stakeholder buy-in, or developer reference on motion.
+description: Turn an Athena ERP module spec (Notion doc, sibling module, or chat description) into a single-file HTML prototype that reviewers can click through. Use when the user says "做一個 XXX 模組的 prototype", pastes a docs/notion path, or asks to convert a Figma frame into an ERP screen. Output is `prototype/project/<模組中文名>.html` plus a chat handoff message with five required fields.
 ---
 
-# 🕹️ 原型設計師 | Prototyper
+# Prototyper（Athena ERP）
+
+> 本 Skill 取代舊版 Figma-based prototyper（保留於 git history）。
+> 對應 ERP 內部規範：`.claude/rules/prototype-design/PRODUCE.md`、`CLAUDE.md`。
+> 詳細審查條款 / token 表 / 元件對照見 `REFERENCE.md`。
 
 ## 角色定位
-把**靜態畫面變成可操作**。驗證互動設計是否真的流暢、用於 stakeholder walkthrough、給 `usability-tester` 做測試素材、給 engineering 看動效意圖。
 
-## 核心職責
-1. **Figma prototype 架設**：連線、trigger、animation
-2. **Motion spec**：動效的 duration、easing、property
-3. **互動驗證 scenario**：設計多少個可點路徑
-4. **Walkthrough script**：給 stakeholder 的 demo 稿
-5. **Motion design token**：統一動效參數
+把 PM 規格、同類舊模組或 chat 描述，**一步到位**轉成可給 reviewer 試玩的 `prototype/project/<模組中文名>.html`。
+不是 Figma 動效設計，不是 production code。**單檔 HTML + Vue 3 production CDN**。
 
-## 觸發時機
-- 要送 `usability-tester` 做測試
-- Stakeholder demo 前
-- 動效 spec 不清楚，Eng 要參考
-- 互動假設需要驗證
+## 觸發即先確認（缺一不開工）
 
-## 原型保真度（Fidelity Levels）
+開工前若使用者沒提供，**主動詢問**這四項，得到答案才動手：
 
-| 層級 | 用途 | 包含 | 不包含 |
-|------|-----|------|-------|
-| **Low-fi click-through** | 早期驗證 flow 通不通 | 主要頁跳轉 | 動效、state 變化 |
-| **Mid-fi** | Usability test、stakeholder review | 主要 flow + edge case + 關鍵 state | 完整 micro animation |
-| **Hi-fi** | 最終驗證、動效 spec、demo | 全 state + motion spec + a11y 考量 | — |
+1. **模組中文名**（決定檔名與 `<title>`）
+2. **對應 Odoo model**（如 `psi.sale_order`，衍生 `programID = PSI-SO`）
+3. **模組分類**（財務 / 進銷存 / 人事 / 設定檔，決定 breadcrumb 與 nav-rail 高亮）
+4. **來源**（PM 文件路徑 / 同類舊模組 / 純 chat 描述？）
 
-> **先問清楚要做到哪層**，不要每次都衝 hi-fi（效率殺手）。
+## 五階段工作流
 
-## 工作流程
+### 階段 0｜跨專案複用（先問再做）
 
-### Step 1：Prototype Plan
-```markdown
-# Prototype Plan — [功能名稱]
+- 有同類舊模組？→ 從舊 `.html` 抽出「介面規格文件」（欄位表 / 狀態流程 / 關聯單據），新模組直接引用，**不重畫**
+- 沒有？→ 進階段 1
 
-## 目的
-- [ ] Usability test 素材
-- [ ] Stakeholder walkthrough
-- [ ] 動效 spec
-- [ ] Eng 參考
+### 階段 1｜PM 規格抽取
 
-## Fidelity
-[Low / Mid / Hi]
+從 `docs/notion/*.md` 依序抽 7 項；缺漏即在 chat 詢問：
 
-## 要覆蓋的 scenario
-1. Happy path：[情境]
-2. Error path：[情境]
-3. Edge case：[情境]
+| 抽取項 | 用於 |
+|---|---|
+| 模組中文名 | 檔名、`<title>`、breadcrumb |
+| 模組分類 | breadcrumb 第一段、nav-rail 高亮 |
+| Odoo model | programID 衍生、chat handoff 必附 |
+| 欄位表（label / 型別 / 必填） | Form View form-grid cells |
+| 狀態流程圖 / 動作清單 | stepper、footer 動作按鈕、tweaks `docState` |
+| 關聯單據 | Smart Bar（無關聯則整段移除） |
+| List 預設搜尋條件 | search bar `<option>` |
 
-## 要覆蓋的 state
-（對齊 interaction-designer State Checklist）
+### 階段 2｜製作 .html（核心）
 
-## 不覆蓋
-- [明確排除的情境]
+1. 複製 `templates/module-page.html` → `prototype/project/<模組中文名>.html`
+2. 替換 App Shell：`<title>` / breadcrumb 三段 / `programId` / `version` / `activeNav`
+3. 建構 List View（依 REFERENCE.md §5 的 7 項自檢）
+4. 建構 Form View（依 §6 的 7 項自檢）
+5. 建構 Tweaks Panel（**必備** 三組 radio：使用者角色 / 單據狀態 / 關鍵 flag，狀態值寫入 `localStorage`）
+6. Modal / Toast / Empty State 範例（modal 兩款：`confirm` + `deeplink`，**`pick` 已淘汰**）
 
-## 預估工時
-- [X 小時]
-```
+### 階段 3｜本機審查（自檢）
 
-### Step 2：Flow Setup（Figma）
-標註清楚連線邏輯：
-```markdown
-# Prototype Flow
+跑 REFERENCE.md §12 Handoff Checklist，**逐項打勾**才算完成；任何一項 fail 回對應步驟修正。
 
-## Pages / Frames
-1. `01-Dashboard`
-2. `02-Project-List`
-3. `03-Project-Detail`
-4. `04-New-Task-Modal`
-5. `05-Success-State`
+### 階段 4｜chat handoff（必附五項）
 
-## 主要連線
-- `01` (點 Primary CTA) → `02`
-- `02` (點 row) → `03`
-- `03` (點 Add Task) → `04`
-- `04` (點 Submit) → `05`
-- `05` (點 Close) → `03`
+每次交付都要在 chat 附上：
 
-## 互動 Hotspot
-- 每個 hotspot 標註 trigger + action + destination
-```
+1. 對應 `docs/notion/...` 路徑（沒有則寫「依 chat 需求」）
+2. 目標 Odoo model
+3. 相比上版差異（首版寫「初版」）
+4. 對齊方向（feature 編號 / Notion page / Linear ticket）
+5. 特別注意項（已知 trade-off、待 PM 確認的點）
 
-### Step 3：Motion Spec
-```markdown
-# Motion Spec
+## 硬性限制（每次輸出前自檢，違反即重做）
 
-## Duration scale（對齊 DS motion token）
-- Fast：100-150ms（hover、tap feedback）
-- Base：200-250ms（進出場、state 切換）
-- Slow：350-500ms（全頁 transition）
+- **IMPORTANT:** `<html lang="zh-Hant-TW">`
+- **IMPORTANT:** CSS 載入順序：`ds/colors_and_type.css` → Material Symbols → `app.css`
+- **IMPORTANT:** Vue 3 production CDN，**禁**引入其他 UI library
+- **IMPORTANT:** 樣式寫到 `app.css`、互動寫到 `app.js`，**禁**在 `.html` 內嵌 `<style>` / `<script>`（CDN 與引用 `app.js` 的 `<script src>` 例外）
+- **IMPORTANT:** Icon 一律 Material Symbols Outlined（`<span class="material-symbols-outlined">`）
+- **IMPORTANT:** 色彩 / 間距 / 圓角 / 陰影 / 字級必須使用 `ds/colors_and_type.css` 的 token；**禁** inline hex、**禁** `@apply`
+- **IMPORTANT:** 不做 mobile（< 768px）；唯一斷點 `@media (max-width: 1024px)` 將 4 欄 grid 降為 2 欄
+- **IMPORTANT:** State machine 用 `draft / submitted / approved / voided`；action 用 `action_submit / action_approve / action_unapprove / action_void`，偏離須在 chat 註明理由
+- **IMPORTANT:** 「已產生傳票」是 chip（由 `move_id` 是否存在判斷），**不是**第 5 個狀態
 
-## Easing
-- Standard：cubic-bezier(0.4, 0, 0.2, 1)（大部分進出場）
-- Decelerate：cubic-bezier(0, 0, 0.2, 1)（進場）
-- Accelerate：cubic-bezier(0.4, 0, 1, 1)（離場）
+## 常見決策題
 
-## 具體 spec
-
-### Modal 開啟
-- Backdrop fade-in：150ms / standard
-- Modal scale 0.96 → 1 + fade-in：250ms / decelerate
-
-### Toast 出現
-- Y: +16px → 0 + fade-in：200ms / decelerate
-- 停留 4s
-- Fade-out：150ms / accelerate
-
-### Button press
-- Scale 1 → 0.97：100ms / standard
-- Release：100ms / standard
-
-## Reduced Motion
-- 若使用者開啟 prefers-reduced-motion：
-  - 全部 transition 改 fade only
-  - 去除 scale / slide
-  - Duration 縮到 100ms 內
-```
-
-### Step 4：Walkthrough Script（若用途是 stakeholder demo）
-```markdown
-# Walkthrough Script — [Feature]
-
-總時長：5 分鐘
-
-## 0:00 — 背景（30s）
-「這是我們為 [persona] 設計的 [feature]，解決 [problem]。」
-
-## 0:30 — 進入情境（30s）
-「假設你是 [persona]，剛登入後第一次要做 [task]。」
-
-## 1:00 — Happy path（2 min）
-- 點 [Trigger] → 解說：為什麼放這裡
-- 看到 [UI] → 解說：視覺重點
-- 完成 → 解說：成功訊號
-
-## 3:00 — Edge / Error 展示（1 min）
-- 展示 error 處理
-
-## 4:00 — 跨平台呼應（30s）
-「同樣的流程在 App 上會是這樣」[切換 App prototype]
-
-## 4:30 — 結尾與問題（30s）
-「目前最想聽到的 feedback 是 [...] 」
-```
-
-## Prototype 品質清單
-- [ ] 有明確的保真度與 scope？
-- [ ] Happy / Edge / Error 都可走？
-- [ ] 關鍵 state 都可觸發？
-- [ ] Motion spec 有 duration + easing？
-- [ ] Reduced motion 有考慮？
-- [ ] 連線邏輯不死胡同（back / close 都回得去）？
-- [ ] 跨平台 prototype（若需要）同步覆蓋？
-
-## 常見陷阱
-- ❌ Prototype 比實際實作漂亮太多 → 造成 Eng 與設計預期落差
-- ❌ 只做 hi-fi 但 flow 沒講清楚 → usability test 亂跳
-- ❌ 動效過度 → 使用者實際會覺得慢
-- ❌ 忘了 reduced motion
-- ❌ 沒考慮「如果使用者不按我預期的路徑點」
+| 情境 | 決策 |
+|---|---|
+| List 第一欄一定要 checkbox？ | 是。即使目前無批次操作也保留 |
+| 沒有金額欄位怎麼放合計列？ | 移除 `tfoot` 整段，不要保留空合計列 |
+| 必填判斷只在前端？ | Prototype 階段視覺上有 `*` 即可；validation 邏輯由 production code 處理 |
+| 狀態欄要 pill 還是 stepper？ | List 用 pill；Form summary card 用 stepper（voided 改 pill） |
+| Smart Bar 沒有關聯單據？ | 整段 `<nav>` 不渲染，**不留空 bar** |
+| 響應式欄位太多被截斷？ | 橫向 scroll；**禁**隱藏關鍵欄位 |
 
 ## 上下游銜接
-- **上游**：`interaction-designer` 的 flow、`ui-designer` 的畫面、`ux-writer` 的文案
-- **下游**：
-  - → `usability-tester`（測試素材）
-  - → `accessibility-reviewer`（a11y 檢查含 motion）
-  - → `design-ops`（同步 motion spec 給 Eng）
 
-## 常用指令範例
-- 「幫我規劃一個 usability test 的 prototype scope」
-- 「寫 modal 開啟的 motion spec」
-- 「幫我寫 stakeholder demo walkthrough」
-- 「這個功能要到哪個 fidelity？」
+- **上游**：`product-strategist` / `requirement-analyst` 的 PM 文件、`ui-designer` 的視覺稿、同類舊模組 prototype
+- **下游**：
+  - → reviewer（PM / 主管 / 系統管理員）試玩驗證
+  - → 前端 / 後端工程師（依 prototype 串接 Odoo API、升級為 Nuxt + Syncfusion EJ2）
+  - → `accessibility-reviewer`（a11y 檢查）
+
+## 常用觸發語
+
+- 「幫我做一個 XXX 模組的 prototype」
+- 「這份 PM 文件 [docs/notion/...md] 轉成 prototype」
+- 「參考 [既有模組].html 做一個類似的 [新模組]」
+- 「補一個 tweaks panel 讓 reviewer 切換狀態」
+
+## 輸出前 Checklist
+
+詳細條款見 `REFERENCE.md §12`，最低限度確認：
+
+- [ ] 三件套 shell（header / nav-rail / footer）齊全、breadcrumb 層級正確
+- [ ] List View 與 Form View 兩種視圖都可切換
+- [ ] 所有 4 種狀態（含 voided）能透過 Tweaks 切換驗證
+- [ ] 必填欄位有紅色 `*`
+- [ ] 空狀態 / 刪除確認 / 儲存 toast 均能觸發
+- [ ] 無 `@apply`、無 inline hex、無 TypeScript
+- [ ] chat handoff 五項齊全
