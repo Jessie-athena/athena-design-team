@@ -37,7 +37,7 @@ A multi-role AI product design team skill for B2B cross-platform (Web / App) pro
 | 互動設計師 | `interaction-designer` | User flow、IA、wireframe、state | 策略確定後進入結構設計 |
 | 視覺設計師 | `ui-designer` | 版面、typography、color、component 應用 | 互動確定後進入視覺設計 |
 | UX 文案 | `ux-writer` | Microcopy、error、onboarding、voice & tone | 有 UI 骨架後的文案撰寫 |
-| 原型設計師 | `prototyper` | Figma prototype、motion、互動驗證 | 需要可點擊原型或動效規範 |
+| 原型設計師 | `prototyper` | prototype、motion、互動驗證 | 需要可點擊原型或動效規範 |
 | 設計系統架構師 | `design-system-architect` | Token、component spec、variant、governance | 建立或擴充 DS 時 |
 
 ### Validation & Delivery Cluster（驗證與交付群）
