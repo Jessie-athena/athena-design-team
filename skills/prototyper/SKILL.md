@@ -85,7 +85,7 @@ description: Turn a module spec (PM doc, sibling module, or chat description) in
 
 ## 5. 上下游銜接
 
-- **上游**:PM 文件（Notion / Linear / Jira）、設計稿、同類舊模組 prototype
+- **上游**:PM 文件（Github / Notion）、設計稿、同類舊模組 prototype
 - **下游**:
   - reviewer（PM / 主管 / 系統管理員）試玩驗證
   - 工程師依 prototype 串接 API、升級為 production 元件
