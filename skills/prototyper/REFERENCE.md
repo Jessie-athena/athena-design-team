@@ -85,7 +85,7 @@ DS 色彩採三層：
 | `--color-sf-primary` | `40, 119, 238` | `rgba(var(--color-sf-primary), .08)` — primary 8% tint |
 | `--color-sf-success` | `18, 183, 106` | `rgba(var(--color-sf-success), .12)` |
 | `--color-sf-error` | `244, 73, 62` | `rgba(var(--color-sf-error), .12)` — 例如 voided pill 背景 |
-| `--color-sf-warning` | （見 base tokens） | — |
+| `--color-sf-warning` | `247, 144, 9` | `rgba(var(--color-sf-warning), .12)` |
 | `--color-sf-primary-container` | `213, 228, 255` | container tint |
 
 > 預先 wrap 的 alpha 變體也存在（如 `--color-sf-primary-opacity-8` = `40, 119, 238, 0.08`），可用 `rgba(var(--color-sf-primary-opacity-8))` 簡寫。
