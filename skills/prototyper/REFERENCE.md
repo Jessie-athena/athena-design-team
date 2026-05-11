@@ -38,39 +38,139 @@
 
 色彩 / 間距 / 圓角 / 陰影 / 字級必須使用 design tokens CSS 的 token，禁 inline hex、禁 `@apply`、禁新增 token 而不更新上游。
 
-### 色彩語義別名（最常用）
+> 以下 token 列以 **Athena Design System** 作為 source of truth（`design-tokens-base.css` + `design-tokens-athena.css` + `colors_and_type.css`）。其他專案以對應 DS 的同名 token 為準；profile 內若用到此清單未列的 token 須在 profile 註明來源。
+
+### 色彩 — 三層架構
+
+DS 色彩採三層：
+
+1. **Raw channels** (`--color-sf-*`)：comma-separated RGB（如 `--color-sf-primary: 40, 119, 238`）。**用於 `rgba()` wrapper**（半透明覆層、tint）。
+2. **Semantic alias** (`--text-*` / `--bg-*` / `--border-*`)：已經 wrap 為 `rgb(...)` 的別名。**用於實心色**（文字、實心背景、邊框）。
+3. **CSS variable consumer**（component 自己的 class）：盡量引用第 2 層；只有需要 alpha 時才用第 1 層。
+
+#### 文字色
 
 | Token | 用途 |
 |---|---|
-| `--surface-default` | 頁面背景 |
-| `--surface-raised` | Card 背景 |
-| `--surface-overlay` | Dialog 背景 |
-| `--text-primary` / `--text-secondary` / `--text-disabled` | 文字 |
-| `--border-default` / `--border-focus` | 邊框 |
-| `--status-success` / `--status-warning` / `--status-error` | 狀態色 |
+| `--text-primary` | 主要文字（near-black） |
+| `--text-secondary` | 次要文字 / label（grey） |
+| `--text-placeholder` | placeholder / 淡化文字 |
+| `--text-inverse` | 反白文字（用於深色背景） |
+| `--text-brand` | 品牌色文字（= primary blue） |
+| `--text-success` / `--text-error` / `--text-warning` | 狀態色文字 |
 
-### 間距（4–48px）
+#### 背景 / 表面
 
-`--spacing-1`(4) / `-2`(8) / `-3`(12) / `-4`(16) / `-5`(20) / `-6`(24) / `-8`(32) / `-12`(48)
+| Token | 用途 |
+|---|---|
+| `--bg-surface-default` | 頁面 / 卡片基本背景（白） |
+| `--bg-surface-variant` | 微 tint 表面（如 input filled 背景、grid header 背景） |
+| `--bg-surface-inverse` | 反色表面 |
+| `--bg-primary` | 實心品牌色背景（primary 按鈕） |
+| `--bg-primary-tint` | 品牌色 container tint |
+| `--bg-app` | App-shell 底層背景 |
+
+#### 邊框
+
+| Token | 用途 |
+|---|---|
+| `--border-default` | 一般邊框（≈ `#D7DAE0`） |
+| `--border-strong` | 強調邊框（≈ `#7F8996`，hover / focus 用） |
+| `--border-focus` | Focus 邊框（= primary） |
+
+#### Raw channels（rgba 用）
+
+| Token | 值 | 範例 |
+|---|---|---|
+| `--color-sf-primary` | `40, 119, 238` | `rgba(var(--color-sf-primary), .08)` — primary 8% tint |
+| `--color-sf-success` | `18, 183, 106` | `rgba(var(--color-sf-success), .12)` |
+| `--color-sf-error` | `244, 73, 62` | `rgba(var(--color-sf-error), .12)` — 例如 voided pill 背景 |
+| `--color-sf-warning` | （見 base tokens） | — |
+| `--color-sf-primary-container` | `213, 228, 255` | container tint |
+
+> 預先 wrap 的 alpha 變體也存在（如 `--color-sf-primary-opacity-8` = `40, 119, 238, 0.08`），可用 `rgba(var(--color-sf-primary-opacity-8))` 簡寫。
+
+### 間距（t-shirt 命名）
+
+| Token | 值 | 別名 |
+|---|---|---|
+| `--space-none` | 0 | — |
+| `--space-xs` | 2px | — |
+| `--space-sm` | 4px | — |
+| `--space-md` | 8px | — |
+| `--space-lg` | 12px | — |
+| `--space-xl` | 16px | — |
+| `--space-2xl` | 20px | — |
+| `--space-3xl` | 24px | — |
+| `--space-4xl` | 32px | — |
+| `--space-5xl` | 40px | — |
+| `--space-6xl` | 48px | — |
+| `--space-7xl` | 56px | — |
+| `--space-8xl` | 64px | — |
+
+> `--ds-space-athena-padding-*` 為 padding 專用對應；通用情境用 `--space-*` 即可。
 
 ### 圓角
 
-`--radius-none` / `-sm`(2) / `-md`(4) / `-lg`(8) / `-xl`(12) / `-full`
-
-### 陰影層級
-
-`--shadow-none` / `-xs` / `-sm`(card hover) / `-md`(dropdown) / `-lg`(dialog) / `-xl`(modal) / `-2xl`(overlay) / `-inner` / `-focus`
-
-### 字型樣式
-
-| 用途 | 樣式 |
+| Token | 值 |
 |---|---|
-| Page title | `display/lg`（32px / 700 / 1.2） |
-| Section heading | `heading/sm`（16px / 600 / 1.4） |
-| Body | `body/md`（14px / 400 / 1.6） |
-| Label | `label/md`（14px / 500 / 1.4） |
+| `--radius-none` | 0 |
+| `--radius-xs` | 2px |
+| `--radius-sm` | 4px |
+| `--radius-md` | 6px |
+| `--radius-lg` | 8px |
+| `--radius-xl` | 12px |
+| `--radius-2xl` | 16px |
+| `--radius-3xl` | 18px |
+| `--radius-4xl` | 20px |
+| `--radius-5xl` | 24px |
+| `--radius-full` | 1000px（pill / circle） |
 
-> ERP 完整對照:`.claude/rules/figma-design-system/references/tokens.md`
+### 陰影（Material 3 elevation）
+
+| Token | 用途 |
+|---|---|
+| `--shadow-e1` | 靜止 card / dropdown 表面 |
+| `--shadow-e2` | toast / snackbar |
+| `--shadow-e3` | dialog |
+| `--shadow-e4` | menu / popover（浮於 dialog 上方） |
+| `--shadow-focus-ring` | 4px primary 16% focus ring |
+
+> **DS 卡片預設無 shadow**（只用 1px outline-variant 邊框）。Shadow 只在 hover/active 或浮層出現。
+
+### 字型
+
+#### Family
+
+- `--font-family-base`（中文）`Noto Sans TC`
+- `--font-family-en` `Roboto`
+- `--font-family-mono` `JetBrains Mono` / `Roboto Mono`
+
+#### Size
+
+| Token | 值 | 對應 Figma style 名 |
+|---|---|---|
+| `--font-size-xxs` | 10px | — |
+| `--font-size-xs` | 11px | `body/sm` 變體 |
+| `--font-size-sm` | 12px | `body/sm` |
+| `--font-size-md` | 14px | `body/md` / `label/md` |
+| `--font-size-lg` | 16px | `body/lg` / `heading/sm` |
+| `--font-size-sf-h6` | 18px | — |
+| `--font-size-sf-h5` | 20px | `heading/md` |
+| `--font-size-sf-h4` | 22px | — |
+| `--font-size-sf-h3` | 24px | `heading/lg` |
+| `--font-size-sf-h2` | 28px | `display/md` |
+| `--font-size-sf-h1` | 32px | `display/lg` |
+
+#### Weight
+
+| Token | 值 |
+|---|---|
+| `--font-weight-sf-normal` | 400 |
+| `--font-weight-sf-medium` | 500 |
+| `--font-weight-sf-bold` | 700 |
+
+> Figma 的 `display/*` / `heading/*` / `body/*` / `label/*` 是**複合樣式**（size + weight + line-height + letter-spacing），對應到 CSS 時要從上表分別挑 token，或直接用 component-level utility class（如 DS components.css 內的 `.btn` 已預先綁好）。
 
 ---
 

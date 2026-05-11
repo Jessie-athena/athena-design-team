@@ -92,7 +92,7 @@ Form View 頂部的 summary bar 在實作時最常被改錯。**必依**以下�
   - 上區：標題（單號）+ Stepper 或 voided pill
   - 下區：關鍵指標（總金額 / 幣別 / 建立者 / 「已產生傳票」chip）
   - 兩塊之間用 `1px solid var(--border-default)` 分隔，**不**用 shadow
-- padding：上下各 `24px`（`--spacing-6`），左右隨 main panel
+- padding：上下各 `var(--space-3xl)`（24px），左右隨 main panel
 - 寬度撐滿 main panel；圓角延續 main panel 的 12px
 
 > voided 狀態下，上區的 stepper 改顯示 `pill-voided`（紅色膠囊），其他結構不變。
@@ -128,9 +128,9 @@ Form View 頂部的 summary bar 在實作時最常被改錯。**必依**以下�
 
 | 狀態 | class modifier | 圓圈 `.stepper__num` (32×32, radius 100px) | 標籤文字 |
 |---|---|---|---|
-| Pending | （無 modifier） | bg `rgba(var(--color-sf-primary), .08)` on `var(--surface-default)`、border `1px solid var(--border-default)`、數字 `var(--text-primary)` 14px/400 | `var(--text-secondary)` 14px/400 |
+| Pending | （無 modifier） | bg `rgba(var(--color-sf-primary), .08)` on `var(--bg-surface-default)`、border `1px solid var(--border-default)`、數字 `var(--text-primary)` 14px/400 | `var(--text-secondary)` 14px/400 |
 | Active | `--active` | bg `rgb(var(--color-sf-primary))`、border `1px solid rgb(var(--color-sf-primary))`、`box-shadow: inset 0 0 0 1px #fff`（內白環）、數字 `#fff` | `var(--text-primary)` |
-| Done | `--done` | bg `rgb(var(--color-sf-success))`、border `1px solid rgb(var(--color-sf-success))`、無 shadow、改顯示 check icon（Material Symbols, 20px, wght 600, `#fff`） | `var(--text-disabled)` |
+| Done | `--done` | bg `rgb(var(--color-sf-success))`、border `1px solid rgb(var(--color-sf-success))`、無 shadow、改顯示 check icon（Material Symbols, 20px, wght 600, `#fff`） | `var(--text-secondary)` |
 
 ### 連接線 `.stepper__bar`
 
@@ -205,7 +205,7 @@ const visibleRelations = computed(() =>
 
 | Token | 值 |
 |---|---|
-| `.smart-bar` | `display: inline-flex; gap: 12px; padding: 8px 4px 8px 16px; background: var(--surface-default); border: 1px solid rgb(var(--color-sf-primary)); border-radius: 8px; width: fit-content;` |
+| `.smart-bar` | `display: inline-flex; gap: 12px; padding: 8px 4px 8px 16px; background: var(--bg-surface-default); border: 1px solid rgb(var(--color-sf-primary)); border-radius: 8px; width: fit-content;` |
 | `.card-btn` | `display: inline-flex; align-items: center; gap: 8px; padding: 0 12px 0 0; border-right: 1px solid rgb(var(--color-sf-primary))`；`:last-child { border-right: none; padding-right: 0; }` |
 | Hover | `opacity: 0.75; transition: 200ms;` |
 | `.card-btn__count` | `font-size: 18px; font-weight: 700; color: rgb(var(--color-sf-primary))` |
