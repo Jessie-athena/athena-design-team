@@ -11,9 +11,14 @@
   3. 對應的 reactive state 與方法寫到 ../app.js（禁止內嵌）
   4. 模組專屬樣式寫到 ../app.css（禁止 <style>、禁止 @apply）
 
-  審查對應：本骨架已涵蓋 .claude/rules/prototype-design/CLAUDE.md
-  §4 (App Shell) §5 (List View) §6 (Form View) §7 (State Machine)
-  §8 (Tweaks) §9 (Modal/Toast/Empty)
+  視覺系統：Claude Design 內部 design system bundle
+    https://api.anthropic.com/v1/design/h/3NlTfIVpv5CoYw5xmHzi5g
+    （Components v3.html / README.md / components.css）
+    本 template 已預設成 DS-correct；常見反射錯誤見 pitfalls.md「DS 反射對照表」。
+
+  審查對應：profiles/erp.md
+    §App Shell §State Machine §Summary Bar §Stepper §Smart Bar
+    §輸入欄樣式 §按鈕 icon 政策 §List View §Form View §Tweaks
 -->
 <!DOCTYPE html>
 <html lang="zh-Hant-TW">
@@ -71,9 +76,8 @@
           <div class="toolbar">
             <div class="toolbar__primary">
               <template v-if="selectedRows.length === 0">
-                <button class="btn btn--primary" @click="onCreate">
-                  <span class="material-symbols-outlined">add</span>新增
-                </button>
+                <!-- 動詞 CTA：無 icon（見 profile §按鈕 icon 政策） -->
+                <button class="btn btn--primary" @click="onCreate">新增</button>
               </template>
               <template v-else>
                 <span class="toolbar__count">已選 {{ selectedRows.length }} 筆</span>
@@ -186,18 +190,41 @@
         <!-- ===== Form View ============================== -->
         <!-- ============================================== -->
         <section v-else-if="view === 'form'" class="form-view">
-          <!-- Summary card：關鍵指標 + stepper（voided 改 pill） -->
+          <!--
+            Summary bar：position: sticky、無 shadow、上下兩塊（詳 profile §Summary Bar 結構）
+            DS-correct 預設：所有 input filled、按鈕無 icon、卡片無 shadow
+          -->
           <header class="summary-card">
-            <div class="summary-card__head">
+            <!-- 上區：標題 + Stepper / voided pill -->
+            <div class="summary-card__upper">
               <h1 class="summary-card__title">{{ form.docNo || '新單' }}</h1>
-              <span v-if="form.status === 'voided'" class="status-pill status-pill--voided">已作廢</span>
+              <span v-if="form.status === 'voided'" class="pill-voided">已作廢</span>
+              <!-- Stepper 三狀態結構（詳 profile §Stepper 三狀態結構） -->
               <ol v-else class="stepper">
-                <li :class="{ 'is-done': stepDone('draft'), 'is-current': form.status === 'draft' }">草稿</li>
-                <li :class="{ 'is-done': stepDone('submitted'), 'is-current': form.status === 'submitted' }">已提交</li>
-                <li :class="{ 'is-done': stepDone('approved'), 'is-current': form.status === 'approved' }">已核准</li>
+                <li class="stepper__step" :class="stepClass('draft')">
+                  <span class="stepper__num">
+                    <span v-if="stepState('draft') === 'done'" class="material-symbols-outlined">check</span>
+                    <template v-else>1</template>
+                  </span>
+                  <span>草稿</span>
+                </li>
+                <span class="stepper__bar" :class="stepClass('draft', 'bar')"></span>
+                <li class="stepper__step" :class="stepClass('submitted')">
+                  <span class="stepper__num">
+                    <span v-if="stepState('submitted') === 'done'" class="material-symbols-outlined">check</span>
+                    <template v-else>2</template>
+                  </span>
+                  <span>已提交</span>
+                </li>
+                <span class="stepper__bar" :class="stepClass('submitted', 'bar')"></span>
+                <li class="stepper__step" :class="stepClass('approved')">
+                  <span class="stepper__num">3</span>
+                  <span>已核准</span>
+                </li>
               </ol>
             </div>
-            <div class="summary-card__metrics">
+            <!-- 下區：關鍵指標 + 已產生傳票 chip -->
+            <div class="summary-card__lower">
               <div class="metric"><span class="metric__label">總金額</span><span class="metric__value">{{ formatAmount(form.totalAmount) }}</span></div>
               <div class="metric"><span class="metric__label">幣別</span><span class="metric__value">{{ form.currency }}</span></div>
               <div class="metric"><span class="metric__label">建立者</span><span class="metric__value">{{ form.createdBy }}</span></div>
@@ -205,14 +232,31 @@
             </div>
           </header>
 
-          <!-- Smart Bar：跳轉關聯單據；無關聯時整段不顯示 -->
-          <nav v-if="form.relations && form.relations.length > 0" class="smart-bar">
-            <a v-for="rel in form.relations" :key="rel.id" @click="openRelated(rel)">
-              <span class="material-symbols-outlined">link</span>{{ rel.label }}
+          <!--
+            Smart Bar `card-btn` 結構（詳 profile §Smart Bar `card-btn` 結構）
+            禁加 link icon；每個 card-btn = count + 單位 + 標題 + arrow_outward
+            無關聯時整段不渲染；count === null 的條目（如「會計傳票」）省略 count + 單位
+          -->
+          <nav v-if="visibleRelations.length > 0" class="smart-bar">
+            <a v-for="rel in visibleRelations" :key="rel.type" class="card-btn" @click.prevent="openRelated(rel)">
+              <div class="card-btn__main">
+                <span v-if="rel.count != null" class="card-btn__count">{{ rel.count }}</span>
+                <span class="card-btn__title">
+                  <span v-if="rel.unit" class="card-btn__unit">{{ rel.unit }}</span>{{ rel.title }}
+                </span>
+              </div>
+              <span class="card-btn__arrow material-symbols-outlined">arrow_outward</span>
             </a>
           </nav>
 
-          <!-- Section pattern：bar + title + 4 欄 grid（≤1024px 自動降為 2 欄） -->
+          <!--
+            Section：bar + title + form-grid 4 欄（≤1024px 自動降為 2 欄）
+            DS 預設：
+              - DynamicForm 外層無 border、padding 0（外距由 .form-section 控制）
+              - SectionHeader 下方 padding 16px
+              - 所有 input 預設 Filled（背景 surface-variant + 底線）
+              - Read-only 用 `readonly` 屬性（**禁**用 `disabled`，語意不同）
+          -->
           <section class="form-section">
             <header class="form-section__bar">
               <h2 class="form-section__title">基本資料</h2>
@@ -220,6 +264,7 @@
             <div class="form-grid form-grid--4">
               <div class="form-field">
                 <label>單號</label>
+                <!-- read-only 範例：用 readonly 屬性，**禁**用 disabled -->
                 <input type="text" v-model="form.docNo" readonly>
               </div>
               <div class="form-field">
@@ -247,9 +292,8 @@
                         :class="{ 'is-active': activeTab === tab.key }"
                         @click="activeTab = tab.key">{{ tab.label }}</button>
               </div>
-              <button class="btn btn--primary" @click="onAddLine">
-                <span class="material-symbols-outlined">add</span>新增明細
-              </button>
+              <!-- 動詞 CTA：無 icon（見 profile §按鈕 icon 政策） -->
+              <button class="btn btn--primary" @click="onAddLine">新增明細</button>
             </header>
             <div class="form-tabs__body">
               <table class="grid">

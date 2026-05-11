@@ -34,7 +34,27 @@
 
 <!-- 樣式、結構、技術 baseline 相關 -->
 
-_（尚無紀錄，遇到再累積）_
+### [2026-05-11] AI 預設樣式 ≠ Design System
+
+- **症狀**:生出來的 prototype 像 Bootstrap / 一般 web app — outlined input、所有按鈕都帶 icon、操作欄 hover 才浮出、卡片有 shadow、`<input readonly>` 直接套 disabled 樣式、nav-rail icon 是 outlined 變體、新增按鈕寫成 `<button><span class="material-symbols-outlined">add</span>新增</button>`。
+- **正確做法**:每次製作前對照「DS 反射對照表」（下方）；template 已預設成 DS-correct 樣式，**不要改回 AI 直覺**。專案的 DS 來源在 `profiles/<project>.md` 內指定（ERP → Claude Design 內部 design system，README 已記於 `profiles/erp.md`）。
+- **為什麼會反覆犯**:訓練資料中 Bootstrap / Tailwind UI Kit / generic web app 的範例量遠多於任何企業內部 DS。沒被提醒就走預設。
+
+#### DS 反射對照表（每次製作前掃）
+
+| 反射做法（錯） | DS 正確做法 |
+|---|---|
+| input / select / textarea 用 `<input>` 預設樣式（看起來是 outlined） | 套 `.input.filled`（背景 surface-variant + 底線）為預設；`.outlined` 只在特定情境用 |
+| 把 read-only 欄位直接套 `disabled` | `readonly` 屬性 + DS 的 readonly 樣式（背景仍 surface-variant、文字 secondary、cursor: default）；**禁**用 disabled 屬性表達 read-only |
+| nav-rail / header icon 用 outlined 變體（如 `home_outline`） | 用 filled 變體（`home` / `notifications` / `settings`）；產品縮寫文字（如「ERP」）必須存在 |
+| DataGrid 操作欄做成 hover 才浮出 | 操作欄永遠顯示，凍結在右側 |
+| 卡片預設加 `box-shadow` | 預設**無 shadow**（只用 1px outline-variant 邊框）；shadow 僅出現在 hover 或 dialog/popover 等浮層 |
+| Summary card 是一塊，內容平鋪 | Summary 區分**上區（title + stepper / status pill）+ 下區（指標 / 關聯資訊）**兩塊，`position: sticky`，無 shadow，padding 24px |
+| Smart Bar 用 `<a><span class="material-symbols-outlined">link</span>標題</a>` | 用 `.smart-bar > .card-btn` 結構，**無 link icon**；每個 card-btn 內含 count + 單位 + 標題 + `arrow_outward`；詳細結構見 profile |
+| Stepper 用一個 `<li>` 配 `is-current`/`is-done` 兩態 | 三態（pending / active / done）+ 連接線（bar）；done 顯示 check icon、active 內白環、pending 灰；詳見 profile |
+| 主要 CTA 按鈕（新增 / 提交 / 儲存）帶 icon 強調 | CTA 標籤本身就是動詞，**禁加 icon**；icon 只用在 icon-only 按鈕（如 settings / close）或導向類（如 chevron_left「上一筆」） |
+| 表單區塊（DynamicForm）外層再包 border + padding | **無外框、padding 0**；外距由父層 section 控制 |
+| Section header 與下方內容貼太近 | `DsSectionHeader` 下方 padding 16px |
 
 ---
 
