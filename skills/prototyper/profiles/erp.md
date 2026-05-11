@@ -128,15 +128,15 @@ Form View 頂部的 summary bar 在實作時最常被改錯。**必依**以下�
 
 | 狀態 | class modifier | 圓圈 `.stepper__num` (32×32, radius 100px) | 標籤文字 |
 |---|---|---|---|
-| Pending | （無 modifier） | bg `rgba(40,119,238,.08)` on `#FFF`、border `1px solid #D7DAE0`、數字 `#0F172A` 14px/400 | `#7F8996` 14px/400 |
-| Active | `--active` | bg `#2877EE`、border `1px solid #2877EE`、`box-shadow: inset 0 0 0 1px #FFFFFF`（內白環）、數字 `#FFFFFF` | `#0F172A` |
-| Done | `--done` | bg `#12B76A`、border `1px solid #12B76A`、無 shadow、改顯示 check icon（Material Symbols, 20px, wght 600, white） | `#67717E` |
+| Pending | （無 modifier） | bg `rgba(var(--color-sf-primary), .08)` on `var(--surface-default)`、border `1px solid var(--border-default)`、數字 `var(--text-primary)` 14px/400 | `var(--text-secondary)` 14px/400 |
+| Active | `--active` | bg `rgb(var(--color-sf-primary))`、border `1px solid rgb(var(--color-sf-primary))`、`box-shadow: inset 0 0 0 1px #fff`（內白環）、數字 `#fff` | `var(--text-primary)` |
+| Done | `--done` | bg `rgb(var(--color-sf-success))`、border `1px solid rgb(var(--color-sf-success))`、無 shadow、改顯示 check icon（Material Symbols, 20px, wght 600, `#fff`） | `var(--text-disabled)` |
 
 ### 連接線 `.stepper__bar`
 
-- 預設：`width: 40px`、`border-top: 2px solid #D7DAE0`、`margin-top: 15px`（對齊圓圈中心）
-- `--active`：`border-top-color: #2877EE`
-- `--done`：`border-top-color: #12B76A`
+- 預設：`width: 40px`、`border-top: 2px solid var(--border-default)`、`margin-top: 15px`（對齊圓圈中心）
+- `--active`：`border-top-color: rgb(var(--color-sf-primary))`
+- `--done`：`border-top-color: rgb(var(--color-sf-success))`
 
 ### 狀態 × step 對應矩陣
 
@@ -145,7 +145,7 @@ Form View 頂部的 summary bar 在實作時最常被改錯。**必依**以下�
 | `draft` | active | pending | pending | pending | pending |
 | `submitted` | done ✓ | done | active | active | pending |
 | `approved` | done ✓ | done | done ✓ | done | active |
-| `voided` | ⛔ 整個 stepper 隱藏，改顯示 `.pill-voided`（bg `rgba(244,73,62,.12)`, border `1px solid #F4493E`, color `#F4493E`, 12px medium, 36px 高，文字「已作廢」） | — | — | — | — |
+| `voided` | ⛔ 整個 stepper 隱藏，改顯示 `.pill-voided`（bg `rgba(var(--color-sf-error), .12)`, border `1px solid rgb(var(--color-sf-error))`, color `rgb(var(--color-sf-error))`, 12px medium, 36px 高，文字「已作廢」） | — | — | — | — |
 
 ### 容器
 
@@ -159,46 +159,65 @@ Form View 頂部的 summary bar 在實作時最常被改錯。**必依**以下�
 
 ERP 的 Smart Bar **不是** 一排有 link icon 的文字連結。是一組以藍框統一包起來的 card-btn，每個 card-btn 顯示「N /單位 標題 ↗」。
 
+### 資料模型
+
+`form.relations` 是陣列，每個元素形狀 `{ type, count, unit, title }`：
+
+| 欄位 | 型別 | 說明 |
+|---|---|---|
+| `type` | string | 關聯類型 key（如 `'pr'` / `'ec'` / `'voucher'`），用於 `:key` 與 `openRelated(rel)` 路由 |
+| `count` | number \| null | 筆數；`null` 代表此關聯不計數（如「會計傳票」），永遠顯示 |
+| `unit` | string \| null | 計數單位（如 `'/筆'`）；`count === null` 時可省略 |
+| `title` | string | 顯示名稱（如「應付請款單」） |
+
 ### 出現條件
 
-`v-if="smartBarCounts.X > 0 || smartBarCounts.Y > 0 || ..."` — 任一關聯類型有 > 0 筆才渲染。
+`v-if="visibleRelations.length > 0"`，其中 `visibleRelations` 為 computed：
+
+```js
+const visibleRelations = computed(() =>
+  (form.relations || []).filter(r => r.count == null || r.count > 0)
+)
+```
+
+也就是「**count > 0 的條目**」**或**「**count == null 的常駐條目**」任一存在即渲染；全部 `count === 0` 時整段不渲染。
 
 ### DOM 結構
 
 ```html
-<nav class="smart-bar">
-  <a class="card-btn" v-if="smartBarCounts.pr > 0" @click.prevent="openRelated('pr')">
+<nav v-if="visibleRelations.length > 0" class="smart-bar">
+  <a v-for="rel in visibleRelations" :key="rel.type"
+     class="card-btn" @click.prevent="openRelated(rel)">
     <div class="card-btn__main">
-      <span class="card-btn__count">{{ smartBarCounts.pr }}</span>
+      <span v-if="rel.count != null" class="card-btn__count">{{ rel.count }}</span>
       <span class="card-btn__title">
-        <span class="card-btn__unit">/筆</span>應付請款單
+        <span v-if="rel.unit" class="card-btn__unit">{{ rel.unit }}</span>{{ rel.title }}
       </span>
     </div>
     <span class="card-btn__arrow material-symbols-outlined">arrow_outward</span>
   </a>
-  <!-- ...更多 card-btn... -->
 </nav>
 ```
 
-無 count 的 card-btn（如「會計傳票」）省略 `.card-btn__count` 與 `.card-btn__unit`。
+`count == null` 的條目（如「會計傳票」）省略 `.card-btn__count` 與 `.card-btn__unit`。
 
 ### 視覺規格
 
 | Token | 值 |
 |---|---|
-| `.smart-bar` | `display: inline-flex; gap: 12px; padding: 8px 4px 8px 16px; background: #FFFFFF; border: 1px solid #2877EE; border-radius: 8px; width: fit-content;` |
-| `.card-btn` | `display: inline-flex; align-items: center; gap: 8px; padding: 0 12px 0 0; border-right: 1px solid #2877EE`；`:last-child { border-right: none; padding-right: 0; }` |
+| `.smart-bar` | `display: inline-flex; gap: 12px; padding: 8px 4px 8px 16px; background: var(--surface-default); border: 1px solid rgb(var(--color-sf-primary)); border-radius: 8px; width: fit-content;` |
+| `.card-btn` | `display: inline-flex; align-items: center; gap: 8px; padding: 0 12px 0 0; border-right: 1px solid rgb(var(--color-sf-primary))`；`:last-child { border-right: none; padding-right: 0; }` |
 | Hover | `opacity: 0.75; transition: 200ms;` |
-| `.card-btn__count` | `font-size: 18px; font-weight: 700; color: #2877EE` |
+| `.card-btn__count` | `font-size: 18px; font-weight: 700; color: rgb(var(--color-sf-primary))` |
 | `.card-btn__unit` | `font-size: 11px; margin: 0 8px;` |
-| `.card-btn__title` | `font-size: 16px; font-weight: 400; color: #2877EE` |
-| `.card-btn__arrow` | 18×18px、Material Symbols `arrow_outward`、`wght: 500; opsz: 20; color: #2877EE` |
+| `.card-btn__title` | `font-size: 16px; font-weight: 400; color: rgb(var(--color-sf-primary))` |
+| `.card-btn__arrow` | 18×18px、Material Symbols `arrow_outward`、`wght: 500; opsz: 20; color: rgb(var(--color-sf-primary))` |
 
 ### 互動
 
-- 所有 link `@click.prevent`（SPA 行為），點擊呼叫 `openRelated(type)` 跳轉到對應列表 / 單據
+- 所有 link `@click.prevent`（SPA 行為），點擊呼叫 `openRelated(rel)` 跳轉到對應列表 / 單據（handler 內依 `rel.type` 路由）
 - **禁加 link icon**（如 `<span class="material-symbols-outlined">link</span>`）
-- 整段 Smart Bar 內所有顏色統一 `#2877EE`，視覺動線左到右串連一致
+- 整段 Smart Bar 內所有顏色統一 `rgb(var(--color-sf-primary))`，視覺動線左到右串連一致
 
 ---
 
