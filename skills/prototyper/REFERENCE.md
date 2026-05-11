@@ -127,7 +127,35 @@ createApp({
     // ===== State machine handlers（依 profile 命名） =====
     // 例:ERP profile 用 onSubmit / onApprove / onUnapprove / onVoid
 
-    return { breadcrumb, programId, version, navItems, activeNav, view, tweaks, toasts }
+    // ===== Stepper helpers（ERP profile §Stepper 三狀態結構） =====
+    // form.status ∈ stateOrder 時：step 在 cur 前 = done、等於 cur = active、之後 = pending
+    // bar 的狀態 = 左側 step 的狀態（見 profile 對應矩陣）
+    const stateOrder = ['draft', 'submitted', 'approved']
+    const stepState = (s) => {
+      const cur = stateOrder.indexOf(form.status)
+      const idx = stateOrder.indexOf(s)
+      if (idx < cur) return 'done'
+      if (idx === cur) return 'active'
+      return 'pending'
+    }
+    const stepClass = (s, kind = 'step') => {
+      const st = stepState(s)
+      if (st === 'pending') return ''
+      return kind === 'bar' ? `stepper__bar--${st}` : `stepper__step--${st}`
+    }
+
+    // ===== Smart Bar（ERP profile §Smart Bar `card-btn` 結構） =====
+    // form.relations 形狀：[{ type, count, unit, title }, ...]
+    //   count === null 的條目（如「會計傳票」）省略 count + 單位，永遠顯示
+    //   count > 0 才顯示；count === 0 過濾掉
+    const visibleRelations = computed(() =>
+      (form.relations || []).filter(r => r.count == null || r.count > 0)
+    )
+
+    return {
+      breadcrumb, programId, version, navItems, activeNav, view, tweaks, toasts,
+      stepState, stepClass, visibleRelations,
+    }
   }
 }).mount('#app')
 ```
