@@ -28,7 +28,7 @@
 | 模組分類 | breadcrumb 第一段、nav-rail 高亮 |
 | Odoo model | programID 衍生、chat handoff 必附 |
 | 欄位表（label / 型別 / 必填） | Form View form-grid cells |
-| 狀態流程圖 / 動作清單 | stepper、footer 動作按鈕、tweaks `docState` |
+| 狀態流程圖 / 動作清單 | stepper、footer 動作按鈕 |
 | 關聯單據 | Smart Bar（無關聯則整段移除） |
 | List 預設搜尋條件 | search bar `<option>` |
 
@@ -274,22 +274,6 @@ const visibleRelations = computed(() =>
 
 ---
 
-## Tweaks Panel（必備）
-
-右下浮動 FAB；展開後**至少**含三組 radio:
-
-| fieldset | 必含選項 |
-|---|---|
-| 使用者角色 | 一般使用者 / 主管 / 系統管理員 |
-| 單據狀態 | 草稿 / 已提交 / 已核准 / 已作廢 |
-| 關鍵 flag | 模組相關，如「是否已產生傳票」、「跨公司」、「外幣」 |
-
-`tweaks.*` 變動須持久化到 `localStorage`（在 `app.js` 用 `watch` 寫入 / 啟動時讀取）。
-
-用途: reviewer 不寫程式即可驗證所有狀態分支與權限差異。
-
----
-
 ## Modal / Toast / Empty State
 
 - **Modal kinds**:
@@ -333,7 +317,7 @@ const visibleRelations = computed(() =>
 - [ ] breadcrumb 三層正確（模組分類 / 功能名 / 單號）
 - [ ] nav-rail 高亮對應模組分類
 - [ ] programID 與版號格式正確（`vX.Y.Z.A.B`）
-- [ ] State machine 4 種狀態（含 voided）能透過 Tweaks 切換驗證
+- [ ] State machine 4 種狀態（含 voided）能在 Form View 正確呈現
 - [ ] 「已產生傳票」用 chip，**不在** stepper 內
 - [ ] Stepper 三狀態結構（`--active` / `--done` / pending + `.stepper__bar`）正確、矩陣對應 4 種 form.status
 - [ ] Smart Bar 在無關聯時整段不渲染；有關聯時用 `card-btn` 結構（無 link icon、count + 單位 + 標題 + `arrow_outward`）

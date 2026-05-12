@@ -211,11 +211,6 @@ createApp({
     // ===== View =====
     const view = ref('list')   // 'list' | 'form'
 
-    // ===== Tweaks（持久化 localStorage） =====
-    const tweaks = reactive(JSON.parse(localStorage.getItem('tweaks') || '{}'))
-    // 預設值由 profile 補
-    watch(tweaks, (v) => localStorage.setItem('tweaks', JSON.stringify(v)), { deep: true })
-
     // ===== Toast =====
     const toasts = ref([])
     const showToast = (kind, message) => {
@@ -253,7 +248,7 @@ createApp({
     )
 
     return {
-      breadcrumb, programId, version, navItems, activeNav, view, tweaks, toasts,
+      breadcrumb, programId, version, navItems, activeNav, view, toasts,
       stepState, stepClass, visibleRelations,
     }
   }
@@ -278,10 +273,9 @@ createApp({
 /*    .smart-bar                         */
 /*    .form-section / .form-grid         */
 /*    .form-tabs / .form-footer          */
-/* 5. Tweaks Panel                       */
-/* 6. Overlay (Modal / Toast)            */
-/* 7. Atoms (.btn / .chip / .pill)       */
-/* 8. Responsive @1024px                 */
+/* 5. Overlay (Modal / Toast)            */
+/* 6. Atoms (.btn / .chip / .pill)       */
+/* 7. Responsive @1024px                 */
 ```
 
 所有色彩 / 間距 / 陰影 / 字級必須引用 design tokens CSS 已定義的 CSS variables，**禁** hex、**禁** `@apply`。
@@ -290,4 +284,4 @@ createApp({
 
 ## 章節編號注意
 
-§4–§9 與 §12（App Shell / List View / Form View / State Machine / Tweaks Panel / Modal-Toast-Empty / Handoff Checklist）為**專案專屬內容**，已移至 `profiles/<project>.md`。本檔保留 §1–§3、§10–§11、§13–§15 跨專案通用條款；編號保留以利對照舊文件。
+§4–§9 與 §12（App Shell / List View / Form View / State Machine / Modal-Toast-Empty / Handoff Checklist）為**專案專屬內容**，已移至 `profiles/<project>.md`。本檔保留 §1–§3、§10–§11、§13–§15 跨專案通用條款；編號保留以利對照舊文件。
