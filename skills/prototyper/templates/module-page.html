@@ -7,7 +7,7 @@
      - <title>             模組中文名
      - breadcrumb          模組分類 / 功能名稱 / 單號
      - programId / version 由 PM 文件 / Odoo model 決定
-     - List View 欄位、Form View sections、tabs、tweaks options
+     - List View 欄位、Form View sections、tabs
   3. 對應的 reactive state 與方法寫到 ../app.js（禁止內嵌）
   4. 模組專屬樣式寫到 ../app.css（禁止 <style>、禁止 @apply）
 
@@ -18,7 +18,7 @@
 
   審查對應：profiles/erp.md
     §App Shell §State Machine §Summary Bar §Stepper §Smart Bar
-    §輸入欄樣式 §按鈕 icon 政策 §List View §Form View §Tweaks
+    §輸入欄樣式 §按鈕 icon 政策 §List View §Form View
 -->
 <!DOCTYPE html>
 <html lang="zh-Hant-TW">
@@ -369,40 +369,6 @@
       <span class="erp-footer__program">{{ programId }}</span>
       <span class="erp-footer__version">v{{ version }}</span>
     </footer>
-
-    <!-- ===== Tweaks Panel（必備） ===== -->
-    <button class="tweaks-fab" @click="tweaksOpen = !tweaksOpen" aria-label="tweaks">
-      <span class="material-symbols-outlined">tune</span>
-    </button>
-    <aside v-if="tweaksOpen" class="tweaks-panel">
-      <header class="tweaks-panel__head">
-        <h3>Reviewer Tweaks</h3>
-        <button @click="tweaksOpen = false" aria-label="close">
-          <span class="material-symbols-outlined">close</span>
-        </button>
-      </header>
-
-      <fieldset>
-        <legend>使用者角色</legend>
-        <label v-for="r in tweakRoles" :key="r.value">
-          <input type="radio" :value="r.value" v-model="tweaks.role"> {{ r.label }}
-        </label>
-      </fieldset>
-
-      <fieldset>
-        <legend>單據狀態</legend>
-        <label v-for="s in tweakStates" :key="s.value">
-          <input type="radio" :value="s.value" v-model="tweaks.docState"> {{ s.label }}
-        </label>
-      </fieldset>
-
-      <fieldset>
-        <legend>關鍵 flag</legend>
-        <label v-for="f in tweakFlags" :key="f.value">
-          <input type="radio" :value="f.value" v-model="tweaks.flag"> {{ f.label }}
-        </label>
-      </fieldset>
-    </aside>
 
     <!-- ===== Modal: confirm / deeplink ===== -->
     <div v-if="modal.open" class="modal-overlay" @click.self="modal.open = false">

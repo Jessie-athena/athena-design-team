@@ -42,8 +42,7 @@ description: Turn a module spec (PM doc, sibling module, or chat description) in
 2. 替換 App Shell（依 profile 規範:breadcrumb / nav / footer / programID / version 等）
 3. 建構 List View（自檢項目見 profile）
 4. 建構 Form View（自檢項目見 profile）
-5. 建構 Tweaks Panel（**必備**，至少三組 radio；狀態值寫入 `localStorage`）
-6. Modal / Toast / Empty State 範例（modal 兩款:`confirm` + `deeplink`，**`pick` 已淘汰**）
+5. Modal / Toast / Empty State 範例（modal 兩款:`confirm` + `deeplink`，**`pick` 已淘汰**）
 
 ### 階段 3｜本機審查（自檢）
 
@@ -96,7 +95,6 @@ description: Turn a module spec (PM doc, sibling module, or chat description) in
 - 「幫我做一個 XXX 模組的 prototype」
 - 「這份 PM 文件 [path] 轉成 prototype」
 - 「參考 [既有模組].html 做一個類似的 [新模組]」
-- 「補一個 tweaks panel 讓 reviewer 切換狀態」
 - 「讀取此份 PRD 並產出互動功能及前端頁面」
 
 ## 7. 檔案結構
