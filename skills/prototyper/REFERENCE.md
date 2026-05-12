@@ -197,7 +197,7 @@ Prototype 階段所有元件用 **原生 HTML + Tailwind class + Vue directive**
 > 共用 `app.js`，每個模組各自 mount。下例為通用骨架；專案專屬欄位（nav-rail 五項、state machine 命名等）請依 profile 調整。
 
 ```js
-const { createApp, ref, reactive, computed, watch, onMounted } = Vue
+const { createApp, ref, reactive, computed, onMounted } = Vue
 
 createApp({
   setup() {
