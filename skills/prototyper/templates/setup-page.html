@@ -1,0 +1,377 @@
+<!--
+  Athena ERP Prototype — Setup Page Starter（設定檔專用）
+  ======================================================
+  使用方式：
+  1. 複製本檔到 prototype/project/<模組中文名>.html（如「地點設定檔.html」）
+  2. 替換 placeholder：
+     - <title>             模組中文名（如「地點設定檔 — Athena ERP」）
+     - breadcrumb          設定群組設定檔 / 功能名 / record 名稱（或「新增 XX」）
+     - programId / version 由 PM 文件 / Odoo model 決定
+     - settingsSideNav     同組設定檔清單（如「進銷存設定」群組）
+     - List View 欄位、Form View groups、Footer 動作
+  3. 對應 reactive state 與 handlers 寫到 ../app.js（禁止內嵌）
+  4. 模組專屬樣式寫到 ../app.css（禁止 <style>、禁止 @apply）
+
+  與 module-page.html（作業檔）的關鍵差異：
+    - 無 Summary Bar、無 Stepper、無 Smart Bar
+    - List 批次模式僅「批次刪除」+「已選取 N 筆 ×」chip
+    - List 狀態欄為 st-chip（display only，不在列表 toggle）
+    - List 操作欄為「編輯 + 刪除」（非「檢視」）
+    - Form 章節：基本資料 → 附加群組 →（可選）稽核軌跡
+    - Form `active` 用 Dropdown「啟用/停用」（非 boolean_toggle）
+    - Form Footer：上下筆 / 刪除 / 更多操作 / 儲存變更（無狀態動作按鈕）
+    - 新增「設定檔側欄」（main panel 左側 sub-nav）
+
+  視覺系統：Claude Design 內部 design system bundle
+    https://api.anthropic.com/v1/design/h/3NlTfIVpv5CoYw5xmHzi5g
+    本 template 已預設成 DS-correct；常見反射錯誤見 pitfalls.md「DS 反射對照表」。
+
+  審查對應：profiles/erp.md
+    §App Shell §設定檔（Master Data）特化規則
+    §輸入欄樣式 §按鈕 icon 政策
+-->
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=1280">
+  <title>模組中文名 — Athena ERP</title>
+  <link rel="stylesheet" href="../ds/colors_and_type.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Symbols+Outlined">
+  <link rel="stylesheet" href="../app.css">
+</head>
+<body>
+  <div id="app">
+
+    <!-- ===== App Shell · Header（與 module-page 一致） ===== -->
+    <header class="erp-header">
+      <button class="erp-header__home" @click="goHome" aria-label="home">
+        <span class="material-symbols-outlined">home</span>
+      </button>
+      <nav class="erp-breadcrumb" aria-label="breadcrumb">
+        <span>{{ breadcrumb.module }}</span>
+        <span class="erp-breadcrumb__sep">/</span>
+        <span>{{ breadcrumb.feature }}</span>
+        <span v-if="breadcrumb.record" class="erp-breadcrumb__sep">/</span>
+        <span v-if="breadcrumb.record">{{ breadcrumb.record }}</span>
+      </nav>
+      <div class="erp-header__actions">
+        <button @click="toggleFavorite" :class="{ 'is-favorite': isFavorite }" aria-label="favorite">
+          <span class="material-symbols-outlined">{{ isFavorite ? 'star' : 'star_border' }}</span>
+        </button>
+        <button aria-label="notifications"><span class="material-symbols-outlined">notifications</span></button>
+        <button aria-label="settings"><span class="material-symbols-outlined">settings</span></button>
+        <button class="erp-header__avatar">{{ user.initials }}</button>
+      </div>
+    </header>
+
+    <div class="erp-body">
+      <!-- ===== App Shell · Nav Rail（5 項固定順序；設定檔高亮第 5 項） ===== -->
+      <aside class="nav-rail">
+        <button v-for="item in navItems" :key="item.key"
+                :class="{ 'is-active': item.key === activeNav }"
+                @click="activeNav = item.key">
+          <span class="material-symbols-outlined">{{ item.icon }}</span>
+          <span class="nav-rail__label">{{ item.label }}</span>
+        </button>
+      </aside>
+
+      <!--
+        ===== 設定檔側欄（sub-nav within main panel） =====
+        僅在「模組分類 = 設定檔」時渲染；資料模型見 profiles/erp.md §設定檔側欄
+      -->
+      <aside class="settings-sidenav">
+        <div v-for="group in settingsSideNav" :key="group.title" class="settings-sidenav__group">
+          <div class="settings-sidenav__title">{{ group.title }}</div>
+          <ul>
+            <li v-for="item in group.items" :key="item.key"
+                :class="{ 'is-active': item.key === activeSettingKey }"
+                @click="openSetting(item.key)">
+              <span class="material-symbols-outlined">{{ item.icon }}</span>
+              <span>{{ item.label }}</span>
+            </li>
+          </ul>
+        </div>
+      </aside>
+
+      <main class="erp-main">
+
+        <!-- ============================================== -->
+        <!-- ===== List View ============================== -->
+        <!-- ============================================== -->
+        <section v-if="view === 'list'" class="list-view">
+          <!--
+            Toolbar：未選 → [新增 XX]（無 icon）；已選 → icon-only 批次刪除 + chip
+            設定檔不提供批次提交 / 批次作廢 / 批次匯出 / 批次啟用 / 批次停用
+          -->
+          <div class="toolbar">
+            <div class="toolbar__primary">
+              <template v-if="selectedRows.length === 0">
+                <button class="btn btn--primary" @click="onCreate">新增{{ entityLabel }}</button>
+              </template>
+              <template v-else>
+                <button class="btn btn--icon btn--danger-outline" @click="onBatchDelete" aria-label="batch delete">
+                  <span class="material-symbols-outlined">delete</span>
+                </button>
+                <span class="chip chip--selected">
+                  已選取 {{ selectedRows.length }} 筆
+                  <button class="chip__close" @click="clearSelection" aria-label="clear selection">
+                    <span class="material-symbols-outlined">close</span>
+                  </button>
+                </span>
+              </template>
+            </div>
+            <div class="toolbar__right">
+              <!-- 分群下拉（設定檔常用，作業檔不一定有） -->
+              <div class="toolbar__group-by">
+                <label>分群</label>
+                <select v-model="groupBy">
+                  <option value="">未選擇</option>
+                  <option v-for="g in groupByOptions" :key="g.value" :value="g.value">{{ g.label }}</option>
+                </select>
+              </div>
+              <button class="btn" @click="filtersOpen = !filtersOpen">篩選</button>
+            </div>
+          </div>
+
+          <!-- Search：第一選項固定「全部」(value="") -->
+          <div v-if="filtersOpen" class="search-bar">
+            <input type="text" v-model="filters.keyword" :placeholder="searchPlaceholder">
+            <select v-for="f in searchFilters" :key="f.key" v-model="filters[f.key]">
+              <option value="">全部</option>
+              <option v-for="opt in f.options" :key="opt.value" :value="opt.value">{{ opt.label }}</option>
+            </select>
+            <button class="btn btn--primary" @click="onSearch">搜尋</button>
+            <button class="btn" @click="onResetFilters">清除</button>
+          </div>
+
+          <!--
+            Grid：checkbox + 主欄 sticky-left；操作欄 sticky-right
+            狀態欄為 st-chip（display only，不在列表 toggle）
+            操作欄為「編輯 + 刪除」
+          -->
+          <div v-if="rows.length > 0" class="grid-wrap">
+            <table class="grid">
+              <thead>
+                <tr>
+                  <th class="sticky-left col-check">
+                    <input type="checkbox" :checked="allSelected" @change="onToggleAll">
+                  </th>
+                  <th v-for="col in columns" :key="col.key"
+                      :class="[col.sticky ? 'sticky-left' : '', col.align === 'right' ? 'text-right' : '']">
+                    {{ col.label }}
+                  </th>
+                  <th class="sticky-right col-actions">操作</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr v-for="row in rows" :key="row.id">
+                  <td class="sticky-left col-check">
+                    <input type="checkbox" v-model="selectedRows" :value="row.id">
+                  </td>
+                  <td v-for="col in columns" :key="col.key"
+                      :class="[col.sticky ? 'sticky-left' : '', col.align === 'right' ? 'text-right' : '']">
+                    <!-- 主欄連結樣式 -->
+                    <a v-if="col.linkToForm" class="link" @click="openForm(row.id)">{{ row[col.key] || '—' }}</a>
+                    <!-- 狀態欄 st-chip（display only） -->
+                    <span v-else-if="col.kind === 'status'" :class="['st-chip', row.active ? 'st-chip--active' : 'st-chip--inactive']">
+                      {{ row.active ? '啟用' : '停用' }}
+                    </span>
+                    <!-- 一般欄 -->
+                    <span v-else>{{ row[col.key] || '—' }}</span>
+                  </td>
+                  <td class="sticky-right col-actions">
+                    <button @click="openForm(row.id)" aria-label="edit">
+                      <span class="material-symbols-outlined">edit</span>
+                    </button>
+                    <button @click="onDeleteRow(row)" aria-label="delete" :disabled="!canDelete">
+                      <span class="material-symbols-outlined">delete</span>
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Empty state：inbox icon + 主訊息 + 副說明 -->
+          <div v-else class="empty-state">
+            <span class="material-symbols-outlined">inbox</span>
+            <p class="empty-state__title">無符合條件的{{ entityLabel }}</p>
+            <p class="empty-state__hint">請調整搜尋條件或 <a class="link" @click="onResetFilters">清除篩選</a></p>
+          </div>
+
+          <!-- Pager：每頁 20 / 50 / 100；左群（頁碼 + 頁筆數）+ 右群（範圍） -->
+          <div v-if="rows.length > 0" class="pager">
+            <div class="pager__left">
+              <button @click="page = 1" :disabled="page <= 1" aria-label="first">
+                <span class="material-symbols-outlined">first_page</span>
+              </button>
+              <button @click="prevPage" :disabled="page <= 1" aria-label="prev">
+                <span class="material-symbols-outlined">chevron_left</span>
+              </button>
+              <span class="pager__page">{{ page }}</span>
+              <button @click="nextPage" :disabled="page >= totalPages" aria-label="next">
+                <span class="material-symbols-outlined">chevron_right</span>
+              </button>
+              <button @click="page = totalPages" :disabled="page >= totalPages" aria-label="last">
+                <span class="material-symbols-outlined">last_page</span>
+              </button>
+              <select v-model.number="pageSize">
+                <option :value="20">20</option>
+                <option :value="50">50</option>
+                <option :value="100">100</option>
+              </select>
+              <span class="pager__unit">筆/每頁</span>
+            </div>
+            <span class="pager__range">{{ page }} 至 {{ totalPages }} 頁（共 {{ total }} 筆）</span>
+          </div>
+        </section>
+
+        <!-- ============================================== -->
+        <!-- ===== Form View ============================== -->
+        <!-- ============================================== -->
+        <section v-else-if="view === 'form'" class="form-view form-view--setup">
+          <!--
+            設定檔 Form：無 Summary Bar、無 Stepper、無 Smart Bar
+            麵包屑帶 record name（如「進銷存設定檔 / 地點設定 / 一樓門市」）已在 erp-header 表現
+            頁面內以章節分群（基本資料 → 附加群組 →（可選）稽核軌跡）
+          -->
+
+          <!-- Page Title bar（簡單頁標，非 sticky；複雜情境可改 sticky） -->
+          <header class="form-view__title">
+            <h1>{{ form.id ? form.name : '新增' + entityLabel }}</h1>
+          </header>
+
+          <!-- Group 1 — 基本資料（必有） -->
+          <section class="form-section">
+            <header class="form-section__bar">
+              <h2 class="form-section__title">基本資料</h2>
+            </header>
+            <div class="form-grid form-grid--4">
+              <div class="form-field">
+                <label>名稱 <span class="required">*</span></label>
+                <input type="text" v-model="form.name" placeholder="例如：備用庫存">
+              </div>
+              <div class="form-field">
+                <label>代號</label>
+                <input type="text" v-model="form.code" placeholder="儲存時自動產生">
+              </div>
+              <!-- 其餘欄位依模組規格 — 以下為範例 placeholder -->
+              <div class="form-field">
+                <label>類型 <span class="required">*</span></label>
+                <select v-model="form.type">
+                  <option v-for="t in typeOptions" :key="t.value" :value="t.value">{{ t.label }}</option>
+                </select>
+              </div>
+              <div class="form-field">
+                <label>狀態</label>
+                <!-- active 用 Dropdown，**非** boolean_toggle -->
+                <select v-model="form.active">
+                  <option :value="true">啟用</option>
+                  <option :value="false">停用</option>
+                </select>
+              </div>
+            </div>
+          </section>
+
+          <!-- Group 2 — 附加群組（依模組規格新增；可有可無） -->
+          <section v-if="extraGroups.length > 0" v-for="g in extraGroups" :key="g.key" class="form-section">
+            <header class="form-section__bar">
+              <h2 class="form-section__title">{{ g.title }}</h2>
+            </header>
+            <div class="form-grid" :class="'form-grid--' + (g.columns || 4)">
+              <!-- 各模組依規格自行擴充 form-field -->
+              <slot :name="'group-' + g.key">
+                <!-- placeholder：複製模組後在此填入欄位 -->
+              </slot>
+            </div>
+          </section>
+
+          <!--
+            Group N — 稽核軌跡（最近變更）：可選；只在 tracking.length > 0 時顯示
+            設定檔以 inline group 表現，**不使用** Odoo chatter
+          -->
+          <section v-if="draft.tracking && draft.tracking.length > 0" class="form-section form-section--audit">
+            <header class="form-section__bar">
+              <h2 class="form-section__title">稽核軌跡（最近變更）</h2>
+            </header>
+            <ul class="audit-list">
+              <li v-for="t in draft.tracking.slice(0, 5)" :key="t.id">
+                <span class="audit-list__msg">{{ t.message }}</span>
+                <span class="audit-list__sep">─</span>
+                <time class="audit-list__time">{{ t.timestamp }}</time>
+              </li>
+            </ul>
+          </section>
+
+          <!--
+            Form Footer（設定檔版，必依）
+            左：上下筆 nav（route.id === 'new' 時整組停用）
+            右：刪除 / 更多操作 / 儲存變更
+            **無** 提交 / 核准 / 解核 / 作廢
+          -->
+          <footer class="form-footer form-footer--setup">
+            <div class="form-footer__nav">
+              <button @click="prevRecord" :disabled="isNew || recordIndex <= 1" aria-label="prev">
+                <span class="material-symbols-outlined">chevron_left</span>
+              </button>
+              <span class="form-footer__pos">{{ isNew ? '— / —' : `${recordIndex} / ${recordTotal}` }}</span>
+              <button @click="nextRecord" :disabled="isNew || recordIndex >= recordTotal" aria-label="next">
+                <span class="material-symbols-outlined">chevron_right</span>
+              </button>
+            </div>
+            <div class="form-footer__actions">
+              <button class="btn btn--danger-outline" @click="onDeleteForm" :disabled="!canDelete || isNew">刪除</button>
+              <div class="dropdown">
+                <button class="btn btn--outline" @click="moreOpen = !moreOpen">
+                  更多操作<span class="material-symbols-outlined">expand_more</span>
+                </button>
+                <ul v-if="moreOpen" class="dropdown__menu">
+                  <li @click="onSaveAndCreate(); moreOpen = false">儲存後新增</li>
+                  <li @click="onDuplicate(); moreOpen = false" :class="{ 'is-disabled': isNew }">複製</li>
+                </ul>
+              </div>
+              <button v-if="canSave" class="btn btn--primary" @click="onSave">儲存變更</button>
+              <span v-else class="readonly-tag">
+                <span class="material-symbols-outlined">visibility</span>唯讀檢視
+              </span>
+            </div>
+          </footer>
+        </section>
+      </main>
+    </div>
+
+    <!-- ===== App Shell · Footer ===== -->
+    <footer class="erp-footer">
+      <span class="erp-footer__program">{{ programId }}</span>
+      <span class="erp-footer__version">v{{ version }}</span>
+    </footer>
+
+    <!-- ===== Modal: confirm / deeplink ===== -->
+    <div v-if="modal.open" class="modal-overlay" @click.self="modal.open = false">
+      <div :class="['modal', 'modal--' + modal.kind]">
+        <header class="modal__head"><h3>{{ modal.title }}</h3></header>
+        <div class="modal__body">
+          <p>{{ modal.message }}</p>
+          <p v-if="modal.hint" class="modal__hint">{{ modal.hint }}</p>
+        </div>
+        <footer class="modal__foot">
+          <button class="btn" @click="modal.open = false">取消</button>
+          <button class="btn btn--primary" @click="modal.confirm">確認</button>
+        </footer>
+      </div>
+    </div>
+
+    <!-- ===== Toast：success / warning / error / info，3 秒自動消失 ===== -->
+    <div class="toast-stack">
+      <div v-for="t in toasts" :key="t.id" :class="['toast', 'toast--' + t.kind]">
+        <span class="material-symbols-outlined">{{ toastIcon(t.kind) }}</span>
+        <span>{{ t.message }}</span>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
+  <script src="../app.js"></script>
+</body>
+</html>

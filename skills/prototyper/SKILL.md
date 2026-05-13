@@ -39,9 +39,12 @@ description: Turn a module spec (PM doc, sibling module, or chat description) in
 ### 階段 2｜製作 .html（核心）
 
 1. 複製 profile 指定的 starter template → 目標路徑
+   - 作業檔（transaction documents，含狀態流程） → `templates/module-page.html`
+   - 設定檔（master data，僅 active true/false） → `templates/setup-page.html`
+   - 類型判斷準則由 profile 規定（ERP 見 `profiles/erp.md §設定檔（Master Data）特化規則`）
 2. 替換 App Shell（依 profile 規範:breadcrumb / nav / footer / programID / version 等）
-3. 建構 List View（自檢項目見 profile）
-4. 建構 Form View（自檢項目見 profile）
+3. 建構 List View（自檢項目見 profile，作業檔與設定檔有獨立清單）
+4. 建構 Form View（自檢項目見 profile，作業檔與設定檔有獨立清單）
 5. Modal / Toast / Empty State 範例（modal 兩款:`confirm` + `deeplink`，**`pick` 已淘汰**）
 
 ### 階段 3｜本機審查（自檢）
@@ -81,6 +84,7 @@ description: Turn a module spec (PM doc, sibling module, or chat description) in
 | 必填判斷只在前端？ | Prototype 階段視覺上有 `*` 即可；validation 邏輯由 production code 處理 |
 | 狀態欄要 pill 還是 stepper？ | List 用 pill；Form summary card 用 stepper |
 | 響應式欄位太多被截斷？ | 橫向 scroll；**禁**隱藏關鍵欄位 |
+| 規格沒提「狀態流程」是不是缺漏？ | 不一定。設定檔（master data）本來就沒有狀態機，僅 `active`；參照 profile 的設定檔特化規則 |
 
 ## 5. 上下游銜接
 
@@ -107,7 +111,8 @@ skills/prototyper/
 ├── profiles/
 │   └── erp.md            # Athena ERP 專案專屬規則
 └── templates/
-    └── module-page.html  # ERP starter（其他 profile 可指向自己的 template）
+    ├── module-page.html  # 作業檔 starter（含狀態流程；其他 profile 可指向自己的 template）
+    └── setup-page.html   # 設定檔 starter（master data；無狀態機 / 無 Smart Bar / 設定檔側欄）
 ```
 
 ## 8. 輸出前 Checklist（通用最低限度）

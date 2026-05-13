@@ -17,6 +17,7 @@
 
 1. **對應 Odoo model**（如 `psi.sale_order`，衍生 `programID = PSI-SO`）
 2. **模組分類**（財務 / 進銷存 / 人事 / 設定檔，決定 breadcrumb 與 nav-rail 高亮）
+3. **單據類型**（**作業檔 / 設定檔**，決定走哪份 starter template 與下游章節）— 判斷準則見 §設定檔（Master Data）特化規則
 
 ## 規格抽取表（PM 文件 → prototype）
 
@@ -28,13 +29,17 @@
 | 模組分類 | breadcrumb 第一段、nav-rail 高亮 |
 | Odoo model | programID 衍生、chat handoff 必附 |
 | 欄位表（label / 型別 / 必填） | Form View form-grid cells |
-| 狀態流程圖 / 動作清單 | stepper、footer 動作按鈕 |
-| 關聯單據 | Smart Bar（無關聯則整段移除） |
+| 狀態流程圖 / 動作清單 | stepper、footer 動作按鈕（**設定檔不需要**） |
+| 關聯單據 | Smart Bar（無關聯則整段移除；**設定檔通常不渲染**） |
 | List 預設搜尋條件 | search bar `<option>` |
+
+> 設定檔的規格中不會出現「狀態流程」、「核准 / 提交 / 作廢」等欄位；缺漏不代表規格不完整，是類型本身就不需要。
 
 ## 檔案路徑
 
-- **starter template**: `templates/module-page.html`（已 ERP-shaped）
+- **starter template**:
+  - 作業檔 → `templates/module-page.html`（含 Summary Bar / Stepper / Smart Bar / 狀態動作群）
+  - 設定檔 → `templates/setup-page.html`（含設定檔側欄 / 批次刪除 / active chip / 儲存變更 footer）
 - **輸出**: `prototype/project/<模組中文名>.html`
 - **配套資源**: `prototype/app.js`、`prototype/app.css`、`prototype/ds/colors_and_type.css`
 - **規格來源**: `docs/notion/*.md`（檔名同模組中文名）
@@ -271,6 +276,109 @@ const visibleRelations = computed(() =>
 - [ ] Tab block: 表頭右側固定 add 按鈕（按鈕**無 add icon**，詳 §按鈕 icon 政策）；行內編輯模式有 save / cancel
 - [ ] Footer 三段: 上下筆 / 動作群（按鈕**分層級配色 + 無 icon**） / 「更多操作」下拉
 - [ ] `form.moveId` 存在時顯示「已產生傳票」chip（**禁**當成獨立狀態加進 stepper）
+
+---
+
+## 設定檔（Master Data）特化規則
+
+> 「設定檔」(master data) 的 UI 慣例與「作業檔」(transaction documents) 不同。判斷類型後，**以下章節 override 前述作業檔慣例**：
+> - State Machine、Summary Bar (stepper)、Smart Bar、Form Footer 動作群 — **全部不適用**
+> - List View 批次操作、Form View 章節結構、Footer — **依本節重寫**
+> - Modal / Toast / Empty State、輸入欄樣式、按鈕 icon 政策、App Shell — **沿用前述章節**
+
+### 類型判斷準則（命中任一即為設定檔）
+
+- Odoo model 屬於設定檔層（如 `stock.location` 擴展、`psi.sale_reason`、`psi.sales_category`、`cm.partner_grade`、`cm.branch`、`cm.area`）
+- 規格文件路徑在 `docs/notion/<模組>設定檔/`、`docs/notion/共用設定檔/`、`docs/notion/財務設定檔/`、`docs/notion/進銷存設定檔/`
+- 規格中**無**「狀態流程圖」、**無**「核准 / 提交 / 作廢」動作
+- 模組分類為「設定檔」（nav-rail 第 5 項）
+
+### 作業檔 vs 設定檔 差異速查
+
+| 維度 | 作業檔 (default) | 設定檔 (override) |
+|---|---|---|
+| State machine | draft / submitted / approved / voided | 僅 `active`: true/false |
+| Form Summary Bar | sticky, 上下兩塊, stepper + 指標 | **不使用**；以麵包屑 + Page Title 取代 |
+| Stepper | 三狀態 (pending/active/done) + bar | **不使用** |
+| Smart Bar (card-btn) | 關聯單據列 | **不使用**（設定檔通常無下游關聯） |
+| 模組分類 nav-rail | 財務 / 進銷存 / 人事 | **設定檔** |
+| List 工具列批次操作 | 批次提交 / 批次作廢 / 批次匯出 | **僅批次刪除**；icon-only danger 按鈕 + `[已選取 N 筆 ×]` chip |
+| List 狀態欄 | status-pill (4 種狀態) | **st-chip**（啟用 / 停用）；display only, **不在列表 toggle** |
+| List 操作欄 | view (👁) | **edit + delete**（兩個 icon button） |
+| Form 章節結構 | 基本資料 + Smart Bar + Tabs（明細） | 基本資料 → 附加群組（依模組）→（可選）稽核軌跡 |
+| Form `active` 欄位 | n/a | **Dropdown**「啟用 / 停用」；**非** `boolean_toggle` widget |
+| Form 動作按鈕 | 提交 / 核准 / 解核 / 作廢 + 更多 | 刪除（danger outline）/ 更多操作（儲存後新增、複製）/ **儲存變更** (primary) |
+| Form Footer 左群 | 上下筆 (prev/next doc) | 上下筆（`[‹] {n}/{total} [›]`）；新增（`route.id === 'new'`）時整組停用 |
+| 稽核軌跡 | n/a（暫不在 prototype 表現） | **表單內 Group**（最近 5 筆 tracking inline）；**不使用 Odoo chatter** |
+| 設定檔側欄 | 不使用 | **使用**（main panel 左側列出同組設定，方便跳轉） |
+
+### 設定檔側欄（main panel 左側 sub-nav）
+
+設定檔常以「主檔設定 → 進銷存設定 → 〔本設定〕」進入；**同組內**的同類設定（如「進銷存設定」下：地點設定、成本計算層級、倉庫設定、產品類別設定檔、盤存制依據）以**側欄**列出，方便 reviewer 在設定群組內快速跳轉。
+
+- **位置**：nav-rail 右邊、main panel 左邊；寬度 220px（≤1024px 時整段收成 dropdown，**非**隱藏）
+- **結構**：群組標題（如「共用設定」、「財務設定」、「進銷存設定」）+ 連結列表（icon + label）
+- **行為**：點擊切換到對應設定的 List View；本檔高亮
+- **資料模型**：`settingsSideNav` array，每個 group `{ title, items: [{ key, label, icon }] }`；`activeSettingKey` 決定高亮
+- **顯示條件**：**僅在「模組分類 = 設定檔」**時渲染；作業檔不渲染
+
+### List View 七項自檢（設定檔版）
+
+- [ ] Toolbar:`selectedRows.length === 0` 時顯示 `[新增 XX]`（primary、**無 icon**）；> 0 時切換為 icon-only `[🗑 批次刪除]`（danger 框） + `[已選取 N 筆 ×]` chip
+- [ ] 點 chip 內 `×` 取消選取；**不**提供獨立「取消選取」文字按鈕
+- [ ] **無**批次提交 / 批次作廢 / 批次匯出 / 批次啟用 / 批次停用
+- [ ] Search 第一個 `<option>` 為 `value=""` 標籤「全部」（規則同作業檔）
+- [ ] 狀態 filter 只列 啟用 / 停用（搜尋區可省略此 filter，由前端切換管道處理）
+- [ ] Grid 欄位順序:`checkbox(sticky-left) → 主欄（code/name 連結樣式, sticky-left）→ 一般欄 → 狀態(st-chip, display-only) → actions(sticky-right)`
+- [ ] 操作欄: `[編輯]` + `[刪除]`（兩個 icon button；**非** `[檢視]`）
+
+### Form View 七項自檢（設定檔版）
+
+- [ ] **無** Summary Bar、**無** Stepper、**無** Smart Bar
+- [ ] 麵包屑帶 record name（如「進銷存設定檔 / 地點設定 / 一樓門市」）或「新增 XX」
+- [ ] 章節分群以「基本資料 → 附加群組 →（可選）稽核軌跡」為骨幹；DynamicForm 外層無 border、padding 0
+- [ ] 必填欄位 label 加 `<span class="required">*</span>`；read-only 用 `readonly` 屬性，**禁**用 `disabled`
+- [ ] `active` 欄位用 Dropdown「啟用 / 停用」，**非** `boolean_toggle` widget
+- [ ] 稽核軌跡群組：只在 `tracking.length > 0` 時顯示；最近 5 筆 inline 顯示「{訊息} ─ {時間戳 monospace}」；背景 `--bg-surface-variant`、12px、`--text-secondary`
+- [ ] 隱藏欄位（如本檔的 `scrap_location` / `return_location` / `replenish_location` 等 boolean flag）**不渲染** UI，但保留資料
+
+### Form Footer（設定檔版，必依）
+
+| 區塊 | 內容 | 說明 |
+|---|---|---|
+| 左群（rec-nav） | `[‹] {recordIndex}/{recordTotal} [›]` | 上下筆切換；`route.id === 'new'` 時整組停用 |
+| 右群 | `[刪除]`（danger outline） | 受 `canDelete` 控制（manager 角色才可用）；點擊 → 阻擋（如 `quant_count > 0`）走 error toast；無阻擋 → confirm modal（danger）→ success toast + 返回列表 |
+|  | `[更多操作 ▾]`（primary outline） | 下拉：`儲存後新增`、`複製` |
+|  | `[儲存變更]`（primary fill） | 受 `canSave` 控制；唯讀視角改顯示 `👁 唯讀檢視` 標籤 |
+
+> **無**「提交 / 核准 / 解核 / 作廢」；**無**「回列表」按鈕（離開靠麵包屑或 `isDirty` 攔截 modal）。
+
+### 設定檔 Modal / Toast 特有場景
+
+| 場景 | 元件 | 樣式 | 文案範例 |
+|---|---|---|---|
+| 離開未儲存表單 | confirm | warning | 您有尚未儲存的變更。是否放棄並返回列表？ |
+| 刪除受阻（單筆，如有依賴庫存） | toast | error | 「{name}」仍有 N 筆庫存，無法刪除 |
+| 刪除受阻（批次） | toast | error | 其中 N 筆仍有依賴，無法刪除（**直接阻擋，不彈 confirm**） |
+| 批次刪除 | confirm | danger | 將刪除 N 筆 {模組}，是否繼續？／hint：此動作無法復原。 |
+| 切換 related 來源（如 `warehouse_id` 連動 `branch_id`） | confirm | info | 此變更將連動更新「館別」與「區域」欄位。 |
+| 複製成功 | toast | success | 已複製，請編輯副本 |
+| 重置篩選 | toast | info | 已重置篩選 |
+
+### 設定檔 Handoff Checklist（疊加通用 + ERP 清單）
+
+通用 + ERP 清單通過後再逐項打勾：
+
+- [ ] 模組分類 = 設定檔，nav-rail 第 5 項高亮；麵包屑首段為「{設定群組}設定檔」
+- [ ] 設定檔側欄渲染，本檔高亮，群組分類正確
+- [ ] 無 Summary Bar / Stepper / Smart Bar（不要從作業檔 template 殘留下來）
+- [ ] List View 批次模式只有「批次刪除」+「已選取 N 筆 ×」chip
+- [ ] List 狀態欄為 st-chip，且**非** toggle（不在列表直接切換 active）
+- [ ] List 操作欄為「編輯 + 刪除」icon button
+- [ ] Form `active` 用 Dropdown（非 `boolean_toggle`）
+- [ ] Form Footer 為「上下筆 / 刪除 / 更多操作 / 儲存變更」四段，**無**狀態動作按鈕
+- [ ] 「離開未儲存表單」攔截 modal 能在 isDirty 時觸發
+- [ ] 刪除受阻場景（單筆與批次）能跑出 error toast 並阻擋
 
 ---
 
