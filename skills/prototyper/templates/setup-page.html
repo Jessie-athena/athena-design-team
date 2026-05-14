@@ -22,6 +22,12 @@
     - Form Footer：上下筆 / 刪除 / 更多操作 / 儲存變更（無狀態動作按鈕）
     - 新增「設定檔側欄」（main panel 左側 sub-nav）
 
+  Form 資料狀態 × readonly 矩陣（詳見 profiles/erp.md §設定檔資料狀態矩陣）：
+    - 新增中    全部欄位可編輯
+    - 編輯啟用  全部可編輯，但「公司別」等建立後不可變欄位 readonly
+    - 編輯停用  整張 form 唯讀；唯獨「狀態」欄保留可編輯（.is-keep-editable）
+    透過 `.form-view--setup` 上的 `is-archived-view` / `is-readonly-view` 兩個 flag 切換
+
   視覺系統：Claude Design 內部 design system bundle
     https://api.anthropic.com/v1/design/h/3NlTfIVpv5CoYw5xmHzi5g
     本 template 已預設成 DS-correct；常見反射錯誤見 pitfalls.md「DS 反射對照表」。
@@ -230,7 +236,10 @@
         <!-- ============================================== -->
         <!-- ===== Form View ============================== -->
         <!-- ============================================== -->
-        <section v-else-if="view === 'form'" class="form-view form-view--setup">
+        <section v-else-if="view === 'form'"
+                 :class="['form-view', 'form-view--setup',
+                          { 'is-archived-view': isFormArchived,
+                            'is-readonly-view': isFormReadonly }]">
           <!--
             設定檔 Form：無 Summary Bar、無 Stepper、無 Smart Bar
             麵包屑帶 record name（如「進銷存設定檔 / 地點設定 / 一樓門市」）已在 erp-header 表現
@@ -241,6 +250,19 @@
           <header class="form-view__title">
             <h1>{{ form.id ? form.name : '新增' + entityLabel }}</h1>
           </header>
+
+          <!--
+            State banner（可選）—— Form view 頂部、第一個 section 之前
+            依資料狀態顯示色條提示，三種 variant：
+              .state-banner--new       新建中（form.id 為空）
+              .state-banner--readonly  編輯中但唯讀（role=readonly 或檢視模式）
+              .state-banner--inactive  停用記錄唯讀（active=false 且 role !== readonly）
+            無多狀態的設定檔（如純 active toggle 無 readonly 視角）可整段省略
+          -->
+          <div v-if="stateBanner" :class="['state-banner', 'state-banner--' + stateBanner.variant]">
+            <span class="material-symbols-outlined">{{ stateBanner.icon }}</span>
+            <span>{{ stateBanner.message }}</span>
+          </div>
 
           <!-- Group 1 — 基本資料（必有） -->
           <section class="form-section">
@@ -263,9 +285,14 @@
                   <option v-for="t in typeOptions" :key="t.value" :value="t.value">{{ t.label }}</option>
                 </select>
               </div>
-              <div class="form-field">
+              <!--
+                狀態欄：active 用 Dropdown「啟用 / 停用」（**非** boolean_toggle）。
+                .is-keep-editable 標記：當整張 form 進入 is-archived-view 時，
+                此欄仍保留可編輯（白底 + 下拉箭頭），讓使用者切回「啟用」並儲存。
+                切換 form.active 應即時更新 is-archived-view 旗標，不需等儲存。
+              -->
+              <div class="form-field is-keep-editable">
                 <label>狀態</label>
-                <!-- active 用 Dropdown，**非** boolean_toggle -->
                 <select v-model="form.active">
                   <option :value="true">啟用</option>
                   <option :value="false">停用</option>
@@ -273,6 +300,21 @@
               </div>
             </div>
           </section>
+
+          <!--
+            Conditional Section pattern：依其他欄位值整段顯隱
+            例：「庫存與盤點」整段在 draft.usage === 'internal' 時才出現。
+            **必須**用 v-if 整段顯隱，**不要**用 disabled / hidden 把欄位逐一鎖死。
+            範例（依需要 uncomment + 改欄位）：
+            <section v-if="draft.usage === 'internal'" class="form-section">
+              <header class="form-section__bar">
+                <h2 class="form-section__title">庫存與盤點</h2>
+              </header>
+              <div class="form-grid form-grid--4">
+                <div class="form-field"> ... </div>
+              </div>
+            </section>
+          -->
 
           <!-- Group 2 — 附加群組（依模組規格新增；可有可無） -->
           <section v-if="extraGroups.length > 0" v-for="g in extraGroups" :key="g.key" class="form-section">

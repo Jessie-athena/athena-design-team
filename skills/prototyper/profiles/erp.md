@@ -254,6 +254,92 @@ const visibleRelations = computed(() =>
 
 ---
 
+## PRD 元件對照（Pass 0 / Pass 2 用）
+
+對應 SKILL.md `### 3. 五階段工作流` 下的 `#### 階段 1` 三段式流程：Pass 0 找權威來源、Pass 1 抽 schema、Pass 2 對表轉實作。本節是 Pass 0 找不到 / 模組無設計文件時的 fallback 對照。
+
+### 權威來源優先順序
+
+衝突時上層贏（呼應 SKILL.md §1 資料來源權重規則）：
+
+1. **模組對應的設計文件元件清單章節** — 該模組元件命名的單一來源；章節命名因模組不同：
+   - `docs/uiflowspec/出納模組/<功能>-設計文件.md §2.1.1 元件實作狀態`
+   - `docs/uiflowspec/應付模組/<功能>-設計文件.md §3.1 元件庫對照表`
+   - `docs/uiflowspec/應收模組/<功能>-互動規格.md §2 互動元素清單`
+   - 找不到時：`find docs/uiflowspec/<模組> -type f` → `grep '元件實作狀態\|元件庫對照\|互動元素清單'`
+2. **本節 Table A** — 設計文件不存在 / 章節未涵蓋時的最小集 fallback
+3. **完整 Syncfusion 元件清單** — `/Users/athena/working/ddd/syncfusion-playground/app/pages/playground/`（95 個 `.vue`，進一步擴充查詢用）
+
+### Table A — PRD 元件詞彙 → 實作對照（最小集）
+
+| PRD 詞彙（含別名）| 適用情境（PRD 文字線索） | Prototype HTML（本 skill） | Production：shared-ui | 共享庫未封裝時：Syncfusion |
+|---|---|---|---|---|
+| TextBox / 文字 | 單行文字、單號、名稱 | `<input type="text">` + `.input--filled` | `<TextInput>` | `<ejs-textbox>` |
+| NumericTextBox / 數值 / Monetary | 金額、數量、含千分位 | `<input>` + `.text-right` | `<NumericInput>` | `<ejs-numerictextbox>` |
+| TextArea / Text Area / textarea / 多行 | 備註、長說明 | `<textarea>` + `.input--filled` | `<TextareaInput>` | `<ejs-textarea>` |
+| DropDownList / Dropdown / 下拉 | 列舉 ≤ 30 項、單選 | `<select>` + 自製 caret | `<DropdownInput>` | `<ejs-dropdownlist>` |
+| MultiSelect / 多選下拉 | 多選 chip 列 | `<select multiple>` | `<MultiSelectInput>` | `<ejs-multiselect>` |
+| DropDownTree / 樹狀下拉 | 階層選擇 | (prototype 略，用 select 代) | `<DropdownTreeInput>` | `<ejs-dropdowntree>` |
+| DropdownPair / 雙欄下拉 | 雙欄複合下拉 | `<select>` 兩個並列 | `<DropdownPairField>` | — |
+| DropdownWithAction | 含側邊動作的下拉 | `<select>` + `<button>` | `<DropdownWithAction>` | — |
+| PhoneField | 電話欄位（國碼 + 號碼） | `<select>` + `<input>` | `<PhoneField>` | — |
+| DatePicker / Date Picker / 日期 | 單一日期 | `<input type="date">` | `<DatePickerInput>` | `<ejs-datepicker>` |
+| DateRangePicker / 日期區間 | 起訖兩日期 | 兩個 `<input type="date">` | `<DateRangePickerInput>` | `<ejs-daterangepicker>` |
+| Checkbox / 勾選框 | 布林、多選列項 | `<input type="checkbox">` | `<CheckboxInput>` | `<ejs-checkbox>` |
+| Dialog / Modal | confirm / deeplink | `<div class="modal-overlay">` | `<AppDialog>` | `<ejs-dialog>` |
+| Toast | 3 秒回饋 | `<div class="toast">` | `<AppToast>` | `<ejs-toast>` |
+| Message / inline alert | 表單區段警示 | `<div class="alert">` | `<AppMessage>` | `<ejs-message>` |
+| Grid / DataGrid / 多筆 | List View、明細 | `<table class="grid">` | `<DataGrid>` | `<ejs-grid>` |
+| NestedGrid / TreeGrid | 巢狀 / 樹表 | `<table>` + 縮排列 | `<NestedGrid>` / `<TreeGrid>` | `<ejs-treegrid>` |
+| Pager / 分頁器 | List 底部 | `<div class="pager">` | `<GridPager>` | `<ejs-pager>` |
+| Header | App shell 頂部 | `<header class="erp-header">` | `<AppHeader>` | — |
+| Sidebar / NavRail | nav-rail + 設定檔側欄 | `<aside class="nav-rail">` | `<NavigationRail>` / `<AppSidebar>` | `<ejs-sidebar>` |
+| ContentSection / 區段容器 | Form section block | `<section class="form-section">` | `<ContentSection>` | — |
+| SearchPanel | List 搜尋區 | `<div class="search-bar">` | `<SearchPanel>` | — |
+| StatusBadge / Badge / 狀態 pill | List 狀態欄、Summary | `<span class="status-pill">` | `<StatusBadge>` | — (自製) |
+| Tab / 分頁 | Form 內 Tab block | `<button class="tab">` | (B 類) | `<ejs-tab>` |
+| Stepper | 作業檔狀態流程 | `<ol class="stepper">` | (B 類) | `<ejs-stepper>` |
+| Button | CTA、操作 | `<button class="btn btn--primary">` | (B 類) | `<ejs-button>` |
+| FAB | 浮動主動作 | `<button class="fab">` | (B 類) | `<ejs-fab>` |
+| AutoComplete / Lookup | FK 到主檔（含搜尋）| `<input>` + suggest | (B 類) | `<ejs-autocomplete>` |
+| Tooltip | hover 說明 | `[title]` attr | (B 類) | `<ejs-tooltip>` |
+| Skeleton | loading | `<div class="skeleton">` | (B 類) | `<ejs-skeleton>` |
+| ProgressBar | 進度條 | `<div class="progress">` | (B 類) | `<ejs-progressbar>` |
+| Spinner | inline loading | `<span class="spinner">` | (B 類) | `<ejs-spinner>` |
+
+> **Switch / boolean_toggle 刻意不列**：設定檔 `active` 強制用 `<DropdownInput>`「啟用 / 停用」（見 §設定檔特化規則）。
+> 「(B 類)」= 共享庫 `@web-erp/shared-ui` 尚未封裝；production 化暫直用 Syncfusion。
+> **C 類（提案待建）**：`AmountSummaryCard`、`DropdownGrid`（3 欄變體）等個別模組提案，需評估後才進共享庫；prototype 階段以 Tailwind 行內組合替代。
+
+### Table B — Form section 元件推論規則（PRD 沒列 `元件` 欄時用）
+
+| PRD 文字線索 | 推論元件（→ 套 Table A） |
+|---|---|
+| 「下拉」「選擇」「列表選一個」 | DropDownList |
+| 「文字」「填入」「輸入」（單行）| TextBox |
+| 「備註」「說明」（多行）| TextArea |
+| 「日期」「YYYY-MM-DD」 | DatePicker |
+| 「日期區間」「起訖」「起迄」 | DateRangePicker |
+| 「金額」「數量」「含千分位」「右對齊」 | NumericTextBox |
+| 「啟用」「停用」（設定檔 active） | DropDownList（**非** Switch；設定檔慣例）|
+| 「唯讀」「系統帶入」 | TextBox readonly（**非** disabled）|
+| 「FK 到」「關聯到」「來自主檔」「domain：」| AutoComplete / Lookup |
+| 「明細」「逐列輸入」「可加列」 | Grid |
+| 「樹狀」「階層」「組織架構」 | DropDownTree |
+| 「多選」「複選」 | MultiSelect |
+
+> 推論結果**必須在 Pass 1 回填 schema 時標記為「推論」**，等使用者確認。
+
+### Section C — 條件式顯隱規則（非元件，但常被 AI 漏處理）
+
+| PRD 文字線索 | 實作 |
+|---|---|
+| 「條件欄位」「依 X 顯隱」「X='internal' 才顯示」 | 整段 `v-if`，**禁**用 `disabled` / `hidden` 逐欄鎖死 |
+| 「核准後唯讀」「狀態 = X 全部唯讀」 | view-level flag class（呼應 §設定檔資料狀態矩陣） |
+| 「保留位置但隱藏」「不顯示但保留資料」 | 個別欄位 `v-show` 或外層保留 wrapper |
+
+---
+
 ## List View 七項自檢
 
 - [ ] Toolbar: `selectedRows.length === 0` 時顯示主操作；> 0 時切換為批次操作
@@ -330,6 +416,7 @@ const visibleRelations = computed(() =>
 - [ ] Search 第一個 `<option>` 為 `value=""` 標籤「全部」（規則同作業檔）
 - [ ] 狀態 filter 只列 啟用 / 停用（搜尋區可省略此 filter，由前端切換管道處理）
 - [ ] Grid 欄位順序:`checkbox(sticky-left) → 主欄（code/name 連結樣式, sticky-left）→ 一般欄 → 狀態(st-chip, display-only) → actions(sticky-right)`
+- [ ] 「一般欄」的語意排序遵守 **識別 → 分類 → 歸屬 → 業務屬性 → 狀態**（如：完整路徑 → 類型 → 所屬倉庫/館別/區域 → 部門 → 公司別 → active）；違反此序視同欄位排序錯誤
 - [ ] 操作欄: `[編輯]` + `[刪除]`（兩個 icon button；**非** `[檢視]`）
 
 ### Form View 七項自檢（設定檔版）
@@ -341,6 +428,42 @@ const visibleRelations = computed(() =>
 - [ ] `active` 欄位用 Dropdown「啟用 / 停用」，**非** `boolean_toggle` widget
 - [ ] 稽核軌跡群組：只在 `tracking.length > 0` 時顯示；最近 5 筆 inline 顯示「{訊息} ─ {時間戳 monospace}」；背景 `--bg-surface-variant`、12px、`--text-secondary`
 - [ ] 隱藏欄位（如本檔的 `scrap_location` / `return_location` / `replenish_location` 等 boolean flag）**不渲染** UI，但保留資料
+- [ ] 整段條件式 section（如「庫存與盤點」`v-if="draft.usage === 'internal'"`）以 `v-if` 整段顯隱，**禁**用 disabled / hidden 把欄位逐一鎖死
+- [ ] State banner（可選）：若有多重資料狀態（新增 / 編輯啟用 / 編輯停用 / 唯讀檢視），在頁面標題與第一個 section 之間加 `.state-banner` 色條提示；無多狀態可省略
+- [ ] 「狀態」欄位 `.form-field.is-keep-editable`，切「啟用 ↔ 停用」即時驅動 `.is-archived-view`（見 §設定檔資料狀態矩陣）
+
+### 設定檔資料狀態矩陣（Form View readonly 行為）
+
+設定檔 form 視角依「資料狀態」決定 readonly 行為。在 `.form-view--setup` 上套兩個 flag class，由 reactive 狀態驅動：
+
+| 資料狀態 | 觸發條件 | `.form-view--setup` flag | 整體 form | 例外可編輯 | Footer 行為 |
+|---|---|---|---|---|---|
+| 新增中 | `route.id === 'new'` | 無 flag | 全欄位可編輯 | — | `儲存變更` 顯示 |
+| 編輯（啟用） | 既有記錄且 `form.active === true` | 無 flag | 可編輯 | 建立後不可變欄位（如 `company_id`）個別加 `readonly` 屬性 | `儲存變更` 顯示 |
+| 編輯（停用） | 既有記錄且 `form.active === false` 且 `role !== 'readonly'` | `.is-archived-view` | 整張 form 唯讀（透明背景 + 1px 灰底線、無下拉箭頭） | `.form-field.is-keep-editable` 標記的「狀態」欄保留可編輯（白底） | `儲存變更` 仍顯示（讓 user 切回啟用並儲存） |
+| 唯讀檢視 | `role === 'readonly'` | `.is-readonly-view` | 全 readonly（含「狀態」欄） | — | `儲存變更` 改顯示 `👁 唯讀檢視` 標籤 |
+
+**互動規則**
+
+- 「狀態」欄切「啟用 ↔ 停用」**立即**驅動 `.is-archived-view` 切換，不需等儲存（reactive computed 直接綁 `form.active`）
+- `.is-keep-editable` 放在最內層 `.form-field`（**非**外層 section），且只用於「狀態」欄這一格；用 CSS 覆寫繼承自 `.is-archived-view` 的 readonly 樣式
+- `role === 'readonly'` **優先於** active 狀態 — readonly 視角下「狀態」欄也鎖定
+- 「公司別」等建立後不可變欄位：個別 input 加 `readonly` 屬性，**不**靠 view-level flag
+
+**class 命名**（建議延用，避免每模組各自取名）
+
+- `.form-view--setup.is-archived-view` — 整張 form 進入停用唯讀
+- `.form-view--setup.is-readonly-view` — readonly 角色視角
+- `.form-field.is-keep-editable` — section 內個別欄位的「白名單例外」標記
+
+**State banner 對照**（若有採用 `.state-banner`）
+
+| 資料狀態 | banner variant |
+|---|---|
+| 新增中 | `.state-banner--new`（藍） |
+| 編輯（啟用） | 不顯示 banner |
+| 編輯（停用） | `.state-banner--inactive`（紅淡） |
+| 唯讀檢視 | `.state-banner--readonly`（灰） |
 
 ### Form Footer（設定檔版，必依）
 
@@ -375,8 +498,10 @@ const visibleRelations = computed(() =>
 - [ ] List View 批次模式只有「批次刪除」+「已選取 N 筆 ×」chip
 - [ ] List 狀態欄為 st-chip，且**非** toggle（不在列表直接切換 active）
 - [ ] List 操作欄為「編輯 + 刪除」icon button
-- [ ] Form `active` 用 Dropdown（非 `boolean_toggle`）
+- [ ] Form `active` 用 Dropdown（非 `boolean_toggle`），文案「啟用 / 停用」（**禁**用「已封存」/「已停用」變體）
 - [ ] Form Footer 為「上下筆 / 刪除 / 更多操作 / 儲存變更」四段，**無**狀態動作按鈕
+- [ ] List 一般欄語意排序遵守「識別 → 分類 → 歸屬 → 業務屬性 → 狀態」
+- [ ] Form 資料狀態矩陣已套用：`.is-archived-view` / `.is-readonly-view` / `.is-keep-editable` 三個 class 對應正確；切「狀態」欄即時生效
 - [ ] 「離開未儲存表單」攔截 modal 能在 isDirty 時觸發
 - [ ] 刪除受阻場景（單筆與批次）能跑出 error toast 並阻擋
 
