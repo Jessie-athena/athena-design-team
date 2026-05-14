@@ -1,6 +1,6 @@
-# Prototyper REFERENCE（通用技術細節）
+# Prototyper Reference（通用技術細節）
 
-> `SKILL.md` 的詳細展開:技術 baseline、token 對照、prototype → production 元件對照、`app.js` / `app.css` 起手式。
+> `SKILL.md` 的詳細展開：token 對照、prototype → production 元件對照、`app.js` / `app.css` 起手式。技術 baseline 以 SKILL.md §3 為單一來源，本檔不重複。
 >
 > **此檔僅含跨專案通用內容**。專案專屬的 App Shell / state machine / list view / form view / handoff 規則見 `profiles/<project>.md`（如 `profiles/erp.md`）。
 
@@ -11,13 +11,9 @@
 - **Prototype = 真相來源**；規格文件與 production code 都對齊到 prototype
 - 文件變更不回拋 prototype；prototype 修正後須重新 export
 
-## §2 Tech Baseline（重申硬性限制）
+## §2 Tech Baseline
 
-- `<html lang="zh-Hant-TW">`（多語環境由 profile 指定）
-- 載入順序:design tokens CSS → Material Symbols → `app.css`
-- Vue 3 production CDN，禁引入其他 UI library
-- 樣式寫到 `app.css`、互動寫到 `app.js`，禁在 `.html` 內嵌
-- Icon 一律 Material Symbols Outlined，禁其他 icon 套件
+技術 baseline（HTML lang / CSS 載入順序 / Vue 3 CDN / `app.js` 與 `app.css` 分離 / Material Symbols icon）已列為 `SKILL.md §3 通用硬性限制`，本檔不重複，以 SKILL.md 為單一來源。
 
 ## §3 File Layout
 
@@ -280,8 +276,3 @@ createApp({
 
 所有色彩 / 間距 / 陰影 / 字級必須引用 design tokens CSS 已定義的 CSS variables，**禁** hex、**禁** `@apply`。
 
----
-
-## 章節編號注意
-
-§4–§9 與 §12（App Shell / List View / Form View / State Machine / Modal-Toast-Empty / Handoff Checklist）為**專案專屬內容**，已移至 `profiles/<project>.md`。本檔保留 §1–§3、§10–§11、§13–§15 跨專案通用條款；編號保留以利對照舊文件。

@@ -1,24 +1,37 @@
 ---
 name: prototyper
-description: Turn a module spec (PM doc, sibling module, or chat description) into a single-file HTML prototype that reviewers can click through. Use when the user says "做一個 XXX 的 prototype", pastes a spec doc path, or asks to convert a Figma frame into a clickable screen. Output is `prototype/project/<模組中文名>.html` (or profile-defined path) plus a chat handoff. Project-specific rules live in `profiles/<project>.md` (Athena ERP → `profiles/erp.md`).
+description: Turn a module spec into a clickable single-file HTML prototype for reviewers. Use when the user asks to build, generate, or convert anything into a prototype — from a PM doc path, an existing prototype to clone, a Figma frame, or a chat-described spec.
+when_to_use: |
+  Activate when the user types phrases like:
+  - 「幫我做一個 XXX 模組的 prototype」
+  - 「這份 PM 文件 [path] 轉成 prototype」
+  - 「參考 [既有模組].html 做一個類似的 [新模組]」
+  - 「讀取此份 PRD 並產出互動功能及前端頁面」
+  Also activate when the user pastes a Figma frame and asks to convert it into a clickable screen.
+allowed-tools: Read Write Edit Glob Grep
 ---
 
 # Prototyper（通用核心）
 
 > 把規格 / 同類舊模組 / chat 描述，**一步到位**轉成可給 reviewer 試玩的單檔 HTML prototype。
 > 不是 Figma 動效設計，不是 production code。**單檔 HTML + Vue 3 production CDN**。
->
-> - 此檔為**所有專案共用核心**；專案專屬規則見 `profiles/<project>.md`
-> - **Athena ERP** → `profiles/erp.md`（必讀，含 App Shell / state machine / chat handoff 5 項）
-> - **反覆出現的審查問題** → `pitfalls.md`（每次製作前掃一眼，避免重蹈覆轍）
-> - **詳細展開**（token / 元件對照 / `app.js` 起手式）→ `REFERENCE.md`
+
+## 支援檔案（按需載入）
+
+- 專案專屬規則：`${CLAUDE_SKILL_DIR}/profiles/<project>.md`
+  - Athena ERP → `${CLAUDE_SKILL_DIR}/profiles/erp.md`（必讀，含 App Shell / state machine / chat handoff 5 項）
+- 反覆出現的審查問題：`${CLAUDE_SKILL_DIR}/pitfalls.md`（每次製作前掃一眼）
+- 詳細展開（token / 元件對照 / `app.js` 起手式）：`${CLAUDE_SKILL_DIR}/reference.md`
+- Starter templates：
+  - 作業檔（含狀態流程）：`${CLAUDE_SKILL_DIR}/templates/module-page.html`
+  - 設定檔（master data，僅 active true/false）：`${CLAUDE_SKILL_DIR}/templates/setup-page.html`
 
 ## 1. 觸發即先確認（缺一不開工）
 
 開工前若使用者沒提供，**主動詢問**：
 
 1. **模組中文名**（決定檔名與 `<title>`）
-2. **專案 profile**（如 ERP，決定載入哪份 `profiles/*.md`；若 cwd 已能推斷則略）
+2. **專案 profile**（如 ERP，決定載入哪份 profile；若 cwd 已能推斷則略）
 3. **來源**（PM 文件路徑 / 同類舊模組 / 純 chat 描述？）
 4. **輸出路徑**（預設 `prototype/project/<模組中文名>.html`，profile 可覆寫）
 
@@ -33,30 +46,29 @@ description: Turn a module spec (PM doc, sibling module, or chat description) in
 
 ### 階段 1｜規格抽取
 
-依 profile 指定的「規格抽取表」抽欄位、狀態、關聯、預設搜尋條件等。
-缺漏即在 chat 詢問。
+依 profile 指定的「規格抽取表」抽欄位、狀態、關聯、預設搜尋條件等。缺漏即在 chat 詢問。
 
 ### 階段 2｜製作 .html（核心）
 
 1. 複製 profile 指定的 starter template → 目標路徑
-   - 作業檔（transaction documents，含狀態流程） → `templates/module-page.html`
-   - 設定檔（master data，僅 active true/false） → `templates/setup-page.html`
-   - 類型判斷準則由 profile 規定（ERP 見 `profiles/erp.md §設定檔（Master Data）特化規則`）
-2. 替換 App Shell（依 profile 規範:breadcrumb / nav / footer / programID / version 等）
+   - 作業檔（transaction documents，含狀態流程）→ `${CLAUDE_SKILL_DIR}/templates/module-page.html`
+   - 設定檔（master data，僅 active true/false）→ `${CLAUDE_SKILL_DIR}/templates/setup-page.html`
+   - 類型判斷準則由 profile 規定（ERP 見 `${CLAUDE_SKILL_DIR}/profiles/erp.md §設定檔（Master Data）特化規則`）
+2. 替換 App Shell（依 profile 規範：breadcrumb / nav / footer / programID / version 等）
 3. 建構 List View（自檢項目見 profile，作業檔與設定檔有獨立清單）
 4. 建構 Form View（自檢項目見 profile，作業檔與設定檔有獨立清單）
-5. Modal / Toast / Empty State 範例（modal 兩款:`confirm` + `deeplink`，**`pick` 已淘汰**）
+5. Modal / Toast / Empty State 範例（modal 兩款：`confirm` + `deeplink`，**`pick` 已淘汰**）
 
 ### 階段 3｜本機審查（自檢）
 
-兩件事要做:
+兩件事要做：
 
 1. 跑 profile 的 Handoff Checklist，**逐項打勾**才算完成；任一 fail 回對應步驟修正
-2. **每次都要掃一眼 `pitfalls.md`**——這份累積了反覆出現的審查問題，目的是不要再犯
+2. **每次都要掃一眼 `${CLAUDE_SKILL_DIR}/pitfalls.md`**——這份累積了反覆出現的審查問題，目的是不要再犯
 
 ### 階段 4｜chat handoff
 
-依 profile 規範交付（如 ERP 要求 5 項）。沒有 profile 時最低限度提供:
+依 profile 規範交付（如 ERP 要求 5 項）。沒有 profile 時最低限度提供：
 
 1. 對應規格來源（路徑 / 連結 / 「依 chat 需求」）
 2. 相比上版差異（首版寫「初版」）
@@ -66,7 +78,7 @@ description: Turn a module spec (PM doc, sibling module, or chat description) in
 ## 3. 通用硬性限制（每次輸出前自檢，違反即重做）
 
 - **IMPORTANT:** 預設 `<html lang="zh-Hant-TW">`（多語環境由 profile 指定）
-- **IMPORTANT:** CSS 載入順序:design tokens CSS → Material Symbols → `app.css`
+- **IMPORTANT:** CSS 載入順序：design tokens CSS → Material Symbols → `app.css`
 - **IMPORTANT:** Vue 3 production CDN，**禁**引入其他 UI library
 - **IMPORTANT:** 樣式寫到 `app.css`、互動寫到 `app.js`，**禁**在 `.html` 內嵌 `<style>` / `<script>`（CDN 與引用 `app.js` 的 `<script src>` 例外）
 - **IMPORTANT:** Icon 一律 Material Symbols Outlined（`<span class="material-symbols-outlined">`）
@@ -86,42 +98,13 @@ description: Turn a module spec (PM doc, sibling module, or chat description) in
 | 響應式欄位太多被截斷？ | 橫向 scroll；**禁**隱藏關鍵欄位 |
 | 規格沒提「狀態流程」是不是缺漏？ | 不一定。設定檔（master data）本來就沒有狀態機，僅 `active`；參照 profile 的設定檔特化規則 |
 
-## 5. 上下游銜接
+## 5. 輸出前 Checklist（通用最低限度）
 
-- **上游**:PM 文件（Github / Notion）、設計稿、同類舊模組 prototype
-- **下游**:
-  - reviewer（PM / 主管 / 系統管理員）試玩驗證
-  - 工程師依 prototype 串接 API、升級為 production 元件
-  - a11y / accessibility 審查
-
-## 6. 常用觸發語
-
-- 「幫我做一個 XXX 模組的 prototype」
-- 「這份 PM 文件 [path] 轉成 prototype」
-- 「參考 [既有模組].html 做一個類似的 [新模組]」
-- 「讀取此份 PRD 並產出互動功能及前端頁面」
-
-## 7. 檔案結構
-
-```
-skills/prototyper/
-├── SKILL.md              # 本檔（通用核心，所有專案共用）
-├── REFERENCE.md          # 詳細展開（token / 元件對照 / app.js 起手式）
-├── pitfalls.md           # 反覆出現的審查問題（每次製作前必掃）
-├── profiles/
-│   └── erp.md            # Athena ERP 專案專屬規則
-└── templates/
-    ├── module-page.html  # 作業檔 starter（含狀態流程；其他 profile 可指向自己的 template）
-    └── setup-page.html   # 設定檔 starter（master data；無狀態機 / 無 Smart Bar / 設定檔側欄）
-```
-
-## 8. 輸出前 Checklist（通用最低限度）
-
-profile 通常會擴充更嚴格的清單；本檔僅列共通底線:
+profile 通常會擴充更嚴格的清單；本檔僅列共通底線：
 
 - [ ] List View 與 Form View 兩種視圖都可切換
 - [ ] 必填欄位有紅色 `*`
 - [ ] 空狀態 / 刪除確認 / 儲存 toast 均能觸發
 - [ ] 無 `@apply`、無 inline hex、無 TypeScript、無 `<style>` / `<script>` 內嵌
-- [ ] 已掃過 `pitfalls.md`，沒有踩到既知地雷
+- [ ] 已掃過 `${CLAUDE_SKILL_DIR}/pitfalls.md`，沒有踩到既知地雷
 - [ ] profile 的 Handoff Checklist 已逐項打勾
