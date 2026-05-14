@@ -68,7 +68,7 @@ prototype 的 `prototype/ds/colors_and_type.css` 與 `prototype/app.css` 已預�
 - **nav-rail**:
   - 5 項固定順序 — 我的最愛、財務、進銷存、人事、設定檔
   - icon variant：**filled**
-  - **必含產品縮寫**文字（如 `ERP`），位置依 template；不可遺失
+  - **必含產品縮寫**文字（如 `ERP`），位置於 nav-rail 置底；不可遺失
 - **erp-footer**: 左 programID（如 `PSI-SO`）、右版號（格式 `vX.Y.Z.A.B`）
 
 ---
