@@ -330,6 +330,7 @@ const visibleRelations = computed(() =>
 - [ ] Search 第一個 `<option>` 為 `value=""` 標籤「全部」（規則同作業檔）
 - [ ] 狀態 filter 只列 啟用 / 停用（搜尋區可省略此 filter，由前端切換管道處理）
 - [ ] Grid 欄位順序:`checkbox(sticky-left) → 主欄（code/name 連結樣式, sticky-left）→ 一般欄 → 狀態(st-chip, display-only) → actions(sticky-right)`
+- [ ] 「一般欄」的語意排序遵守 **識別 → 分類 → 歸屬 → 業務屬性 → 狀態**（如：完整路徑 → 類型 → 所屬倉庫/館別/區域 → 部門 → 公司別 → active）；違反此序視同欄位排序錯誤
 - [ ] 操作欄: `[編輯]` + `[刪除]`（兩個 icon button；**非** `[檢視]`）
 
 ### Form View 七項自檢（設定檔版）
@@ -341,6 +342,42 @@ const visibleRelations = computed(() =>
 - [ ] `active` 欄位用 Dropdown「啟用 / 停用」，**非** `boolean_toggle` widget
 - [ ] 稽核軌跡群組：只在 `tracking.length > 0` 時顯示；最近 5 筆 inline 顯示「{訊息} ─ {時間戳 monospace}」；背景 `--bg-surface-variant`、12px、`--text-secondary`
 - [ ] 隱藏欄位（如本檔的 `scrap_location` / `return_location` / `replenish_location` 等 boolean flag）**不渲染** UI，但保留資料
+- [ ] 整段條件式 section（如「庫存與盤點」`v-if="draft.usage === 'internal'"`）以 `v-if` 整段顯隱，**禁**用 disabled / hidden 把欄位逐一鎖死
+- [ ] State banner（可選）：若有多重資料狀態（新增 / 編輯啟用 / 編輯停用 / 唯讀檢視），在頁面標題與第一個 section 之間加 `.state-banner` 色條提示；無多狀態可省略
+- [ ] 「狀態」欄位 `.form-field.is-keep-editable`，切「啟用 ↔ 停用」即時驅動 `.is-archived-view`（見 §設定檔資料狀態矩陣）
+
+### 設定檔資料狀態矩陣（Form View readonly 行為）
+
+設定檔 form 視角依「資料狀態」決定 readonly 行為。在 `.form-view--setup` 上套兩個 flag class，由 reactive 狀態驅動：
+
+| 資料狀態 | 觸發條件 | `.form-view--setup` flag | 整體 form | 例外可編輯 | Footer 行為 |
+|---|---|---|---|---|---|
+| 新增中 | `route.id === 'new'` | 無 flag | 全欄位可編輯 | — | `儲存變更` 顯示 |
+| 編輯（啟用） | 既有記錄且 `form.active === true` | 無 flag | 可編輯 | 建立後不可變欄位（如 `company_id`）個別加 `readonly` 屬性 | `儲存變更` 顯示 |
+| 編輯（停用） | 既有記錄且 `form.active === false` 且 `role !== 'readonly'` | `.is-archived-view` | 整張 form 唯讀（透明背景 + 1px 灰底線、無下拉箭頭） | `.form-field.is-keep-editable` 標記的「狀態」欄保留可編輯（白底） | `儲存變更` 仍顯示（讓 user 切回啟用並儲存） |
+| 唯讀檢視 | `role === 'readonly'` | `.is-readonly-view` | 全 readonly（含「狀態」欄） | — | `儲存變更` 改顯示 `👁 唯讀檢視` 標籤 |
+
+**互動規則**
+
+- 「狀態」欄切「啟用 ↔ 停用」**立即**驅動 `.is-archived-view` 切換，不需等儲存（reactive computed 直接綁 `form.active`）
+- `.is-keep-editable` 放在最內層 `.form-field`（**非**外層 section），且只用於「狀態」欄這一格；用 CSS 覆寫繼承自 `.is-archived-view` 的 readonly 樣式
+- `role === 'readonly'` **優先於** active 狀態 — readonly 視角下「狀態」欄也鎖定
+- 「公司別」等建立後不可變欄位：個別 input 加 `readonly` 屬性，**不**靠 view-level flag
+
+**class 命名**（建議延用，避免每模組各自取名）
+
+- `.form-view--setup.is-archived-view` — 整張 form 進入停用唯讀
+- `.form-view--setup.is-readonly-view` — readonly 角色視角
+- `.form-field.is-keep-editable` — section 內個別欄位的「白名單例外」標記
+
+**State banner 對照**（若有採用 `.state-banner`）
+
+| 資料狀態 | banner variant |
+|---|---|
+| 新增中 | `.state-banner--new`（藍） |
+| 編輯（啟用） | 不顯示 banner |
+| 編輯（停用） | `.state-banner--inactive`（紅淡） |
+| 唯讀檢視 | `.state-banner--readonly`（灰） |
 
 ### Form Footer（設定檔版，必依）
 
@@ -375,8 +412,10 @@ const visibleRelations = computed(() =>
 - [ ] List View 批次模式只有「批次刪除」+「已選取 N 筆 ×」chip
 - [ ] List 狀態欄為 st-chip，且**非** toggle（不在列表直接切換 active）
 - [ ] List 操作欄為「編輯 + 刪除」icon button
-- [ ] Form `active` 用 Dropdown（非 `boolean_toggle`）
+- [ ] Form `active` 用 Dropdown（非 `boolean_toggle`），文案「啟用 / 停用」（**禁**用「已封存」/「已停用」變體）
 - [ ] Form Footer 為「上下筆 / 刪除 / 更多操作 / 儲存變更」四段，**無**狀態動作按鈕
+- [ ] List 一般欄語意排序遵守「識別 → 分類 → 歸屬 → 業務屬性 → 狀態」
+- [ ] Form 資料狀態矩陣已套用：`.is-archived-view` / `.is-readonly-view` / `.is-keep-editable` 三個 class 對應正確；切「狀態」欄即時生效
 - [ ] 「離開未儲存表單」攔截 modal 能在 isDirty 時觸發
 - [ ] 刪除受阻場景（單筆與批次）能跑出 error toast 並阻擋
 
