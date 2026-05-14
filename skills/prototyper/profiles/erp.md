@@ -254,6 +254,92 @@ const visibleRelations = computed(() =>
 
 ---
 
+## PRD 元件對照（Pass 0 / Pass 2 用）
+
+對應 SKILL.md `### 3. 五階段工作流` 下的 `#### 階段 1` 三段式流程：Pass 0 找權威來源、Pass 1 抽 schema、Pass 2 對表轉實作。本節是 Pass 0 找不到 / 模組無設計文件時的 fallback 對照。
+
+### 權威來源優先順序
+
+衝突時上層贏（呼應 SKILL.md §1 資料來源權重規則）：
+
+1. **模組對應的設計文件元件清單章節** — 該模組元件命名的單一來源；章節命名因模組不同：
+   - `docs/uiflowspec/出納模組/<功能>-設計文件.md §2.1.1 元件實作狀態`
+   - `docs/uiflowspec/應付模組/<功能>-設計文件.md §3.1 元件庫對照表`
+   - `docs/uiflowspec/應收模組/<功能>-互動規格.md §2 互動元素清單`
+   - 找不到時：`find docs/uiflowspec/<模組> -type f` → `grep '元件實作狀態\|元件庫對照\|互動元素清單'`
+2. **本節 Table A** — 設計文件不存在 / 章節未涵蓋時的最小集 fallback
+3. **完整 Syncfusion 元件清單** — `/Users/athena/working/ddd/syncfusion-playground/app/pages/playground/`（95 個 `.vue`，進一步擴充查詢用）
+
+### Table A — PRD 元件詞彙 → 實作對照（最小集）
+
+| PRD 詞彙（含別名）| 適用情境（PRD 文字線索） | Prototype HTML（本 skill） | Production：shared-ui | 共享庫未封裝時：Syncfusion |
+|---|---|---|---|---|
+| TextBox / 文字 | 單行文字、單號、名稱 | `<input type="text">` + `.input--filled` | `<TextInput>` | `<ejs-textbox>` |
+| NumericTextBox / 數值 / Monetary | 金額、數量、含千分位 | `<input>` + `.text-right` | `<NumericInput>` | `<ejs-numerictextbox>` |
+| TextArea / Text Area / textarea / 多行 | 備註、長說明 | `<textarea>` + `.input--filled` | `<TextareaInput>` | `<ejs-textarea>` |
+| DropDownList / Dropdown / 下拉 | 列舉 ≤ 30 項、單選 | `<select>` + 自製 caret | `<DropdownInput>` | `<ejs-dropdownlist>` |
+| MultiSelect / 多選下拉 | 多選 chip 列 | `<select multiple>` | `<MultiSelectInput>` | `<ejs-multiselect>` |
+| DropDownTree / 樹狀下拉 | 階層選擇 | (prototype 略，用 select 代) | `<DropdownTreeInput>` | `<ejs-dropdowntree>` |
+| DropdownPair / 雙欄下拉 | 雙欄複合下拉 | `<select>` 兩個並列 | `<DropdownPairField>` | — |
+| DropdownWithAction | 含側邊動作的下拉 | `<select>` + `<button>` | `<DropdownWithAction>` | — |
+| PhoneField | 電話欄位（國碼 + 號碼） | `<select>` + `<input>` | `<PhoneField>` | — |
+| DatePicker / Date Picker / 日期 | 單一日期 | `<input type="date">` | `<DatePickerInput>` | `<ejs-datepicker>` |
+| DateRangePicker / 日期區間 | 起訖兩日期 | 兩個 `<input type="date">` | `<DateRangePickerInput>` | `<ejs-daterangepicker>` |
+| Checkbox / 勾選框 | 布林、多選列項 | `<input type="checkbox">` | `<CheckboxInput>` | `<ejs-checkbox>` |
+| Dialog / Modal | confirm / deeplink | `<div class="modal-overlay">` | `<AppDialog>` | `<ejs-dialog>` |
+| Toast | 3 秒回饋 | `<div class="toast">` | `<AppToast>` | `<ejs-toast>` |
+| Message / inline alert | 表單區段警示 | `<div class="alert">` | `<AppMessage>` | `<ejs-message>` |
+| Grid / DataGrid / 多筆 | List View、明細 | `<table class="grid">` | `<DataGrid>` | `<ejs-grid>` |
+| NestedGrid / TreeGrid | 巢狀 / 樹表 | `<table>` + 縮排列 | `<NestedGrid>` / `<TreeGrid>` | `<ejs-treegrid>` |
+| Pager / 分頁器 | List 底部 | `<div class="pager">` | `<GridPager>` | `<ejs-pager>` |
+| Header | App shell 頂部 | `<header class="erp-header">` | `<AppHeader>` | — |
+| Sidebar / NavRail | nav-rail + 設定檔側欄 | `<aside class="nav-rail">` | `<NavigationRail>` / `<AppSidebar>` | `<ejs-sidebar>` |
+| ContentSection / 區段容器 | Form section block | `<section class="form-section">` | `<ContentSection>` | — |
+| SearchPanel | List 搜尋區 | `<div class="search-bar">` | `<SearchPanel>` | — |
+| StatusBadge / Badge / 狀態 pill | List 狀態欄、Summary | `<span class="status-pill">` | `<StatusBadge>` | — (自製) |
+| Tab / 分頁 | Form 內 Tab block | `<button class="tab">` | (B 類) | `<ejs-tab>` |
+| Stepper | 作業檔狀態流程 | `<ol class="stepper">` | (B 類) | `<ejs-stepper>` |
+| Button | CTA、操作 | `<button class="btn btn--primary">` | (B 類) | `<ejs-button>` |
+| FAB | 浮動主動作 | `<button class="fab">` | (B 類) | `<ejs-fab>` |
+| AutoComplete / Lookup | FK 到主檔（含搜尋）| `<input>` + suggest | (B 類) | `<ejs-autocomplete>` |
+| Tooltip | hover 說明 | `[title]` attr | (B 類) | `<ejs-tooltip>` |
+| Skeleton | loading | `<div class="skeleton">` | (B 類) | `<ejs-skeleton>` |
+| ProgressBar | 進度條 | `<div class="progress">` | (B 類) | `<ejs-progressbar>` |
+| Spinner | inline loading | `<span class="spinner">` | (B 類) | `<ejs-spinner>` |
+
+> **Switch / boolean_toggle 刻意不列**：設定檔 `active` 強制用 `<DropdownInput>`「啟用 / 停用」（見 §設定檔特化規則）。
+> 「(B 類)」= 共享庫 `@web-erp/shared-ui` 尚未封裝；production 化暫直用 Syncfusion。
+> **C 類（提案待建）**：`AmountSummaryCard`、`DropdownGrid`（3 欄變體）等個別模組提案，需評估後才進共享庫；prototype 階段以 Tailwind 行內組合替代。
+
+### Table B — Form section 元件推論規則（PRD 沒列 `元件` 欄時用）
+
+| PRD 文字線索 | 推論元件（→ 套 Table A） |
+|---|---|
+| 「下拉」「選擇」「列表選一個」 | DropDownList |
+| 「文字」「填入」「輸入」（單行）| TextBox |
+| 「備註」「說明」（多行）| TextArea |
+| 「日期」「YYYY-MM-DD」 | DatePicker |
+| 「日期區間」「起訖」「起迄」 | DateRangePicker |
+| 「金額」「數量」「含千分位」「右對齊」 | NumericTextBox |
+| 「啟用」「停用」（設定檔 active） | DropDownList（**非** Switch；設定檔慣例）|
+| 「唯讀」「系統帶入」 | TextBox readonly（**非** disabled）|
+| 「FK 到」「關聯到」「來自主檔」「domain：」| AutoComplete / Lookup |
+| 「明細」「逐列輸入」「可加列」 | Grid |
+| 「樹狀」「階層」「組織架構」 | DropDownTree |
+| 「多選」「複選」 | MultiSelect |
+
+> 推論結果**必須在 Pass 1 回填 schema 時標記為「推論」**，等使用者確認。
+
+### Section C — 條件式顯隱規則（非元件，但常被 AI 漏處理）
+
+| PRD 文字線索 | 實作 |
+|---|---|
+| 「條件欄位」「依 X 顯隱」「X='internal' 才顯示」 | 整段 `v-if`，**禁**用 `disabled` / `hidden` 逐欄鎖死 |
+| 「核准後唯讀」「狀態 = X 全部唯讀」 | view-level flag class（呼應 §設定檔資料狀態矩陣） |
+| 「保留位置但隱藏」「不顯示但保留資料」 | 個別欄位 `v-show` 或外層保留 wrapper |
+
+---
+
 ## List View 七項自檢
 
 - [ ] Toolbar: `selectedRows.length === 0` 時顯示主操作；> 0 時切換為批次操作

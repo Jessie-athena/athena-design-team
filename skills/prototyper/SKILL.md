@@ -64,13 +64,37 @@ allowed-tools: Read Write Edit Glob Grep
 - 有同類舊模組？→ 從舊 `.html` 抽出介面規格（欄位 / 狀態 / 關聯），新模組直接引用，**不重畫**
 - 沒有？→ 進階段 1
 
-#### 階段 1｜規格抽取
+#### 階段 1｜規格抽取（三段式：Pass 0 / Pass 1 / Pass 2）
 
-依 profile 指定的「規格抽取表」抽欄位、狀態、關聯、預設搜尋條件等。缺漏即在 chat 詢問。
+**Pass 0｜找元件權威來源**
+
+依 profile 規定的「元件權威來源」順序查找：
+1. 該模組是否有對應的設計文件元件清單章節（profile 會列出該專案的章節命名慣例）？
+   - 有 → 把該章節完整列出的元件當作**本模組的元件命名單一來源**
+   - 無 → 落到 profile 內建的「PRD 元件詞彙 → 實作對照」最小集
+2. 記錄本次採用的權威來源（檔名 + 章節），handoff 時要附上
+
+**Pass 1｜純抽取，不選元件**
+
+把 PRD 拆成「欄位 schema 表」並輸出給使用者確認，每行五欄：
+
+| 欄位中文 | 區塊 | 元件（PRD 標示） | 必填 | 約束 / 關聯 |
+
+規則：
+- 「元件」欄若 PRD 有列就照填（如 `TextBox` / `DropDownList`），**禁**自己編
+- PRD 沒列就填 `?`，等 Pass 2 推論
+- PRD 沒列的欄位 / List 欄 / action **禁止**自動補（R1）；缺漏即停下來問
+
+**Pass 2｜schema 查表轉實作**
+
+對 schema 每行：
+- prototype 階段 markup：依 profile 對照表查 `Prototype HTML` 欄
+- handoff「production 對應元件」：填 Pass 0 權威來源裡的元件名（如 `<TextInput>` / `<DataGrid>`）
+- 若 Pass 1 元件欄為 `?`，依 profile 的「Form section 元件推論規則」推論並回填，**標記為推論**讓 user 確認
 
 #### 階段 2｜製作 .html（核心）
 
-1. 複製 profile 指定的 starter template → 目標路徑
+1. 拿 Pass 1 確認過的 schema → 複製 profile 指定的 starter template → 目標路徑
    - 作業檔（transaction documents，含狀態流程）→ `${CLAUDE_SKILL_DIR}/templates/module-page.html`
    - 設定檔（master data，僅 active true/false）→ `${CLAUDE_SKILL_DIR}/templates/setup-page.html`
    - 類型判斷準則由 profile 規定（ERP 見 `${CLAUDE_SKILL_DIR}/profiles/erp.md §設定檔（Master Data）特化規則`）
@@ -94,6 +118,7 @@ allowed-tools: Read Write Edit Glob Grep
 2. 相比上版差異（首版寫「初版」）
 3. 對齊方向（feature 編號 / 文件 / ticket）
 4. 特別注意項（已知 trade-off、待 PM 確認的點）
+5. **Pass 0 採用的元件權威來源** + **Pass 2 對應的 production 元件清單**（讓下游工程師知道 prototype 用的 HTML 對應到 production 哪個 component）
 
 ### 4. 通用硬性限制（每次輸出前自檢，違反即重做）
 
