@@ -56,6 +56,13 @@
 | 表單區塊（DynamicForm）外層再包 border + padding | **無外框、padding 0**；外距由父層 section 控制 |
 | Section header 與下方內容貼太近 | `DsSectionHeader` 下方 padding 16px |
 
+### [2026-05-14] AI 自動補 PRD 沒列的資訊 / DS 預設覆寫 PRD 視覺
+
+- **症狀（資料層）**：PRD 列了 8 個欄位，生出來的 List View 出現 10 欄；PRD 沒提的「建立者 / 建立時間」自動被加進 form section。
+- **症狀（介面層）**：PRD 註明 input 用 filled 樣式、卡片無 shadow，但生出來的卡片帶 shadow、input 是 outlined。
+- **正確做法**：SKILL.md §1「資料來源權重規則」R1 + R2。資料層 PRD 是 source of truth，PRD 沒列就停下來問；介面層 PRD 明確指定時優先於 DS 預設。
+- **為什麼會反覆犯**：訓練資料中「補齊」是常見的助手行為（user 給少寫多）；DS 對 AI 來說是「已知預設」，比 PRD 視覺指定（散落在多處的文字描述）更容易被當作 baseline。
+
 ---
 
 ## ERP profile

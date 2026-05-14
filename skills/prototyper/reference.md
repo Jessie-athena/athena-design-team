@@ -1,6 +1,6 @@
 # Prototyper Reference（通用技術細節）
 
-> `SKILL.md` 的詳細展開：token 對照、prototype → production 元件對照、`app.js` / `app.css` 起手式。技術 baseline 以 SKILL.md §3 為單一來源，本檔不重複。
+> `SKILL.md` 的詳細展開：token 對照、prototype → production 元件對照、`app.js` / `app.css` 起手式。技術 baseline 以 SKILL.md §4 為單一來源，本檔不重複。
 >
 > **此檔僅含跨專案通用內容**。專案專屬的 App Shell / state machine / list view / form view / handoff 規則見 `profiles/<project>.md`（如 `profiles/erp.md`）。
 
@@ -13,7 +13,7 @@
 
 ## §2 Tech Baseline
 
-技術 baseline（HTML lang / CSS 載入順序 / Vue 3 CDN / `app.js` 與 `app.css` 分離 / Material Symbols icon）已列為 `SKILL.md §3 通用硬性限制`，本檔不重複，以 SKILL.md 為單一來源。
+技術 baseline（HTML lang / CSS 載入順序 / Vue 3 CDN / `app.js` 與 `app.css` 分離 / Material Symbols icon）已列為 `SKILL.md §4 通用硬性限制`，本檔不重複，以 SKILL.md 為單一來源。
 
 ## §3 File Layout
 

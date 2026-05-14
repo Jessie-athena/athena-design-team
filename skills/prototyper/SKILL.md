@@ -26,7 +26,25 @@ allowed-tools: Read Write Edit Glob Grep
   - 作業檔（含狀態流程）：`${CLAUDE_SKILL_DIR}/templates/module-page.html`
   - 設定檔（master data，僅 active true/false）：`${CLAUDE_SKILL_DIR}/templates/setup-page.html`
 
-## 1. 觸發即先確認（缺一不開工）
+## 1. 資料來源權重規則（衝突時的判定法）
+
+四層權重，由上往下：
+
+| 順位 | 來源 | 管轄範圍 | 衝突時的處置 |
+|---|---|---|---|
+| 1 | **SKILL.md + profile**（標 IMPORTANT 的硬性限制） | 技術 baseline、檔案結構、不可妥協的規範 | 永遠最高；PRD / DS 不得覆寫 |
+| 2 | **PRD**（規格文件 / 設計稿） | 欄位、資料、狀態流程、業務邏輯、明確指定的視覺 | DS 與其他文件不得擅自擴充或替換 |
+| 3 | **Design System** | 元件視覺、token、互動預設 | PRD 未明確指定時用 DS 預設；PRD 明確指定時以 PRD 為準 |
+| 4 | **其他**（同類舊模組、Figma frame、chat 描述） | 結構靈感、版型參考 | 只能當參考，**不得**當作「規格」直接搬用 |
+
+### 兩條硬性派生規則（每次製作前自檢）
+
+- **R1 — PRD 完整性原則**：**禁止**自動補 PRD 沒列的欄位 / List 欄 / form section / action / status。PRD 缺漏時停下來問使用者，不要自己編；profile 的「規格抽取表」要求的欄位若 PRD 沒給，視同缺漏。
+- **R2 — DS 不覆寫 PRD 視覺**：PRD 對視覺有明確指定（如「filled input」、「summary 上下兩區」、「無 shadow」、特定排版）時以 PRD 為準；PRD 未提時才套 DS 預設。判斷不確定的視覺差異時，**先信 PRD，再回查 DS**。
+
+> profile 內標 **IMPORTANT** 的條目（如 ERP 的 state machine 命名）視為 Tier 1，其餘 profile 內容仍為 Tier 2。
+
+## 2. 觸發即先確認（缺一不開工）
 
 開工前若使用者沒提供，**主動詢問**：
 
@@ -37,7 +55,7 @@ allowed-tools: Read Write Edit Glob Grep
 
 > profile 額外要問的項目（如 ERP 的 Odoo model、模組分類）由 profile 內定義，本檔不重複。
 
-## 2. 五階段工作流
+## 3. 五階段工作流
 
 ### 階段 0｜跨專案複用（先問再做）
 
@@ -75,7 +93,7 @@ allowed-tools: Read Write Edit Glob Grep
 3. 對齊方向（feature 編號 / 文件 / ticket）
 4. 特別注意項（已知 trade-off、待 PM 確認的點）
 
-## 3. 通用硬性限制（每次輸出前自檢，違反即重做）
+## 4. 通用硬性限制（每次輸出前自檢，違反即重做）
 
 - **IMPORTANT:** 預設 `<html lang="zh-Hant-TW">`（多語環境由 profile 指定）
 - **IMPORTANT:** CSS 載入順序：design tokens CSS → Material Symbols → `app.css`
@@ -87,7 +105,7 @@ allowed-tools: Read Write Edit Glob Grep
 
 > profile 可**附加更嚴格**規則（如 ERP 規定 state machine 命名），但**不可放寬**通用限制。
 
-## 4. 通用決策題
+## 5. 通用決策題
 
 | 情境 | 決策 |
 |---|---|
@@ -98,7 +116,7 @@ allowed-tools: Read Write Edit Glob Grep
 | 響應式欄位太多被截斷？ | 橫向 scroll；**禁**隱藏關鍵欄位 |
 | 規格沒提「狀態流程」是不是缺漏？ | 不一定。設定檔（master data）本來就沒有狀態機，僅 `active`；參照 profile 的設定檔特化規則 |
 
-## 5. 輸出前 Checklist（通用最低限度）
+## 6. 輸出前 Checklist（通用最低限度）
 
 profile 通常會擴充更嚴格的清單；本檔僅列共通底線：
 
@@ -108,3 +126,4 @@ profile 通常會擴充更嚴格的清單；本檔僅列共通底線：
 - [ ] 無 `@apply`、無 inline hex、無 TypeScript、無 `<style>` / `<script>` 內嵌
 - [ ] 已掃過 `${CLAUDE_SKILL_DIR}/pitfalls.md`，沒有踩到既知地雷
 - [ ] profile 的 Handoff Checklist 已逐項打勾
+- [ ] R1 + R2 已自檢：未自動補 PRD 沒列的欄位；DS 預設未覆寫 PRD 明確指定的視覺
