@@ -64,7 +64,7 @@ prototype 的 `prototype/ds/colors_and_type.css` 與 `prototype/app.css` 已預�
 - **erp-header**:
   - 結構：home button + breadcrumb（模組分類 / 功能名 / 單號）+ favorite + 通知 / 設定 / avatar
   - icon variant：**filled**（`home` / `notifications` / `settings`，**禁** `*_outline`）
-  - (EIP) home icon 區塊寬度須**對齊 nav-rail 寬度（72px）**；icon 尺寸 24px、非隨意縮小
+  - (EIP) home icon 區塊寬度須**對齊 nav-rail 寬度（72px）**；icon 尺寸 32px、非隨意縮小
 - **nav-rail**:
   - 5 項固定順序 — 我的最愛、財務、進銷存、人事、設定檔
   - icon variant：**filled**
