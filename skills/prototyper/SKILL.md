@@ -21,12 +21,14 @@ allowed-tools: Read Write Edit Glob Grep
 - 專案專屬規則：`${CLAUDE_SKILL_DIR}/profiles/<project>.md`
   - Athena ERP → `${CLAUDE_SKILL_DIR}/profiles/erp.md`（必讀，含 App Shell / state machine / chat handoff 5 項）
 - 反覆出現的審查問題：`${CLAUDE_SKILL_DIR}/pitfalls.md`（每次製作前掃一眼）
-- 詳細展開（token / 元件對照 / `app.js` 起手式）：`${CLAUDE_SKILL_DIR}/reference.md`
+- 詳細展開（token / 元件對照 / `app.js` 起手式）：`${CLAUDE_SKILL_DIR}/REFERENCE.md`
 - Starter templates：
   - 作業檔（含狀態流程）：`${CLAUDE_SKILL_DIR}/templates/module-page.html`
   - 設定檔（master data，僅 active true/false）：`${CLAUDE_SKILL_DIR}/templates/setup-page.html`
 
-## 1. 資料來源權重規則（衝突時的判定法）
+## Instructions
+
+### 1. 資料來源權重規則（衝突時的判定法）
 
 四層權重，由上往下：
 
@@ -37,14 +39,14 @@ allowed-tools: Read Write Edit Glob Grep
 | 3 | **Design System** | 元件視覺、token、互動預設 | PRD 未明確指定時用 DS 預設；PRD 明確指定時以 PRD 為準 |
 | 4 | **其他**（同類舊模組、Figma frame、chat 描述） | 結構靈感、版型參考 | 只能當參考，**不得**當作「規格」直接搬用 |
 
-### 兩條硬性派生規則（每次製作前自檢）
+#### 兩條硬性派生規則（每次製作前自檢）
 
 - **R1 — PRD 完整性原則**：**禁止**自動補 PRD 沒列的欄位 / List 欄 / form section / action / status。PRD 缺漏時停下來問使用者，不要自己編；profile 的「規格抽取表」要求的欄位若 PRD 沒給，視同缺漏。
 - **R2 — DS 不覆寫 PRD 視覺**：PRD 對視覺有明確指定（如「filled input」、「summary 上下兩區」、「無 shadow」、特定排版）時以 PRD 為準；PRD 未提時才套 DS 預設。判斷不確定的視覺差異時，**先信 PRD，再回查 DS**。
 
 > profile 內標 **IMPORTANT** 的條目（如 ERP 的 state machine 命名）視為 Tier 1，其餘 profile 內容仍為 Tier 2。
 
-## 2. 觸發即先確認（缺一不開工）
+### 2. 觸發即先確認（缺一不開工）
 
 開工前若使用者沒提供，**主動詢問**：
 
@@ -55,18 +57,18 @@ allowed-tools: Read Write Edit Glob Grep
 
 > profile 額外要問的項目（如 ERP 的 Odoo model、模組分類）由 profile 內定義，本檔不重複。
 
-## 3. 五階段工作流
+### 3. 五階段工作流
 
-### 階段 0｜跨專案複用（先問再做）
+#### 階段 0｜跨專案複用（先問再做）
 
 - 有同類舊模組？→ 從舊 `.html` 抽出介面規格（欄位 / 狀態 / 關聯），新模組直接引用，**不重畫**
 - 沒有？→ 進階段 1
 
-### 階段 1｜規格抽取
+#### 階段 1｜規格抽取
 
 依 profile 指定的「規格抽取表」抽欄位、狀態、關聯、預設搜尋條件等。缺漏即在 chat 詢問。
 
-### 階段 2｜製作 .html（核心）
+#### 階段 2｜製作 .html（核心）
 
 1. 複製 profile 指定的 starter template → 目標路徑
    - 作業檔（transaction documents，含狀態流程）→ `${CLAUDE_SKILL_DIR}/templates/module-page.html`
@@ -77,14 +79,14 @@ allowed-tools: Read Write Edit Glob Grep
 4. 建構 Form View（自檢項目見 profile，作業檔與設定檔有獨立清單）
 5. Modal / Toast / Empty State 範例（modal 兩款：`confirm` + `deeplink`，**`pick` 已淘汰**）
 
-### 階段 3｜本機審查（自檢）
+#### 階段 3｜本機審查（自檢）
 
 兩件事要做：
 
 1. 跑 profile 的 Handoff Checklist，**逐項打勾**才算完成；任一 fail 回對應步驟修正
 2. **每次都要掃一眼 `${CLAUDE_SKILL_DIR}/pitfalls.md`**——這份累積了反覆出現的審查問題，目的是不要再犯
 
-### 階段 4｜chat handoff
+#### 階段 4｜chat handoff
 
 依 profile 規範交付（如 ERP 要求 5 項）。沒有 profile 時最低限度提供：
 
@@ -93,7 +95,7 @@ allowed-tools: Read Write Edit Glob Grep
 3. 對齊方向（feature 編號 / 文件 / ticket）
 4. 特別注意項（已知 trade-off、待 PM 確認的點）
 
-## 4. 通用硬性限制（每次輸出前自檢，違反即重做）
+### 4. 通用硬性限制（每次輸出前自檢，違反即重做）
 
 - **IMPORTANT:** 預設 `<html lang="zh-Hant-TW">`（多語環境由 profile 指定）
 - **IMPORTANT:** CSS 載入順序：design tokens CSS → Material Symbols → `app.css`
@@ -105,7 +107,7 @@ allowed-tools: Read Write Edit Glob Grep
 
 > profile 可**附加更嚴格**規則（如 ERP 規定 state machine 命名），但**不可放寬**通用限制。
 
-## 5. 通用決策題
+### 5. 通用決策題
 
 | 情境 | 決策 |
 |---|---|
@@ -116,7 +118,7 @@ allowed-tools: Read Write Edit Glob Grep
 | 響應式欄位太多被截斷？ | 橫向 scroll；**禁**隱藏關鍵欄位 |
 | 規格沒提「狀態流程」是不是缺漏？ | 不一定。設定檔（master data）本來就沒有狀態機，僅 `active`；參照 profile 的設定檔特化規則 |
 
-## 6. 輸出前 Checklist（通用最低限度）
+### 6. 輸出前 Checklist（通用最低限度）
 
 profile 通常會擴充更嚴格的清單；本檔僅列共通底線：
 
@@ -127,3 +129,51 @@ profile 通常會擴充更嚴格的清單；本檔僅列共通底線：
 - [ ] 已掃過 `${CLAUDE_SKILL_DIR}/pitfalls.md`，沒有踩到既知地雷
 - [ ] profile 的 Handoff Checklist 已逐項打勾
 - [ ] R1 + R2 已自檢：未自動補 PRD 沒列的欄位；DS 預設未覆寫 PRD 明確指定的視覺
+
+## Examples
+
+### 範例 1：從 PM 文件建立新模組 prototype
+
+**輸入**：「這份 PM 文件 `docs/notion/出納模組/付款作業.md` 轉成 prototype」
+
+**預期流程**：
+
+1. 觸發前確認 §2 四項：模組中文名（付款作業）、profile（cwd 推斷為 ERP）、來源（已給 PM 路徑）、輸出（預設 `prototype/project/付款作業.html`）
+2. 載入 `${CLAUDE_SKILL_DIR}/profiles/erp.md` + `pitfalls.md`
+3. 依 erp.md 的「規格抽取表」從 PM 抽欄位、狀態、關聯、預設搜尋條件
+4. 判斷為作業檔（有狀態流程）→ 複製 `templates/module-page.html`
+5. 完成 List/Form View；跑 ERP 作業檔 Handoff Checklist
+6. chat handoff 含 ERP 5 項
+
+**關鍵守則**：依 R1（PRD 完整性），PRD 沒列的欄位 / 動作不自動補；如缺漏，停下來問。
+
+---
+
+### 範例 2：從同類舊模組複製建立新設定檔
+
+**輸入**：「參考 `prototype/project/地點設定檔.html` 做一個區域設定檔」
+
+**預期流程**：
+
+1. 觸發前確認：模組中文名（區域設定檔）、profile（ERP）、來源（同類舊模組）、輸出（`prototype/project/區域設定檔.html`）
+2. 階段 0 跨專案複用：從舊 .html 抽介面規格（欄位 / 狀態 / 關聯），舊模組視為 Tier 4 參考
+3. 判斷為設定檔（master data，僅 active）→ 複製 `templates/setup-page.html`
+4. 套用 §設定檔（Master Data）特化規則 + §設定檔資料狀態矩陣
+5. List/Form 完成後跑 ERP §設定檔 Handoff Checklist
+
+**關鍵守則**：舊模組是 Tier 4 參考；若新模組另有 PRD（Tier 2），PRD 優先於舊模組。
+
+---
+
+### 範例 3：純 chat 描述，無正式文件
+
+**輸入**：「幫我做一個請假申請的 prototype」
+
+**預期流程**：
+
+1. 觸發前**主動詢問** §2 四項：模組中文名、profile、來源（無 → 純 chat 描述）、輸出路徑
+2. 依 profile 反問該專案要求的補資料（如 ERP 還要問 Odoo model、模組分類、作業檔/設定檔類型）
+3. 規格不完整時**停下來問**，**禁**自動補 PRD 沒列的欄位（R1）；不為了「補齊」而擅自添加業務邏輯
+4. 規格齊全後再進階段 2 製作
+
+**關鍵守則**：無 PRD 時最容易踩 R1（自動補欄位）和 R2（DS 預設套到使用者意圖之上）；先問再做。
