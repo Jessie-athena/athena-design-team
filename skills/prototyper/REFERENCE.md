@@ -2,7 +2,7 @@
 
 > `SKILL.md` 的詳細展開：token 對照、prototype → production 元件對照、`app.js` / `app.css` 起手式。技術 baseline 以 SKILL.md §4 為單一來源，本檔不重複。
 >
-> **此檔僅含跨專案通用內容**。專案專屬的 App Shell / state machine / list view / form view / handoff 規則見 `profiles/<project>.md`（如 `profiles/erp.md`）。
+> **此檔僅含跨專案通用內容**。頁面框架（Header / Nav-rail / Info Bar 結構）見 `profiles/共用.md`；專案專屬的 state machine / list view / form view / handoff / App Shell 具體值（nav 項目、programID 格式等）見 `profiles/<project>.md`（如 `profiles/erp.md`）。
 
 ---
 
@@ -99,7 +99,7 @@
    - 作業檔（transaction documents，含狀態流程）→ `${CLAUDE_SKILL_DIR}/templates/module-page.html`
    - 設定檔（master data，僅 active true/false）→ `${CLAUDE_SKILL_DIR}/templates/setup-page.html`
    - 類型判斷準則由 profile 規定（ERP 見 `${CLAUDE_SKILL_DIR}/profiles/erp.md §設定檔（Master Data）特化規則`）
-2. 替換 App Shell（依 profile 規範：breadcrumb / nav / footer / programID / version 等）
+2. 替換 App Shell（結構與尺寸見 `profiles/共用.md §頁面框架`；breadcrumb 層級、nav 項目、programID / version 等具體值見專案 profile）
 3. 建構 List View（自檢項目見 profile，作業檔與設定檔有獨立清單）
 4. 建構 Form View（自檢項目見 profile，作業檔與設定檔有獨立清單）
 5. Modal / Toast / Empty State 範例（modal 兩款：`confirm` + `deeplink`，**`pick` 已淘汰**）
@@ -409,7 +409,7 @@ createApp({
 ```
 /* 1. Reset / base                       */
 /* 2. App Shell                          */
-/*    .app-header / .nav-rail / footer   */
+/*    .app-header / .nav-rail / info-bar */
 /* 3. List View                          */
 /*    .toolbar / .search-bar / .grid     */
 /*    .pager / .empty-state              */

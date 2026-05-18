@@ -1,8 +1,10 @@
 ---
+# Invocation modes: auto-trigger (by description match) + manual `/prototyper` command — both enabled.
+# No `paths` restriction — this skill is cross-project (currently ERP, future may add other projects via new profiles).
 name: prototyper
 description: Turn a module spec into a clickable single-file HTML prototype for reviewers. Use when the user asks to build, generate, or convert anything into a prototype — from a PM doc path, an existing prototype to clone, a Figma frame, or a chat-described spec.
 when_to_use: |
-  Activate when user types「做 prototype」「PM 文件轉 prototype」「參考 [既有].html 做 [新模組]」「PRD 產出前端頁面」, or pastes a Figma frame asking for clickable conversion.
+  Activate when user types「做 prototype」「PM 文件轉 prototype」「參考 [既有].html 做 [新模組]」「PRD 產出前端頁面」, pastes a Figma frame asking for clickable conversion, or explicitly runs `/prototyper`.
 allowed-tools: Read Write Edit Glob Grep
 ---
 
@@ -13,8 +15,9 @@ allowed-tools: Read Write Edit Glob Grep
 
 ## 支援檔案（按需載入）
 
-- **專案專屬規則**：`${CLAUDE_SKILL_DIR}/profiles/<project>.md`
-  - Athena ERP → `${CLAUDE_SKILL_DIR}/profiles/erp.md`（必讀，含 App Shell / state machine / chat handoff 5 項 / Form & List 樣式互動規則）
+- **跨專案共用 profile**：`${CLAUDE_SKILL_DIR}/profiles/共用.md`（**所有專案前置必讀**；含頁面框架等共通骨架）
+- **專案專屬 profile**：`${CLAUDE_SKILL_DIR}/profiles/<project>.md`（在共用 profile 之上**附加 / 覆寫**）
+  - Athena ERP → `${CLAUDE_SKILL_DIR}/profiles/erp.md`（必讀，含 App Shell 覆寫 / state machine / chat handoff 5 項 / Form & List 樣式互動規則）
 - **反覆審查問題**：`${CLAUDE_SKILL_DIR}/pitfalls.md`（每次製作前掃一眼）
 - **詳細展開（工作流明細 / 權重規則明細 / 決策題 / 完整 Examples / token / 元件對照 / `app.js` 起手式）**：`${CLAUDE_SKILL_DIR}/REFERENCE.md`
 - **Starter templates**：
@@ -94,7 +97,7 @@ profile 通常會擴充更嚴格的清單；本檔僅列共通底線：
 **預期流程**：
 
 1. §2 四項確認：模組中文名（付款作業）、profile（cwd 推斷為 ERP）、來源（已給 PM 路徑）、輸出（`prototype/project/付款作業.html`）
-2. 載入 `${CLAUDE_SKILL_DIR}/profiles/erp.md` + `pitfalls.md`
+2. 載入 `${CLAUDE_SKILL_DIR}/profiles/共用.md` + `${CLAUDE_SKILL_DIR}/profiles/erp.md` + `pitfalls.md`
 3. 依 erp.md「規格抽取表」從 PM 抽欄位、狀態、關聯、預設搜尋
 4. 判斷為作業檔（有狀態流程）→ 複製 `templates/module-page.html`
 5. 完成 List/Form View；跑 ERP 作業檔 Handoff Checklist

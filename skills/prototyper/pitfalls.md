@@ -69,6 +69,18 @@
 - **正確做法**：跑 SKILL.md `#### 階段 1` 的 Pass 0/1/2 三段式 — Pass 0 找模組對應的設計文件 § 元件清單章節（出納 §2.1.1 / 應付 §3.1 / 應收 §2 互動元素清單）；無設計文件時退到 `profiles/erp.md §PRD 元件對照 Table A`；Form section 沒列「元件」欄時跑 Table B 推論規則並標記推論結果讓 user 確認。
 - **為什麼會反覆犯**：（1）PRD 的 List/Search section 已標 `元件` 欄但 Form section 通常省略，AI 看到 Form section 就退回訓練資料預設；（2）AI 對 `<TextInput>` / `<DataGrid>` 等 shared-ui wrapper 沒概念，會優先用 raw `<input>`；（3）布林欄位的反射是 `<input type="checkbox">` 或 Switch，但設定檔 `active` 慣例是 Dropdown「啟用 / 停用」。
 
+### [2026-05-18] 刪除按鈕用實心紅底 `.btn--danger` 出現在 List/Form
+
+- **症狀**：List 列尾或 Form 底部刪除按鈕做成紅底白字（filled `.btn--danger`）；hover 時還會切換 icon 顏色；批次刪除做成 filled 紅 button-with-label。
+- **正確做法**：List / Form 的刪除按鈕一律 **outline 或 icon-only** —— 列尾用 `.ico-btn.is-delete`（純 icon, error 色）、批次列用 `.btn-icon--danger-square`（icon + error 邊框）、Form 底部用 `.btn--outline-danger`（紅外框文字按鈕）；背景透明，hover 加 `error @ 8%` 底色，**不**改 icon 顏色。實心 `.btn--danger`（紅底白字）**僅出現於 Modal 主按鈕**。詳細視覺見 ERP profile §設定檔刪除機制（必依）。
+- **為什麼會反覆犯**：Bootstrap / Material / Tailwind UI 範例的「危險按鈕」幾乎都是 filled red，AI 直覺套上；訓練資料裡 outline-danger / icon-only-danger 出現頻率低，需要被明確覆寫。
+
+### [2026-05-18] 刪除確認 Modal 主按鈕預設焦點誤觸
+
+- **症狀**：刪除 confirm modal 開啟後 Enter 直接執行刪除；主按鈕在 Tab order 第一位；`Delete` / `Backspace` 鍵被綁為刪除快捷鍵。
+- **正確做法**：刪除類 confirm modal（danger / warning kind）**預設焦點放在「取消」按鈕**；Tab order 取消 → 主按鈕；`Esc` 與 `Enter` 都對應「取消」；只有使用者主動 Tab 到主按鈕並 Enter 才執行刪除。`Delete` / `Backspace` **MUST NOT** 綁為刪除快捷鍵。
+- **為什麼會反覆犯**：一般 confirm modal 的 UX 預設「主按鈕焦點」以利快速確認；但**破壞性動作要反過來**——預設焦點放安全選項。AI 沒被提醒就走一般習慣。
+
 ---
 
 ## ERP profile

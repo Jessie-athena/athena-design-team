@@ -4,6 +4,8 @@
 
 ## 觸發載入此 profile
 
+> 載入本檔前**必先**載入 `profiles/共用.md`（頁面框架基底）。本檔在共用 profile 之上附加 / 覆寫 ERP 專屬行為。
+
 使用者提到下列任一情境時載入:
 
 - 提到「Athena ERP」、「ERP 模組」、「ERP prototype」
@@ -61,15 +63,40 @@ prototype 的 `prototype/ds/colors_and_type.css` 與 `prototype/app.css` 已預�
 
 ## App Shell 規範
 
-- **erp-header**:
-  - 結構：home button + breadcrumb（模組分類 / 功能名 / 單號）+ favorite + 通知 / 設定 / avatar
-  - icon variant：**filled**（`home` / `notifications` / `settings`，**禁** `*_outline`）
-  - (EIP) home icon 區塊寬度須**對齊 nav-rail 寬度（72px）**；icon 尺寸 32px、非隨意縮小
-- **nav-rail**:
-  - 5 項固定順序 — 我的最愛、財務、進銷存、人事、設定檔
-  - icon variant：**filled**
-  - **必含產品縮寫**文字（如 `ERP`），位置於 nav-rail 置底；不可遺失
-- **erp-footer**: 左 programID（如 `PSI-SO`）、右版號（格式 `vX.Y.Z.A.B`）
+> 結構基底（Header / Nav-rail / Info Bar 尺寸、layout、icon variant、hover/active 樣式）見 [`共用.md` §頁面框架](共用.md)。本節只列 ERP 專屬覆寫。
+
+### Breadcrumb 層級
+
+三層固定順序：**模組分類** / **功能名稱** / **單號**
+
+- 例：「進銷存 / 銷售訂單 / SO_2026_000123」
+- 新單時單號顯示 `—`（dash）
+
+### Nav-rail 項目（5 項固定順序）
+
+| key | icon | label |
+|---|---|---|
+| `fav` | `star` | 我的最愛 |
+| `finance` | `account_balance` | 財務 |
+| `psi` | `inventory` | 進銷存 |
+| `hr` | `badge` | 人事 |
+| `config` | `settings` | 設定檔 |
+
+- 產品縮寫文字 = `ERP`（位於 `.nav-rail__top`，**不可遺失**）
+- 模組分類 → 對應 nav-rail 高亮項：財務 → `finance` / 進銷存 → `psi` / 人事 → `hr` / 設定檔 → `config`
+
+### Info Bar 格式
+
+- **左 programID**：格式 `<MODULE>-<CODE>`（如 `PSI-SO`、`AC-AP`、`HR-EMP`）；由對應 Odoo model 衍生
+- **右版號**：格式 `vX.Y.Z.A.B`（如 `v1.0.0.0.0`）
+
+### Class prefix
+
+沿用 `.erp-*` 前綴（legacy），與既有 template 一致；不改為 `.app-*`。
+
+### Home icon 額外規範
+
+(EIP) home icon 區塊寬度須**對齊 nav-rail 寬度（72px）**；icon 尺寸 32px、非隨意縮小。
 
 ---
 
@@ -288,6 +315,26 @@ const visibleRelations = computed(() =>
 | Footer 按鈕 | 依 DS 分**層級配色**（primary / outline / text / danger / ghost），無 icon | 提交 = primary、解核 = outline、作廢 = danger |
 
 > 違反此政策的最常見錯誤：「新增」按鈕被加上 `<span class="material-symbols-outlined">add</span>新增`。動詞標籤本身已說明動作，icon 是噪音。
+
+---
+
+## 資料顯示與過濾慣例
+
+### 會計科目顯示格式
+
+科目欄位（含 dropdown 選項、grid 顯示、autoComplete 結果、smart-bar、列印單）一律使用 `[NNNN] 會計科目名稱` 格式（科目代號方括號 + 半形空白 + 名稱）。
+
+- 來源：`account.code` + `account.name`
+- 應用位置：所有出現 `ac.account` FK 的欄位
+- **禁**單獨顯示「會計科目名稱」或「會計科目代號」，必須組合
+
+### 公司別（公司過濾）Dropdown 預設值
+
+App Shell 與多公司情境下的「公司別」過濾 dropdown **預設為空白**（無 pre-selection），由使用者主動選擇。
+
+- **禁**顯示「全域」或「全部」當作預設值（會誤導使用者以為已套用全公司視角）
+- DOM：`<select v-model="filters.companyId">` 不放 `value=""` 的「全域」option；首 option 即為空白
+- 與 List 搜尋區的「狀態」filter（第一 option 為 `value=""` 標「全部」）規則**不同**——搜尋 filter 是「條件選空 = 不過濾」；公司別 filter 是「身分選擇，無預設」
 
 ---
 
@@ -949,7 +996,8 @@ Form View 主體由多個 Group（`.form-section`）組成，每個 Group 內以
 > 「設定檔」(master data) 的 UI 慣例與「作業檔」(transaction documents) 不同。判斷類型後，**以下章節 override 前述作業檔慣例**：
 > - State Machine、Summary Bar (stepper)、Smart Bar、Form Footer 動作群 — **全部不適用**
 > - List View 批次操作、Form View 章節結構、Footer — **依本節重寫**
-> - Modal / Toast / Empty State、輸入欄樣式、按鈕 icon 政策、App Shell — **沿用前述章節**
+> - Modal / Toast / Empty State、輸入欄樣式、按鈕 icon 政策 — **沿用前述章節**
+> - App Shell — 沿用 `共用.md §頁面框架` + 本檔 §App Shell 規範（breadcrumb 三層 / nav-rail 5 項 / Info Bar 格式）
 
 ### 類型判斷準則（命中任一即為設定檔）
 
@@ -999,6 +1047,8 @@ Form View 主體由多個 Group（`.form-section`）組成，每個 Group 內以
 - [ ] Grid 欄位順序:`checkbox(sticky-left) → 主欄（code/name 連結樣式, sticky-left）→ 一般欄 → 狀態(st-chip, display-only) → actions(sticky-right)`（**詳見 §DataGrid 結構與互動**）
 - [ ] 「一般欄」的語意排序遵守 **識別 → 分類 → 歸屬 → 業務屬性 → 狀態**（如：完整路徑 → 類型 → 所屬倉庫/館別/區域 → 部門 → 公司別 → active）；違反此序視同欄位排序錯誤
 - [ ] 操作欄: `[編輯]` + `[刪除]`（兩個 icon button；**非** `[檢視]`）；唯讀模式切 chevron `[檢視]`（**詳見 §DataGrid → 唯讀模式**）
+- [ ] `canDelete === false` 時 `[刪除]` **不渲染**（**禁**用 disabled），操作欄套 `.col-actions--single` 收窄寬度至 56px（從預設 96px）
+- [ ] 列尾 `[刪除]`（`.ico-btn.is-delete`）與批次列 `[🗑]`（`.btn-icon--danger-square`）符合 §設定檔刪除機制（必依）
 
 ### Form View 七項自檢（設定檔版）
 
@@ -1064,12 +1114,103 @@ Form View 主體由多個 Group（`.form-section`）組成，每個 Group 內以
 | 場景 | 元件 | 樣式 | 文案範例 |
 |---|---|---|---|
 | 離開未儲存表單 | confirm | warning | 您有尚未儲存的變更。是否放棄並返回列表？ |
-| 刪除受阻（單筆，如有依賴庫存） | toast | error | 「{name}」仍有 N 筆庫存，無法刪除 |
-| 刪除受阻（批次） | toast | error | 其中 N 筆仍有依賴，無法刪除（**直接阻擋，不彈 confirm**） |
-| 批次刪除 | confirm | danger | 將刪除 N 筆 {模組}，是否繼續？／hint：此動作無法復原。 |
+| 單筆刪除（可刪） | confirm | danger | 確定刪除「{name}」？此操作無法復原。 |
+| 批次刪除（全部可刪） | confirm | danger | 確定刪除已選取的 {n} 筆資料？ |
+| 單筆改停用（已被引用） | confirm | warning | 此筆已被 {n} 筆資料引用，無法刪除。是否改為停用？ |
+| 混合批次（部分需停用） | confirm | warning | 已選取 {n} 筆，其中 {a} 筆可刪除、{b} 筆需改為停用，是否繼續？ |
 | 切換 related 來源（如 `warehouse_id` 連動 `branch_id`） | confirm | info | 此變更將連動更新「館別」與「區域」欄位。 |
 | 複製成功 | toast | success | 已複製，請編輯副本 |
 | 重置篩選 | toast | info | 已重置篩選 |
+| 刪除 / 停用失敗 | toast | error | 刪除失敗：{reason}（不關 modal，讓使用者重試） |
+| 批次部分失敗 | toast | warning | 成功 {n} 筆，失敗 {m} 筆（失敗者保持選取狀態） |
+
+> 完整刪除機制（按鈕位置、判斷邏輯、視覺、鍵盤）見下方 §設定檔刪除機制（必依）。**禁**直接用 error toast 阻擋刪除——已被引用的項目走 warning modal 提供「改為停用」選項。
+
+---
+
+### 設定檔刪除機制（必依）
+
+設定檔混合「實體刪除 vs 軟刪除（停用）」行為，且入口分散在 List 批次列 / List 列尾 / Form 底部三處。本節是設定檔必依結構，沿用 §設定檔資料狀態矩陣 的 `canDelete` 旗標。
+
+#### 刪除按鈕的三個出現位置
+
+| 位置 | 觸發條件 | 元件樣式 | 行為 |
+|---|---|---|---|
+| List · 批次列 | `selectedRows.length > 0 && canDelete` | `.btn-icon--danger-square`（40×40、error 邊框 + icon、背景 surface-default） | 對選取的多筆執行刪除 / 停用判斷 |
+| List · 列尾 | 該列 `canDelete` | `.ico-btn.is-delete`（40×40、純 icon、error 色） | 對該單筆執行刪除 / 停用判斷 |
+| Form · 底部 | `!isNew && canDelete && form.active` | `.btn--outline-danger`（40px、紅色外框文字按鈕、背景透明） | 對當前單筆執行刪除 / 停用判斷 |
+
+**不出現的情境**：新增中（`isNew`）、無刪除權限（`!canDelete`）、本筆已停用（`!form.active`，停用 = 軟刪除目的已達成）。
+
+> `canDelete === false` 時整顆按鈕**不渲染**（**禁**用 disabled 表達無權限）；同時影響 List 操作欄寬度——搭配 `.col-actions--single` 收窄至 56px（見 §List View 七項自檢（設定檔版））。
+
+#### 刪除 vs 停用的判斷邏輯（最重要）
+
+```
+if (row.usage_count > 0)  →  禁止實體刪除，改走「停用」流程
+else                       →  允許實體刪除
+```
+
+- **同一顆刪除按鈕**承擔兩種行為，由系統依資料引用狀態切換，使用者只看到一個入口
+- 按鈕 `aria-label` / `title` 必須對應實際行為：
+  - 可刪除：`aria-label="delete"`、`title="刪除"`
+  - 須停用：`aria-label="deactivate"`、`title="已被 N 筆引用，須改為停用"`
+- 視覺**不改變**（仍紅色 icon），改變的是 hover tooltip 與後續 modal 內容
+
+#### 確認 Modal 規則
+
+所有刪除操作 **MUST** 經 modal 二次確認，**不可直接動作**。完整情境與文案見上方 §設定檔 Modal / Toast 特有場景；額外行為規則：
+
+- 取消按鈕一律 `btn--outline`「取消」，靠右側次位
+- **主按鈕焦點預設在「取消」上**（避免 Enter 誤觸刪除）
+- Modal icon 對應 `kind`：danger → `delete`、warning → `warning`
+
+#### 視覺樣式規則
+
+```css
+/* 列尾刪除 icon */
+.ico-btn.is-delete             { color: rgb(var(--color-sf-error)); }
+.ico-btn.is-delete:hover       { background: rgba(var(--color-sf-error), .08); }
+
+/* 批次刪除（icon-square） */
+.btn-icon--danger-square       { background: var(--bg-surface-default); color: rgb(var(--color-sf-error)); border: 1px solid rgb(var(--color-sf-error)); border-radius: var(--radius-sm); }
+.btn-icon--danger-square:hover { background: rgba(var(--color-sf-error), .08); }
+
+/* Form 底部刪除文字按鈕 */
+.btn--outline-danger           { background: transparent; color: rgb(var(--color-sf-error)); border: 1px solid rgb(var(--color-sf-error)); }
+.btn--outline-danger:hover     { background: rgba(var(--color-sf-error), .08); }
+.btn--outline-danger:active    { background: rgba(var(--color-sf-error), .12); }
+```
+
+**統一原則**：
+
+- 預設背景透明、僅 error 色描邊或 icon
+- Hover 統一加 `error @ 8%` 底色，**不**改 icon 顏色
+- Active 加深至 `error @ 12%`
+- **MUST NOT** 使用實心 `.btn--danger`（紅底白字）於 List / Form；實心紅色僅出現於 Modal 主按鈕
+
+#### 結果反饋
+
+| 結果 | 反饋 | 後續動作 |
+|---|---|---|
+| 刪除成功 | `toast--success`「已刪除」 | List：列消失 / Form：返回 List |
+| 停用成功 | `toast--success`「已改為停用」 | 該列 `st-chip` 切為 `st-chip--inactive` |
+| 失敗 | `toast--error`「刪除失敗：{reason}」 | **不關 modal**，讓使用者重試 / 取消 |
+| 批次部分失敗 | `toast--warning`「成功 {n} 筆，失敗 {m} 筆」 | 失敗者保持選取狀態 |
+
+#### 鍵盤與快捷鍵
+
+- **Delete / Backspace** 鍵：**MUST NOT** 綁定為刪除快捷鍵（避免誤刪）
+- Modal 開啟時：`Esc` = 取消、`Enter` = **取消**（非確認，因主按鈕焦點在取消上）
+- Tab order：取消按鈕在主按鈕之前
+
+#### 權限與審計
+
+- `canDelete` 為布林權限旗標，影響**所有**刪除按鈕的可見性（**不是 disabled，是不渲染**）
+- 已作廢 / 已核准的資料 **MUST NOT** 顯示刪除按鈕（用作廢 / 反核准取代）
+- 每次刪除 / 停用 **MUST** 寫入 audit log（誰、何時、哪筆、行為）
+
+---
 
 ### 設定檔 Handoff Checklist（疊加通用 + ERP 清單）
 
@@ -1086,7 +1227,7 @@ Form View 主體由多個 Group（`.form-section`）組成，每個 Group 內以
 - [ ] List 一般欄語意排序遵守「識別 → 分類 → 歸屬 → 業務屬性 → 狀態」
 - [ ] Form 資料狀態矩陣已套用：`.is-archived-view` / `.is-readonly-view` / `.is-keep-editable` 三個 class 對應正確；切「狀態」欄即時生效
 - [ ] 「離開未儲存表單」攔截 modal 能在 isDirty 時觸發
-- [ ] 刪除受阻場景（單筆與批次）能跑出 error toast 並阻擋
+- [ ] 刪除機制符合 §設定檔刪除機制（必依）：三個按鈕位置與樣式（`.ico-btn.is-delete` / `.btn-icon--danger-square` / `.btn--outline-danger`）、刪除 vs 停用 by `usage_count`、modal `kind` 對應（可刪 = danger / 已被引用 = warning「改為停用」/ 混合批次 = warning）、`.btn--danger` 實心紅**不**出現於 List/Form、modal 主按鈕焦點預設在「取消」、`canDelete === false` 時 `.col-actions--single` 收窄
 
 ---
 
@@ -1129,7 +1270,7 @@ Form View 主體由多個 Group（`.form-section`）組成，每個 Group 內以
 
 通用清單通過後再逐項打勾:
 
-- [ ] 三件套 shell（erp-header / nav-rail / erp-footer）齊全
+- [ ] App Shell 結構符合 `共用.md §頁面框架`（56px header / 72px nav-rail / 28px info bar）；class 沿用 `.erp-*`
 - [ ] breadcrumb 三層正確（模組分類 / 功能名 / 單號）
 - [ ] nav-rail 高亮對應模組分類
 - [ ] programID 與版號格式正確（`vX.Y.Z.A.B`）
