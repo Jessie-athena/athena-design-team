@@ -123,7 +123,6 @@ prototype 頁面層級**不可**出現第二條捲軸。reviewer 反覆遇到的
 | List View 寬欄位橫向滾動 | `.grid-wrap` | 同上載體（`overflow: auto` 同時負責 X/Y） |
 | Form View body 內容捲動 | `.form-view__body`（包住 summary bar 下方所有 section） | `flex: 1 1 auto; min-height: 0; overflow-y: auto`；summary bar 與 form-footer 不在此容器內 |
 | Modal overlay 內超長內容 | `.modal` 內部容器 | 允許 modal 自帶捲軸（不影響頁面層） |
-| Tweaks Panel 超長內容 | `.tweaks-panel` 內部 | 允許自帶捲軸 |
 
 ### 反例（禁止）
 
@@ -1182,10 +1181,10 @@ else                       →  允許實體刪除
 .btn--outline-danger:active    { background: rgba(var(--color-sf-error), .12); }
 ```
 
-**統一原則**：
+**統一原則（合稱「紅框白底紅字」家族）**：
 
-- 預設背景透明、僅 error 色描邊或 icon
-- Hover 統一加 `error @ 8%` 底色，**不**改 icon 顏色
+- 預設背景透明 / 白底、僅 error 色描邊或 icon、文字 error 色（= **紅框白底紅字**）
+- Hover 統一加 `error @ 8%` 底色，**不**改 icon / 文字顏色
 - Active 加深至 `error @ 12%`
 - **MUST NOT** 使用實心 `.btn--danger`（紅底白字）於 List / Form；實心紅色僅出現於 Modal 主按鈕
 
@@ -1227,7 +1226,7 @@ else                       →  允許實體刪除
 - [ ] List 一般欄語意排序遵守「識別 → 分類 → 歸屬 → 業務屬性 → 狀態」
 - [ ] Form 資料狀態矩陣已套用：`.is-archived-view` / `.is-readonly-view` / `.is-keep-editable` 三個 class 對應正確；切「狀態」欄即時生效
 - [ ] 「離開未儲存表單」攔截 modal 能在 isDirty 時觸發
-- [ ] 刪除機制符合 §設定檔刪除機制（必依）：三個按鈕位置與樣式（`.ico-btn.is-delete` / `.btn-icon--danger-square` / `.btn--outline-danger`）、刪除 vs 停用 by `usage_count`、modal `kind` 對應（可刪 = danger / 已被引用 = warning「改為停用」/ 混合批次 = warning）、`.btn--danger` 實心紅**不**出現於 List/Form、modal 主按鈕焦點預設在「取消」、`canDelete === false` 時 `.col-actions--single` 收窄
+- [ ] 刪除機制符合 §設定檔刪除機制（必依）：三個按鈕位置與樣式皆為「紅框白底紅字」家族（`.ico-btn.is-delete` / `.btn-icon--danger-square` / `.btn--outline-danger`）、刪除 vs 停用 by `usage_count`、modal `kind` 對應（可刪 = danger / 已被引用 = warning「改為停用」/ 混合批次 = warning）、實心紅底 `.btn--danger`**不**出現於 List/Form、modal 主按鈕焦點預設在「取消」、`canDelete === false` 時 `.col-actions--single` 收窄
 
 ---
 

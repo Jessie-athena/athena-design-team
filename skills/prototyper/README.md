@@ -34,7 +34,6 @@
 
 - **單檔 `.html`**：Vue 3 production CDN，無 build step，雙擊即可在瀏覽器開啟
 - **List View + Form View 雙視圖**：toolbar / search / grid / pager + summary card / sections / tabs / footer
-- **Tweaks Panel**：右下浮動 FAB；reviewer 不需改程式就能切換「角色 / 單據狀態 / 關鍵 flag」三組 radio，驗證所有分支
 - **DS-correct 預設樣式**：色彩 / 間距 / 圓角 / 字級全部用 design tokens，無 inline hex、無 `@apply`
 - **Modal / Toast / Empty State**：confirm / deeplink modal + success / warning / error toast 已內建
 
