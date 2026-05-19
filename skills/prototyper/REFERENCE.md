@@ -173,9 +173,48 @@
 
 ## §10 Responsive
 
-- 預設桌面寬度（≥ 1280px）；**不做** mobile（< 768px）版本，PM 明確要求才例外
-- 唯一斷點:`@media (max-width: 1024px)` → 4 欄 grid 降為 2 欄
-- 小螢幕一律以橫向 scroll 處理，**禁**隱藏關鍵欄位
+- **設計基準**：1440px（XL）
+- **主要作業寬度**：1280px（L）
+- **不支援**：< 768px（mobile）；PM 明確要求才例外
+- **降級策略**：< 1024px 一律以「橫向 scroll + sticky 欄」處理；**禁**隱藏關鍵欄位（具體欄位優先級由 profile 定義）
+
+### 四斷點對照表
+
+| 代號 | 範圍 | 角色 | 行為 |
+|---|---|---|---|
+| **XL** | ≥ 1440px | 設計基準 default | 所有欄位 / 篩選器完整顯示；form 4 欄；padding 32px |
+| **L** | 1280–1439px | 主要作業寬度 | 維持完整顯示；欄寬可縮減；form 4 欄（緊縮） |
+| **M** | 1024–1279px | 窄桌面 / 平板橫向 | List 搜尋區可換行；DataGrid 啟用橫向捲動；form 3 欄（auto-fit 收斂） |
+| **S** | 768–1023px | 平板 | List 搜尋區預設收合；DataGrid 降低欄位優先級；**form 強制 2 欄**；padding 20px |
+| — | < 768px | 不支援 | 非設計範圍，建議改用行動裝置專用視圖 |
+
+### Form Grid 預設規則
+
+```css
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 16px;
+}
+.form-grid--1     { grid-template-columns: minmax(300px, 1fr); }
+.form-field--full { grid-column: 1 / -1; }
+
+@media (max-width: 1024px) {
+  .form-grid       { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .form-view__body { padding: 20px; }
+}
+```
+
+> **為何 ≤ 1024px 強制 2 欄而非繼續 auto-fit？** 在 ~1000px 時 auto-fit 仍可能給 3 欄但每欄擠到 300px 邊界，標籤易折行；強制 2 欄能維持較寬欄位與較易讀的標籤。
+
+### List 與 Form 的細部 RWD 規則
+
+各 view 的斷點細節（搜尋區欄位寬 / 收合行為、Grid 欄位優先級 P0–P3、Form Footer 縱向堆疊等）由專案 profile 補完。ERP 詳見：
+
+- `profiles/erp.md §List 搜尋區結構與互動 → RWD 4 斷點對照`
+- `profiles/erp.md §DataGrid 結構與互動 → 欄位優先級 P0–P3`
+- `profiles/erp.md §Form Group 分群與 form-grid RWD → 斷點對照表`
+- `profiles/erp.md §Form Footer 結構與互動 → RWD 斷點`
 
 ---
 

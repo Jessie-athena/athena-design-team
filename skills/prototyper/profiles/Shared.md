@@ -74,7 +74,18 @@ Main panel 內部從上到下兩段：
 
 ## Nav-rail（左側）
 
-- **寬度 72px**(全域固定，不可變)、高度 100%
+### Layout 預設狀態
+
+**預設採用：Sidebar Collapsed（側欄收合）**
+
+- **Collapsed**（預設）：寬度 72px，icon + 12px 短標籤（如「我的最愛」「財務」）；產品縮寫文字在底部
+- **Expanded**（可選，規格 TBD）：寬版含完整 label 與群組結構；需要時由專案 profile 補完規格
+
+所有 prototype 預設輸出 Collapsed 版型；未明確指定 Expanded 時，**不**自動切換。
+
+### 規格（Collapsed）
+
+- **寬度 72px**（全域固定，不可變）、高度 100%
 - 背景深色 `rgb(var(--color-sf-on-primary-container))`、圓角 `var(--radius-xl)`
 - 內部 `padding: 8px`、`flex-direction: column`、`gap: 8px`
 - 結構從上到下：

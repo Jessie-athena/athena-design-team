@@ -467,12 +467,26 @@ App Shell 與多公司情境下的「公司別」過濾 dropdown **預設為空�
 - 寬度足夠 → 欄位等寬平均分配，並排同一行
 - 寬度不足 → 欄位自動換行（操作區固定在第一行右上不被擠下）
 
+### RWD 4 斷點對照
+
+> 對應 `REFERENCE.md §10` 的 XL / L / M / S 四斷點。Search Bar 採「Flex Wrap → 自動收合」兩階段策略，避免水平捲動。
+
+| 斷點 | 欄位排列 | 欄位 flex-basis | 收合行為 |
+|---|---|---|---|
+| **XL ≥ 1440** | 單列 5 欄 | `flex: 1 1 180px` | 不收合 |
+| **L 1280–1439** | 單列 5 欄 | `flex: 1 1 160px` | 不收合 |
+| **M 1024–1279** | 2 列換行（3+2 或 4+1） | `flex: 1 1 200px` | 偵測到換行 → 顯示「收合」按鈕 |
+| **S 768–1023** | **預設收合**，依寬度動態顯示 N 個欄位（至少 1 個） | 固定 `150px` | 預設 `.is-collapsed = true`；點「展開」可顯示全部 |
+
+> S 斷點下進入頁面時 **預設 `searchCollapsed = true`**，避免擠壓主要表格區域。
+
 ### RWD 換行觸發條件
 
 換行於以下任一條件成立時發生：
 
 1. **欄位數量 > 5**（預設 5 個 filter；新增第 6 個會直接掉到下一行）
-2. **外層容器寬度不足**：一行容納 5 個欄位所需寬度 ≈ `5 × 150 + 4 × 16 + 16 + 操作區寬度 + 32(padding) ≈ 990px`；容器寬度 < 此值 → 最右側欄位優先換行
+2. **外層容器寬度不足**：依當前斷點的 flex-basis 計算容納寬度；容器寬度低於該臨界值 → 最右側欄位優先換行
+3. **S 斷點預設收合**：進入頁面時直接套 `.is-collapsed`，跳過「先展開再收合」的中間狀態
 
 ### 換行偵測（JS）
 
@@ -589,6 +603,36 @@ List View 的表格本體；唯一的橫向 / 縱向捲軸來源。
 | 操作欄 `.col-actions`（1 顆按鈕） | **56px** | 56px |
 | 操作欄 `.col-actions`（2 顆按鈕） | 96px | 96px |
 
+### 欄位優先級與 RWD 顯示規則（必依）
+
+> 採「優先級欄位 + 黏性欄位 + 橫向捲動」三層策略。重要欄位（勾選、代號、操作）永遠可見；次要欄位於窄視窗下隱藏；對應 §RWD 4 斷點 XL / L / M / S。
+
+#### 優先級分類
+
+| 優先級 | 規則 | 典型欄位 |
+|---|---|---|
+| **P0** 必要 | 任何斷點皆顯示 | 勾選欄（sticky-left）、主鍵 / 代號（sticky-left）、名稱、狀態、操作欄（sticky-right） |
+| **P1** 重要 | M 橫向捲動可見；S 隱藏 | 主要業務欄位（如「應收科目」「對應科目」等） |
+| **P2** 次要 | M 橫向捲動可見；S 隱藏 | 補充業務欄位（如「銷貨價格表」「預設區域」等） |
+| **P3** 輔助 | L 橫向捲動可見；M / S 隱藏 | 多公司 / 跨組織欄位（如「公司別」） |
+
+#### 實作要點
+
+1. 低優先級欄位以 `data-prio="p1|p2|p3"` 標記，透過 `@media` 設定 `display: none`
+2. 黏性欄位（勾選 / 代號 / 操作）採 `position: sticky`，背景色**必須不透明**（見 §資料列 → 斑馬紋），避免捲動時穿透
+3. 欄位最小寬度遵守上表，避免文字折行；超出時以 `text-overflow: ellipsis` 截斷並提供 tooltip
+4. 「設定」按鈕（toolbar 右側 `tune` icon）提供「自訂顯示欄位」開關，可覆寫斷點預設值並持久化至 `localStorage`
+
+#### 圖例
+
+| 符號 | 意義 |
+|---|---|
+| ● | 顯示 |
+| ↔ | 該斷點下顯示，但隨容器寬度進入橫向捲動 |
+| — | 隱藏（`display: none`） |
+
+> 各模組的具體欄位 → 優先級對照表，由該模組 prototype 製作時依本表分類，並在 chat handoff 附上「P0–P3 欄位分配」清單供 reviewer 對照。
+
 ### Sticky 凍結欄
 
 - **左凍結**：`.sticky-left` → `position: sticky; left: <offset>`
@@ -617,8 +661,13 @@ List View 的表格本體；唯一的橫向 / 縱向捲軸來源。
 - 高度 `50px`，padding `0 16px`
 - 字級 14px / `color: var(--text-primary)`
 - 列間 `border-bottom: 1px solid var(--border-default)`；最後一列無
-- **斑馬紋**：奇數列 `var(--bg-surface-default)`、偶數列 `var(--bg-surface-variant)`
-  - **Sticky 欄需另外指定背景**（否則會穿透看到下層內容）：偶數列 `var(--bg-surface-variant)`、奇數列 `var(--bg-surface-default)`、表頭背景同表頭值
+- **斑馬紋**：
+  - **奇數列**：純白 `#fff`（= `var(--bg-surface-default)`）
+  - **偶數列・一般欄（非 sticky）**：`rgba(15, 23, 42, .04)` — 淺岩石色 4% 疊白（semi-transparent，視覺層次靠透明度疊出）
+  - **偶數列・Sticky 左欄（勾選 / 主鍵）/ Sticky 右欄（操作）**：`rgb(245, 246, 248)`（= `#F5F6F8` 實色）— **必須不透明**，否則捲動時會穿透看到下層內容
+  - 表頭背景同表頭值（5% Primary 疊白，見 §表頭 `thead th` 樣式）
+
+  > 一般欄用半透明、sticky 欄用實色：兩者視覺接近（疊白後皆為 ≈ `#F5F6F8`），但 sticky 必須是 solid 才能正確遮蔽下層。app.css 已配置；token 對應由 DS 內部命名（`--bg-surface-variant` ≈ `#F5F6F8`）。
 
 ### 特殊資料型態
 
@@ -706,7 +755,7 @@ Form View 主體由多個 Group（`.form-section`）組成，每個 Group 內以
 
 ### form-grid 變體與 RWD
 
-**核心原則：用 `minmax(欄寬下限, 1fr)` + `auto-fit` 自動換行，不寫 media query 控制欄數。**
+**核心原則：用 `minmax(300px, 1fr)` + `auto-fit` 自動換行；≤ 1024px 強制 2 欄。最小欄位寬度 300px。**
 
 | Grid 變體 | template-columns | 適用 |
 |---|---|---|
@@ -719,16 +768,26 @@ Form View 主體由多個 Group（`.form-section`）組成，每個 Group 內以
 - `.form-field--span-2` / `.form-field--span-3` — 桌機寬度下跨 2 / 3 欄
 - `.form-field--full` — `grid-column: 1 / -1`，**永遠**整列
 
-### 斷點對照表
+### 斷點對照表（對應 §REFERENCE.md §10 四斷點）
 
-| 視窗寬度 | 4 欄佈局（300px min） | 跨欄 modifier 表現 |
-|---|---|---|
-| ≥ 1280px | 4 欄 | `--span-3` 維持 3 欄 |
-| 1024–1279px | 3 欄（auto-fit 自然收斂） | `--span-3` → 降為 2 欄 |
-| 768–1023px | **強制 2 欄**（`grid-template-columns: repeat(2, minmax(0, 1fr))`） | 所有 `--span` 皆變 2 欄 |
-| < 768px | 1 欄（待 CSS 補上） | 全部單欄堆疊 |
+| 代號 | 範圍 | 自動欄數 | padding | 跨欄 modifier 表現 |
+|---|---|---|---|---|
+| **XL** | ≥ 1440px | 4 欄（餘額空間平分） | `32px` 左右內距 | `--span-3` 維持 3 欄 |
+| **L** | 1280–1439px | 4 欄（緊縮） | `24~32px` | `--span-3` 維持 3 欄 |
+| **M** | 1024–1279px | 3 欄（auto-fit 自然收斂） | `24px` | `--span-3` → 降為 2 欄 |
+| **S** | 768–1023px | **強制 2 欄** | **`20px`** | 所有 `--span` 皆變 2 欄 |
+| — | < 768px | 不支援 | — | — |
 
-> 目前 `app.css` 只到 `@media (max-width: 1024px)` 斷點降為 2 欄；< 768 的 1 欄規則屬本次規格新增、實作補 CSS 不在本次 skill 任務範圍內。在 prototype 階段以「視覺上欄位過窄就堆疊」為驗收目標，由實作端補。
+#### 為何 ≤ 1024 強制 2 欄而非繼續 auto-fit？
+
+在 ~1000px 時 auto-fit 仍可能給 3 欄但每欄擠到 300px 邊界，標籤易折行；強制 2 欄能維持較寬欄位與更易讀的標籤。
+
+```css
+@media (max-width: 1024px) {
+  .form-grid       { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .form-view__body { padding: 20px; }
+}
+```
 
 ### 複合欄位 `.field-phone`（含國碼 + 號碼）
 
