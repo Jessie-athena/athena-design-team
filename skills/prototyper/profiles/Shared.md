@@ -25,8 +25,7 @@ Main panel 內部從上到下兩段：
 | 主要內容（List View 或 Form View） | 可變高度 |
 | Info Bar | 28px，sticky 在 main panel 底部；左 programID / 右版號 |
 
-### 整體 Layout 規格（必依）
-
+### 整體 Layout 規格
 ```css
 #app {
   height: 100vh;

@@ -33,10 +33,12 @@
     本 template 已預設成 DS-correct；常見反射錯誤見 pitfalls.md「DS 反射對照表」。
 
   審查對應：
-    profiles/Shared.md §頁面框架（Header / Nav-rail / Info Bar 結構）
-    profiles/erp.md  §App Shell §設定檔（Master Data）特化規則
-                     §設定檔刪除機制（必依） §資料顯示與過濾慣例
-                     §輸入欄樣式 §按鈕 icon 政策
+    profiles/Shared.md       §頁面框架（Header / Nav-rail / Info Bar 結構）
+    profiles/erp.md          §App Shell §設定檔（Master Data）特化規則
+                             §資料顯示與過濾慣例 §輸入欄樣式 §按鈕 icon 政策
+    profiles/erp-setup.md    §設定檔側欄 §List/Form 七項自檢（設定檔版）
+                             §設定檔資料狀態矩陣 §Form Footer（設定檔版）
+                             §設定檔 Modal / Toast 特有場景 §設定檔刪除機制
 -->
 <!DOCTYPE html>
 <html lang="zh-Hant-TW">
@@ -349,7 +351,7 @@
           </section>
 
           <!--
-            Form Footer（設定檔版，必依）
+            Form Footer（設定檔版）
             左：上下筆 nav（route.id === 'new' 時整組停用）
             右：刪除 / 更多操作 / 儲存變更
             **無** 提交 / 核准 / 解核 / 作廢

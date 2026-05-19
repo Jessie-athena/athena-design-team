@@ -85,7 +85,8 @@ skills/prototyper/
 ├── pitfalls.md         反覆出現的審查問題（dated entries，第 2 次以上才寫入）
 ├── profiles/
 │   ├── Shared.md       跨專案頁面框架（Header 56px / Nav-rail 72px / Info Bar 28px）
-│   └── erp.md          ERP 專屬：State Machine / Summary Bar / Stepper / Smart Bar / DataGrid / Form Footer / 設定檔特化
+│   ├── erp.md          ERP 專屬：State Machine / Summary Bar / Stepper / Smart Bar / DataGrid / Form Footer / 設定檔類型判斷
+│   └── erp-setup.md    ERP 設定檔（master data）專屬：側欄 / List/Form 自檢 / 資料狀態矩陣 / 刪除機制
 └── templates/
     ├── module-page.html 作業檔 starter（含狀態流程）
     └── setup-page.html  設定檔 starter（master data，僅 active）
@@ -100,6 +101,7 @@ skills/prototyper/
 | **永遠** | `SKILL.md` | 核心規範與工作流總覽，每次呼叫必載 |
 | **永遠** | `profiles/Shared.md` | 頁面框架基底，所有專案前置必讀 |
 | **依專案** | `profiles/<project>.md` | 專案專屬覆寫（ERP 即 `erp.md`） |
+| **依類型** | `profiles/<project>-setup.md` | 設定檔模組才載入（依 `erp.md §類型判斷準則`，ERP 即 `erp-setup.md`） |
 | **按需** | `pitfalls.md` | 每次製作前掃一眼，避免重蹈覆轍 |
 | **按需** | `REFERENCE.md` | 需要工作流明細 / token / 元件對照 / `app.js` 範本時查 |
 | **按需** | `templates/*.html` | 階段 2「複製 starter」時讀取 |

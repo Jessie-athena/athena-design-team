@@ -66,13 +66,13 @@
 ### [2026-05-14] Form section 沒列「元件」就用 generic web 預設
 
 - **症狀**：PRD Form section 表格只有 `欄位 / 必填 / 說明`（沒列「元件」欄），AI 自行挑成 Bootstrap-ish 預設樣式 — outlined input、`disabled` 表 readonly、checkbox 表 boolean、generic `<select>` 沒 caret icon。產出與 Athena DS 完全脫節。
-- **正確做法**：跑 SKILL.md `#### 階段 1` 的 Pass 0/1/2 三段式 — Pass 0 找模組對應的設計文件 § 元件清單章節（出納 §2.1.1 / 應付 §3.1 / 應收 §2 互動元素清單）；無設計文件時退到 `profiles/erp.md §PRD 元件對照 Table A`；Form section 沒列「元件」欄時跑 Table B 推論規則並標記推論結果讓 user 確認。
+- **正確做法**：跑 `REFERENCE.md §5 階段 1` 的 Pass 0/1/2 三段式 — Pass 0 找模組對應的設計文件 § 元件清單章節（出納 §2.1.1 / 應付 §3.1 / 應收 §2 互動元素清單）；無設計文件時退到 `profiles/erp.md §PRD 元件對照 Table A`；Form section 沒列「元件」欄時跑 Table B 推論規則並標記推論結果讓 user 確認。
 - **為什麼會反覆犯**：（1）PRD 的 List/Search section 已標 `元件` 欄但 Form section 通常省略，AI 看到 Form section 就退回訓練資料預設；（2）AI 對 `<TextInput>` / `<DataGrid>` 等 shared-ui wrapper 沒概念，會優先用 raw `<input>`；（3）布林欄位的反射是 `<input type="checkbox">` 或 Switch，但設定檔 `active` 慣例是 Dropdown「啟用 / 停用」。
 
 ### [2026-05-18] 刪除按鈕用紅框白底紅字（非實心紅底）
 
 - **症狀**：List 列尾或 Form 底部刪除按鈕做成「實心紅底白字」（filled `.btn--danger`，紅 bg + 白字）而非「紅框白底紅字」（`.btn--outline-danger`，紅描邊 + 白底 + 紅字）；hover 時還會切換 icon 顏色；批次刪除做成 filled 紅 button-with-label。
-- **正確做法**：List / Form 的刪除按鈕一律走「紅框白底紅字」家族（outline 或 icon-only）—— 列尾用 `.ico-btn.is-delete`（純紅 icon, 無框）、批次列用 `.btn-icon--danger-square`（紅框 + 白底 + 紅 icon）、Form 底部用 `.btn--outline-danger`（紅框 + 白底 + 紅字）；背景透明 / 白，hover 加 `error @ 8%` 底色，**不**改 icon 顏色。實心 `.btn--danger`（紅底白字）**僅出現於 Modal 主按鈕**。詳細視覺見 ERP profile §設定檔刪除機制（必依）。
+- **正確做法**：List / Form 的刪除按鈕一律走「紅框白底紅字」家族（outline 或 icon-only）—— 列尾用 `.ico-btn.is-delete`（純紅 icon, 無框）、批次列用 `.btn-icon--danger-square`（紅框 + 白底 + 紅 icon）、Form 底部用 `.btn--outline-danger`（紅框 + 白底 + 紅字）；背景透明 / 白，hover 加 `error @ 8%` 底色，**不**改 icon 顏色。實心 `.btn--danger`（紅底白字）**僅出現於 Modal 主按鈕**。詳細視覺見 `erp-setup.md §設定檔刪除機制`。
 - **為什麼會反覆犯**：Bootstrap / Material / Tailwind UI 範例的「危險按鈕」幾乎都是 filled red，AI 直覺套上；訓練資料裡「紅框白底紅字」/ icon-only-danger 出現頻率低，需要被明確覆寫。
 
 ### [2026-05-18] 刪除確認 Modal 主按鈕預設焦點誤觸
