@@ -4,7 +4,7 @@
 
 ## 觸發載入此 profile
 
-> 載入本檔前**必先**載入 `profiles/共用.md`（頁面框架基底）。本檔在共用 profile 之上附加 / 覆寫 ERP 專屬行為。
+> 載入本檔前**必先**載入 `profiles/Shared.md`（頁面框架基底）。本檔在共用 profile 之上附加 / 覆寫 ERP 專屬行為。
 
 使用者提到下列任一情境時載入:
 
@@ -63,7 +63,7 @@ prototype 的 `prototype/ds/colors_and_type.css` 與 `prototype/app.css` 已預�
 
 ## App Shell 規範
 
-> 結構基底（Header / Nav-rail / Info Bar 尺寸、layout、icon variant、hover/active 樣式）見 [`共用.md` §頁面框架](共用.md)。本節只列 ERP 專屬覆寫。
+> 結構基底（Header / Nav-rail / Info Bar 尺寸、layout、icon variant、hover/active 樣式）見 [`Shared.md` §頁面框架](Shared.md)。本節只列 ERP 專屬覆寫。
 
 ### Breadcrumb 層級
 
@@ -996,7 +996,7 @@ Form View 主體由多個 Group（`.form-section`）組成，每個 Group 內以
 > - State Machine、Summary Bar (stepper)、Smart Bar、Form Footer 動作群 — **全部不適用**
 > - List View 批次操作、Form View 章節結構、Footer — **依本節重寫**
 > - Modal / Toast / Empty State、輸入欄樣式、按鈕 icon 政策 — **沿用前述章節**
-> - App Shell — 沿用 `共用.md §頁面框架` + 本檔 §App Shell 規範（breadcrumb 三層 / nav-rail 5 項 / Info Bar 格式）
+> - App Shell — 沿用 `Shared.md §頁面框架` + 本檔 §App Shell 規範（breadcrumb 三層 / nav-rail 5 項 / Info Bar 格式）
 
 ### 類型判斷準則（命中任一即為設定檔）
 
@@ -1269,7 +1269,7 @@ else                       →  允許實體刪除
 
 通用清單通過後再逐項打勾:
 
-- [ ] App Shell 結構符合 `共用.md §頁面框架`（56px header / 72px nav-rail / 28px info bar）；class 沿用 `.erp-*`
+- [ ] App Shell 結構符合 `Shared.md §頁面框架`（56px header / 72px nav-rail / 28px info bar）；class 沿用 `.erp-*`
 - [ ] breadcrumb 三層正確（模組分類 / 功能名 / 單號）
 - [ ] nav-rail 高亮對應模組分類
 - [ ] programID 與版號格式正確（`vX.Y.Z.A.B`）

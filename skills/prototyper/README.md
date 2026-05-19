@@ -84,7 +84,7 @@ skills/prototyper/
 ├── REFERENCE.md        詳細展開：權重邊界、Pass 0-1-2 細節、Examples、token 對照、元件對照、app.js 起手式
 ├── pitfalls.md         反覆出現的審查問題（dated entries，第 2 次以上才寫入）
 ├── profiles/
-│   ├── 共用.md         跨專案頁面框架（Header 56px / Nav-rail 72px / Info Bar 28px）
+│   ├── Shared.md       跨專案頁面框架（Header 56px / Nav-rail 72px / Info Bar 28px）
 │   └── erp.md          ERP 專屬：State Machine / Summary Bar / Stepper / Smart Bar / DataGrid / Form Footer / 設定檔特化
 └── templates/
     ├── module-page.html 作業檔 starter（含狀態流程）
@@ -98,7 +98,7 @@ skills/prototyper/
 | 載入時機 | 檔案 | 用途 |
 |---|---|---|
 | **永遠** | `SKILL.md` | 核心規範與工作流總覽，每次呼叫必載 |
-| **永遠** | `profiles/共用.md` | 頁面框架基底，所有專案前置必讀 |
+| **永遠** | `profiles/Shared.md` | 頁面框架基底，所有專案前置必讀 |
 | **依專案** | `profiles/<project>.md` | 專案專屬覆寫（ERP 即 `erp.md`） |
 | **按需** | `pitfalls.md` | 每次製作前掃一眼，避免重蹈覆轍 |
 | **按需** | `REFERENCE.md` | 需要工作流明細 / token / 元件對照 / `app.js` 範本時查 |

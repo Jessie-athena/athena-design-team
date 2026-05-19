@@ -5,7 +5,7 @@
 
 ## 觸發載入
 
-本檔為所有專案 profile 的**前置必讀**——使用 prototyper skill 時，先載入 `共用.md`，再依專案載入對應 `<project>.md`。
+本檔為所有專案 profile 的**前置必讀**——使用 prototyper skill 時，先載入 `Shared.md`，再依專案載入對應 `<project>.md`。
 
 ---
 
