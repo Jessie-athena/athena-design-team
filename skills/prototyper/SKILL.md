@@ -1,10 +1,8 @@
 ---
-# Invocation modes: auto-trigger (by description match) + manual `/prototyper` command — both enabled.
-# No `paths` restriction — this skill is cross-project (currently ERP, future may add other projects via new profiles).
 name: prototyper
-description: Turn a module spec into a clickable single-file HTML prototype for reviewers. Use when the user asks to build, generate, or convert anything into a prototype — from a PM doc path, an existing prototype to clone, a Figma frame, or a chat-described spec.
+description: Turns a module spec into a clickable single-file HTML prototype for reviewers. Use when the user asks to build, generate, or convert anything into a prototype.
 when_to_use: |
-  Activate when user types「做 prototype」「PM 文件轉 prototype」「參考 [既有].html 做 [新模組]」「PRD 產出前端頁面」, pastes a Figma frame asking for clickable conversion, or explicitly runs `/prototyper`.
+  Activate when user types「做 prototype」「PM 文件轉 prototype」「參考 [既有].html 做 [新模組]」「PRD 產出前端頁面」, pastes a Figma frame asking for clickable conversion, references a PM doc path under `docs/notion/`, or explicitly runs `/prototyper`.
 allowed-tools: Read Write Edit Glob Grep
 ---
 
