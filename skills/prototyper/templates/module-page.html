@@ -5,7 +5,7 @@
   1. 複製本檔到 prototype/project/<模組中文名>.html
   2. 將以下 placeholder 替換為實際內容：
      - <title>             模組中文名
-     - breadcrumb          模組分類 / 功能名稱 / 單號
+     - breadcrumb          模組分類 > 功能名稱 > 單號
      - programId / version 由 PM 文件 / Odoo model 決定
      - List View 欄位、Form View sections、tabs
   3. 對應的 reactive state 與方法寫到 ../app.js（禁止內嵌）
@@ -41,9 +41,9 @@
       </button>
       <nav class="erp-breadcrumb" aria-label="breadcrumb">
         <span>{{ breadcrumb.module }}</span>
-        <span class="erp-breadcrumb__sep">/</span>
+        <span class="erp-breadcrumb__sep">&gt;</span>
         <span>{{ breadcrumb.feature }}</span>
-        <span class="erp-breadcrumb__sep">/</span>
+        <span class="erp-breadcrumb__sep">&gt;</span>
         <span>{{ breadcrumb.docNo || '—' }}</span>
       </nav>
       <div class="erp-header__actions">

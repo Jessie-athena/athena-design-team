@@ -5,7 +5,7 @@
   1. 複製本檔到 prototype/project/<模組中文名>.html（如「地點設定檔.html」）
   2. 替換 placeholder：
      - <title>             模組中文名（如「地點設定檔 — Athena ERP」）
-     - breadcrumb          設定群組設定檔 / 功能名 / record 名稱（或「新增 XX」）
+     - breadcrumb          設定群組設定檔 > 功能名 > record 名稱（或「新增 XX」）
      - programId / version 由 PM 文件 / Odoo model 決定
      - settingsSideNav     同組設定檔清單（如「進銷存設定」群組）
      - List View 欄位、Form View groups、Footer 動作
@@ -60,9 +60,9 @@
       </button>
       <nav class="erp-breadcrumb" aria-label="breadcrumb">
         <span>{{ breadcrumb.module }}</span>
-        <span class="erp-breadcrumb__sep">/</span>
+        <span class="erp-breadcrumb__sep">&gt;</span>
         <span>{{ breadcrumb.feature }}</span>
-        <span v-if="breadcrumb.record" class="erp-breadcrumb__sep">/</span>
+        <span v-if="breadcrumb.record" class="erp-breadcrumb__sep">&gt;</span>
         <span v-if="breadcrumb.record">{{ breadcrumb.record }}</span>
       </nav>
       <div class="erp-header__actions">

@@ -75,6 +75,12 @@
 - **正確做法**：List / Form 的刪除按鈕一律走「紅框白底紅字」家族（outline 或 icon-only）—— 列尾用 `.ico-btn.is-delete`（純紅 icon, 無框）、批次列用 `.btn-icon--danger-square`（紅框 + 白底 + 紅 icon）、Form 底部用 `.btn--outline-danger`（紅框 + 白底 + 紅字）；背景透明 / 白，hover 加 `error @ 8%` 底色，**不**改 icon 顏色。實心 `.btn--danger`（紅底白字）**僅出現於 Modal 主按鈕**。詳細視覺見 `erp-setup.md §設定檔刪除機制`。
 - **為什麼會反覆犯**：Bootstrap / Material / Tailwind UI 範例的「危險按鈕」幾乎都是 filled red，AI 直覺套上；訓練資料裡「紅框白底紅字」/ icon-only-danger 出現頻率低，需要被明確覆寫。
 
+### [2026-05-20] Breadcrumb 分隔符用 `/` 而非 `>`
+
+- **症狀**：生出來的 breadcrumb 寫成 `<span>模組分類</span><span class="erp-breadcrumb__sep">/</span><span>功能名稱</span>...`；或 PRODUCE 風格的描述文字寫「模組分類 / 功能名稱 / 單號」。
+- **正確做法**：分隔符一律 `>`（HTML 中寫 `&gt;`）。`>` 才是「層級」語意；`/` 是「路徑」語意（URL / 檔案系統），不該用在 navigation breadcrumb。`profiles/Shared.md §Breadcrumb` 是視覺 SoT；`profiles/erp.md` 描述層級結構與 Handoff Checklist 也須一致；template `module-page.html` / `setup-page.html` 已預設成 `&gt;`，**不要改回 `/`**。
+- **為什麼會反覆犯**：訓練資料中 web app breadcrumb 兩種寫法都常見（Bootstrap 預設 `/`、Material 預設 `>`），AI 沒被提醒就走路徑直覺；且早期版本 Athena template 一度用 `/`，舊 prototype 看一眼又會被誤導回 `/`。
+
 ### [2026-05-18] 刪除確認 Modal 主按鈕預設焦點誤觸
 
 - **症狀**：刪除 confirm modal 開啟後 Enter 直接執行刪除；主按鈕在 Tab order 第一位；`Delete` / `Backspace` 鍵被綁為刪除快捷鍵。

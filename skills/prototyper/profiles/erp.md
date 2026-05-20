@@ -67,7 +67,7 @@ prototype 的 `prototype/ds/colors_and_type.css` 與 `prototype/app.css` 已預�
 
 ### Breadcrumb 層級
 
-三層固定順序：**模組分類** / **功能名稱** / **單號**
+三層固定順序：**模組分類** > **功能名稱** > **單號**（分隔符 `>`，**不**用 `/`）
 
 - 例：「進銷存 / 銷售訂單 / SO_2026_000123」
 - 新單時單號顯示 `—`（dash）
@@ -1122,7 +1122,7 @@ Form View 主體由多個 Group（`.form-section`）組成，每個 Group 內以
 通用清單通過後再逐項打勾:
 
 - [ ] App Shell 結構符合 `Shared.md §頁面框架`（56px header / 72px nav-rail / 28px info bar）；class 沿用 `.erp-*`
-- [ ] breadcrumb 三層正確（模組分類 / 功能名 / 單號）
+- [ ] breadcrumb 三層正確（模組分類 > 功能名 > 單號；分隔符 `>`）
 - [ ] nav-rail 高亮對應模組分類
 - [ ] programID 與版號格式正確（`vX.Y.Z.A.B`）
 - [ ] State machine 4 種狀態（含 voided）能在 Form View 正確呈現

@@ -64,10 +64,10 @@ Main panel 內部從上到下兩段：
 - 結構：`item / sep / item / sep / current`
 - 最後一層為 `.erp-breadcrumb__current`（**不可點**、weight 500、cursor default）
 - 前面層級 `.erp-breadcrumb__item`（可點、weight 400、hover 加 `rgba(15, 23, 42, 0.04)` 底色）
-- 分隔符：`/`、18px、灰色
+- 分隔符：`>`、18px、灰色（**禁**用 `/`——`/` 是路徑語意，`>` 才是層級語意）
 - **Favorite icon 緊接 current 之後**（**不在右側 actions**）；`.erp-breadcrumb__fav`、40×40、未收藏 `star_border`、已收藏 `star`（金色 `rgb(247, 192, 0)`，FILL 1）
 
-> 麵包屑**層數與各層語意**由專案 profile 定義（如 ERP：模組分類 / 功能名稱 / 單號 三層）。
+> 麵包屑**層數與各層語意**由專案 profile 定義（如 ERP：模組分類 > 功能名稱 > 單號 三層）。
 
 ---
 
