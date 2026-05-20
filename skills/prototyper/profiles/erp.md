@@ -659,9 +659,11 @@ List View 的表格本體；唯一的橫向 / 縱向捲軸來源。
 | 欄位類型 | min-width | width |
 |---|---|---|
 | 一般資料欄（`<th>` / `<td>`） | **200px** | auto |
-| Checkbox 欄 `.col-check` | **50px** | 50px |
-| 操作欄 `.col-actions`（1 顆按鈕） | **56px** | 56px |
-| 操作欄 `.col-actions`（2 顆按鈕） | 96px | 96px |
+| Checkbox 欄 `.col-check` | **56px** | 56px（固定，**禁**自適應） |
+| 操作欄 `.col-actions`（1 顆按鈕） | **56px** | 56px（固定，套 `.col-actions--single`） |
+| 操作欄 `.col-actions`（2 顆按鈕） | **96px** | 96px（固定，預設 `.col-actions`） |
+
+> **操作欄寬度鎖定**：兩種寬度都用 `width / min-width / max-width + box-sizing: border-box` 三件套鎖死，避免 grid auto-fit 在窄視窗下擠壓按鈕。
 
 ### 欄位優先級與 RWD 顯示規則
 > 採「優先級欄位 + 黏性欄位 + 橫向捲動」三層策略。重要欄位（勾選、代號、操作）永遠可見；次要欄位於窄視窗下隱藏；對應 §RWD 4 斷點 XL / L / M / S。
@@ -696,7 +698,7 @@ List View 的表格本體；唯一的橫向 / 縱向捲軸來源。
 
 - **左凍結**：`.sticky-left` → `position: sticky; left: <offset>`
   - 第 1 欄（checkbox）：`left: 0`
-  - 第 2 欄（主鍵，如館別代號）：`left: 50px`（緊接 checkbox）
+  - 第 2 欄（主鍵，如館別代號）：`left: 56px`（緊接 checkbox 寬度）
 - **右凍結**：`.sticky-right` → `position: sticky; right: 0`（操作欄）
 - z-index 階層：`thead th.sticky-*` = `3`；`tbody td.sticky-*` = `1`；一般 `thead th` = `2`
 - **禁加 `box-shadow`** 強調凍結邊（會視覺破碎）
@@ -719,7 +721,8 @@ List View 的表格本體；唯一的橫向 / 縱向捲軸來源。
 
 - 高度 `50px`，padding `0 16px`
 - 字級 14px / `color: var(--text-primary)`
-- 列間 `border-bottom: 1px solid var(--border-default)`；最後一列無
+- 列間 `border-bottom: 1px solid var(--border-default)`
+- 最後一列 `tr:last-child td { border-bottom: none }`（避免與外層 `.data-grid-block` 的下邊框疊出兩條）
 - **斑馬紋**：
   - **奇數列**：純白 `#fff`（= `var(--bg-surface-default)`）
   - **偶數列・一般欄（非 sticky）**：`rgba(15, 23, 42, .04)` — 淺岩石色 4% 疊白（semi-transparent，視覺層次靠透明度疊出）
@@ -756,9 +759,25 @@ List View 的表格本體；唯一的橫向 / 縱向捲軸來源。
 | 互動 | 行為 |
 |---|---|
 | 表頭 checkbox | 部分選取 → `indeterminate`；全選 / 全不選切換 |
-| 列 checkbox | 勾選後該列加 `.is-selected`，背景 `rgba(var(--color-sf-primary), .10)` |
-| 列 hover | 整列背景 `rgba(var(--color-sf-primary), .06)`；Sticky 欄 hover 同色（**禁**改用不同 tint 讓 sticky 欄看起來是獨立區塊） |
-| `.is-selected` × hover | `.is-selected` 優先級高於 hover |
+| 列 checkbox | 勾選後該列加 `.is-selected` |
+| 列 hover | 整列背景，sticky 欄補實色（見下方優先級表） |
+| 列點擊 | **禁**整列可點（避免誤觸）。進詳細只有兩個入口：① 主鍵欄 `.link`、② 操作欄按鈕 |
+| 唯讀模式 | 操作欄按鈕從鉛筆（`.is-edit`）切換成右箭頭 chevron（`.is-view`），title 改「檢視」；**禁直接隱藏按鈕**，保留入口 |
+| 橫向捲動 | 左 / 右凍結欄保持可見；Sticky 欄一定要明確指定 `background` |
+| 進入「批次模式」 | 由父層判斷 `selectedIds.length > 0` 切換 toolbar，與表格本身解耦 |
+
+#### 互動狀態優先級（由淺到深，覆蓋斑馬紋）
+
+**預設斑馬紋  <  hover  <  selected  <  selected + hover**
+
+| 狀態 | 普通 cell（非 sticky） | Sticky cell（必須實色） |
+|---|---|---|
+| Hover | `rgba(var(--color-sf-primary), .06)` | `rgb(232, 238, 252)` |
+| Selected (`.is-selected`) | `rgba(var(--color-sf-primary), .10)` | `rgb(229, 235, 251)` |
+| Selected + Hover | 取 selected + hover 疊加值（最深） | 取對應疊加實色 |
+
+> **為什麼 sticky 必須補實色？** Sticky cell 會浮在下方滾動內容之上；若用 `rgba()` 透明色，scroll 時下層 cell 會穿透顯現，破壞 hover/selected 的視覺反饋。每個互動狀態都必須有對應的「疊白後固體色」配套。
+> **禁**改用不同色相讓 sticky 欄看起來是獨立區塊；色相要與一般 cell 一致，只是 alpha 換實色。
 | 列點擊 | **禁**整列可點（避免誤觸）。進詳細只有兩個入口：① 主鍵欄 `.link`、② 操作欄按鈕 |
 | 唯讀模式 | 操作欄按鈕從鉛筆（`.is-edit`）切換成右箭頭 chevron（`.is-view`），title 改「檢視」；**禁直接隱藏按鈕**，保留入口 |
 | 橫向捲動 | 左 / 右凍結欄保持可見；Sticky 欄一定要明確指定 `background` |

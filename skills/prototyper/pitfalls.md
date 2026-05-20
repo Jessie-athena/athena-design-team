@@ -75,6 +75,17 @@
 - **正確做法**：List / Form 的刪除按鈕一律走「紅框白底紅字」家族（outline 或 icon-only）—— 列尾用 `.ico-btn.is-delete`（純紅 icon, 無框）、批次列用 `.btn-icon--danger-square`（紅框 + 白底 + 紅 icon）、Form 底部用 `.btn--outline-danger`（紅框 + 白底 + 紅字）；背景透明 / 白，hover 加 `error @ 8%` 底色，**不**改 icon 顏色。實心 `.btn--danger`（紅底白字）**僅出現於 Modal 主按鈕**。詳細視覺見 `erp-setup.md §設定檔刪除機制`。
 - **為什麼會反覆犯**：Bootstrap / Material / Tailwind UI 範例的「危險按鈕」幾乎都是 filled red，AI 直覺套上；訓練資料裡「紅框白底紅字」/ icon-only-danger 出現頻率低，需要被明確覆寫。
 
+### [2026-05-20] DataGrid 欄寬未鎖 / sticky cell hover-selected 沒補實色
+
+- **症狀**：(a) Checkbox 欄寬走預設或寫成 50px / 40px（正確 **56px**）；(b) 操作欄沒用 `.col-actions` / `.col-actions--single` 區分，2 顆按鈕用 80px、1 顆用 40px 等亂值（正確 **96px / 56px**）；(c) sticky 欄寬度沒用 `width + min + max + box-sizing` 三件套鎖死，被 auto-fit 擠壓；(d) **hover/selected 直接套 `rgba(primary, .06/.10)` 到 sticky cell** → scroll 時下層內容穿透顯現；(e) selected + hover 疊加沒處理，hover 時 selected 視覺消失；(f) sticky cell hover 用了不同色相（如灰色），讓凍結欄看起來像獨立區塊。
+- **正確做法**：嚴守 `erp.md §DataGrid 結構與互動 → 欄位 min-width / Sticky 凍結欄 / 互動狀態優先級`：
+  - **欄寬鎖定**：Checkbox `.col-check` = 56px / 操作 2 顆 `.col-actions` = 96px / 操作 1 顆 `.col-actions--single` = 56px（三件套 width/min/max + box-sizing）
+  - **Sticky offset 連動**：sticky-left 第 2 欄 `left: 56px`（不是 50px）
+  - **互動優先級**：default < hover < selected < selected + hover
+  - **Sticky 補實色**：hover sticky = `rgb(232, 238, 252)`、selected sticky = `rgb(229, 235, 251)`、selected + hover 取對應疊加實色；**禁**用 `rgba()` 透明色在 sticky cell
+  - **色相一致**：sticky 與一般 cell 同色相，只差 alpha 換實色
+- **為什麼會反覆犯**：(1) 大多 grid library（DataTables、Material Table 等）預設沒 sticky cell，AI 沒概念要為 sticky 補實色；(2) hover/selected 直覺寫法是 `tbody tr:hover { background: rgba(...) }`，沒區分一般 cell 與 sticky cell；(3) 「checkbox 50px 看起來夠」直覺偏好，但實際操作欄按鈕 32px + padding 12px×2 = 56px 才剛好不擠壓，checkbox 同寬才能視覺對齊。
+
 ### [2026-05-20] Filled input 套錯視覺（白底 + 1px 邊 vs Material 風格）
 
 - **症狀**：(a) 套成「白底 `#FFFFFF` + 1px solid `#D5D8DC` 完整邊框 + 圓角 4px」(Bootstrap / Tailwind outlined 風格)；(b) Focus 加 outline ring（如 `box-shadow: 0 0 0 2px rgba(37,99,235,.20)`）；(c) Label / placeholder 顏色與字級亂選；(d) 必填星號顏色用紅色但非 `#F4493E`；(e) 上下圓角都做（應僅上方 `4px 4px 0 0`）。
