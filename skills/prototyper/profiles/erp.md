@@ -280,13 +280,86 @@ ERP 的 Smart Bar **不是** 一排有 link icon 的文字連結。是一組以�
 ---
 
 ## 輸入欄樣式
-- **預設 Shape：Filled**（`.input.filled` — background `surface-variant` + 底部 2px 底線）；`.outlined` 只在特定需要 borders-on-all-sides 的情境用
+
+- **預設 Shape：Filled**（class `.input.filled`） — Material 3 風格：surface-variant 底色 + 底部 underline + 上方圓角；`.outlined` 只在特定需要 borders-on-all-sides 的情境用
+- **作業檔與設定檔皆預設 Filled**
 - **Read Only ≠ Disabled**：
-  - read-only：用 `readonly` 屬性，套 DS 的 readonly 樣式（背景仍為 surface-variant、文字 secondary、cursor: default）
-  - disabled：用 `disabled` 屬性，opacity 38%、cursor not-allowed、pointer-events: none
-  - **禁**用 disabled 屬性表達 read-only（會誤導使用者以為欄位不可用）
+  - read-only：用 `readonly` 屬性 — 背景透明、底線 `1px solid var(--border-default)`、文字 `var(--text-primary)`、`cursor: default`、**不觸發** focus 樣式
+  - disabled：用 `disabled` 屬性 — 同 readonly + select caret 隱藏 + `cursor: not-allowed` + `pointer-events: none`
+  - **禁**用 `disabled` 屬性表達 read-only（會誤導使用者以為欄位不可用）
 - DynamicForm（動態表單）：外層**無 border、padding 0**；外距由父層 `.form-section` 控制
 - `DsSectionHeader`：下方 padding 16px（與下方 form-grid 之間）
+- **詳細狀態視覺**（Default / Hover / Focus / Filled / Error / Readonly / Disabled）見 §Form Group 分群與 form-grid RWD → `.input.filled` 各狀態
+
+### Filled 詳細視覺規格（Figma source of truth）
+
+> 以下為 Figma DS 中 `.input.filled` 的實際 CSS 值，是 token 在 `prototype/ds/colors_and_type.css` 中應對應的具象值。**禁** AI 反射用 outlined 風格（白底 + 1px solid `#D5D8DC` 是錯的）。
+
+**外層 wrapper（一個 form-field 整體）**
+
+| 屬性 | 值 |
+|---|---|
+| display | `flex; flex-direction: column` |
+| gap（label → input → help） | `4px` |
+| min-width | `300px` |
+| 高度（含 label） | 自動（label 18 + gap 4 + input 40 = 62px；help 在 input 下方再 +4 + 16） |
+
+**Label（label 元素）**
+
+| 屬性 | 值 |
+|---|---|
+| font-family | `Roboto` |
+| font-weight | `400`（Regular） |
+| font-size | `14px` |
+| line-height | `130%`（18px） |
+| color | `#3C4A5B`（content-text-color-alt1） |
+
+**必填星號（`<span class="required">*</span>`）**
+
+| 屬性 | 值 |
+|---|---|
+| font-size | `12px` Roboto Regular |
+| line-height | `130%`（16px） |
+| letter-spacing | `0.1px` |
+| color | `#F4493E`（danger） |
+| 寬高 | `6×16px` |
+
+**Input container（filled 的填色矩形本體）**
+
+| 屬性 | 值 |
+|---|---|
+| height | `40px`（form 主表單） |
+| background | `#EDF0F7`（Material 3 surface-variant） |
+| border-bottom | `1px solid #7F8996`（border 色） |
+| border-radius | `4px 4px 0 0`（**僅上方圓角**；Material Filled 簽名特徵） |
+| padding | `0 0 0 10px`（左內距 10px；右側若有 action icon 則不留 padding） |
+| display | `flex; align-items: center; justify-content: space-between` |
+| 內容 gap | `6px`（文字與右側 icon 之間） |
+
+**輸入文字（input value / placeholder）**
+
+| 屬性 | 值 |
+|---|---|
+| font-family | `Roboto` |
+| font-weight | `400`（Regular） |
+| font-size | `14px` |
+| line-height | `150%`（21px） |
+| letter-spacing | `0.24px` |
+| placeholder color | `#67717E`（placeholder-text-color） |
+| content color | Material 3 primary text color（深於 placeholder） |
+
+**右側 action icons（如 clear / search / 自訂）**
+
+- 每個 icon 容器 `32×32`
+- 無 action 時整段 `display: none`（**不**留空白槽）
+
+**輔助／錯誤訊息（`.help` / `.help.is-error`）**
+
+- 與 input 之間 `gap: 4px`
+- `.help { min-height: 16px }`（永遠保留佔位，避免錯誤訊息出現時欄位位移）
+- 錯誤訊息顏色同 error border（`#F4493E` / `--color-sf-error`）
+
+> **狀態完整視覺（Default / Hover / Focus / Filled / Error / Readonly / Disabled）** 見 §Form Group 分群與 form-grid RWD → `.input.filled` 各狀態。Focus 時 underline 加粗為 `2px solid` primary 色，**不**加 outline ring；Error 時 underline 變 `2px solid` danger 色。
 
 ---
 

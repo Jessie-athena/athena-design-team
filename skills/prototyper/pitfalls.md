@@ -75,6 +75,21 @@
 - **正確做法**：List / Form 的刪除按鈕一律走「紅框白底紅字」家族（outline 或 icon-only）—— 列尾用 `.ico-btn.is-delete`（純紅 icon, 無框）、批次列用 `.btn-icon--danger-square`（紅框 + 白底 + 紅 icon）、Form 底部用 `.btn--outline-danger`（紅框 + 白底 + 紅字）；背景透明 / 白，hover 加 `error @ 8%` 底色，**不**改 icon 顏色。實心 `.btn--danger`（紅底白字）**僅出現於 Modal 主按鈕**。詳細視覺見 `erp-setup.md §設定檔刪除機制`。
 - **為什麼會反覆犯**：Bootstrap / Material / Tailwind UI 範例的「危險按鈕」幾乎都是 filled red，AI 直覺套上；訓練資料裡「紅框白底紅字」/ icon-only-danger 出現頻率低，需要被明確覆寫。
 
+### [2026-05-20] Filled input 套錯視覺（白底 + 1px 邊 vs Material 風格）
+
+- **症狀**：(a) 套成「白底 `#FFFFFF` + 1px solid `#D5D8DC` 完整邊框 + 圓角 4px」(Bootstrap / Tailwind outlined 風格)；(b) Focus 加 outline ring（如 `box-shadow: 0 0 0 2px rgba(37,99,235,.20)`）；(c) Label / placeholder 顏色與字級亂選；(d) 必填星號顏色用紅色但非 `#F4493E`；(e) 上下圓角都做（應僅上方 `4px 4px 0 0`）。
+- **正確做法**：`.input.filled` 是 **Material 3 Filled 風格**：
+  - 背景 `#EDF0F7`（surface-variant）
+  - 底部 underline `1px solid #7F8996`（無左右上邊框）
+  - `border-radius: 4px 4px 0 0`（**僅上方圓角**，Material Filled 簽名）
+  - 高度 40px、padding `0 0 0 10px`
+  - Label：Roboto 14px Regular / line-height 130% / `#3C4A5B`
+  - Placeholder：Roboto 14px Regular / line-height 150% / letter-spacing 0.24px / `#67717E`
+  - 必填星號：12px / letter-spacing 0.1px / `#F4493E`
+  - **Focus**：底線加粗 `2px solid` primary 色，**禁加 outline ring**（焦點靠底線變色表達）
+  - 詳 `erp.md §輸入欄樣式 → Filled 詳細視覺規格`
+- **為什麼會反覆犯**：(1) 訓練資料中 Bootstrap / Tailwind / Tailwind UI 預設 input 都是 outlined 白底 + 完整 1px 邊，AI 直覺套上；(2)「Filled」一詞在 web 通用語境意義不明（Material Filled vs 一般「filled in」），AI 沒區分；(3) Focus 加 ring（Tailwind 慣例）vs Material Filled 用 underline 變化的差異容易混淆。
+
 ### [2026-05-20] Breadcrumb 分隔符用 `/` 而非 `>`
 
 - **症狀**：生出來的 breadcrumb 寫成 `<span>模組分類</span><span class="erp-breadcrumb__sep">/</span><span>功能名稱</span>...`；或 PRODUCE 風格的描述文字寫「模組分類 / 功能名稱 / 單號」。
