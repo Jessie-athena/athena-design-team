@@ -1,12 +1,10 @@
 ---
 name: prototyper
-description: Turns a module spec into a clickable single-file HTML prototype for reviewers. Use when the user asks to build, generate, or convert anything into a prototype.
-when_to_use: |
-  Activate when user types「做 prototype」「PM 文件轉 prototype」「參考 [既有].html 做 [新模組]」「PRD 產出前端頁面」, pastes a Figma frame asking for clickable conversion, references a PM doc path under `docs/notion/`, or explicitly runs `/prototyper`.
+description: Turn an ERP module spec into a clickable single-file HTML prototype (Vue 3 production CDN, no build step) for reviewers. Use this skill whenever the user types「做 prototype」「PM 文件轉 prototype」「參考 [既有].html 做 [新模組]」「PRD 產出前端頁面」「把這份規格做成可以點的頁面」, pastes a Figma frame asking for a clickable HTML conversion, references a PM doc path under `docs/notion/`, asks to convert a PRD or Notion page into an interactive prototype page, or explicitly runs `/prototyper`. Skip for Figma motion / interaction design (use `figma-use` / `figma-generate-design`), production Vue SFC / Odoo Python code, or pure requirement parsing without prototype output (use `requirement-analyst`).
 allowed-tools: Read Write Edit Glob Grep
 ---
 
-# Prototyper（通用核心）
+# Prototyper（ERP）
 
 > 把規格 / 同類舊模組 / chat 描述，**一步到位**轉成可給 reviewer 試玩的單檔 HTML prototype。
 > 不是 Figma 動效設計，不是 production code。**單檔 HTML + Vue 3 production CDN**。
@@ -37,7 +35,8 @@ allowed-tools: Read Write Edit Glob Grep
 派生規則（每次製作前自檢）：
 
 - **R1 — PRD 完整性**：**禁**自動補 PRD 沒列的欄位 / List 欄 / action / status；缺漏停下來問
-- **R2 — DS 不覆寫 PRD 視覺**：PRD 明確指定的視覺 > DS 預設；判斷不確定時，**先信 PRD，再回查 DS**
+- **R2a — DS 不覆寫 PRD 視覺**：PRD 明確指定的視覺 > DS 預設；判斷不確定時，**先信 PRD，再回查 DS**
+- **R2b — AI 反射不覆寫 DS 預設**：訓練資料中 Bootstrap / Tailwind UI Kit / generic web app 範例量遠多於企業內部 DS，沒被提醒就走反射預設（outlined input、所有按鈕都帶 icon、操作欄 hover 才浮出、卡片帶 shadow、`<input readonly>` 直接套 disabled 樣式…）。**禁**讓 AI 直覺壓過 DS；每次製作前**先讀 `pitfalls.md §通用 [2026-05-11] AI 預設樣式 ≠ Design System` 的反射對照表**，逐項對照
 
 > **IMPORTANT:** 遇到衝突邊界情境（如「PRD 沒提但舊模組有」、「profile IMPORTANT 與 PRD 衝突」），**必讀 `REFERENCE.md §4 資料來源權重明細`**——一行版規則處理不了的，邊界表會給明確判定。
 
@@ -72,7 +71,7 @@ allowed-tools: Read Write Edit Glob Grep
 - **IMPORTANT:** 樣式寫到 `app.css`、互動寫到 `app.js`，**禁**在 `.html` 內嵌 `<style>` / `<script>`（CDN 與引用 `app.js` 的 `<script src>` 例外）
 - **IMPORTANT:** Icon 一律 Material Symbols Outlined（`<span class="material-symbols-outlined">`）
 - **IMPORTANT:** 色彩 / 間距 / 圓角 / 陰影 / 字級必須使用 design tokens；**禁** inline hex、**禁** `@apply`
-- **IMPORTANT:** 設計基準 **1440px**、主要作業寬度 **1280px**；**不支援** `< 768px`（mobile）。RWD 4 斷點 XL / L / M / S 規格詳見 `REFERENCE.md §10 Responsive`；主要 grid 降欄關鍵斷點為 `@media (max-width: 1024px)` 強制 2 欄
+- **IMPORTANT:** 寬度雙標（語義不同，勿混用）：**1440px** = Figma 設計畫布基準（design ↔ dev 規格對齊用，所有設計稿尺寸以此計）／**1280px** = prototype 預覽 viewport（template `<meta name="viewport" content="width=1280">` 已釘住，reviewer 開瀏覽器即以此寬看）。**不支援** `< 768px`（mobile）。RWD 4 斷點 XL / L / M / S 規格詳見 `REFERENCE.md §10 Responsive`；主要 grid 降欄關鍵斷點為 `@media (max-width: 1024px)` 強制 2 欄
 
 > profile 可**附加更嚴格**規則（如 ERP 規定 state machine 命名），但**不可放寬**通用限制。
 > 通用決策題（List 第一欄是否要 checkbox / 合計列處理 / 必填判斷邊界 / 響應式截斷 / 設定檔有無狀態流程等）→ `REFERENCE.md §6 通用決策題`
