@@ -659,7 +659,7 @@ List View 的表格本體；唯一的橫向 / 縱向捲軸來源。
 | 欄位類型 | min-width | width |
 |---|---|---|
 | 一般資料欄（`<th>` / `<td>`） | **200px** | auto |
-| Checkbox 欄 `.col-check` | **56px** | 56px（固定，**禁**自適應） |
+| Checkbox 欄 `.col-check` | **50px** | 50px（固定，**禁**自適應） |
 | 操作欄 `.col-actions`（1 顆按鈕） | **56px** | 56px（固定，套 `.col-actions--single`） |
 | 操作欄 `.col-actions`（2 顆按鈕） | **96px** | 96px（固定，預設 `.col-actions`） |
 
@@ -698,7 +698,7 @@ List View 的表格本體；唯一的橫向 / 縱向捲軸來源。
 
 - **左凍結**：`.sticky-left` → `position: sticky; left: <offset>`
   - 第 1 欄（checkbox）：`left: 0`
-  - 第 2 欄（主鍵，如館別代號）：`left: 56px`（緊接 checkbox 寬度）
+  - 第 2 欄（主鍵，如館別代號）：`left: 50px`（緊接 checkbox 寬度）
 - **右凍結**：`.sticky-right` → `position: sticky; right: 0`（操作欄）
 - z-index 階層：`thead th.sticky-*` = `3`；`tbody td.sticky-*` = `1`；一般 `thead th` = `2`
 - **禁加 `box-shadow`** 強調凍結邊（會視覺破碎）
