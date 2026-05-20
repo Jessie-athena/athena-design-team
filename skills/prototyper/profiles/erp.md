@@ -419,9 +419,9 @@ App Shell 與多公司情境下的「公司別」過濾 dropdown **預設為空�
 
 | PRD 詞彙（含別名）| 適用情境（PRD 文字線索） | Prototype HTML（本 skill） | Production：shared-ui | 共享庫未封裝時：Syncfusion |
 |---|---|---|---|---|
-| TextBox / 文字 | 單行文字、單號、名稱 | `<input type="text">` + `.input--filled` | `<TextInput>` | `<ejs-textbox>` |
+| TextBox / 文字 | 單行文字、單號、名稱 | `<input type="text">` + `.input.filled` | `<TextInput>` | `<ejs-textbox>` |
 | NumericTextBox / 數值 / Monetary | 金額、數量、含千分位 | `<input>` + `.text-right` | `<NumericInput>` | `<ejs-numerictextbox>` |
-| TextArea / Text Area / textarea / 多行 | 備註、長說明 | `<textarea>` + `.input--filled` | `<TextareaInput>` | `<ejs-textarea>` |
+| TextArea / Text Area / textarea / 多行 | 備註、長說明 | `<textarea>` + `.input.filled` | `<TextareaInput>` | `<ejs-textarea>` |
 | DropDownList / Dropdown / 下拉 | 列舉 ≤ 30 項、單選 | `<select>` + 自製 caret | `<DropdownInput>` | `<ejs-dropdownlist>` |
 | MultiSelect / 多選下拉 | 多選 chip 列 | `<select multiple>` | `<MultiSelectInput>` | `<ejs-multiselect>` |
 | DropDownTree / 樹狀下拉 | 階層選擇 | (prototype 略，用 select 代) | `<DropdownTreeInput>` | `<ejs-dropdowntree>` |
@@ -857,7 +857,7 @@ Form View 主體由多個 Group（`.form-section`）組成，每個 Group 內以
 ### `.input.filled` 各狀態
 | 狀態 | 視覺 |
 |---|---|
-| **Default** | 底色 `var(--bg-surface-variant)`、底線 `1px solid var(--border-strong)`、頂部 `border-radius: var(--radius-sm)` 圓角 |
+| **Default** | 底色 `var(--bg-surface-variant)` (`#EDF0F7`)、底線 `1px solid var(--border-strong)` (`#7F8996`)、`border-radius: 4px 4px 0 0`（**僅上方圓角**，Material Filled 簽名特徵） |
 | **Hover** | 底線顏色不變，僅 `cursor: text` |
 | **Focus** | **底線 `2px solid rgb(var(--color-sf-primary))`**，**禁加 outline ring**（焦點靠底線變色表達） |
 | **Filled**（有值） | 同 default |
