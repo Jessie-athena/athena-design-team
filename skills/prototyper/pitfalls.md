@@ -24,7 +24,7 @@
 ### [yyyy-mm-dd] 簡短描述
 
 - **症狀**:`<select v-model="filters.status"><option value="all">全部</option>...`
-- **正確做法**:第一個 option 必須 `value=""`（profile/erp.md §List View 七項自檢第 2 項）
+- **正確做法**:第一個 option 必須 `value=""`（profile/erp-transaction.md §List View 七項自檢第 2 項）
 - **為什麼會反覆犯**:寫程式直覺會給「全部」一個 'all' 字串，但搜尋邏輯預期空字串作為「不過濾」
 ```
 
@@ -37,7 +37,7 @@
 ### [2026-05-11] AI 預設樣式 ≠ Design System
 
 - **症狀**:生出來的 prototype 像 Bootstrap / 一般 web app — outlined input、所有按鈕都帶 icon、操作欄 hover 才浮出、卡片有 shadow、`<input readonly>` 直接套 disabled 樣式、nav-rail icon 是 outlined 變體、新增按鈕寫成 `<button><span class="material-symbols-outlined">add</span>新增</button>`。
-- **正確做法**:每次製作前對照「DS 反射對照表」（下方）；template 已預設成 DS-correct 樣式，**不要改回 AI 直覺**。專案的 DS 來源在 `profiles/<project>.md` 內指定（ERP → Claude Design 內部 design system，README 已記於 `profiles/erp.md`）。
+- **正確做法**:每次製作前對照「DS 反射對照表」（下方）；template 已預設成 DS-correct 樣式，**不要改回 AI 直覺**。專案的 DS 來源在 `profiles/<project>.md` 內指定（ERP → Claude Design 內部 design system，README 已記於 `profiles/erp-transaction.md`）。
 - **為什麼會反覆犯**:訓練資料中 Bootstrap / Tailwind UI Kit / generic web app 的範例量遠多於任何企業內部 DS。沒被提醒就走預設。
 
 #### DS 反射對照表（每次製作前掃）
@@ -66,7 +66,7 @@
 ### [2026-05-14] Form section 沒列「元件」就用 generic web 預設
 
 - **症狀**：PRD Form section 表格只有 `欄位 / 必填 / 說明`（沒列「元件」欄），AI 自行挑成 Bootstrap-ish 預設樣式 — outlined input、`disabled` 表 readonly、checkbox 表 boolean、generic `<select>` 沒 caret icon。產出與 Athena DS 完全脫節。
-- **正確做法**：跑 `REFERENCE.md §5 階段 1` 的 Pass 0/1/2 三段式 — Pass 0 找模組對應的設計文件 § 元件清單章節（出納 §2.1.1 / 應付 §3.1 / 應收 §2 互動元素清單）；無設計文件時退到 `profiles/erp.md §PRD 元件對照 Table A`；Form section 沒列「元件」欄時跑 Table B 推論規則並標記推論結果讓 user 確認。
+- **正確做法**：跑 `REFERENCE.md §5 階段 1` 的 Pass 0/1/2 三段式 — Pass 0 找模組對應的設計文件 § 元件清單章節（出納 §2.1.1 / 應付 §3.1 / 應收 §2 互動元素清單）；無設計文件時退到 `profiles/erp-transaction.md §PRD 元件對照 Table A`；Form section 沒列「元件」欄時跑 Table B 推論規則並標記推論結果讓 user 確認。
 - **為什麼會反覆犯**：（1）PRD 的 List/Search section 已標 `元件` 欄但 Form section 通常省略，AI 看到 Form section 就退回訓練資料預設；（2）AI 對 `<TextInput>` / `<DataGrid>` 等 shared-ui wrapper 沒概念，會優先用 raw `<input>`；（3）布林欄位的反射是 `<input type="checkbox">` 或 Switch，但設定檔 `active` 慣例是 Dropdown「啟用 / 停用」。
 
 ### [2026-05-18] 刪除按鈕用紅框白底紅字（非實心紅底）
@@ -78,7 +78,7 @@
 ### [2026-05-20] DataGrid 欄寬未鎖 / sticky cell hover-selected 沒補實色
 
 - **症狀**：(a) Checkbox 欄寬走預設或寫成 40px / 56px（正確 **50px**）；(b) 操作欄沒用 `.col-actions` / `.col-actions--single` 區分，2 顆按鈕用 80px、1 顆用 40px 等亂值（正確 **96px / 56px**）；(c) sticky 欄寬度沒用 `width + min + max + box-sizing` 三件套鎖死，被 auto-fit 擠壓；(d) **hover/selected 直接套 `rgba(primary, .06/.10)` 到 sticky cell** → scroll 時下層內容穿透顯現；(e) selected + hover 疊加沒處理，hover 時 selected 視覺消失；(f) sticky cell hover 用了不同色相（如灰色），讓凍結欄看起來像獨立區塊。
-- **正確做法**：嚴守 `profiles/erp/DataGrid.md → 欄位 min-width / Sticky 凍結欄 / 互動狀態優先級`：
+- **正確做法**：嚴守 `profiles/erp-components/DataGrid.md → 欄位 min-width / Sticky 凍結欄 / 互動狀態優先級`：
   - **欄寬鎖定**：Checkbox `.col-check` = 50px / 操作 2 顆 `.col-actions` = 96px / 操作 1 顆 `.col-actions--single` = 56px（三件套 width/min/max + box-sizing）
   - **Sticky offset 連動**：sticky-left 第 2 欄 `left: 50px`（與 checkbox 寬一致）
   - **互動優先級**：default < hover < selected < selected + hover
@@ -98,13 +98,13 @@
   - Placeholder：Roboto 14px Regular / line-height 150% / letter-spacing 0.24px / `#67717E`
   - 必填星號：12px / letter-spacing 0.1px / `#F4493E`
   - **Focus**：底線加粗 `2px solid` primary 色，**禁加 outline ring**（焦點靠底線變色表達）
-  - 詳 `erp.md §輸入欄樣式 → Filled 詳細視覺規格`
+  - 詳 `erp-transaction.md §輸入欄樣式 → Filled 詳細視覺規格`
 - **為什麼會反覆犯**：(1) 訓練資料中 Bootstrap / Tailwind / Tailwind UI 預設 input 都是 outlined 白底 + 完整 1px 邊，AI 直覺套上；(2)「Filled」一詞在 web 通用語境意義不明（Material Filled vs 一般「filled in」），AI 沒區分；(3) Focus 加 ring（Tailwind 慣例）vs Material Filled 用 underline 變化的差異容易混淆。
 
 ### [2026-05-20] Breadcrumb 分隔符用 `/` 而非 `>`
 
 - **症狀**：生出來的 breadcrumb 寫成 `<span>模組分類</span><span class="erp-breadcrumb__sep">/</span><span>功能名稱</span>...`；或 PRODUCE 風格的描述文字寫「模組分類 / 功能名稱 / 單號」。
-- **正確做法**：分隔符一律 `>`（HTML 中寫 `&gt;`）。`>` 才是「層級」語意；`/` 是「路徑」語意（URL / 檔案系統），不該用在 navigation breadcrumb。`profiles/Shared.md §Breadcrumb` 是視覺 SoT；`profiles/erp.md` 描述層級結構與 Handoff Checklist 也須一致；template `module-page.html` / `setup-page.html` 已預設成 `&gt;`，**不要改回 `/`**。
+- **正確做法**：分隔符一律 `>`（HTML 中寫 `&gt;`）。`>` 才是「層級」語意；`/` 是「路徑」語意（URL / 檔案系統），不該用在 navigation breadcrumb。`profiles/Shared.md §Breadcrumb` 是視覺 SoT；`profiles/erp-transaction.md` 描述層級結構與 Handoff Checklist 也須一致；template `module-page.html` / `setup-page.html` 已預設成 `&gt;`，**不要改回 `/`**。
 - **為什麼會反覆犯**：訓練資料中 web app breadcrumb 兩種寫法都常見（Bootstrap 預設 `/`、Material 預設 `>`），AI 沒被提醒就走路徑直覺；且早期版本 Athena template 一度用 `/`，舊 prototype 看一眼又會被誤導回 `/`。
 
 ### [2026-05-18] 刪除確認 Modal 主按鈕預設焦點誤觸

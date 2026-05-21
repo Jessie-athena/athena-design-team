@@ -1,9 +1,9 @@
 # List 搜尋區結構與互動
 
-> 屬於 `profiles/erp.md` 的延伸元件規格。
+> 屬於 `profiles/erp-transaction.md` 的延伸元件規格。
 > 載入時機：實作該元件（或審查含該元件的 prototype）時依需求載入；不會隨 erp profile 自動載入。
 >
-> 上層 profile：`profiles/erp.md`
+> 上層 profile：`profiles/erp-transaction.md`
 > 同層元件：`ListSearch.md` / `DataGrid.md` / `FormGroup.md` / `FormFooter.md`
 
 ---

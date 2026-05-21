@@ -22,7 +22,7 @@
     - Form Footer：上下筆 / 刪除 / 更多操作 / 儲存變更（無狀態動作按鈕）
     - 新增「設定檔側欄」（main panel 左側 sub-nav）
 
-  Form 資料狀態 × readonly 矩陣（詳見 profiles/erp.md §設定檔資料狀態矩陣）：
+  Form 資料狀態 × readonly 矩陣（詳見 profiles/erp-transaction.md §設定檔資料狀態矩陣）：
     - 新增中    全部欄位可編輯
     - 編輯啟用  全部可編輯，但「公司別」等建立後不可變欄位 readonly
     - 編輯停用  整張 form 唯讀；唯獨「狀態」欄保留可編輯（.is-keep-editable）
@@ -34,7 +34,7 @@
 
   審查對應：
     profiles/Shared.md       §頁面框架（Header / Nav-rail / Info Bar 結構）
-    profiles/erp.md          §App Shell §設定檔（Master Data）特化規則
+    profiles/erp-transaction.md          §App Shell §設定檔（Master Data）特化規則
                              §資料顯示與過濾慣例 §輸入欄樣式 §按鈕 icon 政策
     profiles/erp-setup.md    §設定檔側欄 §List/Form 七項自檢（設定檔版）
                              §設定檔資料狀態矩陣 §Form Footer（設定檔版）
@@ -88,7 +88,7 @@
 
       <!--
         ===== 設定檔側欄（sub-nav within main panel） =====
-        僅在「模組分類 = 設定檔」時渲染；資料模型見 profiles/erp.md §設定檔側欄
+        僅在「模組分類 = 設定檔」時渲染；資料模型見 profiles/erp-transaction.md §設定檔側欄
       -->
       <aside class="settings-sidenav">
         <div v-for="group in settingsSideNav" :key="group.title" class="settings-sidenav__group">

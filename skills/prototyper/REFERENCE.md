@@ -2,7 +2,7 @@
 
 > `SKILL.md` 的詳細展開：token 對照、prototype → production 元件對照、`app.js` / `app.css` 起手式。技術 baseline 以 SKILL.md §4 為單一來源，本檔不重複。
 >
-> **此檔僅含跨專案通用內容**。頁面框架（Header / Nav-rail / Info Bar 結構）見 `profiles/Shared.md`；專案專屬的 state machine / list view / form view / handoff / App Shell 具體值（nav 項目、programID 格式等）見 `profiles/<project>.md`（如 `profiles/erp.md`）。
+> **此檔僅含跨專案通用內容**。頁面框架（Header / Nav-rail / Info Bar 結構）見 `profiles/Shared.md`；專案專屬的 state machine / list view / form view / handoff / App Shell 具體值（nav 項目、programID 格式等）見 `profiles/<project>.md`（如 `profiles/erp-transaction.md`）。
 
 ---
 
@@ -98,7 +98,7 @@
 1. 拿 Pass 1 確認過的 schema → 複製 profile 指定的 starter template → 目標路徑
    - 作業檔（transaction documents，含狀態流程）→ `${CLAUDE_SKILL_DIR}/templates/module-page.html`
    - 設定檔（master data，僅 active true/false）→ `${CLAUDE_SKILL_DIR}/templates/setup-page.html`
-   - 類型判斷準則由 profile 規定（ERP 見 `${CLAUDE_SKILL_DIR}/profiles/erp.md §設定檔（Master Data）特化規則`）
+   - 類型判斷準則由 profile 規定（ERP 見 `${CLAUDE_SKILL_DIR}/profiles/erp-transaction.md §設定檔（Master Data）特化規則`）
 2. 替換 App Shell（結構與尺寸見 `profiles/Shared.md §頁面框架`；breadcrumb 層級、nav 項目、programID / version 等具體值見專案 profile）
 3. 建構 List View（自檢項目見 profile，作業檔與設定檔有獨立清單）
 4. 建構 Form View（自檢項目見 profile，作業檔與設定檔有獨立清單）
@@ -211,10 +211,10 @@
 
 各 view 的斷點細節（搜尋區欄位寬 / 收合行為、Grid 欄位優先級 P0–P3、Form Footer 縱向堆疊等）由專案 profile 補完。ERP 詳見：
 
-- `profiles/erp/ListSearch.md → RWD 4 斷點對照`
-- `profiles/erp/DataGrid.md → 欄位優先級 P0–P3`
-- `profiles/erp/FormGroup.md → 斷點對照表`
-- `profiles/erp/FormFooter.md → RWD 斷點`
+- `profiles/erp-components/ListSearch.md → RWD 4 斷點對照`
+- `profiles/erp-components/DataGrid.md → 欄位優先級 P0–P3`
+- `profiles/erp-components/FormGroup.md → 斷點對照表`
+- `profiles/erp-components/FormFooter.md → RWD 斷點`
 
 ---
 

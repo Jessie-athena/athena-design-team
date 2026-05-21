@@ -1,14 +1,14 @@
 # Form Group 分群與 form-grid RWD
 
-> 屬於 `profiles/erp.md` 的延伸元件規格。
+> 屬於 `profiles/erp-transaction.md` 的延伸元件規格。
 > 載入時機：實作該元件（或審查含該元件的 prototype）時依需求載入；不會隨 erp profile 自動載入。
 >
-> 上層 profile：`profiles/erp.md`
+> 上層 profile：`profiles/erp-transaction.md`
 > 同層元件：`ListSearch.md` / `DataGrid.md` / `FormGroup.md` / `FormFooter.md`
 
 ---
 
-Form View 主體由多個 Group（`.form-section`）組成，每個 Group 內以 `.form-grid` 排版欄位。本節規範分群結構、grid RWD、輸入欄狀態與 group header 視覺；輸入欄樣式的「Filled vs Outlined」、「readonly vs disabled」原則見 `profiles/erp.md §輸入欄樣式`，本節不重述。
+Form View 主體由多個 Group（`.form-section`）組成，每個 Group 內以 `.form-grid` 排版欄位。本節規範分群結構、grid RWD、輸入欄狀態與 group header 視覺；輸入欄樣式的「Filled vs Outlined」、「readonly vs disabled」原則見 `profiles/erp-transaction.md §輸入欄樣式`，本節不重述。
 
 ## Anatomy
 

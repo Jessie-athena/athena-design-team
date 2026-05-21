@@ -289,7 +289,7 @@ ERP 的 Smart Bar **不是** 一排有 link icon 的文字連結。是一組以�
   - **禁**用 `disabled` 屬性表達 read-only（會誤導使用者以為欄位不可用）
 - DynamicForm（動態表單）：外層**無 border、padding 0**；外距由父層 `.form-section` 控制
 - `DsSectionHeader`：下方 padding 16px（與下方 form-grid 之間）
-- **詳細狀態視覺**（Default / Hover / Focus / Filled / Error / Readonly / Disabled）見 `profiles/erp/FormGroup.md → .input.filled 各狀態`
+- **詳細狀態視覺**（Default / Hover / Focus / Filled / Error / Readonly / Disabled）見 `profiles/erp-components/FormGroup.md → .input.filled 各狀態`
 
 ### Filled 詳細視覺規格（Figma source of truth）
 
@@ -359,7 +359,7 @@ ERP 的 Smart Bar **不是** 一排有 link icon 的文字連結。是一組以�
 - `.help { min-height: 16px }`（永遠保留佔位，避免錯誤訊息出現時欄位位移）
 - 錯誤訊息顏色同 error border（`#F4493E` / `--color-sf-error`）
 
-> **狀態完整視覺（Default / Hover / Focus / Filled / Error / Readonly / Disabled）** 見 `profiles/erp/FormGroup.md → .input.filled 各狀態`。Focus 時 underline 加粗為 `2px solid` primary 色，**不**加 outline ring；Error 時 underline 變 `2px solid` danger 色。
+> **狀態完整視覺（Default / Hover / Focus / Filled / Error / Readonly / Disabled）** 見 `profiles/erp-components/FormGroup.md → .input.filled 各狀態`。Focus 時 underline 加粗為 `2px solid` primary 色，**不**加 outline ring；Error 時 underline 變 `2px solid` danger 色。
 
 ---
 
@@ -491,10 +491,10 @@ App Shell 與多公司情境下的「公司別」過濾 dropdown **預設為空�
 
 | 元件 | 規格檔 |
 |---|---|
-| List 搜尋區（toolbar / search bar / RWD） | `profiles/erp/ListSearch.md` |
-| DataGrid（含行內編輯互動） | `profiles/erp/DataGrid.md` |
-| Form Group / form-grid RWD | `profiles/erp/FormGroup.md` |
-| Form Footer（記錄分頁器 / 主 CTA / 更多操作） | `profiles/erp/FormFooter.md` |
+| List 搜尋區（toolbar / search bar / RWD） | `profiles/erp-components/ListSearch.md` |
+| DataGrid（含行內編輯互動） | `profiles/erp-components/DataGrid.md` |
+| Form Group / form-grid RWD | `profiles/erp-components/FormGroup.md` |
+| Form Footer（記錄分頁器 / 主 CTA / 更多操作） | `profiles/erp-components/FormFooter.md` |
 
 > 撰寫 chat handoff 時若 prototype 命中其中任一元件，請在「對齊方向」段附上對應子檔路徑，方便 reviewer 直接跳到規格。
 
@@ -503,10 +503,10 @@ App Shell 與多公司情境下的「公司別」過濾 dropdown **預設為空�
 ## List View 七項自檢
 
 - [ ] Toolbar: `selectedRows.length === 0` 時顯示主操作；> 0 時切換為批次操作
-- [ ] Search 第一個 `<option>` 為 `value=""` 標籤「全部」（**詳見 `profiles/erp/ListSearch.md`**）
-- [ ] Grid 欄位順序: `checkbox(sticky-left) → PK(sticky-left) → 一般欄 → 金額(text-right) → 狀態 → actions(sticky-right)`（**詳見 `profiles/erp/DataGrid.md`**）
+- [ ] Search 第一個 `<option>` 為 `value=""` 標籤「全部」（**詳見 `profiles/erp-components/ListSearch.md`**）
+- [ ] Grid 欄位順序: `checkbox(sticky-left) → PK(sticky-left) → 一般欄 → 金額(text-right) → 狀態 → actions(sticky-right)`（**詳見 `profiles/erp-components/DataGrid.md`**）
 - [ ] 金額欄 class 加 `text-right`
-- [ ] 空狀態套用 `inbox` icon（**詳見 `profiles/erp/DataGrid.md` → 空狀態**）
+- [ ] 空狀態套用 `inbox` icon（**詳見 `profiles/erp-components/DataGrid.md` → 空狀態**）
 - [ ] `tfoot` 合計列只在 `rows.length > 0` 時顯示
 - [ ] Pager 三段: page size（20 / 50 / 100）/ 範圍與總數 / 上下頁
 
@@ -516,11 +516,11 @@ App Shell 與多公司情境下的「公司別」過濾 dropdown **預設為空�
 
 - [ ] Summary bar 為 `sticky` + 上下兩塊（標題/stepper / 指標）+ 無 shadow + padding 24px（詳 §Summary Bar 結構）；`form.status === 'voided'` 改顯示 pill（不顯示 stepper）
 - [ ] Stepper 三狀態結構正確（`--active` / `--done` / pending + `.stepper__bar`），詳 §Stepper 三狀態結構
-- [ ] Section 用 `bar + title + form-grid--4`；DynamicForm 外層無 border、padding 0（詳 §輸入欄樣式 + `profiles/erp/FormGroup.md`）
+- [ ] Section 用 `bar + title + form-grid--4`；DynamicForm 外層無 border、padding 0（詳 §輸入欄樣式 + `profiles/erp-components/FormGroup.md`）
 - [ ] 必填欄位 label 加 `<span class="required">*</span>`；read-only 用 `readonly` 屬性，**禁**用 `disabled`
 - [ ] Smart Bar 用 `card-btn` 結構（無 link icon、count + 單位 + 標題 + `arrow_outward`），詳 §Smart Bar `card-btn` 結構；無關聯時整段不渲染
 - [ ] Tab block: 表頭右側固定 add 按鈕（按鈕**無 add icon**，詳 §按鈕 icon 政策）；行內編輯模式有 save / cancel
-- [ ] Footer 三段: 上下筆 / 動作群（按鈕**分層級配色 + 無 icon**） / 「更多操作」下拉（**詳 `profiles/erp/FormFooter.md`**）
+- [ ] Footer 三段: 上下筆 / 動作群（按鈕**分層級配色 + 無 icon**） / 「更多操作」下拉（**詳 `profiles/erp-components/FormFooter.md`**）
 - [ ] `form.moveId` 存在時顯示「已產生傳票」chip（**禁**當成獨立狀態加進 stepper）
 
 ---
@@ -627,10 +627,10 @@ App Shell 與多公司情境下的「公司別」過濾 dropdown **預設為空�
 - [ ] chat handoff 五項齊全（對應 Notion 路徑、Odoo model、版本差異、對齊方向、注意項）
 - [ ] 開啟欲實作的 `.html` 後再 export（會標為 primary）
 - [ ] **頁面層級無第二條捲軸**（`html` / `body` / `#app` / `.shell` 全部 `100vh + overflow hidden`；捲軸只在 `.grid-wrap` 與 `.form-view__body` 內，詳 §頁面捲動範圍）
-- [ ] **List 搜尋區** 欄位 > 5 或容器窄時能正確換行；操作按鈕固定右上不被擠下；收合狀態下隱藏 label 並依容器寬即時計算可容納欄位數（詳 `profiles/erp/ListSearch.md`）
-- [ ] **DataGrid** 列本身不可點；唯讀模式操作欄切 chevron 而**非隱藏入口**；sticky 欄明確指定背景；斑馬紋偶列用 `var(--bg-surface-variant)`（詳 `profiles/erp/DataGrid.md`）
-- [ ] **Form Footer** 在 `< 768px` 縱向堆疊、CTA 全寬；`Ctrl/Cmd + S` 在表單聚焦時可儲存；dirty 切筆 / sidebar / `beforeunload` 都會攔截確認（詳 `profiles/erp/FormFooter.md`）
-- [ ] **Form Group** 跨欄 `--span-2 / --span-3 / --full` 在 1024 斷點下正確降欄；`.field-phone` 在父 grid 縮到 1 欄時仍維持並排（詳 `profiles/erp/FormGroup.md`）
+- [ ] **List 搜尋區** 欄位 > 5 或容器窄時能正確換行；操作按鈕固定右上不被擠下；收合狀態下隱藏 label 並依容器寬即時計算可容納欄位數（詳 `profiles/erp-components/ListSearch.md`）
+- [ ] **DataGrid** 列本身不可點；唯讀模式操作欄切 chevron 而**非隱藏入口**；sticky 欄明確指定背景；斑馬紋偶列用 `var(--bg-surface-variant)`（詳 `profiles/erp-components/DataGrid.md`）
+- [ ] **Form Footer** 在 `< 768px` 縱向堆疊、CTA 全寬；`Ctrl/Cmd + S` 在表單聚焦時可儲存；dirty 切筆 / sidebar / `beforeunload` 都會攔截確認（詳 `profiles/erp-components/FormFooter.md`）
+- [ ] **Form Group** 跨欄 `--span-2 / --span-3 / --full` 在 1024 斷點下正確降欄；`.field-phone` 在父 grid 縮到 1 欄時仍維持並排（詳 `profiles/erp-components/FormGroup.md`）
 
 ---
 

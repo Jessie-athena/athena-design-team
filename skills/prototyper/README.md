@@ -85,7 +85,7 @@ skills/prototyper/
 ├── pitfalls.md         反覆出現的審查問題（dated entries，第 2 次以上才寫入）
 ├── profiles/
 │   ├── Shared.md       跨專案頁面框架（Header 56px / Nav-rail 72px / Info Bar 28px）
-│   ├── erp.md          ERP 專屬：State Machine / Summary Bar / Stepper / Smart Bar / DataGrid / Form Footer / 設定檔類型判斷
+│   ├── erp-transaction.md          ERP 專屬：State Machine / Summary Bar / Stepper / Smart Bar / DataGrid / Form Footer / 設定檔類型判斷
 │   └── erp-setup.md    ERP 設定檔（master data）專屬：側欄 / List/Form 自檢 / 資料狀態矩陣 / 刪除機制
 └── templates/
     ├── module-page.html 作業檔 starter（含狀態流程）
@@ -100,8 +100,8 @@ skills/prototyper/
 |---|---|---|
 | **永遠** | `SKILL.md` | 核心規範與工作流總覽，每次呼叫必載 |
 | **永遠** | `profiles/Shared.md` | 頁面框架基底，所有專案前置必讀 |
-| **依專案** | `profiles/<project>.md` | 專案專屬覆寫（ERP 即 `erp.md`） |
-| **依類型** | `profiles/<project>-setup.md` | 設定檔模組才載入（依 `erp.md §類型判斷準則`，ERP 即 `erp-setup.md`） |
+| **依專案** | `profiles/<project>.md` | 專案專屬覆寫（ERP 即 `erp-transaction.md`） |
+| **依類型** | `profiles/<project>-setup.md` | 設定檔模組才載入（依 `erp-transaction.md §類型判斷準則`，ERP 即 `erp-setup.md`） |
 | **按需** | `pitfalls.md` | 每次製作前掃一眼，避免重蹈覆轍 |
 | **按需** | `REFERENCE.md` | 需要工作流明細 / token / 元件對照 / `app.js` 範本時查 |
 | **按需** | `templates/*.html` | 階段 2「複製 starter」時讀取 |
@@ -116,7 +116,7 @@ skills/prototyper/
 
 未來要服務 ERP 以外的專案時：
 
-1. **複製 `profiles/erp.md` 為起點**，重新命名為 `profiles/<新專案>.md`
+1. **複製 `profiles/erp-transaction.md` 為起點**，重新命名為 `profiles/<新專案>.md`
 2. **補完共用 profile §「專案 profile 應補完」6 項**：
    - Nav-rail 項目清單（key / icon / label / 順序、產品縮寫）
    - Breadcrumb 層級結構
@@ -188,4 +188,4 @@ cp -r athena-design-team/skills/prototyper/. ~/.claude/skills/prototyper/
 - [athena-design-team 根 README](https://github.com/Jessie-athena/athena-design-team) — 整個設計團隊定位與 14 角色
 - ERP repo `.claude/rules/prototype-design/CLAUDE.md` — Prototype 審查規範（與本 skill 互為對照）
 - ERP repo `.claude/rules/prototype-design/PRODUCE.md` — Prototype 製作 SOP（含 starter template 附錄）
-- Athena Design System bundle — 視覺 token 與元件樣式來源（URL 與 README 路徑詳見 `profiles/erp.md §視覺系統來源`）
+- Athena Design System bundle — 視覺 token 與元件樣式來源（URL 與 README 路徑詳見 `profiles/erp-transaction.md §視覺系統來源`）

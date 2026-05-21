@@ -1,16 +1,16 @@
 # Form Footer 結構與互動（共通）
 
-> 屬於 `profiles/erp.md` 的延伸元件規格。
+> 屬於 `profiles/erp-transaction.md` 的延伸元件規格。
 > 載入時機：實作該元件（或審查含該元件的 prototype）時依需求載入；不會隨 erp profile 自動載入。
 >
-> 上層 profile：`profiles/erp.md`
+> 上層 profile：`profiles/erp-transaction.md`
 > 同層元件：`ListSearch.md` / `DataGrid.md` / `FormGroup.md` / `FormFooter.md`
 
 ---
 
 作業檔與設定檔的 Form Footer **共用本節結構、RWD、互動、A11y 規則**；右側按鈕內容差異（作業檔的狀態動作群 vs 設定檔的儲存變更 / 啟用按鈕）見對應章節：
 
-- 作業檔右側按鈕內容 → `profiles/erp.md §Form View 七項自檢`第 7 項
+- 作業檔右側按鈕內容 → `profiles/erp-transaction.md §Form View 七項自檢`第 7 項
 - 設定檔右側按鈕內容 → `profiles/erp-setup.md §Form Footer（設定檔版）`
 
 ## Anatomy
