@@ -211,10 +211,10 @@
 
 各 view 的斷點細節（搜尋區欄位寬 / 收合行為、Grid 欄位優先級 P0–P3、Form Footer 縱向堆疊等）由專案 profile 補完。ERP 詳見：
 
-- `profiles/erp.md §List 搜尋區結構與互動 → RWD 4 斷點對照`
-- `profiles/erp.md §DataGrid 結構與互動 → 欄位優先級 P0–P3`
-- `profiles/erp.md §Form Group 分群與 form-grid RWD → 斷點對照表`
-- `profiles/erp.md §Form Footer 結構與互動 → RWD 斷點`
+- `profiles/erp/ListSearch.md → RWD 4 斷點對照`
+- `profiles/erp/DataGrid.md → 欄位優先級 P0–P3`
+- `profiles/erp/FormGroup.md → 斷點對照表`
+- `profiles/erp/FormFooter.md → RWD 斷點`
 
 ---
 

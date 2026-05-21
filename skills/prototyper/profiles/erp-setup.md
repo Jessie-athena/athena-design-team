@@ -6,7 +6,9 @@
 >
 > **覆寫的章節**：State Machine、Summary Bar、Stepper、Smart Bar、Form Footer 動作群、List 工具列批次操作、Form View 章節結構。
 >
-> **沿用的章節（仍見 `erp.md`）**：App Shell、輸入欄樣式、按鈕 icon 政策、Modal/Toast/Empty State、PRD 元件對照、List 搜尋區結構與互動、DataGrid 結構與互動、Form Group 分群與 form-grid RWD、Form Footer 結構與互動（共通）。
+> **沿用的章節**：
+> - `erp.md`：App Shell、輸入欄樣式、按鈕 icon 政策、Modal/Toast/Empty State、PRD 元件對照
+> - `profiles/erp/ListSearch.md`、`profiles/erp/DataGrid.md`、`profiles/erp/FormGroup.md`、`profiles/erp/FormFooter.md`（4 個元件子檔，已從 `erp.md` 獨立出來）
 
 ---
 
@@ -24,16 +26,16 @@
 
 ## List View 七項自檢（設定檔版）
 
-> 通用結構規則沿用 `erp.md §List 搜尋區結構與互動` + `erp.md §DataGrid 結構與互動`；本清單只列**設定檔覆寫項**。
+> 通用結構規則沿用 `profiles/erp/ListSearch.md` + `profiles/erp/DataGrid.md`；本清單只列**設定檔覆寫項**。
 
 - [ ] Toolbar：`selectedRows.length === 0` 時顯示 `[新增 XX]`（primary、**無 icon**）；> 0 時切換為 icon-only `[🗑 批次刪除]`（danger 框） + `[已選取 N 筆 ×]` chip
 - [ ] 點 chip 內 `×` 取消選取；**不**提供獨立「取消選取」文字按鈕
 - [ ] **無**批次提交 / 批次作廢 / 批次匯出 / 批次啟用 / 批次停用
 - [ ] Search 第一個 `<option>` 為 `value=""` 標籤「全部」（規則同作業檔）
 - [ ] 狀態 filter 只列 啟用 / 停用（搜尋區可省略此 filter，由前端切換管道處理）
-- [ ] Grid 欄位順序：`checkbox(sticky-left) → 主欄（code/name 連結樣式, sticky-left）→ 一般欄 → 狀態(st-chip, display-only) → actions(sticky-right)`（詳見 `erp.md §DataGrid 結構與互動`）
+- [ ] Grid 欄位順序：`checkbox(sticky-left) → 主欄（code/name 連結樣式, sticky-left）→ 一般欄 → 狀態(st-chip, display-only) → actions(sticky-right)`（詳見 `profiles/erp/DataGrid.md`）
 - [ ] 「一般欄」的語意排序遵守 **識別 → 分類 → 歸屬 → 業務屬性 → 狀態**（如：完整路徑 → 類型 → 所屬倉庫/館別/區域 → 部門 → 公司別 → active）；違反此序視同欄位排序錯誤
-- [ ] 操作欄：`[編輯]` + `[刪除]`（兩個 icon button；**非** `[檢視]`）；唯讀模式切 chevron `[檢視]`（詳見 `erp.md §DataGrid → 唯讀模式`）
+- [ ] 操作欄：`[編輯]` + `[刪除]`（兩個 icon button；**非** `[檢視]`）；唯讀模式切 chevron `[檢視]`（詳見 `profiles/erp/DataGrid.md → 唯讀模式`）
 - [ ] `canDelete === false` 時 `[刪除]` **不渲染**（**禁**用 disabled），操作欄套 `.col-actions--single` 收窄寬度至 56px（從預設 96px）
 - [ ] 列尾 `[刪除]`（`.ico-btn.is-delete`）與批次列 `[🗑]`（`.btn-icon--danger-square`）符合 §設定檔刪除機制
 
@@ -91,7 +93,7 @@
 
 ## Form Footer（設定檔版）
 
-> 通用結構 / RWD / A11y / dirty-guard / 鍵盤快捷鍵見 `erp.md §Form Footer 結構與互動（共通）`。本表只列**設定檔右側按鈕內容覆寫項**。
+> 通用結構 / RWD / A11y / dirty-guard / 鍵盤快捷鍵見 `profiles/erp/FormFooter.md`。本表只列**設定檔右側按鈕內容覆寫項**。
 
 | 區塊 | 內容 | 說明 |
 |---|---|---|

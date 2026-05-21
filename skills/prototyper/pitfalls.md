@@ -78,7 +78,7 @@
 ### [2026-05-20] DataGrid 欄寬未鎖 / sticky cell hover-selected 沒補實色
 
 - **症狀**：(a) Checkbox 欄寬走預設或寫成 40px / 56px（正確 **50px**）；(b) 操作欄沒用 `.col-actions` / `.col-actions--single` 區分，2 顆按鈕用 80px、1 顆用 40px 等亂值（正確 **96px / 56px**）；(c) sticky 欄寬度沒用 `width + min + max + box-sizing` 三件套鎖死，被 auto-fit 擠壓；(d) **hover/selected 直接套 `rgba(primary, .06/.10)` 到 sticky cell** → scroll 時下層內容穿透顯現；(e) selected + hover 疊加沒處理，hover 時 selected 視覺消失；(f) sticky cell hover 用了不同色相（如灰色），讓凍結欄看起來像獨立區塊。
-- **正確做法**：嚴守 `erp.md §DataGrid 結構與互動 → 欄位 min-width / Sticky 凍結欄 / 互動狀態優先級`：
+- **正確做法**：嚴守 `profiles/erp/DataGrid.md → 欄位 min-width / Sticky 凍結欄 / 互動狀態優先級`：
   - **欄寬鎖定**：Checkbox `.col-check` = 50px / 操作 2 顆 `.col-actions` = 96px / 操作 1 顆 `.col-actions--single` = 56px（三件套 width/min/max + box-sizing）
   - **Sticky offset 連動**：sticky-left 第 2 欄 `left: 50px`（與 checkbox 寬一致）
   - **互動優先級**：default < hover < selected < selected + hover
