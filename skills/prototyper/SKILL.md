@@ -65,12 +65,12 @@ allowed-tools: Read Write Edit Glob Grep
 
 ### 4. 通用硬性限制（每次輸出前自檢，違反即重做）
 
-- **IMPORTANT:** 預設 `<html lang="zh-Hant-TW">`（多語環境由 profile 指定）
-- **IMPORTANT:** CSS 載入順序：design tokens CSS → Material Symbols → `app.css`
-- **IMPORTANT:** Vue 3 production CDN，**禁**引入其他 UI library
-- **IMPORTANT:** 樣式寫到 `app.css`、互動寫到 `app.js`，**禁**在 `.html` 內嵌 `<style>` / `<script>`（CDN 與引用 `app.js` 的 `<script src>` 例外）
-- **IMPORTANT:** Icon 一律 Material Symbols Outlined（`<span class="material-symbols-outlined">`）
-- **IMPORTANT:** 色彩 / 間距 / 圓角 / 陰影 / 字級必須使用 design tokens；**禁** inline hex、**禁** `@apply`
+- **IMPORTANT:** 預設 `<html lang="zh-Hant-TW">`（多語環境由 profile 指定）。**Why**：lang 屬性決定瀏覽器字型回退、斷字規則、螢幕閱讀器發音；錯設 `en` 時中文常被誤套西文字型，行高與標點間距整批跑掉
+- **IMPORTANT:** CSS 載入順序：design tokens CSS → Material Symbols → `app.css`。**Why**：tokens 必須先載入才能被後續 stylesheet 引用；`app.css` 寫應用層覆寫必須最後，否則 token 變數抓不到值、自訂樣式被 DS 預設蓋掉
+- **IMPORTANT:** Vue 3 production CDN，**禁**引入其他 UI library。**Why**：prototype 用途是「reviewer 點一下開檔即試玩」，多加 library 增加下載 / 環境配置成本；視覺由 DS 已涵蓋，多餘 library 反成視覺噪音與整合阻力
+- **IMPORTANT:** 樣式寫到 `app.css`、互動寫到 `app.js`，**禁**在 `.html` 內嵌 `<style>` / `<script>`（CDN 與引用 `app.js` 的 `<script src>` 例外）。**Why**：prototype 後續會 port 到 production Vue SFC；三檔分離可直接貼進 `<template>` / `<script>` / `<style scoped>`，內嵌會逼下一手先 untangle
+- **IMPORTANT:** Icon 一律 Material Symbols Outlined（`<span class="material-symbols-outlined">`）。**Why**：與 DS 預設 icon 風格一致（避免 outlined / filled / sharp 變體混用造成視覺斷裂）；font-based icon 無需個別下載 SVG，prototype review 階段載入快
+- **IMPORTANT:** 色彩 / 間距 / 圓角 / 陰影 / 字級必須使用 design tokens；**禁** inline hex、**禁** `@apply`。**Why**：prototype → production 重用同一份 token CSS，數值一次對齊；inline hex 失去與 DS 連動，DS 更新時 prototype 顯示舊色；`@apply` 把 token 烘進 component-scoped CSS，反而切斷 token 引用鏈
 - **IMPORTANT:** 寬度雙標（語義不同，勿混用）：**1440px** = Figma 設計畫布基準（design ↔ dev 規格對齊用，所有設計稿尺寸以此計）／**1280px** = prototype 預覽 viewport（template `<meta name="viewport" content="width=1280">` 已釘住，reviewer 開瀏覽器即以此寬看）。**不支援** `< 768px`（mobile）。RWD 4 斷點 XL / L / M / S 規格詳見 `REFERENCE.md §10 Responsive`；主要 grid 降欄關鍵斷點為 `@media (max-width: 1024px)` 強制 2 欄
 
 > profile 可**附加更嚴格**規則（如 ERP 規定 state machine 命名），但**不可放寬**通用限制。
