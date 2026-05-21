@@ -12,6 +12,21 @@
 
 ---
 
+## 模組元件規格索引
+
+下列元件規格已獨立成檔，**載入 erp-setup 時這些子檔不會自動載入**；實作或審查特定元件時依需求讀取。本表同時列出設定檔的覆寫項，避免直接套作業檔規則。
+
+| 元件 | 規格檔 | 設定檔覆寫項 |
+|---|---|---|
+| List 搜尋區 | `profiles/erp-components/ListSearch.md` | 全沿用，無覆寫 |
+| DataGrid | `profiles/erp-components/DataGrid.md` | 操作欄為 `[編輯]+[刪除]`（非 `[檢視]`）、狀態欄 `st-chip` display-only（**不**在列表 toggle active）、`canDelete === false` 時套 `.col-actions--single` 收窄；詳 §List View 七項自檢（設定檔版） |
+| Form Group | `profiles/erp-components/FormGroup.md` | `active` 欄位用 Dropdown「啟用 / 停用」、隱藏 boolean flag 欄位不渲染但保留資料、條件式 section 整段 `v-if`；詳 §Form View 七項自檢（設定檔版） + §設定檔資料狀態矩陣 |
+| Form Footer | `profiles/erp-components/FormFooter.md` | 右群替換為「`[刪除]` + `[更多操作 ▾]` + `[儲存變更]`」；**無**提交 / 核准 / 解核 / 作廢；詳 §Form Footer（設定檔版） + §設定檔刪除機制 |
+
+> 撰寫 chat handoff 時若 prototype 命中其中任一元件，請在「對齊方向」段附上對應子檔路徑與本檔的覆寫章節編號。
+
+---
+
 ## 設定檔側欄（main panel 左側 sub-nav）
 
 設定檔常以「主檔設定 → 進銷存設定 → 〔本設定〕」進入；**同組內**的同類設定（如「進銷存設定」下：地點設定、成本計算層級、倉庫設定、產品類別設定檔、盤存制依據）以**側欄**列出，方便 reviewer 在設定群組內快速跳轉。
@@ -218,3 +233,7 @@ else                       →  允許實體刪除
 - [ ] Form 資料狀態矩陣已套用：`.is-archived-view` / `.is-readonly-view` / `.is-keep-editable` 三個 class 對應正確；切「狀態」欄即時生效
 - [ ] 「離開未儲存表單」攔截 modal 能在 isDirty 時觸發
 - [ ] 刪除機制符合 §設定檔刪除機制：三個按鈕位置與樣式皆為「紅框白底紅字」家族（`.ico-btn.is-delete` / `.btn-icon--danger-square` / `.btn--outline-danger`）、刪除 vs 停用 by `usage_count`、modal `kind` 對應（可刪 = danger / 已被引用 = warning「改為停用」/ 混合批次 = warning）、實心紅底 `.btn--danger`**不**出現於 List/Form、modal 主按鈕焦點預設在「取消」、`canDelete === false` 時 `.col-actions--single` 收窄
+- [ ] **List 搜尋區** 規則完全沿用（詳 `profiles/erp-components/ListSearch.md`），設定檔無覆寫項
+- [ ] **DataGrid** 操作欄為 `[編輯]+[刪除]`（**非** `[檢視]`）、狀態欄 `st-chip` 不可在列表 toggle、`canDelete === false` 時套 `.col-actions--single` 收窄；通用結構詳 `profiles/erp-components/DataGrid.md`
+- [ ] **Form Group** `active` 欄位用 Dropdown「啟用 / 停用」（**非** `boolean_toggle`）、隱藏 boolean flag 欄位不渲染 UI 但保留資料、條件式 section 整段 `v-if` 顯隱；通用結構詳 `profiles/erp-components/FormGroup.md`
+- [ ] **Form Footer** 右群為「刪除 / 更多操作 / 儲存變更」三段，**無**提交 / 核准 / 作廢；`canDelete === false` 時刪除按鈕**不渲染**（**禁**用 disabled）；通用結構詳 `profiles/erp-components/FormFooter.md`
