@@ -49,14 +49,45 @@ Main panel 內部從上到下兩段：
 
 ## Header（頂部欄）
 
-- 高度 56px、垂直置中、`background: transparent`
-- 結構從左到右：
-  1. **Home button** — 寬 72px × 高 56px（**寬度必須對齊 nav-rail 72px**），icon 28px
-  2. **Breadcrumb 列**（含 favorite ⭐ icon，緊接最後一層之後）— `flex: 1` 撐滿中間
-  3. **Header actions**（右側）— `gap: 4px`，含通知（含 badge）/ 設定 / avatar
-- **Icon variant 依 Design System** 規定（見 SKILL.md §4 icon 條）。本檔不另立 icon variant / glyph 命名規則
-- 右側 icon 按鈕（`.erp-header__icon`）尺寸 40×40，hover `primary @ 8%` 底色、active `primary @ 12%`
-- Notification badge：min-width 18px × 18px、bg `rgb(247, 192, 0)`、白字 10px/700、圓角 `var(--radius-full)`
+整個 Header 為 **4 層 auto-layout**（DsHeader 對齊 Figma）。不僅是「左 / 中 / 右」三段——`Left` 內含 ItemHome + Breadcrumb wrapper + Title + 右側 Utility Navigation 四個子節點，順序與尺寸**鎖定**，AI 用直覺擺會偏左 / 換行 / 顯不出 Title。
+
+### 圖層樹
+
+```
+Header (1920×56, padding 8, gap 16)
+├─ Left (flex-grow: 1, gap 8)
+│  ├─ DsNavigation/ItemHome (72×44)         ← home button
+│  ├─ star = Breadcrumb 容器 (152×44)        ← 含 PageTitle + favorite icon
+│  │  ├─ Title (112×44, padding 0 8)
+│  │  │  └─ PageTitle (Label/16pt/Medium)
+│  │  └─ Icon Button (favorite, 40×40, radius 4)
+│  └─ ……（breadcrumb 各層階段，由專案 profile 定義）
+└─ Utility Navigation (140×40, gap 4)
+   ├─ Speed Dial (44×44, 通知 + Badge)
+   ├─ <sideMenu> (44×44, settings)
+   └─ Avatar (44×44 wrapper)
+```
+
+### Token 速查
+
+| 區段 | 尺寸 | padding / gap | 背景 / 色 |
+|---|---|---|---|
+| 外層 `Header` | 1920 × 56 | padding 8 / gap 16 | transparent |
+| `Left` 容器 | 1748 × 44 / flex-grow 1 | padding 0 / gap 8 | — |
+| `DsNavigation/ItemHome` | 72 × 44 | padding 12×8 / gap 4 | radius 8；icon `home` 32×32，色 `#001D5A`（$primary-darker） |
+| `star`（Breadcrumb 容器） | 152 × 44 | padding 0 | — |
+| `Title` | 112 × 44 | padding 0 × 8 | — |
+| `PageTitle` | 96 × 21 | — | Label/16pt/Medium：Roboto 500 / 16px / line-height 130% / color `#0F172A` |
+| `Icon Button`（favorite） | 40 × 40 | padding 10 × 20 / gap 4 | bg `rgba(255,255,255,0.0001)` / radius 4 / icon 20×20 色 `#3C4A5B` |
+| `Utility Navigation` | 140 × 40 | padding 0 / gap 4 | — |
+| `Speed Dial`（通知） | 44 × 44 | padding 12 × 8 / gap 4 / isolation | icon `notifications` 24×24 色 `#001D5A` |
+| Notification `Badge` | 22 × 16（absolute right 3 / top 3） | padding 0 × 4 | bg `#FFBE0B`（$tertiary） / radius `1000px` / 文字 Roboto 500 / 12px / color `#1D1400` |
+| `<sideMenu>`（settings） | 44 × 44 | padding 12 × 8 / gap 4 | icon `settings` 24×24 色 `#001D5A` |
+| Avatar wrapper | 44 × 44 | padding 0 / gap 8 / isolation | — |
+| Avatar 內圈（ring） | 30 × 30 | padding 3 / gap 10 | border 1px `#1F57D1`（$darken($primary,5%)）/ radius `1000px` |
+| Avatar `_Avatar` | 24 × 24 | padding 4 × 5 / gap 10 | bg `#1F57D1` / radius 20 / 文字 Roboto 500 / 11pt / color `#F2F0F4` |
+
+> **Icon variant 依 Design System** 規定（見 SKILL.md §4 icon 條）。本檔不另立 icon variant / glyph 命名規則。
 
 ### Breadcrumb
 
@@ -65,9 +96,10 @@ Main panel 內部從上到下兩段：
 - 最後一層為 `.erp-breadcrumb__current`（**不可點**、weight 500、cursor default）
 - 前面層級 `.erp-breadcrumb__item`（可點、weight 400、hover 加 `rgba(15, 23, 42, 0.04)` 底色）
 - 分隔符：`>`、18px、灰色（**禁**用 `/`——`/` 是路徑語意，`>` 才是層級語意）
-- **Favorite icon 緊接 current 之後**（**不在右側 actions**）；`.erp-breadcrumb__fav`、40×40、未收藏 `star_border`、已收藏 `star`（金色 `rgb(247, 192, 0)`，FILL 1）
+- **Favorite icon 緊接 current 之後**（**不在右側 actions**）；`.erp-breadcrumb__fav`、40×40
 
 > 麵包屑**層數與各層語意**由專案 profile 定義（如 ERP：模組分類 > 功能名稱 > 單號 三層）。
+> Favorite 的具體 glyph / FILL 由 DS 規定（star vs star_border 切換規則參照 DS components.css §icon）。
 
 ---
 
