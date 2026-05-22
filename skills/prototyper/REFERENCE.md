@@ -171,7 +171,7 @@
 
 ---
 
-## §10 Responsive
+## §8 Responsive
 
 - **設計基準**：1440px（XL）
 - **主要作業寬度**：1280px（L）
@@ -218,7 +218,7 @@
 
 ---
 
-## §11 Tokens
+## §9 Tokens
 
 色彩 / 間距 / 圓角 / 陰影 / 字級必須使用 design tokens CSS 的 token，禁 inline hex、禁 `@apply`、禁新增 token 而不更新上游。
 
@@ -358,7 +358,7 @@ DS 色彩採三層：
 
 ---
 
-## §13 元件對照（HTML prototype 階段不引外部 lib）
+## §10 元件對照（HTML prototype 階段不引外部 lib）
 
 Prototype 階段所有元件用 **原生 HTML + Tailwind class + Vue directive** 寫成（template 已在 `templates/module-page.html` 內示範）。
 **production 升級**才把這些對應到對應專案的元件庫（如 ERP 用 Syncfusion Vue 或 `Ds*` 客製元件）。
@@ -376,7 +376,7 @@ Prototype 階段所有元件用 **原生 HTML + Tailwind class + Vue directive**
 
 ---
 
-## §14 `app.js` 起手式（reactive state + handlers）
+## §11 `app.js` 起手式（reactive state + handlers）
 
 > 共用 `app.js`，每個模組各自 mount。下例為通用骨架；專案專屬欄位（nav-rail 五項、state machine 命名等）請依 profile 調整。
 
@@ -443,7 +443,7 @@ createApp({
 
 ---
 
-## §15 `app.css` 結構建議（章節順序）
+## §12 `app.css` 結構建議（章節順序）
 
 ```
 /* 1. Reset / base                       */

@@ -51,7 +51,7 @@ Form View 主體由多個 Group（`.form-section`）組成，每個 Group 內以
 - `.form-field--span-2` / `.form-field--span-3` — 桌機寬度下跨 2 / 3 欄
 - `.form-field--full` — `grid-column: 1 / -1`，**永遠**整列
 
-## 斷點對照表（對應 `REFERENCE.md §10` 四斷點）
+## 斷點對照表（對應 `REFERENCE.md §8` 四斷點）
 
 | 代號 | 範圍 | 自動欄數 | padding | 跨欄 modifier 表現 |
 |---|---|---|---|---|

@@ -52,7 +52,7 @@
 
 ## RWD 4 斷點對照
 
-> 對應 `REFERENCE.md §10` 的 XL / L / M / S 四斷點。Search Bar 採「Flex Wrap → 自動收合」兩階段策略，避免水平捲動。
+> 對應 `REFERENCE.md §8` 的 XL / L / M / S 四斷點。Search Bar 採「Flex Wrap → 自動收合」兩階段策略，避免水平捲動。
 
 | 斷點 | 欄位排列 | 欄位 flex-basis | 收合行為 |
 |---|---|---|---|
