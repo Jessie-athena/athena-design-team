@@ -46,7 +46,7 @@
 |---|---|
 | input / select / textarea 用 `<input>` 預設樣式（看起來是 outlined） | 套 `.input.filled`（背景 surface-variant + 底線）為預設；`.outlined` 只在特定情境用 |
 | 把 read-only 欄位直接套 `disabled` | `readonly` 屬性 + DS 的 readonly 樣式（背景仍 surface-variant、文字 secondary、cursor: default）；**禁**用 disabled 屬性表達 read-only |
-| nav-rail / header icon 用 outlined 變體（如 `home_outline`） | 用 filled 變體（`home` / `notifications` / `settings`）；產品縮寫文字（如「ERP」）必須存在 |
+| 自行決定 icon variant（filled / outlined / `*_outline` 字尾）而不查 DS | 一律依 **Design System** `components.css` / DS README §icon 規定，prototype 不另立規則（詳 SKILL.md §4 icon 條） |
 | DataGrid 操作欄做成 hover 才浮出 | 操作欄永遠顯示，凍結在右側 |
 | 卡片預設加 `box-shadow` | 預設**無 shadow**（只用 1px outline-variant 邊框）；shadow 僅出現在 hover 或 dialog/popover 等浮層 |
 | Summary card 是一塊，內容平鋪 | Summary 區分**上區（title + stepper / status pill）+ 下區（指標 / 關聯資訊）**兩塊，`position: sticky`，無 shadow，padding 24px |
