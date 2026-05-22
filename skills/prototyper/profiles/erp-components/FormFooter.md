@@ -53,7 +53,7 @@
 | `padding` | **桌機 `12px 24px`** ／ 平板 `12px 16px` ／ 手機 `10px 12px` |
 | `background` | `var(--bg-surface-default)` |
 | `border-top` | `1px solid var(--border-default)` |
-| `box-shadow` | 內容可捲動時加 footer top shadow；內容未滿一頁時移除。**DS 目前無對應 token**（`--shadow-e1` 是 card / dropdown 用、方向錯），請先在 `REFERENCE.md §11` 新增 `--shadow-footer-top`（建議值 `0 -2px 8px rgba(var(--color-sf-neutral), .04)` 或對應 DS 規格）再引用；prototype 階段未補 token 前可暫時省略 shadow |
+| `box-shadow` | 內容可捲動時加 footer top shadow；內容未滿一頁時移除。**DS 目前無對應 token**（`--shadow-e1` 是 card / dropdown 用、方向錯），請先在 `REFERENCE.md §9` 新增 `--shadow-footer-top`（建議值 `0 -2px 8px rgba(var(--color-sf-neutral), .04)` 或對應 DS 規格）再引用；prototype 階段未補 token 前可暫時省略 shadow |
 | `z-index` | `5`（高於表單內容，低於 modal / toast） |
 | `min-height` | `64px`（保留 40px CTA + 12×2 padding） |
 

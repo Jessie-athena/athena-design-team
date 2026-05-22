@@ -13,7 +13,7 @@
 - cwd 在 ERP repo 內（`/Users/athena/working/ddd/ERP-System` 或同類路徑）
 - 同類舊 prototype 在 ERP repo 內
 
-## 開工前額外確認（疊加 SKILL.md §1）
+## 開工前額外確認（疊加 SKILL.md §2）
 
 `SKILL.md` 三項通用問題之外，另須確認:
 
@@ -238,7 +238,7 @@ ERP 的 Smart Bar **不是** 一排有 link icon 的文字連結。是一組以�
 
 `v-if="visibleRelations.length > 0"`。`visibleRelations` 邏輯：「**count > 0 的條目**」**或**「**count == null 的常駐條目**」任一存在即渲染；全部 `count === 0` 時整段不渲染。
 
-> JS computed 實作見 `REFERENCE.md §14`（`app.js` 起手式）的 `visibleRelations` helper。
+> JS computed 實作見 `REFERENCE.md §11`（`app.js` 起手式）的 `visibleRelations` helper。
 
 ### DOM 結構
 
@@ -487,7 +487,7 @@ App Shell 與多公司情境下的「公司別」過濾 dropdown **預設為空�
 
 ## 模組元件規格索引
 
-下列元件規格已獨立成檔，避免單檔過長造成漏讀。**載入 erp profile 時這些子檔不會自動載入**；實作或審查特定元件時才依需求讀取。
+下列元件規格已獨立成檔，避免單檔過長造成漏讀。**載入 ERP profile 時這 4 份會一併自動載入**（由 `SKILL.md §支援檔案` 規定）；本表作為「快速跳轉」索引用途。
 
 | 元件 | 規格檔 |
 |---|---|
@@ -593,7 +593,7 @@ App Shell 與多公司情境下的「公司別」過濾 dropdown **預設為空�
 | Smart Bar 沒有關聯單據？ | 整段 `<nav>` 不渲染，**不留空 bar** |
 | 狀態欄要 pill 還是 stepper？ | List View 用 pill；Form View summary card 用 stepper（voided 改 pill） |
 
-> 通用決策題見 `SKILL.md §4`。
+> 通用決策題見 `REFERENCE.md §6`。
 
 ---
 

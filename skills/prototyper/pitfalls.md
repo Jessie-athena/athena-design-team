@@ -46,7 +46,7 @@
 |---|---|
 | input / select / textarea 用 `<input>` 預設樣式（看起來是 outlined） | 套 `.input.filled`（背景 surface-variant + 底線）為預設；`.outlined` 只在特定情境用 |
 | 把 read-only 欄位直接套 `disabled` | `readonly` 屬性 + DS 的 readonly 樣式（背景仍 surface-variant、文字 secondary、cursor: default）；**禁**用 disabled 屬性表達 read-only |
-| nav-rail / header icon 用 outlined 變體（如 `home_outline`） | 用 filled 變體（`home` / `notifications` / `settings`）；產品縮寫文字（如「ERP」）必須存在 |
+| 自行決定 icon variant（filled / outlined / `*_outline` 字尾）而不查 DS | 一律依 **Design System** `components.css` / DS README §icon 規定，prototype 不另立規則（詳 SKILL.md §4 icon 條） |
 | DataGrid 操作欄做成 hover 才浮出 | 操作欄永遠顯示，凍結在右側 |
 | 卡片預設加 `box-shadow` | 預設**無 shadow**（只用 1px outline-variant 邊框）；shadow 僅出現在 hover 或 dialog/popover 等浮層 |
 | Summary card 是一塊，內容平鋪 | Summary 區分**上區（title + stepper / status pill）+ 下區（指標 / 關聯資訊）**兩塊，`position: sticky`，無 shadow，padding 24px |
@@ -69,23 +69,6 @@
 - **正確做法**：跑 `REFERENCE.md §5 階段 1` 的 Pass 0/1/2 三段式 — Pass 0 找模組對應的設計文件 § 元件清單章節（出納 §2.1.1 / 應付 §3.1 / 應收 §2 互動元素清單）；無設計文件時退到 `profiles/erp-transaction.md §PRD 元件對照 Table A`；Form section 沒列「元件」欄時跑 Table B 推論規則並標記推論結果讓 user 確認。
 - **為什麼會反覆犯**：（1）PRD 的 List/Search section 已標 `元件` 欄但 Form section 通常省略，AI 看到 Form section 就退回訓練資料預設；（2）AI 對 `<TextInput>` / `<DataGrid>` 等 shared-ui wrapper 沒概念，會優先用 raw `<input>`；（3）布林欄位的反射是 `<input type="checkbox">` 或 Switch，但設定檔 `active` 慣例是 Dropdown「啟用 / 停用」。
 
-### [2026-05-18] 刪除按鈕用紅框白底紅字（非實心紅底）
-
-- **症狀**：List 列尾或 Form 底部刪除按鈕做成「實心紅底白字」（filled `.btn--danger`，紅 bg + 白字）而非「紅框白底紅字」（`.btn--outline-danger`，紅描邊 + 白底 + 紅字）；hover 時還會切換 icon 顏色；批次刪除做成 filled 紅 button-with-label。
-- **正確做法**：List / Form 的刪除按鈕一律走「紅框白底紅字」家族（outline 或 icon-only）—— 列尾用 `.ico-btn.is-delete`（純紅 icon, 無框）、批次列用 `.btn-icon--danger-square`（紅框 + 白底 + 紅 icon）、Form 底部用 `.btn--outline-danger`（紅框 + 白底 + 紅字）；背景透明 / 白，hover 加 `error @ 8%` 底色，**不**改 icon 顏色。實心 `.btn--danger`（紅底白字）**僅出現於 Modal 主按鈕**。詳細視覺見 `erp-setup.md §設定檔刪除機制`。
-- **為什麼會反覆犯**：Bootstrap / Material / Tailwind UI 範例的「危險按鈕」幾乎都是 filled red，AI 直覺套上；訓練資料裡「紅框白底紅字」/ icon-only-danger 出現頻率低，需要被明確覆寫。
-
-### [2026-05-20] DataGrid 欄寬未鎖 / sticky cell hover-selected 沒補實色
-
-- **症狀**：(a) Checkbox 欄寬走預設或寫成 40px / 56px（正確 **50px**）；(b) 操作欄沒用 `.col-actions` / `.col-actions--single` 區分，2 顆按鈕用 80px、1 顆用 40px 等亂值（正確 **96px / 56px**）；(c) sticky 欄寬度沒用 `width + min + max + box-sizing` 三件套鎖死，被 auto-fit 擠壓；(d) **hover/selected 直接套 `rgba(primary, .06/.10)` 到 sticky cell** → scroll 時下層內容穿透顯現；(e) selected + hover 疊加沒處理，hover 時 selected 視覺消失；(f) sticky cell hover 用了不同色相（如灰色），讓凍結欄看起來像獨立區塊。
-- **正確做法**：嚴守 `profiles/erp-components/DataGrid.md → 欄位 min-width / Sticky 凍結欄 / 互動狀態優先級`：
-  - **欄寬鎖定**：Checkbox `.col-check` = 50px / 操作 2 顆 `.col-actions` = 96px / 操作 1 顆 `.col-actions--single` = 56px（三件套 width/min/max + box-sizing）
-  - **Sticky offset 連動**：sticky-left 第 2 欄 `left: 50px`（與 checkbox 寬一致）
-  - **互動優先級**：default < hover < selected < selected + hover
-  - **Sticky 補實色**：hover sticky = `rgb(232, 238, 252)`、selected sticky = `rgb(229, 235, 251)`、selected + hover 取對應疊加實色；**禁**用 `rgba()` 透明色在 sticky cell
-  - **色相一致**：sticky 與一般 cell 同色相，只差 alpha 換實色
-- **為什麼會反覆犯**：(1) 大多 grid library（DataTables、Material Table 等）預設沒 sticky cell，AI 沒概念要為 sticky 補實色；(2) hover/selected 直覺寫法是 `tbody tr:hover { background: rgba(...) }`，沒區分一般 cell 與 sticky cell；(3) 欄寬具象值（checkbox 50 / actions 56 或 96）容易被「差不多就好」的直覺取代，必須鎖死。
-
 ### [2026-05-20] Filled input 套錯視覺（白底 + 1px 邊 vs Material 風格）
 
 - **症狀**：(a) 套成「白底 `#FFFFFF` + 1px solid `#D5D8DC` 完整邊框 + 圓角 4px」(Bootstrap / Tailwind outlined 風格)；(b) Focus 加 outline ring（如 `box-shadow: 0 0 0 2px rgba(37,99,235,.20)`）；(c) Label / placeholder 顏色與字級亂選；(d) 必填星號顏色用紅色但非 `#F4493E`；(e) 上下圓角都做（應僅上方 `4px 4px 0 0`）。
@@ -107,19 +90,34 @@
 - **正確做法**：分隔符一律 `>`（HTML 中寫 `&gt;`）。`>` 才是「層級」語意；`/` 是「路徑」語意（URL / 檔案系統），不該用在 navigation breadcrumb。`profiles/Shared.md §Breadcrumb` 是視覺 SoT；`profiles/erp-transaction.md` 描述層級結構與 Handoff Checklist 也須一致；template `module-page.html` / `setup-page.html` 已預設成 `&gt;`，**不要改回 `/`**。
 - **為什麼會反覆犯**：訓練資料中 web app breadcrumb 兩種寫法都常見（Bootstrap 預設 `/`、Material 預設 `>`），AI 沒被提醒就走路徑直覺；且早期版本 Athena template 一度用 `/`，舊 prototype 看一眼又會被誤導回 `/`。
 
+---
+
+## ERP profile
+
+<!-- App Shell / state machine / Smart Bar / handoff 五項相關；設定檔特化規則相關 -->
+
+### [2026-05-18] 刪除按鈕用紅框白底紅字（非實心紅底）
+
+- **症狀**：List 列尾或 Form 底部刪除按鈕做成「實心紅底白字」（filled `.btn--danger`，紅 bg + 白字）而非「紅框白底紅字」（`.btn--outline-danger`，紅描邊 + 白底 + 紅字）；hover 時還會切換 icon 顏色；批次刪除做成 filled 紅 button-with-label。
+- **正確做法**：List / Form 的刪除按鈕一律走「紅框白底紅字」家族（outline 或 icon-only）—— 列尾用 `.ico-btn.is-delete`（純紅 icon, 無框）、批次列用 `.btn-icon--danger-square`（紅框 + 白底 + 紅 icon）、Form 底部用 `.btn--outline-danger`（紅框 + 白底 + 紅字）；背景透明 / 白，hover 加 `error @ 8%` 底色，**不**改 icon 顏色。實心 `.btn--danger`（紅底白字）**僅出現於 Modal 主按鈕**。詳細視覺見 `erp-setup.md §設定檔刪除機制`。
+- **為什麼會反覆犯**：Bootstrap / Material / Tailwind UI 範例的「危險按鈕」幾乎都是 filled red，AI 直覺套上；訓練資料裡「紅框白底紅字」/ icon-only-danger 出現頻率低，需要被明確覆寫。
+
 ### [2026-05-18] 刪除確認 Modal 主按鈕預設焦點誤觸
 
 - **症狀**：刪除 confirm modal 開啟後 Enter 直接執行刪除；主按鈕在 Tab order 第一位；`Delete` / `Backspace` 鍵被綁為刪除快捷鍵。
 - **正確做法**：刪除類 confirm modal（danger / warning kind）**預設焦點放在「取消」按鈕**；Tab order 取消 → 主按鈕；`Esc` 與 `Enter` 都對應「取消」；只有使用者主動 Tab 到主按鈕並 Enter 才執行刪除。`Delete` / `Backspace` **MUST NOT** 綁為刪除快捷鍵。
 - **為什麼會反覆犯**：一般 confirm modal 的 UX 預設「主按鈕焦點」以利快速確認；但**破壞性動作要反過來**——預設焦點放安全選項。AI 沒被提醒就走一般習慣。
 
----
+### [2026-05-20] DataGrid 欄寬未鎖 / sticky cell hover-selected 沒補實色
 
-## ERP profile
-
-<!-- App Shell / state machine / Smart Bar / handoff 五項相關 -->
-
-_（尚無紀錄，遇到再累積）_
+- **症狀**：(a) Checkbox 欄寬走預設或寫成 40px / 56px（正確 **50px**）；(b) 操作欄沒用 `.col-actions` / `.col-actions--single` 區分，2 顆按鈕用 80px、1 顆用 40px 等亂值（正確 **96px / 56px**）；(c) sticky 欄寬度沒用 `width + min + max + box-sizing` 三件套鎖死，被 auto-fit 擠壓；(d) **hover/selected 直接套 `rgba(primary, .06/.10)` 到 sticky cell** → scroll 時下層內容穿透顯現；(e) selected + hover 疊加沒處理，hover 時 selected 視覺消失；(f) sticky cell hover 用了不同色相(如灰色)，讓凍結欄看起來像獨立區塊。
+- **正確做法**：嚴守 `profiles/erp-components/DataGrid.md → 欄位 min-width / Sticky 凍結欄 / 互動狀態優先級`：
+  - **欄寬鎖定**：Checkbox `.col-check` = 50px / 操作 2 顆 `.col-actions` = 96px / 操作 1 顆 `.col-actions--single` = 56px（三件套 width/min/max + box-sizing）
+  - **Sticky offset 連動**：sticky-left 第 2 欄 `left: 50px`（與 checkbox 寬一致）
+  - **互動優先級**：default < hover < selected < selected + hover
+  - **Sticky 補實色**：hover sticky = `rgb(232, 238, 252)`、selected sticky = `rgb(229, 235, 251)`、selected + hover 取對應疊加實色；**禁**用 `rgba()` 透明色在 sticky cell
+  - **色相一致**：sticky 與一般 cell 同色相，只差 alpha 換實色
+- **為什麼會反覆犯**：(1) 大多 grid library（DataTables、Material Table 等）預設沒 sticky cell，AI 沒概念要為 sticky 補實色；(2) hover/selected 直覺寫法是 `tbody tr:hover { background: rgba(...) }`，沒區分一般 cell 與 sticky cell；(3) 欄寬具象值（checkbox 50 / actions 56 或 96）容易被「差不多就好」的直覺取代，必須鎖死。
 
 ---
 

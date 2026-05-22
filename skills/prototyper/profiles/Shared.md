@@ -51,10 +51,10 @@ Main panel 內部從上到下兩段：
 
 - 高度 56px、垂直置中、`background: transparent`
 - 結構從左到右：
-  1. **Home button** — 寬 72px × 高 56px（**寬度必須對齊 nav-rail 72px**），icon 28px、filled 變體
+  1. **Home button** — 寬 72px × 高 56px（**寬度必須對齊 nav-rail 72px**），icon 28px
   2. **Breadcrumb 列**（含 favorite ⭐ icon，緊接最後一層之後）— `flex: 1` 撐滿中間
   3. **Header actions**（右側）— `gap: 4px`，含通知（含 badge）/ 設定 / avatar
-- Icon variant 一律 **filled**（`home` / `notifications` / `settings`，**禁** `*_outline`）
+- **Icon variant 依 Design System** 規定（見 SKILL.md §4 icon 條）。本檔不另立 icon variant / glyph 命名規則
 - 右側 icon 按鈕（`.erp-header__icon`）尺寸 40×40，hover `primary @ 8%` 底色、active `primary @ 12%`
 - Notification badge：min-width 18px × 18px、bg `rgb(247, 192, 0)`、白字 10px/700、圓角 `var(--radius-full)`
 
@@ -95,7 +95,7 @@ Main panel 內部從上到下兩段：
 ### Nav 按鈕（`.nav-rail__btn`）
 
 - 56 × 56、padding 4px 2px、圓角 `var(--radius-lg)`
-- 結構：icon (24px, filled) + label (12px / weight 400 / line-height 1.3 / letter-spacing 0.1px)
+- 結構：icon (24px，variant 依 DS) + label (12px / weight 400 / line-height 1.3 / letter-spacing 0.1px)
 - 預設色：白字
 - Hover：`rgba(255,255,255,.08)`
 - Focus-visible：`outline: 2px solid rgba(255,255,255,.5); outline-offset: -2px;`
