@@ -114,27 +114,53 @@ Header (1920×56, padding 8, gap 16)
 
 所有 prototype 預設輸出 Collapsed 版型；未明確指定 Expanded 時，**不**自動切換。
 
-### 規格（Collapsed）
+### 規格（Collapsed）— 對齊 Figma DsNavigationA8
 
-- **寬度 72px**（全域固定，不可變）、高度 100%
-- 背景深色 `rgb(var(--color-sf-on-primary-container))`、圓角 `var(--radius-xl)`
-- 內部 `padding: 8px`、`flex-direction: column`、`gap: 8px`
-- 結構從上到下：
-  1. `.nav-rail__top` — **我的最愛**（56×64，下方 8px、`1px solid var(--border-strong)` 分隔線）
-  2. `.nav-rail__items` — 主要 nav 按鈕清單（`flex: 1`，承接中間所有可變長度的 ItemMenu）
-  3. **NAV 底部區**（`.nav-rail__items` 之後的區段，對應 Figma `DsNavigation/ItemSystem`）— 必含；放產品縮寫文字（如「ERP」）
+整個 Nav-rail 為**兩段直欄**：`Top`（我的最愛 + 分隔線）+ `Under`（主項目群、`flex-grow: 1` 撐滿剩餘空間 + ItemSystem 底部固定）。AI 用直覺擺常出現的錯：分隔線位置偏、ItemMenu gap 不一致、Active 用 8% tint 而非 darken 實色、底部 ItemSystem 跟 ItemMenu 數量漂動。
 
-### Nav 按鈕（`.nav-rail__btn`）
+#### 圖層樹
 
-- 56 × 56、padding 4px 2px、圓角 `var(--radius-lg)`
-- 結構：icon (24px，variant 依 DS) + label (12px / weight 400 / line-height 1.3 / letter-spacing 0.1px)
-- 預設色：白字
-- Hover：`rgba(255,255,255,.08)`
-- Focus-visible：`outline: 2px solid rgba(255,255,255,.5); outline-offset: -2px;`
-- Active（`.is-active`）：bg `rgb(31, 87, 209)`（primary darken-5）、weight 500
+```
+DsNavigationA8 (72×100%, padding 8, gap 8, radius 12, bg #001D5A)
+├─ Top (56×64, 我的最愛)
+│  └─ ItemMenu (56×56, radius 8)
+│     ├─ Icon (24×24, cards-star, #FFFFFF)
+│     └─ Label "我的最愛" (12pt Regular, #FFFFFF)
+│  └─ border-bottom: 1px #7F8996（分隔線）
+└─ Under (56×剩餘, flex-grow: 1, gap 8)
+   ├─ ButtonController (chevron up, 56×24, 預設 display: none — 收合操作未啟用)
+   ├─ ItemMenu × N (56×56, radius 8)
+   │  ├─ Active: bg #1F57D1 (=darken($primary, 5%))
+   │  └─ Default: bg transparent
+   └─ ItemSystem (56×56, radius 8, 含 ERP 縮寫字標)
+```
 
-> **必含產品縮寫**文字（如「ERP」），位置在 `.nav-rail__items` 之後的 NAV 底部區，**不可遺失**。
-> Nav 項目（key / icon / label / 順序）由專案 profile 定義。
+#### Token 速查
+
+| 區段 | 尺寸 | padding / gap | 背景 / 色 / 邊框 |
+|---|---|---|---|
+| 外層 `DsNavigationA8` | 72 × 100% / max 72 | padding 8 / gap 8 | bg `#001D5A`（$primary-darker） / radius 12 |
+| `Top`（我的最愛區） | 56 × 64 | padding 0 0 8 | border-bottom 1px `#7F8996` |
+| `Under`（主項目區） | 56 × 剩餘 / flex-grow 1 | padding 0 / gap 8 | — |
+| `ItemMenu`（每項） | 56 × 56 / min 56 × 56 | padding 4 × 2 / gap 4 | radius 8 |
+| `ItemMenu` Active | 同上 | — | **bg `#1F57D1`**（= $darken($primary, 5%)）；**不**是 8% tint |
+| ItemMenu Icon | 24 × 24 | — | bg `#FFFFFF`（$primary-text-color） |
+| ItemMenu Label | width auto × 16 | — | Roboto 400 / 12px / line-height 130% / letter-spacing 0.1px / color `#FFFFFF` |
+| `ButtonController`（chevron up） | 56 × 24 | padding 4 × 8 | 預設 `display: none`（收合操作未啟用） |
+| `ItemSystem`（ERP 縮寫） | 56 × 56 / min 56 × 56 | padding 4 × 2 / gap 4 | radius 8；ERP 字標 = Union 40.76 × 18.06，色 `#FFFFFF` |
+
+#### 互動狀態
+
+| 狀態 | 樣式 |
+|---|---|
+| Default | bg transparent / 白字 / Roboto 400 |
+| Hover | `rgba(255,255,255,.08)` |
+| Focus-visible | `outline: 2px solid rgba(255,255,255,.5); outline-offset: -2px;` |
+| Active（`.is-active`） | bg **`#1F57D1`** / weight 500 |
+
+> **必含產品縮寫**字標（如「ERP」），位置在 `Under` 區末端的 `ItemSystem`，**不可遺失**——它不是「擺最下面就好」，是 Figma DsNavigationA8 的固定第 N+1 子節點。
+> Nav 項目（key / icon glyph / label / 順序）由專案 profile 定義。
+> Icon glyph 名與 FILL 軸依 Design System（見 SKILL.md §4 icon 條），本檔不另立規則。
 
 ---
 
