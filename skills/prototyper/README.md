@@ -15,8 +15,12 @@
 - 「幫我做一個 XXX 模組的 prototype」
 - 「這份 PM 文件 [path] 轉成 prototype」
 - 「參考 [既有模組].html 做一個類似的 [新模組]」
+- 「PRD 產出前端頁面」/「把這份規格做成可以點的頁面」
 - 「讀取此份 PRD 並產出互動功能及前端頁面」
 - 使用者貼上 Figma frame 並要求轉成可互動畫面
+- 英文：「build a clickable HTML prototype from this PRD / Notion spec」、「convert this requirement doc into an interactive page」
+
+> 觸發詞清單為 SKILL.md frontmatter `description` 的對照鏡像；異動時兩處同步修改。
 
 ### 手動觸發
 
@@ -110,6 +114,34 @@ skills/prototyper/
 ---
 
 ↑ 使用者導向　／　↓ 維護者導向
+
+---
+
+## 路徑慣例
+
+本 skill 文件中以 `${CLAUDE_SKILL_DIR}/...` 表示 **skill 根目錄相對路徑**（即 `skills/prototyper/`）。這**不是**實際的環境變數，Claude 與 shell 都不會 interpolate；純粹是視覺占位符，幫助讀者識別「這是 skill 內部資源，不是專案路徑」。
+
+對應到實際位置：
+
+- GitHub canonical：`Athena-designteam/skills/prototyper/...`
+- User-level 部署：`~/.claude/skills/prototyper/...`
+
+修改本 skill 任何引用此占位符的檔案時，**請保留 `${CLAUDE_SKILL_DIR}` 寫法**，不需展開為實際路徑。
+
+---
+
+## 工具白名單
+
+SKILL.md frontmatter 的 `allowed-tools` 鎖定本 skill 可用的工具範圍：
+
+| 工具 | 用途 |
+|---|---|
+| `Read` / `Write` / `Edit` | 讀寫 prototype html / app.js / app.css |
+| `Glob` / `Grep` | 在 `docs/notion/`、`prototype/project/` 搜尋規格與同類舊模組 |
+
+**故意不開放**：`Bash` / `WebFetch` / `NotebookEdit` 等。理由——prototype 製作只需檔案讀寫與搜尋；多開工具反而讓 skill 行為發散（執行 shell command 副作用、發起網路請求、改 notebook 內容等都與本 skill 任務無關）。
+
+未來若有正當理由要開新工具，**請在此段同步說明用意**，避免後人誤以為是順手加的。
 
 ---
 

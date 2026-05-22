@@ -1,6 +1,6 @@
 ---
 name: prototyper
-description: Turn an ERP module spec into a clickable single-file HTML prototype (Vue 3 production CDN, no build step) for reviewers. Use this skill whenever the user types「做 prototype」「PM 文件轉 prototype」「參考 [既有].html 做 [新模組]」「PRD 產出前端頁面」「把這份規格做成可以點的頁面」, pastes a Figma frame asking for a clickable HTML conversion, references a PM doc path under `docs/notion/`, asks to convert a PRD or Notion page into an interactive prototype page, or explicitly runs `/prototyper`. Skip for Figma motion / interaction design (use `figma-use` / `figma-generate-design`), production Vue SFC / Odoo Python code, or pure requirement parsing without prototype output (use `requirement-analyst`).
+description: Turn an ERP module spec into a clickable single-file HTML prototype (Vue 3 production CDN, no build step) for reviewers. Use this skill whenever the user types「做 prototype」「PM 文件轉 prototype」「參考 [既有].html 做 [新模組]」「PRD 產出前端頁面」「把這份規格做成可以點的頁面」「讀取此份 PRD 並產出互動功能及前端頁面」, asks in English to "build a clickable HTML prototype from this PRD / Notion spec" or "convert this requirement doc into an interactive page", pastes a Figma frame asking for a clickable HTML conversion, references a PM doc path under `docs/notion/`, asks to convert a PRD or Notion page into an interactive prototype page, or explicitly runs `/prototyper`. Skip for Figma motion / interaction design (use `figma-use` / `figma-generate-design`), production Vue SFC / Odoo Python code, or pure requirement parsing without prototype output (use `requirement-analyst`).
 allowed-tools: Read Write Edit Glob Grep
 ---
 
@@ -25,6 +25,8 @@ allowed-tools: Read Write Edit Glob Grep
 - **Starter templates**：
   - 作業檔（含狀態流程）：`${CLAUDE_SKILL_DIR}/templates/module-page.html`
   - 設定檔（master data，僅 active true/false）：`${CLAUDE_SKILL_DIR}/templates/setup-page.html`
+
+> **工具白名單**：本 skill frontmatter 的 `allowed-tools` 鎖定只用 `Read` / `Write` / `Edit` / `Glob` / `Grep`。設計用意——prototype 製作只需檔案讀寫與搜尋，**刻意不開放** `Bash` / `WebFetch` / `NotebookEdit` 等，避免製作流程被工具失控擴張。詳見 `README.md §工具白名單`。
 
 ## Instructions
 
