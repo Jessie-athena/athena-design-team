@@ -153,3 +153,103 @@
 4. **收合不是「完全隱藏」**，而是把可容納的欄位保留在原處（單行、無 label），常用 filter 仍可立即使用
 5. **不顯示半個欄位** — 容納不下就完全隱藏，避免視覺破碎
 6. 所有換行 / 容納計算均**即時動態，依容器寬度**，不依視窗寬度（適用側邊欄收合、嵌入面板等場景）
+
+---
+
+## Toolbar / Search Bar 按鈕 token 速查
+
+> 本節適用 **List View 頂部 toolbar**（主 CTA / 批次操作 / icon button 群）**與**本檔的 search bar 操作區。所有按鈕共用同一組視覺 token，本表為 source of truth。
+
+> Token 來自 Athena DS Figma toolbar 圖層 + CSS。AI 容易把按鈕反射做成 Bootstrap / Tailwind UI 樣式，請依本表逐項對照（特別是「主 CTA 動詞**無 icon**」與「分隔線是 40×0 旋轉 90deg」兩個易踩點）。
+
+### §1 按鈕 token 表
+
+| 按鈕類型 | 範例 | bg | border | text / icon | radius | padding |
+|---|---|---|---|---|---|---|
+| Primary CTA（動詞） | 「新增」/「查詢」 | `#2877EE` | 1px `#2877EE` | `#FFFFFF` / Roboto Medium 14px / line-height 150% / letter-spacing 0.24px | 4 | 10 × 16 |
+| Secondary outline（動詞） | 「取消」/「清除」/「篩選」 | `rgba(255,255,255,0.0001)` 透明 | 1px `#7F8996`（$border） | `#0F172A` / Roboto Medium 14px | 4 | 10 × 16 |
+| Icon Button（primary） | 列印 / 下載 / 收藏快捷 | `rgba(255,255,255,0.0001)` 透明 | 1px `#2877EE` | inner icon 20 × 20 / 色 `#2877EE` | 4 | 10 × 20 |
+| Icon Button（danger） | 批次刪除 | `rgba(255,255,255,0.0001)` 透明 | 1px `#F4493E` | inner icon 20 × 20 / 色 `#F4493E` | 4 | 10 × 20 |
+| 分隔線（Line） | 介於 icon button 群 | — | **1px `#D7DAE0`（$border-light）/ rotate 90deg** | — | — | width 40 / height 0 |
+| Filter button | 「篩選」 | 同 Secondary outline | 同 Secondary outline | label + tune icon 20×20 色 `#0F172A` | 4 | 10 × 16 |
+
+**統一尺寸**：
+- 帶 label 按鈕高度 `40px`；Primary CTA 寬度依文字長度（範例「新增」134px、「查詢」97px）
+- Icon Button 一律 `40 × 40px`
+- 按鈕群之間 gap `12px`（toolbar 內）/ `8px`（search bar 操作區）
+
+**動詞 CTA 不加 icon**：
+- 「新增」「查詢」「清除」「取消」**禁加 icon**；CTA label 本身已說明動作
+- icon button 才能用 icon（如列印、下載、批次刪除）
+- 詳見 `profiles/erp-transaction.md §按鈕 icon 政策`
+
+### §2 DropdownList filled token
+
+`DropdownList` 用於 toolbar 的 filter 下拉（如「狀態」、「公司別」、「分類」等）。**預設 Filled 風格**（Material 3），不是 outlined。
+
+#### 視覺規格
+
+| 狀態 | bg | border-bottom | text | 其他 |
+|---|---|---|---|---|
+| Default（未選） | `#EDF0F7`（surface-variant） | 1px `#7F8996` | placeholder `#67717E` | — |
+| Filled-in（已選） | `#EDF0F7` | 1px `#7F8996` | value `#49454E` | — |
+| **Focus** | `#EDF0F7` | **2px `#2877EE`**（primary，加粗為 2px） | `#49454E` | **禁加 outline ring** |
+| Selected item label（在 context menu 內） | — | — | **`#2877EE`** | 高亮整列 |
+
+#### 結構
+
+| 屬性 | 值 |
+|---|---|
+| 寬度 | 200px / min-width 150px |
+| 高度 | 40px |
+| border-radius | `4px 4px 0 0`（**僅上方圓角**，Material Filled 簽名） |
+| padding | `0 0 0 10px`（左內距 10，右側留 32 給 caret icon 容器） |
+| Inner gap（文字 ↔ icon） | 6px |
+| Caret icon 容器 | 32 × 32（內含 arrow_down 16×16 色 `#3C4A5B`） |
+
+> Focus 時底線加粗為 2px primary 色，**不**加 outline ring（Tailwind 慣例 ring 在 Material Filled 是錯的，常見反射錯誤見 `pitfalls.md` [2026-05-20] Filled input 條目）。
+
+### §3 Context Menu（DropdownList 展開）
+
+點 DropdownList caret 後彈出的選項清單。
+
+#### 容器
+
+| 屬性 | 值 |
+|---|---|
+| 寬度 | 同 trigger 寬度（200px） |
+| 背景 | `#FFFFFF`（疊一層 linear-gradient 0deg 但實質為純白） |
+| border-radius | `4px` |
+| z-index | 高於 toolbar（依專案 layer policy） |
+
+#### 列項（每列 = Atom / Context Menu）
+
+| 屬性 | 值 |
+|---|---|
+| 列高 | 32px |
+| padding | `3px 8px` |
+| inner gap | 65px（label 與右側 shortcut 之間，**目前未啟用 shortcut**，預留設計） |
+| Label | Roboto 400 / 14px / line-height 150% / letter-spacing 0.24px / color `#0F172A` |
+
+#### 互動狀態
+
+| 狀態 | row bg | label color | 用途 |
+|---|---|---|---|
+| Default | transparent | `#0F172A` | 一般列項 |
+| **Hover** | `rgba(15, 23, 42, 0.05)` | `#0F172A` | 滑鼠停留 |
+| Selected | （由 selected item color 規則決定，目前僅 label 變 primary） | **`#2877EE`** | 已選項 |
+
+> Hover 用 `rgba(15, 23, 42, 0.05)` 是 DS 規定，不是隨手寫的灰色。
+
+#### Header（context menu 中分群標題）
+
+`Atom / Context Menu Header`（高 32，含「Header」字標）：
+- Label：Roboto Medium 14px / color `#0F172A`
+- 與下一段之間用 1px `#D7DAE0`（`$flyout-border`）分隔
+
+#### add 列（context menu 末尾 + Add 按鈕，可選）
+
+當 DropdownList 支援「新增選項」時，context menu 最末加一列：
+- 高 32px、border-top 1px `#D7DAE0`
+- 含 Plus icon 16×16 色 `#2877EE` + label `#2877EE` Roboto Medium 14px
+- 點擊觸發「新增此選項」流程
