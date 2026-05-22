@@ -173,46 +173,54 @@ SKILL.md frontmatter 的 `allowed-tools` 鎖定本 skill 可用的工具範圍�
 - **過時** → 直接刪除，**不保留歷史記錄**（這不是 changelog）
 - 寫入前先檢查是否有同類條目可合併
 
-### Templates 三處同步
+### Templates canonical 與 mirror
 
-`templates/module-page.html` 是 starter 骨架，**同一份內容在三個位置維護**——改一處務必同步另兩處：
+`templates/module-page.html` 同份內容散落 4 處，**唯一 canonical 在本 skill repo**，其他 3 處為 mirror：
 
-1. `Athena-designteam/skills/prototyper/templates/module-page.html`（GitHub canonical）
-2. ERP repo `.claude/rules/prototype-design/templates/module-page.html`
-3. ERP repo `.claude/rules/prototype-design/PRODUCE.md` 附錄 A
+| 位置 | 角色 | 改動規則 |
+|---|---|---|
+| `Athena-designteam/skills/prototyper/templates/module-page.html` | **canonical**（唯一改動入口） | 直接編輯、commit 進 skill repo |
+| ERP repo `.claude/rules/prototype-design/templates/module-page.html` | mirror | 從 canonical 同步覆蓋 |
+| ERP repo `.claude/rules/prototype-design/PRODUCE.md` 附錄 A | mirror（嵌入式） | 從 canonical 同步覆蓋整段 HTML |
+| `~/.claude/skills/prototyper/templates/module-page.html` | mirror（user-level 部署副本） | 從 canonical 同步覆蓋 |
 
-`~/.claude/skills/prototyper/templates/module-page.html` 是 user-level 部署副本，**從 GitHub bundle 同步，不是獨立維護目標**。
+同步方向**單向**：
+
+```
+canonical (skill repo)
+   ├─→ ERP repo template (mirror)
+   ├─→ ERP repo PRODUCE.md 附錄 A (mirror，嵌入式)
+   └─→ ~/.claude/skills/prototyper/templates (user-level mirror)
+```
+
+**禁止**：在 ERP repo 改 template 後反向 push 回 skill repo（會與其他人在 canonical 的改動撞車）。所有 template 改動先在 canonical 完成，再同步到 3 個 mirror。
 
 ### GitHub 同步流程
 
-User-level 副本（`~/.claude/skills/prototyper/`）是部署副本，**真實 source of truth 在 GitHub bundle**：
+User-level 副本（`~/.claude/skills/prototyper/`）是 mirror，**改動入口在 canonical（GitHub bundle）**：
 `https://github.com/Jessie-athena/athena-design-team/tree/main/skills/prototyper`
 
-修改後同步流程：
+修改後同步流程（canonical → user-level mirror）：
 
 ```bash
 # 1. 取得（或更新）本地 clone
 git clone https://github.com/Jessie-athena/athena-design-team.git
 # 或：cd athena-design-team && git pull
 
-# 2. 把 user-level 改動複製到 clone
-cp -r ~/.claude/skills/prototyper/. athena-design-team/skills/prototyper/
-
-# 3. Commit + push
+# 2. 在 clone 內編輯 skill 檔案、commit、push
 cd athena-design-team
+# ...edit...
 git add skills/prototyper
 git commit -m "skills(prototyper): <一句話描述>"
 git push
-```
 
-**反向同步**（GitHub bundle 有更新、要拉回 user-level）：
-
-```bash
-cd athena-design-team && git pull
+# 3. 同步到 user-level 部署副本
 cp -r athena-design-team/skills/prototyper/. ~/.claude/skills/prototyper/
 ```
 
-> 多人協作時，每次修改前先 `git pull`，避免覆蓋他人未同步的改動。
+**ERP repo 同步**（canonical → ERP repo template / PRODUCE.md）：見 ERP repo `.claude/rules/prototype-design/CLAUDE.md` 對應段落。
+
+> 多人協作時，每次在 canonical 改動前先 `git pull`，避免覆蓋他人未同步的改動。
 
 ---
 
