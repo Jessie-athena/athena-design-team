@@ -56,17 +56,47 @@ allowed-tools: Read Write Edit Glob Grep
 
 > profile 額外要問的項目（如 ERP 的 Odoo model、模組分類、作業檔/設定檔類型）由 profile 內定義。
 
-### 3. 五階段工作流（總覽）
+### 3. 五階段工作流
 
-| 階段 | 動作摘要 | 完整明細 |
-|---|---|---|
-| 0 | 跨專案複用：有同類舊模組就抽介面規格直接引用 | `REFERENCE.md §5 階段 0` |
-| 1 | 規格抽取三段式：Pass 0 找元件權威來源 → Pass 1 抽 schema → Pass 2 查表轉實作 | `REFERENCE.md §5 階段 1` |
-| 2 | 製作 .html：複製 starter template → 替換 Shell → List → Form → Modal/Toast | `REFERENCE.md §5 階段 2` |
-| 3 | 本機審查：跑 profile Handoff Checklist + 掃 `pitfalls.md` | `REFERENCE.md §5 階段 3` |
-| 4 | chat handoff：依 profile 規範交付（ERP 5 項；通用底線 5 項見 REFERENCE） | `REFERENCE.md §5 階段 4` |
+| 階段 | 動作 |
+|---|---|
+| 0 | **跨專案複用**：有同類舊模組就抽介面規格直接引用，不重畫 |
+| 1 | **規格抽取三段式**（Pass 0 / 1 / 2，詳見下方） |
+| 2 | **製作 .html**：複製 profile 指定的 starter template → 替換 App Shell → 建 List View → 建 Form View → 補 Modal / Toast / Empty State |
+| 3 | **本機審查**：跑 profile Handoff Checklist + 掃 `pitfalls.md` |
+| 4 | **chat handoff**：依 profile 規範交付（ERP 5 項；通用底線 5 項見 REFERENCE） |
 
-> **IMPORTANT:** **進階段 1 前必讀 `REFERENCE.md §5 五階段工作流明細`**——特別是 Pass 1 的「輸出 5 欄 schema 表給使用者確認」這一步，總覽表不會傳達。略過此步等於跳過使用者校對 PRD 抽取結果，後續若偏差就難救。
+> 邊界判定（PRD 沒提但舊模組有 / profile 與 PRD 衝突等）與完整 Examples 見 `REFERENCE.md §5 五階段工作流明細`。
+
+#### 階段 1 三段式：Pass 0 → Pass 1 → Pass 2（核心，**禁略過**）
+
+**Pass 0｜找元件權威來源**
+
+依 profile 規定的優先順序查找：
+1. 該模組是否有對應的設計文件元件清單章節？（章節命名因模組不同，profile 會列清單）
+   - 有 → 把該章節列出的元件當作**本模組的元件命名單一來源**
+   - 無 → 落到 profile 內建的「PRD 元件詞彙 → 實作對照」最小集（如 `erp-transaction.md §PRD 元件對照 Table A`）
+2. 記錄本次採用的權威來源（檔名 + 章節），handoff 時要附上
+
+**Pass 1｜純抽取，不選元件 — 輸出五欄 schema 表給使用者確認**
+
+把 PRD 拆成五欄表，**先給使用者校對**再進 Pass 2：
+
+| 欄位中文 | 區塊 | 元件（PRD 標示） | 必填 | 約束 / 關聯 |
+
+規則：
+- 「元件」欄若 PRD 有列就照填（如 `TextBox` / `DropDownList`），**禁**自己編
+- PRD 沒列就填 `?`，等 Pass 2 推論
+- PRD 沒列的欄位 / List 欄 / action **禁止**自動補（R1 PRD 完整性原則）；缺漏即停下來問
+
+> **IMPORTANT:** 略過「輸出 schema 表 → 使用者確認」這一步，等於跳過 PRD 抽取校對，後續若偏差就難救。
+
+**Pass 2｜schema 查表轉實作**
+
+對 Pass 1 確認過的 schema 每行：
+- prototype HTML markup：依 profile 對照表查「Prototype HTML」欄
+- handoff 對應的 production 元件：填 Pass 0 權威來源裡的元件名（如 `<TextInput>` / `<DataGrid>`）
+- 若 Pass 1 元件欄為 `?`，依 profile 的「Form section 元件推論規則」推論並回填，**標記為推論**讓使用者確認
 
 ### 4. 通用硬性限制（每次輸出前自檢，違反即重做）
 
