@@ -15,6 +15,11 @@ allowed-tools: Read Write Edit Glob Grep
 - **專案專屬 profile**：`${CLAUDE_SKILL_DIR}/profiles/<project>.md`（在共用 profile 之上**附加 / 覆寫**）
   - Athena ERP → `${CLAUDE_SKILL_DIR}/profiles/erp-transaction.md`（必讀，含 App Shell 覆寫 / state machine / chat handoff 5 項 / Form & List 樣式互動規則）
   - 若單據類型為**設定檔** (master data，依 `erp-transaction.md §類型判斷準則` 判定) → 另載入 `${CLAUDE_SKILL_DIR}/profiles/erp-setup.md`（含設定檔側欄、List/Form 自檢、資料狀態矩陣、刪除機制等）
+  - **ERP 專案載入時，無論作業檔 / 設定檔，自動載入下列 4 份元件規格檔**（List View 與 Form View 幾乎都會用到，避免漏讀）：
+    - `${CLAUDE_SKILL_DIR}/profiles/erp-components/ListSearch.md`（toolbar / search bar / RWD 收合）
+    - `${CLAUDE_SKILL_DIR}/profiles/erp-components/DataGrid.md`（欄寬鎖 / sticky cell / 互動狀態）
+    - `${CLAUDE_SKILL_DIR}/profiles/erp-components/FormGroup.md`（form-grid 4 欄 / 跨欄 modifier / RWD）
+    - `${CLAUDE_SKILL_DIR}/profiles/erp-components/FormFooter.md`（記錄分頁器 / 主 CTA / 更多操作 / dirty-guard）
 - **反覆審查問題**：`${CLAUDE_SKILL_DIR}/pitfalls.md`（每次製作前掃一眼）
 - **詳細展開（工作流明細 / 權重規則明細 / 決策題 / 完整 Examples / token / 元件對照 / `app.js` 起手式）**：`${CLAUDE_SKILL_DIR}/REFERENCE.md`
 - **Starter templates**：

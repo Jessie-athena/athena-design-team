@@ -102,6 +102,7 @@ skills/prototyper/
 | **永遠** | `profiles/Shared.md` | 頁面框架基底，所有專案前置必讀 |
 | **依專案** | `profiles/<project>.md` | 專案專屬覆寫（ERP 即 `erp-transaction.md`） |
 | **依類型** | `profiles/<project>-setup.md` | 設定檔模組才載入（依 `erp-transaction.md §類型判斷準則`，ERP 即 `erp-setup.md`） |
+| **依專案（ERP 一律載入）** | `profiles/erp-components/*.md` | 4 份 ERP 元件規格（ListSearch / DataGrid / FormGroup / FormFooter），List View 與 Form View 幾乎都會用到 |
 | **按需** | `pitfalls.md` | 每次製作前掃一眼，避免重蹈覆轍 |
 | **按需** | `REFERENCE.md` | 需要工作流明細 / token / 元件對照 / `app.js` 範本時查 |
 | **按需** | `templates/*.html` | 階段 2「複製 starter」時讀取 |
