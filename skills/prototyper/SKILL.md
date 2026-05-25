@@ -9,6 +9,27 @@ allowed-tools: Read Write Edit Glob Grep
 > 把規格 / 同類舊模組 / chat 描述，**一步到位**轉成可給 reviewer 試玩的單檔 HTML prototype。
 > 不是 Figma 動效設計，不是 production code。**單檔 HTML + Vue 3 production CDN**。
 
+## ⚠️ 0. 先確認 skill 完整載入（每次必做）
+
+**Claude Code（已安裝 skill）**：可直接讀 `${CLAUDE_SKILL_DIR}/...`，跳到 §1。
+
+**claude.ai/design / 任何只能透過 URL 引用的環境**：使用者通常只貼一個 raw GitHub URL（例如本檔），這代表你**還沒讀到其他必要檔**。在動工前，**先把以下檔抓完**——缺一就會踩 [2026-05-11] AI 預設樣式 ≠ Design System 的反射陷阱：
+
+| 必抓檔 | 用途 | Raw URL 模板 |
+|---|---|---|
+| `pitfalls.md` | 反覆出現的審查問題；**製作前必讀，不是製作後自檢** | `raw.githubusercontent.com/Jessie-athena/athena-design-team/main/skills/prototyper/pitfalls.md` |
+| `profiles/Shared.md` | 跨專案共用 profile（**所有專案前置必讀**） | `raw.githubusercontent.com/Jessie-athena/athena-design-team/main/skills/prototyper/profiles/Shared.md` |
+| `profiles/erp-transaction.md` | ERP 作業檔規則（必讀） | `raw.githubusercontent.com/Jessie-athena/athena-design-team/main/skills/prototyper/profiles/erp-transaction.md` |
+| `profiles/erp-setup.md` | 模組類型為設定檔時加載 | `raw.githubusercontent.com/Jessie-athena/athena-design-team/main/skills/prototyper/profiles/erp-setup.md` |
+| `profiles/erp-components/*.md` | ListSearch / DataGrid / FormGroup / FormFooter 4 份元件規格 | `raw.githubusercontent.com/Jessie-athena/athena-design-team/main/skills/prototyper/profiles/erp-components/<name>.md` |
+| `templates/module-page.html` 或 `setup-page.html` | starter template，依模組類型挑一份 | `raw.githubusercontent.com/Jessie-athena/athena-design-team/main/skills/prototyper/templates/module-page.html` |
+| `REFERENCE.md` | token / 元件對照 / `app.js` 起手式（按需） | `raw.githubusercontent.com/Jessie-athena/athena-design-team/main/skills/prototyper/REFERENCE.md` |
+
+**抓取 troubleshooting**：
+
+- `web_fetch` 被截斷時**換 `github_read_file` 工具**或改用 raw.githubusercontent.com 直接抓；不要假設第一次抓到的就是完整檔
+- 抓不到時**停下來告訴使用者**「skill 沒完整載入，請改在 Claude Code 內執行或授權 GitHub 工具」；**禁**用「就照記憶或 DS 預設先寫」當 fallback——這正是反覆踩反射陷阱的源頭
+
 ## 支援檔案（按需載入）
 
 - **跨專案共用 profile**：`${CLAUDE_SKILL_DIR}/profiles/Shared.md`（**所有專案前置必讀**；含頁面框架等共通骨架）

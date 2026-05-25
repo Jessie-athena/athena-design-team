@@ -1,12 +1,12 @@
 # Prototyper Pitfalls（反覆出現的審查問題）
 
-> 此檔累積**已經被抓到、又重複出現**的審查問題。每次製作 prototype 前掃一眼，**不要再犯同樣的錯**。
+> **製作前必讀**——不是製作後自檢清單。SKILL.md §1 R2b 規定每次製作前先把整份過一遍，特別是「DS 反射對照表」每一條，內化後再開始畫 prototype。製作完成後在階段 3 自檢時再對一次，但**主要的攔截點在開工前**。
+>
+> 此檔累積**已經被抓到、又重複出現**的審查問題。
 >
 > 與 `SKILL.md` / `profiles/*.md` 的差異:
 > - SKILL / profile = 規範本身（要怎麼做才對）
 > - **pitfalls = 經驗教訓**（曾經做錯、容易再錯的具體 case）
->
-> 起手骨架，先空著；之後每次 reviewer 抓到反覆犯的錯就 commit 一條進來。
 
 ---
 
@@ -33,6 +33,12 @@
 ## 通用（跨專案）
 
 <!-- 樣式、結構、技術 baseline 相關 -->
+
+### [2026-05-25] 使用者只貼 pitfalls.md URL 就開工，沒抓 SKILL.md / profile
+
+- **症狀**：使用者在 claude.ai/design（或任何只能透過 URL 引用的環境）說「使用 `skills/prototyper`」並貼 pitfalls.md 連結 → assistant 以為只要這份 → 沒讀 SKILL.md 的階段 0a 規定、沒讀 profile 的 App Shell / state machine → 已經畫完 prototype 才被使用者提醒比對 pitfalls → 6 條反射違規（outlined input、CTA 加 icon、sticky rgba 透色、icon variant rounded、欄寬只設 width、modal 焦點沒處理）一次浮現。
+- **正確做法**：**讀到這一條時，立刻回頭把 SKILL.md §0 列出的必抓檔全部抓完再開工**——SKILL.md / profiles/<project>.md / templates/*.html。pitfalls.md **不是獨立規範**，是 SKILL.md 的附件。
+- **為什麼會反覆犯**：（1）pitfalls 的標題與 DS 反射對照表看起來就像「夠完整的指引」，AI 容易把它當成 SKILL 本體；（2）web_fetch 截斷會讓 assistant 以為「拿到的就是全部」；（3）使用者不一定會主動列出所有檔，只會丟一個 URL 期待 skill 自己擴開。
 
 ### [2026-05-11] AI 預設樣式 ≠ Design System
 
