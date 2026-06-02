@@ -109,7 +109,7 @@
 
 | 屬性 | `searchCollapsed = false`（可收合） | `searchCollapsed = true`（已收合） |
 |---|---|---|
-| icon | `keyboard_arrow_up` ▲ | `keyboard_arrow_down` ▼ |
+| icon | `material-symbols:keyboard-arrow-up` ▲ | `material-symbols:keyboard-arrow-down` ▼ |
 | title | 「收合搜尋」 | 「展開搜尋」 |
 | aria-label | `collapse search` | `expand search` |
 
@@ -207,7 +207,7 @@
 | border-radius | `4px 4px 0 0`（**僅上方圓角**，Material Filled 簽名） |
 | padding | `0 0 0 10px`（左內距 10，右側留 32 給 caret icon 容器） |
 | Inner gap（文字 ↔ icon） | 6px |
-| Caret icon 容器 | 32 × 32（內含 arrow_down 16×16 色 `#3C4A5B`） |
+| Caret icon 容器 | 32 × 32（內含 `material-symbols:keyboard-arrow-down` 16×16 色 `#3C4A5B`） |
 
 > Focus 時底線加粗為 2px primary 色，**不**加 outline ring（Tailwind 慣例 ring 在 Material Filled 是錯的，常見反射錯誤見 `pitfalls.md` [2026-05-20] Filled input 條目）。
 

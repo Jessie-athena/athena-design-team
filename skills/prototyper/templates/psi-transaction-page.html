@@ -26,6 +26,12 @@
   3. 對應 reactive state 與 handlers 寫到 ../app.js（禁止內嵌）
   4. 模組專屬樣式寫到 ../app.css（禁止 <style>、禁止 @apply）
 
+  Icon：一律 Iconify web component（<iconify-icon>），只用 material-symbols: 集。
+    - App shell chrome（Header home/通知/設定、Nav-rail、breadcrumb ★啟用態）= 實心(無後綴)
+    - 內容區 icon（操作鈕/空狀態/分頁/stepper…）依 DS，多為線條(-outline)；筆畫型無 -outline
+    - 動態 icon（modalIcon/toastIcon）在 app.js 回傳完整 Iconify id（見 REFERENCE.md §app.js 骨架）
+    - 規則見 SKILL.md §4 icon 條 + REFERENCE.md §icon 對照
+
   視覺系統：Claude Design 內部 design system bundle
     https://api.anthropic.com/v1/design/h/3NlTfIVpv5CoYw5xmHzi5g
     本 template 已預設成 DS-correct；常見反射錯誤見 pitfalls.md「DS 反射對照表」。
@@ -45,8 +51,9 @@
   <meta name="viewport" content="width=1280">
   <title>模組中文名 — Athena ERP</title>
   <link rel="stylesheet" href="../ds/colors_and_type.css">
-  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Symbols+Outlined">
   <link rel="stylesheet" href="../app.css">
+  <!-- Icon：Iconify web component（只用 material-symbols: 集；線條加 -outline，實心無後綴。見 SKILL.md §4 icon 條） -->
+  <script src="https://code.iconify.design/iconify-icon/2.1.0/iconify-icon.min.js"></script>
 </head>
 <body>
   <div id="app">
@@ -55,19 +62,21 @@
       <!-- ===== App Shell · Header ===== -->
       <header class="app-header">
         <button class="app-header__home" @click="goHome" aria-label="home">
-          <span class="material-symbols-outlined">home</span>
+          <!-- App shell chrome = 實心(無後綴)，見 Shared.md §App shell icon -->
+          <iconify-icon icon="material-symbols:home"></iconify-icon>
         </button>
         <nav class="breadcrumb" aria-label="breadcrumb">
           <span class="breadcrumb__item" @click="goList">{{ breadcrumb.module }}</span>
-          <span class="breadcrumb__sep material-symbols-outlined">chevron_right</span>
+          <iconify-icon class="breadcrumb__sep" icon="material-symbols:chevron-right"></iconify-icon>
           <span class="breadcrumb__item" @click="goList">{{ breadcrumb.feature }}</span>
-          <span class="breadcrumb__sep material-symbols-outlined">chevron_right</span>
+          <iconify-icon class="breadcrumb__sep" icon="material-symbols:chevron-right"></iconify-icon>
           <!-- List 模式：末段為功能名 + ★fav；Form 模式：末段為單號、不顯示 ★ -->
           <template v-if="view === 'list'">
             <span class="breadcrumb__item is-current">{{ breadcrumb.docNo || breadcrumb.feature }}</span>
             <button class="breadcrumb__fav" :class="{ 'is-active': isFavorite }"
                     @click="toggleFavorite" aria-label="favorite">
-              <span class="material-symbols-outlined">{{ isFavorite ? 'star' : 'star_border' }}</span>
+              <!-- ★切換態例外：啟用實心、未啟用線條（見 Shared.md §Breadcrumb） -->
+              <iconify-icon :icon="isFavorite ? 'material-symbols:star' : 'material-symbols:star-outline'"></iconify-icon>
             </button>
           </template>
           <template v-else>
@@ -76,25 +85,25 @@
         </nav>
         <div class="header-right">
           <button class="header-icon-btn" aria-label="notifications">
-            <span class="material-symbols-outlined">notifications</span>
+            <iconify-icon icon="material-symbols:notifications"></iconify-icon>
             <span class="header-badge">9+</span>
           </button>
-          <button class="header-icon-btn" aria-label="settings"><span class="material-symbols-outlined">settings</span></button>
+          <button class="header-icon-btn" aria-label="settings"><iconify-icon icon="material-symbols:settings"></iconify-icon></button>
           <span class="header-avatar">{{ user.initials }}</span>
         </div>
       </header>
 
       <div class="app-body">
-        <!-- ===== App Shell · Nav Rail（5 項固定順序） ===== -->
+        <!-- ===== App Shell · Nav Rail（5 項固定順序；App shell → 實心 glyph 無後綴） ===== -->
         <aside class="nav-rail">
           <div class="nav-rail__top">
-            <button class="nav-rail__item"><span class="material-symbols-outlined">star</span><span>我的最愛</span></button>
+            <button class="nav-rail__item"><iconify-icon icon="material-symbols:cards-star"></iconify-icon><span>我的最愛</span></button>
           </div>
           <div class="nav-rail__under">
-            <button class="nav-rail__item"><span class="material-symbols-outlined">account_balance</span><span>財務</span></button>
-            <button class="nav-rail__item is-active"><span class="material-symbols-outlined">inventory</span><span>進銷存</span></button>
-            <button class="nav-rail__item"><span class="material-symbols-outlined">badge</span><span>人事</span></button>
-            <button class="nav-rail__item"><span class="material-symbols-outlined">settings</span><span>設定檔</span></button>
+            <button class="nav-rail__item"><iconify-icon icon="material-symbols:account-balance"></iconify-icon><span>財務</span></button>
+            <button class="nav-rail__item is-active"><iconify-icon icon="material-symbols:inventory-2"></iconify-icon><span>進銷存</span></button>
+            <button class="nav-rail__item"><iconify-icon icon="material-symbols:badge"></iconify-icon><span>人事</span></button>
+            <button class="nav-rail__item"><iconify-icon icon="material-symbols:settings"></iconify-icon><span>設定檔</span></button>
             <!-- 產品縮寫文字 = ERP（不可遺失）-->
             <div class="nav-rail__system" aria-label="ERP">ERP</div>
           </div>
@@ -119,15 +128,15 @@
                   <!-- 批次結轉：僅可結轉狀態才啟用（結轉/匯出/刪除依角色顯示） -->
                   <button v-if="canEdit && batchConvertable" class="btn btn--primary" @click="onBatchConvert">結轉採購單</button>
                   <button v-if="canExport" class="btn-icon-sq btn-icon-sq--primary-outline" @click="onBatchExport" aria-label="匯出選取項">
-                    <span class="material-symbols-outlined">file_download</span>
+                    <iconify-icon icon="material-symbols:file-download"></iconify-icon>
                   </button>
                   <span v-if="canEdit && canShowDelete" class="toolbar__sep" aria-hidden="true"></span>
                   <button v-if="canShowDelete" class="btn-icon-sq btn-icon-sq--danger-outline" @click="onBatchDelete" aria-label="刪除草稿">
-                    <span class="material-symbols-outlined">delete</span>
+                    <iconify-icon icon="material-symbols:delete-outline"></iconify-icon>
                   </button>
                   <span class="chip--selected">
                     <span class="chip--selected__label">已選取 {{ selectedIds.length }} 筆</span>
-                    <button class="chip--selected__close" @click="clearSelection" aria-label="取消選取"><span class="material-symbols-outlined">close</span></button>
+                    <button class="chip--selected__close" @click="clearSelection" aria-label="取消選取"><iconify-icon icon="material-symbols:close"></iconify-icon></button>
                   </span>
                 </div>
                 <div class="toolbar__right">
@@ -139,7 +148,7 @@
                     <option value="approvedOnly">僅顯示已核准</option>
                   </select>
                   <button class="btn btn--outline" @click="openColumnSettings">
-                    <span class="material-symbols-outlined">tune</span>設定
+                    <iconify-icon icon="material-symbols:tune"></iconify-icon>設定
                   </button>
                 </div>
               </div>
@@ -186,14 +195,14 @@
                 </div>
                 <div class="search-bar__actions">
                   <button class="btn-icon-sq btn-icon-sq--primary" @click="applyFilters" aria-label="搜尋">
-                    <span class="material-symbols-outlined">search</span>
+                    <iconify-icon icon="material-symbols:search"></iconify-icon>
                   </button>
                   <button class="btn-icon-sq btn-icon-sq--primary-outline" @click="clearFilters" aria-label="清除">
-                    <span class="material-symbols-outlined">delete</span>
+                    <iconify-icon icon="material-symbols:delete-outline"></iconify-icon>
                   </button>
                   <button v-if="searchWrapped || searchCollapsed" class="btn-icon-sq btn-icon-sq--primary-outline"
                           @click="toggleSearchCollapse" :aria-label="searchCollapsed ? 'expand search' : 'collapse search'">
-                    <span class="material-symbols-outlined">{{ searchCollapsed ? 'keyboard_arrow_down' : 'keyboard_arrow_up' }}</span>
+                    <iconify-icon :icon="searchCollapsed ? 'material-symbols:keyboard-arrow-down' : 'material-symbols:keyboard-arrow-up'"></iconify-icon>
                   </button>
                 </div>
               </div>
@@ -222,7 +231,7 @@
                         <template v-if="visibleRows.length === 0">
                           <tr><td :colspan="canSelect ? 8 : 7" style="padding:0; border:none">
                             <div class="empty-state">
-                              <span class="material-symbols-outlined">inbox</span>
+                              <iconify-icon icon="material-symbols:inbox-outline"></iconify-icon>
                               <h4>{{ hasActiveFilter ? '無符合條件的資料' : '尚未建立任何資料' }}</h4>
                               <p v-if="hasActiveFilter">請調整搜尋條件或 <a @click="clearFilters">清除篩選</a></p>
                               <p v-else-if="canEdit"><a @click="onCreate">+ 新增第一筆</a></p>
@@ -250,10 +259,10 @@
                               <td class="num">{{ formatAmount(row.amount) }}</td>
                               <td class="col-actions sticky-r" :class="{ 'col-actions--single': !rowDeletable(row) }">
                                 <button class="ico-btn" :class="canEdit ? 'is-edit' : 'is-view'" @click="openForm(row.id)" :aria-label="canEdit ? '編輯' : '檢視'">
-                                  <span class="material-symbols-outlined">{{ canEdit ? 'edit' : 'chevron_right' }}</span>
+                                  <iconify-icon :icon="canEdit ? 'material-symbols:edit-outline' : 'material-symbols:chevron-right'"></iconify-icon>
                                 </button>
                                 <button v-if="rowDeletable(row)" class="ico-btn is-delete" @click="singleDelete(row)" aria-label="刪除">
-                                  <span class="material-symbols-outlined">delete</span>
+                                  <iconify-icon icon="material-symbols:delete-outline"></iconify-icon>
                                 </button>
                               </td>
                             </tr>
@@ -276,14 +285,14 @@
                 <div class="pager">
                   <div class="pager__left">
                     <div class="pager__pages">
-                      <button class="pager__btn" @click="goPage(1)" :disabled="page === 1" aria-label="first"><span class="material-symbols-outlined">first_page</span></button>
-                      <button class="pager__btn" @click="goPage(page - 1)" :disabled="page === 1" aria-label="prev"><span class="material-symbols-outlined">chevron_left</span></button>
+                      <button class="pager__btn" @click="goPage(1)" :disabled="page === 1" aria-label="first"><iconify-icon icon="material-symbols:first-page"></iconify-icon></button>
+                      <button class="pager__btn" @click="goPage(page - 1)" :disabled="page === 1" aria-label="prev"><iconify-icon icon="material-symbols:chevron-left"></iconify-icon></button>
                       <template v-for="(p, i) in pageWindow" :key="i">
                         <span v-if="p === '…'" class="pager__ellipsis">…</span>
                         <button v-else class="pager__btn" :class="{ 'is-active': p === page }" @click="goPage(p)">{{ p }}</button>
                       </template>
-                      <button class="pager__btn" @click="goPage(page + 1)" :disabled="page === totalPages" aria-label="next"><span class="material-symbols-outlined">chevron_right</span></button>
-                      <button class="pager__btn" @click="goPage(totalPages)" :disabled="page === totalPages" aria-label="last"><span class="material-symbols-outlined">last_page</span></button>
+                      <button class="pager__btn" @click="goPage(page + 1)" :disabled="page === totalPages" aria-label="next"><iconify-icon icon="material-symbols:chevron-right"></iconify-icon></button>
+                      <button class="pager__btn" @click="goPage(totalPages)" :disabled="page === totalPages" aria-label="last"><iconify-icon icon="material-symbols:last-page"></iconify-icon></button>
                     </div>
                     <div class="pager__size">
                       <select class="select" v-model.number="pageSize" @change="onPageSizeChange">
@@ -324,7 +333,7 @@
                       <ol v-else class="stepper">
                         <li class="stepper__step" :class="stepClass(1)">
                           <span class="stepper__num">
-                            <span v-if="stepState(1) === 'done'" class="material-symbols-outlined">check</span>
+                            <iconify-icon v-if="stepState(1) === 'done'" icon="material-symbols:check"></iconify-icon>
                             <template v-else>1</template>
                           </span>
                           <span>草稿</span>
@@ -332,7 +341,7 @@
                         <span class="stepper__bar" :class="lineClass(1)"></span>
                         <li class="stepper__step" :class="stepClass(2)">
                           <span class="stepper__num">
-                            <span v-if="stepState(2) === 'done'" class="material-symbols-outlined">check</span>
+                            <iconify-icon v-if="stepState(2) === 'done'" icon="material-symbols:check"></iconify-icon>
                             <template v-else>2</template>
                           </span>
                           <span>已提交</span>
@@ -340,7 +349,7 @@
                         <span class="stepper__bar" :class="lineClass(2)"></span>
                         <li class="stepper__step" :class="stepClass(3)">
                           <span class="stepper__num">
-                            <span v-if="stepState(3) === 'done'" class="material-symbols-outlined">check</span>
+                            <iconify-icon v-if="stepState(3) === 'done'" icon="material-symbols:check"></iconify-icon>
                             <template v-else>3</template>
                           </span>
                           <span>已核准</span>
@@ -359,7 +368,7 @@
                 <!-- 再次核准警示 banner（曾取消核准、回到已提交時顯示） -->
                 <div v-if="form.wasCancelled && form.state === 'submitted'" class="form-banner-wrap">
                   <div class="form-banner is-warning">
-                    <span class="material-symbols-outlined">warning</span>
+                    <iconify-icon icon="material-symbols:warning-outline"></iconify-icon>
                     <span>此單曾被取消核准，請重新確認明細後再次提交。</span>
                   </div>
                 </div>
@@ -473,8 +482,9 @@
                             <th style="min-width:160px">建議供應商</th>
                             <th style="min-width:160px">採購單號</th>
                             <th class="col-ops" style="min-width:96px">
+                              <!-- 實心 add-circle；is-add-circle 用 flat primary 樣式（icon primary 色、無底色無邊框） -->
                               <button v-if="canEditLines" class="ico-btn is-add-circle" @click="addLine" aria-label="新增明細">
-                                <span class="material-symbols-outlined">add_circle</span>
+                                <iconify-icon icon="material-symbols:add-circle"></iconify-icon>
                               </button>
                             </th>
                           </tr>
@@ -535,15 +545,15 @@
                               <!-- 操作：結轉後 lock；編輯態 save/cancel；否則 edit/delete -->
                               <td class="col-ops">
                                 <template v-if="line.poLineId">
-                                  <span class="material-symbols-outlined dim" title="已結轉，不可修改">lock</span>
+                                  <iconify-icon class="dim" icon="material-symbols:lock-outline" title="已結轉，不可修改"></iconify-icon>
                                 </template>
                                 <template v-else-if="line.editing">
-                                  <button class="ico-btn is-save" @click="saveLine(line)" aria-label="儲存"><span class="material-symbols-outlined">save</span></button>
-                                  <button class="ico-btn is-cancel" @click="cancelLine(line)" aria-label="取消"><span class="material-symbols-outlined">close</span></button>
+                                  <button class="ico-btn is-save" @click="saveLine(line)" aria-label="儲存"><iconify-icon icon="material-symbols:save-outline"></iconify-icon></button>
+                                  <button class="ico-btn is-cancel" @click="cancelLine(line)" aria-label="取消"><iconify-icon icon="material-symbols:close"></iconify-icon></button>
                                 </template>
                                 <template v-else-if="canEditLines">
-                                  <button class="ico-btn is-edit" @click="editLine(line)" aria-label="編輯"><span class="material-symbols-outlined">edit</span></button>
-                                  <button class="ico-btn is-delete" @click="deleteLine(line)" aria-label="刪除"><span class="material-symbols-outlined">delete</span></button>
+                                  <button class="ico-btn is-edit" @click="editLine(line)" aria-label="編輯"><iconify-icon icon="material-symbols:edit-outline"></iconify-icon></button>
+                                  <button class="ico-btn is-delete" @click="deleteLine(line)" aria-label="刪除"><iconify-icon icon="material-symbols:delete-outline"></iconify-icon></button>
                                 </template>
                               </td>
                             </tr>
@@ -569,14 +579,14 @@
               -->
               <footer class="form-footer">
                 <div class="form-footer__nav">
-                  <button class="ico-btn" :disabled="form.isNew || formIndex <= 1" @click="prevDoc" aria-label="上一筆"><span class="material-symbols-outlined">chevron_left</span></button>
+                  <button class="ico-btn" :disabled="form.isNew || formIndex <= 1" @click="prevDoc" aria-label="上一筆"><iconify-icon icon="material-symbols:chevron-left"></iconify-icon></button>
                   <span class="form-footer__pos">{{ form.isNew ? 1 : formIndex }} / {{ form.isNew ? recordTotal + 1 : recordTotal }}</span>
-                  <button class="ico-btn" :disabled="form.isNew || formIndex >= recordTotal" @click="nextDoc" aria-label="下一筆"><span class="material-symbols-outlined">chevron_right</span></button>
+                  <button class="ico-btn" :disabled="form.isNew || formIndex >= recordTotal" @click="nextDoc" aria-label="下一筆"><iconify-icon icon="material-symbols:chevron-right"></iconify-icon></button>
                 </div>
                 <div class="form-footer__right">
                   <!-- 唯讀角色：只剩 tag -->
                   <template v-if="isReadOnly">
-                    <span class="readonly-tag"><span class="material-symbols-outlined">visibility</span>唯讀檢視</span>
+                    <span class="readonly-tag"><iconify-icon icon="material-symbols:visibility-outline"></iconify-icon>唯讀檢視</span>
                   </template>
                   <template v-else>
                     <!-- draft：刪除 / 儲存草稿 / 提交 -->
@@ -627,12 +637,13 @@
       kind ∈ { confirm, info, warning, error, danger, deeplink }；confirmKind ∈ { primary, danger, outline }
       結轉採購單精靈 / 載入常用清單精靈為進銷存常見但「模組專屬」流程，
       依 PRD 於 modal__body 內補實作（此處留標準 confirm/info 結構示意）。
+      modalIcon(kind) 在 app.js 回傳完整 Iconify id（見 REFERENCE.md §app.js 骨架）。
     -->
     <transition name="scrim">
       <div v-if="modal.open" class="scrim" @click.self="closeModal" tabindex="-1">
         <div class="modal" :class="'modal--' + modal.kind" role="dialog" aria-modal="true">
           <div class="modal__header">
-            <span class="modal__icon material-symbols-outlined">{{ modalIcon(modal.kind) }}</span>
+            <iconify-icon class="modal__icon" :icon="modalIcon(modal.kind)"></iconify-icon>
             <div class="modal__title">{{ modal.title }}</div>
           </div>
           <div v-if="modal.body" class="modal__body">{{ modal.body }}</div>
@@ -647,11 +658,11 @@
       </div>
     </transition>
 
-    <!-- ===== Toast：success / warning / error / info，3 秒自動消失 ===== -->
+    <!-- ===== Toast：success / warning / error / info，3 秒自動消失（toastIcon 回傳完整 Iconify id） ===== -->
     <div class="toast-host">
       <transition-group name="toast">
         <div v-for="t in toasts" :key="t.id" class="toast" :class="'toast--' + t.kind">
-          <span class="material-symbols-outlined">{{ toastIcon(t.kind) }}</span>
+          <iconify-icon :icon="toastIcon(t.kind)"></iconify-icon>
           <span>{{ t.msg }}</span>
         </div>
       </transition-group>

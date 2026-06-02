@@ -342,7 +342,7 @@ background       : var(--bg-surface-default)
 |---|---|---|
 | 欄位數 | ≤ 6 才建議 inline；多則走 Drawer | **可超過 6 欄仍維持 inline**（採購 / 銷貨明細天生寬表）；以水平捲動 + 操作欄 sticky-right 處理，**不**降級 Drawer |
 | 載體 | `.grid-wrap` | `.dg-lines > .dg-lines__scroll`（Form View 內，與 List 的 `.dg__scroll` 同理，唯一橫向捲軸） |
-| 新增列入口 | 「＋ 新增規則」文字列 | 表頭右側 `add_circle` icon button（`ico-btn is-add-circle`） |
+| 新增列入口 | 「＋ 新增規則」文字列 | 表頭右側 `material-symbols:add-circle`（實心）icon（`ico-btn is-add-circle`）；button 用 **flat primary** 樣式（icon primary 色、**無底色、無邊框**，非一般 icon button 的 primary 填底） |
 
 ### Computed / related 欄位（唯讀，不可編）
 
@@ -363,7 +363,7 @@ background       : var(--bg-surface-default)
 進銷存明細結轉下游單據後，該列不可再改（避免來源與下游不一致）：
 
 - 判斷依據：明細列的下游關聯鍵存在（如 `po_line_id != null`）
-- 視覺：列加 `is-row-locked`；操作欄的 `edit` / `delete` **改為單一 `lock` icon**（`dim`，tooltip「已結轉，不可修改」）
+- 視覺：列加 `is-row-locked`；操作欄的 `edit` / `delete` **改為單一 `material-symbols:lock-outline` icon**（`dim`，tooltip「已結轉，不可修改」）
 - 「採購單號」等 related 欄：結轉後回填單號；尚未結轉顯示 `—`（`dim`）
 - 與權限正交：即使有 `canEditLines`，已鎖列仍不可改
 

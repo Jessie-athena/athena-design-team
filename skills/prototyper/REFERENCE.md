@@ -46,8 +46,16 @@
 | Toast 警告 | `warning` | `material-symbols:warning-outline` | 線條 |
 | Toast 錯誤 | `error` | `material-symbols:error-outline` | 線條 |
 | Toast / banner 資訊 | `info` | `material-symbols:info-outline` | 線條 |
+| 搜尋（List 搜尋鈕） | `search` | `material-symbols:search` | 筆畫（無 outline） |
+| 收合 / 展開（ListSearch） | `keyboard_arrow_up` / `_down` | `material-symbols:keyboard-arrow-up` / `-down` | 筆畫（無 outline） |
+| select / dropdown caret | `keyboard_arrow_down` | `material-symbols:keyboard-arrow-down` | 筆畫（無 outline） |
+| 新增明細列（inline grid） | `add_circle` | `material-symbols:add-circle`（button 用 **flat primary** 樣式：icon primary 色、無底色、無邊框） | 實心 |
+| 儲存（inline 編輯） | `save` | `material-symbols:save-outline` | 線條 |
+| 鎖列（已結轉，不可改） | `lock` | `material-symbols:lock-outline` | 線條 |
+| 匯出 / 下載 | `file_download` | `material-symbols:file-download` | 筆畫（**無 `-outline`**，`file-download-outline` 不存在） |
+| Modal 確認（confirm） | `help` | `material-symbols:help-outline` | 線條 |
 
-> 動態 icon（nav-rail `item.icon`、`toastIcon()`、`stateBanner.icon`）在 `app.js` data 直接存**完整 Iconify id**（nav-rail 屬 App shell → 實心，如 `material-symbols:account-balance`；toast/banner 等內容區依 DS，多為 `-outline`），template 用 `<iconify-icon :icon="...">` 綁定。`toastIcon()` 起手式見本檔 §`app.js` 骨架。
+> 動態 icon（nav-rail `item.icon`、`toastIcon()`、`modalIcon()`、`stateBanner.icon`）在 `app.js` data / helper 直接存**完整 Iconify id**（nav-rail 屬 App shell → 實心，如 `material-symbols:account-balance`；toast / modal / banner 等內容區依 DS，多為 `-outline`），template 用 `<iconify-icon :icon="...">` 綁定。`toastIcon()` / `modalIcon()` 起手式見本檔 §`app.js` 骨架。
 
 ## §3 File Layout
 
@@ -443,6 +451,16 @@ createApp({
       error:   'material-symbols:error-outline',
       info:    'material-symbols:info-outline',
     }[kind] || 'material-symbols:info-outline')
+    // modal 標頭 icon（psi-transaction-page 等用）：同樣回傳完整 Iconify id
+    // kind ∈ { confirm, info, warning, error, danger, deeplink }；danger 視覺同 error，deeplink 用導向 icon
+    const modalIcon = (kind) => ({
+      confirm:  'material-symbols:help-outline',
+      info:     'material-symbols:info-outline',
+      warning:  'material-symbols:warning-outline',
+      error:    'material-symbols:error-outline',
+      danger:   'material-symbols:error-outline',
+      deeplink: 'material-symbols:arrow-outward',
+    }[kind] || 'material-symbols:info-outline')
 
     // ===== State machine handlers（依 profile 命名） =====
     // 例:ERP profile 用 onSubmit / onApprove / onUnapprove / onVoid
@@ -474,7 +492,7 @@ createApp({
 
     return {
       breadcrumb, programId, version, navItems, activeNav, view, toasts,
-      stepState, stepClass, visibleRelations, toastIcon,
+      stepState, stepClass, visibleRelations, toastIcon, modalIcon,
     }
   }
 }).mount('#app')
