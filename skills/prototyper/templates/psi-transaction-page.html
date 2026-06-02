@@ -1,0 +1,664 @@
+<!--
+  Athena ERP Prototype — 進銷存作業檔 Starter（PSI Transaction Page）
+  ====================================================================
+  用途：進銷存（PSI）作業檔的 starter template，含交易明細 DataGrid、
+        擴充狀態機（6 值）、單指標 Summary Card + 4 步動態 stepper、
+        狀態-按鈕矩陣 Footer、結轉/帶入清單精靈占位。
+
+  與 module-page.html（財務作業檔）的關鍵差異：
+    - class 命名採 DS 對齊的 .app-* / .main-panel / .program-info-bar
+      （module-page.html 沿用 legacy .erp-*；詳 profiles/erp-transaction.md §App Shell → Class prefix）
+    - Summary Card 為「單指標 + stepper」左右兩區（非財務的多指標上下兩塊）
+    - Stepper 為 4 步，第 ④ 步是 partial/cancelled/done 三選一動態插槽
+    - 狀態機 6 值：draft / submitted / approved / partial / done / cancelled
+      （詳 profiles/erp-transaction.md §進銷存擴充狀態機）
+    - 明細 DataGrid 可超過 6 欄仍 inline，含 數量×單價 computed 小計、結轉後鎖列
+    - 無 Smart Bar（進銷存作業檔關聯單純，結轉入口在 Footer）
+
+  使用方式：
+  1. 複製本檔到 prototype/project/<模組中文名>.html（如「請購單.html」）
+  2. 替換 placeholder：
+     - <title>                 模組中文名
+     - breadcrumb              進銷存 > 功能名稱 > 單號
+     - programId / version     由 PM 文件 / Odoo model 決定（如 psi.purchase_requisition → PSI-PR）
+     - List View 欄位、搜尋 filter、preset 選項
+     - Form View sections、明細 DataGrid 欄位、狀態-按鈕矩陣
+  3. 對應 reactive state 與 handlers 寫到 ../app.js（禁止內嵌）
+  4. 模組專屬樣式寫到 ../app.css（禁止 <style>、禁止 @apply）
+
+  視覺系統：Claude Design 內部 design system bundle
+    https://api.anthropic.com/v1/design/h/3NlTfIVpv5CoYw5xmHzi5g
+    本 template 已預設成 DS-correct；常見反射錯誤見 pitfalls.md「DS 反射對照表」。
+
+  審查對應：
+    profiles/Shared.md                    §頁面框架（Header / Nav-rail / Info Bar 結構）
+    profiles/erp-transaction.md           §App Shell §進銷存擴充狀態機 §按鈕 icon 政策 §輸入欄樣式
+    profiles/erp-components/ListSearch.md  搜尋區（收合保留 label / RWD）
+    profiles/erp-components/DataGrid.md    §進銷存明細 DataGrid（交易明細擴充）
+    profiles/erp-components/SummaryCard.md 單指標 + 4 步動態 stepper
+    profiles/erp-components/FormFooter.md  §進銷存作業檔狀態-按鈕矩陣
+-->
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=1280">
+  <title>模組中文名 — Athena ERP</title>
+  <link rel="stylesheet" href="../ds/colors_and_type.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Symbols+Outlined">
+  <link rel="stylesheet" href="../app.css">
+</head>
+<body>
+  <div id="app">
+    <div class="app-shell" :data-role="role">
+
+      <!-- ===== App Shell · Header ===== -->
+      <header class="app-header">
+        <button class="app-header__home" @click="goHome" aria-label="home">
+          <span class="material-symbols-outlined">home</span>
+        </button>
+        <nav class="breadcrumb" aria-label="breadcrumb">
+          <span class="breadcrumb__item" @click="goList">{{ breadcrumb.module }}</span>
+          <span class="breadcrumb__sep material-symbols-outlined">chevron_right</span>
+          <span class="breadcrumb__item" @click="goList">{{ breadcrumb.feature }}</span>
+          <span class="breadcrumb__sep material-symbols-outlined">chevron_right</span>
+          <!-- List 模式：末段為功能名 + ★fav；Form 模式：末段為單號、不顯示 ★ -->
+          <template v-if="view === 'list'">
+            <span class="breadcrumb__item is-current">{{ breadcrumb.docNo || breadcrumb.feature }}</span>
+            <button class="breadcrumb__fav" :class="{ 'is-active': isFavorite }"
+                    @click="toggleFavorite" aria-label="favorite">
+              <span class="material-symbols-outlined">{{ isFavorite ? 'star' : 'star_border' }}</span>
+            </button>
+          </template>
+          <template v-else>
+            <span class="breadcrumb__item is-current">{{ form.docNo || '新增' + breadcrumb.feature }}</span>
+          </template>
+        </nav>
+        <div class="header-right">
+          <button class="header-icon-btn" aria-label="notifications">
+            <span class="material-symbols-outlined">notifications</span>
+            <span class="header-badge">9+</span>
+          </button>
+          <button class="header-icon-btn" aria-label="settings"><span class="material-symbols-outlined">settings</span></button>
+          <span class="header-avatar">{{ user.initials }}</span>
+        </div>
+      </header>
+
+      <div class="app-body">
+        <!-- ===== App Shell · Nav Rail（5 項固定順序） ===== -->
+        <aside class="nav-rail">
+          <div class="nav-rail__top">
+            <button class="nav-rail__item"><span class="material-symbols-outlined">star</span><span>我的最愛</span></button>
+          </div>
+          <div class="nav-rail__under">
+            <button class="nav-rail__item"><span class="material-symbols-outlined">account_balance</span><span>財務</span></button>
+            <button class="nav-rail__item is-active"><span class="material-symbols-outlined">inventory</span><span>進銷存</span></button>
+            <button class="nav-rail__item"><span class="material-symbols-outlined">badge</span><span>人事</span></button>
+            <button class="nav-rail__item"><span class="material-symbols-outlined">settings</span><span>設定檔</span></button>
+            <!-- 產品縮寫文字 = ERP（不可遺失）-->
+            <div class="nav-rail__system" aria-label="ERP">ERP</div>
+          </div>
+        </aside>
+
+        <main class="main-panel">
+          <div class="main-panel__content">
+
+            <!-- ============================================== -->
+            <!-- ===== List View ============================== -->
+            <!-- ============================================== -->
+            <section v-if="view === 'list'" class="list-view">
+              <!-- Toolbar：未選 → 主操作 + 匯入；有選 → 批次操作 + 已選 chip；右側 preset + 設定 -->
+              <div class="toolbar">
+                <div class="toolbar__left" v-if="selectedIds.length === 0">
+                  <!-- 動詞 CTA：無 icon（見 profile §按鈕 icon 政策） -->
+                  <button v-if="canEdit" class="btn btn--primary" @click="onCreate">新增</button>
+                  <span v-if="canEdit && canImport" class="toolbar__sep" aria-hidden="true"></span>
+                  <button v-if="canImport" class="btn btn--outline" @click="onImport">匯入</button>
+                </div>
+                <div class="toolbar__left" v-else>
+                  <!-- 批次結轉：僅可結轉狀態才啟用（結轉/匯出/刪除依角色顯示） -->
+                  <button v-if="canEdit && batchConvertable" class="btn btn--primary" @click="onBatchConvert">結轉採購單</button>
+                  <button v-if="canExport" class="btn-icon-sq btn-icon-sq--primary-outline" @click="onBatchExport" aria-label="匯出選取項">
+                    <span class="material-symbols-outlined">file_download</span>
+                  </button>
+                  <span v-if="canEdit && canShowDelete" class="toolbar__sep" aria-hidden="true"></span>
+                  <button v-if="canShowDelete" class="btn-icon-sq btn-icon-sq--danger-outline" @click="onBatchDelete" aria-label="刪除草稿">
+                    <span class="material-symbols-outlined">delete</span>
+                  </button>
+                  <span class="chip--selected">
+                    <span class="chip--selected__label">已選取 {{ selectedIds.length }} 筆</span>
+                    <button class="chip--selected__close" @click="clearSelection" aria-label="取消選取"><span class="material-symbols-outlined">close</span></button>
+                  </span>
+                </div>
+                <div class="toolbar__right">
+                  <!-- preset：列表檢視切換（純 UI，不入庫） -->
+                  <select class="select preset-select" v-model="preset" @change="onPresetChange">
+                    <option value="">預設檢視</option>
+                    <option value="byCompany">依公司分群</option>
+                    <option value="draftOnly">僅顯示草稿</option>
+                    <option value="approvedOnly">僅顯示已核准</option>
+                  </select>
+                  <button class="btn btn--outline" @click="openColumnSettings">
+                    <span class="material-symbols-outlined">tune</span>設定
+                  </button>
+                </div>
+              </div>
+
+              <!-- Search bar：收合保留 label（詳 profiles/erp-components/ListSearch.md）-->
+              <div class="search-bar" :class="{ 'is-collapsed': searchCollapsed }" ref="searchBar">
+                <div class="search-bar__fields" ref="searchFields">
+                  <div class="field" data-prio="p0">
+                    <label class="field__label">單號</label>
+                    <input class="input" v-model="filters.keyword" @keyup.enter="applyFilters">
+                  </div>
+                  <div class="field" data-prio="p1">
+                    <label class="field__label">類型</label>
+                    <select class="select" v-model="filters.docType">
+                      <option value="">全部</option>
+                      <option value="a">類型 A</option>
+                      <option value="b">類型 B</option>
+                    </select>
+                  </div>
+                  <div class="field" data-prio="p1">
+                    <label class="field__label">地點</label>
+                    <select class="select" v-model="filters.locationId">
+                      <option value="">全部</option>
+                      <option v-for="l in locations" :key="l.id" :value="l.id">{{ l.name }}</option>
+                    </select>
+                  </div>
+                  <div class="field" data-prio="p2">
+                    <label class="field__label">日期</label>
+                    <input class="input" type="date" v-model="filters.dateFrom">
+                  </div>
+                  <div class="field" data-prio="p0">
+                    <label class="field__label">狀態</label>
+                    <!-- 第一選項固定「全部」(value="") -->
+                    <select class="select" v-model="filters.state">
+                      <option value="">全部</option>
+                      <option value="draft">草稿</option>
+                      <option value="submitted">已提交</option>
+                      <option value="approved">已核准</option>
+                      <option value="partial">部分採購</option>
+                      <option value="done">已結案</option>
+                      <option value="cancelled">已取消</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="search-bar__actions">
+                  <button class="btn-icon-sq btn-icon-sq--primary" @click="applyFilters" aria-label="搜尋">
+                    <span class="material-symbols-outlined">search</span>
+                  </button>
+                  <button class="btn-icon-sq btn-icon-sq--primary-outline" @click="clearFilters" aria-label="清除">
+                    <span class="material-symbols-outlined">delete</span>
+                  </button>
+                  <button v-if="searchWrapped || searchCollapsed" class="btn-icon-sq btn-icon-sq--primary-outline"
+                          @click="toggleSearchCollapse" :aria-label="searchCollapsed ? 'expand search' : 'collapse search'">
+                    <span class="material-symbols-outlined">{{ searchCollapsed ? 'keyboard_arrow_down' : 'keyboard_arrow_up' }}</span>
+                  </button>
+                </div>
+              </div>
+
+              <!-- DataGrid + Pager（詳 profiles/erp-components/DataGrid.md）-->
+              <div class="dg-section">
+                <div class="dg" ref="dg">
+                  <div class="dg__scroll" ref="dgScroll">
+                    <table>
+                      <thead>
+                        <tr>
+                          <th v-if="canSelect" class="col-check sticky-l">
+                            <input class="cb" type="checkbox" :checked="allSelected" @change="onToggleAll">
+                          </th>
+                          <th :class="canSelect ? 'sticky-l-2' : 'sticky-l'" style="min-width:200px">單號</th>
+                          <th style="min-width:120px">狀態</th>
+                          <th style="min-width:120px">日期</th>
+                          <th style="min-width:140px" data-prio="p1">地點</th>
+                          <th style="min-width:100px">負責人</th>
+                          <th style="min-width:130px" class="num">預估總金額</th>
+                          <th class="col-actions sticky-r" :class="{ 'col-actions--single': !canShowDelete }"></th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <!-- 空狀態（有篩選 vs 首次） -->
+                        <template v-if="visibleRows.length === 0">
+                          <tr><td :colspan="canSelect ? 8 : 7" style="padding:0; border:none">
+                            <div class="empty-state">
+                              <span class="material-symbols-outlined">inbox</span>
+                              <h4>{{ hasActiveFilter ? '無符合條件的資料' : '尚未建立任何資料' }}</h4>
+                              <p v-if="hasActiveFilter">請調整搜尋條件或 <a @click="clearFilters">清除篩選</a></p>
+                              <p v-else-if="canEdit"><a @click="onCreate">+ 新增第一筆</a></p>
+                            </div>
+                          </td></tr>
+                        </template>
+                        <template v-else>
+                          <template v-for="row in visibleRows" :key="row._kind + '-' + (row.id || row.label)">
+                            <!-- preset 分群段落標題 -->
+                            <tr v-if="row._kind === 'group'" class="group-row">
+                              <td :colspan="canSelect ? 8 : 7">{{ row.label }}（{{ row.count }}）</td>
+                            </tr>
+                            <tr v-else :class="{ 'is-selected': selectedIds.includes(row.id) }">
+                              <td v-if="canSelect" class="col-check sticky-l">
+                                <input class="cb" type="checkbox" :checked="selectedIds.includes(row.id)" @change="toggleSelect(row.id)">
+                              </td>
+                              <td :class="canSelect ? 'sticky-l-2' : 'sticky-l'">
+                                <a v-if="row.docNo" class="link" @click="openForm(row.id)">{{ row.docNo }}</a>
+                                <span v-else class="muted">/</span>
+                              </td>
+                              <td><span class="st-chip" :class="'st-chip--' + row.state">{{ stateLabel(row.state) }}</span></td>
+                              <td>{{ row.date }}</td>
+                              <td>{{ locationLabel(row.locationId) }}</td>
+                              <td>{{ row.owner }}</td>
+                              <td class="num">{{ formatAmount(row.amount) }}</td>
+                              <td class="col-actions sticky-r" :class="{ 'col-actions--single': !rowDeletable(row) }">
+                                <button class="ico-btn" :class="canEdit ? 'is-edit' : 'is-view'" @click="openForm(row.id)" :aria-label="canEdit ? '編輯' : '檢視'">
+                                  <span class="material-symbols-outlined">{{ canEdit ? 'edit' : 'chevron_right' }}</span>
+                                </button>
+                                <button v-if="rowDeletable(row)" class="ico-btn is-delete" @click="singleDelete(row)" aria-label="刪除">
+                                  <span class="material-symbols-outlined">delete</span>
+                                </button>
+                              </td>
+                            </tr>
+                          </template>
+                        </template>
+                      </tbody>
+                      <!-- 合計列：放 tfoot，僅在有資料時顯示；只 Σ 金額欄 -->
+                      <tfoot v-if="visibleRowsCount > 0">
+                        <tr>
+                          <td :colspan="canSelect ? 6 : 5"></td>
+                          <td class="num">合計: {{ formatAmount(totalAmount) }}</td>
+                          <td class="col-actions sticky-r" :class="{ 'col-actions--single': !canShowDelete }"></td>
+                        </tr>
+                      </tfoot>
+                    </table>
+                  </div>
+                </div>
+
+                <!-- Pager：多頁碼（first/prev/window+省略號/next/last）+ 每頁筆數 + 範圍總數 -->
+                <div class="pager">
+                  <div class="pager__left">
+                    <div class="pager__pages">
+                      <button class="pager__btn" @click="goPage(1)" :disabled="page === 1" aria-label="first"><span class="material-symbols-outlined">first_page</span></button>
+                      <button class="pager__btn" @click="goPage(page - 1)" :disabled="page === 1" aria-label="prev"><span class="material-symbols-outlined">chevron_left</span></button>
+                      <template v-for="(p, i) in pageWindow" :key="i">
+                        <span v-if="p === '…'" class="pager__ellipsis">…</span>
+                        <button v-else class="pager__btn" :class="{ 'is-active': p === page }" @click="goPage(p)">{{ p }}</button>
+                      </template>
+                      <button class="pager__btn" @click="goPage(page + 1)" :disabled="page === totalPages" aria-label="next"><span class="material-symbols-outlined">chevron_right</span></button>
+                      <button class="pager__btn" @click="goPage(totalPages)" :disabled="page === totalPages" aria-label="last"><span class="material-symbols-outlined">last_page</span></button>
+                    </div>
+                    <div class="pager__size">
+                      <select class="select" v-model.number="pageSize" @change="onPageSizeChange">
+                        <option :value="20">20</option>
+                        <option :value="50">50</option>
+                        <option :value="100">100</option>
+                      </select>
+                      <span>筆 / 每頁</span>
+                    </div>
+                  </div>
+                  <div class="pager__total">第 {{ page }} 至 {{ totalPages }} 頁（共 {{ total }} 筆）</div>
+                </div>
+              </div>
+            </section>
+
+            <!-- ============================================== -->
+            <!-- ===== Form View ============================== -->
+            <!-- ============================================== -->
+            <section v-else class="form-view" :class="{ 'is-locked-view': isLocked, 'is-readonly-view': isReadOnly }">
+              <div class="form-view__body">
+
+                <!--
+                  Summary Card：左 單指標 + 右 stepper（詳 profiles/erp-components/SummaryCard.md）
+                  非財務的「上下兩塊多指標」；外層 summary-card-wrap 負責 padding 與不透明背景
+                -->
+                <div class="summary-card-wrap">
+                  <div class="summary-card">
+                    <div class="summary-card__left">
+                      <div class="summary-card__label">預估總金額</div>
+                      <div class="summary-card__amount">{{ formatCurrency(form.totalAmount) }}</div>
+                    </div>
+                    <div class="summary-card__right">
+                      <!-- 已取消：不進 stepper，整條換為「已取消」pill -->
+                      <div v-if="isCancelled" class="voided-banner">
+                        <span class="st-chip st-chip--cancelled voided-banner__pill">已取消</span>
+                      </div>
+                      <!-- 否則 4 步動態 stepper（第 ④ 步 = partial/done/placeholder） -->
+                      <ol v-else class="stepper">
+                        <li class="stepper__step" :class="stepClass(1)">
+                          <span class="stepper__num">
+                            <span v-if="stepState(1) === 'done'" class="material-symbols-outlined">check</span>
+                            <template v-else>1</template>
+                          </span>
+                          <span>草稿</span>
+                        </li>
+                        <span class="stepper__bar" :class="lineClass(1)"></span>
+                        <li class="stepper__step" :class="stepClass(2)">
+                          <span class="stepper__num">
+                            <span v-if="stepState(2) === 'done'" class="material-symbols-outlined">check</span>
+                            <template v-else>2</template>
+                          </span>
+                          <span>已提交</span>
+                        </li>
+                        <span class="stepper__bar" :class="lineClass(2)"></span>
+                        <li class="stepper__step" :class="stepClass(3)">
+                          <span class="stepper__num">
+                            <span v-if="stepState(3) === 'done'" class="material-symbols-outlined">check</span>
+                            <template v-else>3</template>
+                          </span>
+                          <span>已核准</span>
+                        </li>
+                        <span class="stepper__bar" :class="lineClass(3)"></span>
+                        <!-- 第 ④ 步：三選一動態插槽（partial 靛 / done 灰 / placeholder 灰待定） -->
+                        <li class="stepper__step" :class="step4Class">
+                          <span class="stepper__num">4</span>
+                          <span>{{ step4Label }}</span>
+                        </li>
+                      </ol>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- 再次核准警示 banner（曾取消核准、回到已提交時顯示） -->
+                <div v-if="form.wasCancelled && form.state === 'submitted'" class="form-banner-wrap">
+                  <div class="form-banner is-warning">
+                    <span class="material-symbols-outlined">warning</span>
+                    <span>此單曾被取消核准，請重新確認明細後再次提交。</span>
+                  </div>
+                </div>
+
+                <!-- Section 1：基本資訊（form-section__bar + form-grid 4 欄；≤1024px 自動 2 欄）-->
+                <div class="form-section">
+                  <div class="form-section__bar"><h3>基本資訊</h3></div>
+                  <div class="form-grid">
+                    <div class="field">
+                      <label class="field__label">單號</label>
+                      <!-- read-only 用 readonly 屬性，禁用 disabled -->
+                      <input class="input is-readonly" readonly :value="form.docNo" placeholder="自動產生">
+                    </div>
+                    <div class="field">
+                      <label class="field__label">日期 <span class="required">*</span></label>
+                      <input class="input" type="date" v-model="form.date" :readonly="isLocked || isReadOnly">
+                    </div>
+                    <div class="field">
+                      <label class="field__label">負責人 <span class="required">*</span></label>
+                      <select v-if="!isLocked && !isReadOnly" class="select" v-model="form.ownerId">
+                        <option v-for="u in users" :key="u.id" :value="u.id">{{ u.name }}</option>
+                      </select>
+                      <input v-else class="input is-readonly" readonly :value="form.owner">
+                    </div>
+                    <div class="field">
+                      <label class="field__label">類型 <span class="required">*</span></label>
+                      <select v-if="!isLocked && !isReadOnly" class="select" v-model="form.docType">
+                        <option value="a">類型 A</option>
+                        <option value="b">類型 B</option>
+                      </select>
+                      <input v-else class="input is-readonly" readonly :value="form.docType">
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Section 2：地點資訊（區域 → 館別 → 地點 cascade） -->
+                <div class="form-section">
+                  <div class="form-section__bar"><h3>地點資訊</h3></div>
+                  <div class="form-grid">
+                    <div class="field">
+                      <label class="field__label">區域 <span class="required">*</span></label>
+                      <select v-if="!isLocked && !isReadOnly" class="select" v-model="form.areaId" @change="onAreaChange">
+                        <option v-for="a in areas" :key="a.id" :value="a.id">{{ a.name }}</option>
+                      </select>
+                      <input v-else class="input is-readonly" readonly :value="areaLabel(form.areaId)">
+                    </div>
+                    <div class="field">
+                      <label class="field__label">館別 <span class="required">*</span></label>
+                      <!-- 未選區域時整欄 disabled（語意：不可用，非唯讀） -->
+                      <select v-if="!isLocked && !isReadOnly" class="select" v-model="form.branchId" :disabled="!form.areaId" @change="onBranchChange">
+                        <option v-for="b in branchOptions" :key="b.id" :value="b.id">{{ b.name }}</option>
+                      </select>
+                      <input v-else class="input is-readonly" readonly :value="branchLabel(form.branchId)">
+                    </div>
+                    <div class="field">
+                      <label class="field__label">地點 <span class="required">*</span></label>
+                      <select v-if="!isLocked && !isReadOnly" class="select" v-model="form.locationId" :disabled="!form.branchId" @change="onLocationChange">
+                        <option v-for="l in locationOptions" :key="l.id" :value="l.id">{{ l.name }}</option>
+                      </select>
+                      <input v-else class="input is-readonly" readonly :value="locationLabel(form.locationId)">
+                    </div>
+                    <div class="field">
+                      <label class="field__label">部門</label>
+                      <!-- related：隨地點帶入、唯讀、淡化色 -->
+                      <input class="input is-readonly dim" readonly :value="departmentLabel(form.departmentId) || '—'">
+                    </div>
+                    <div class="field">
+                      <label class="field__label">公司別 <span class="required">*</span></label>
+                      <!-- 僅草稿可改；儲存後 readonly（避免跨公司明細殘留） -->
+                      <select v-if="form.state === 'draft' && !isReadOnly" class="select" v-model="form.companyId">
+                        <option v-for="c in companies" :key="c.id" :value="c.id">{{ c.name }}</option>
+                      </select>
+                      <input v-else class="input is-readonly" readonly :value="companyLabel(form.companyId)">
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Section 3：補充說明（全寬 textarea） -->
+                <div class="form-section">
+                  <div class="form-section__bar"><h3>補充說明</h3></div>
+                  <div class="form-grid">
+                    <div class="field field--full">
+                      <label class="field__label">備註</label>
+                      <textarea class="input input--textarea" rows="3" v-model="form.note" :readonly="isLocked || isReadOnly"></textarea>
+                    </div>
+                  </div>
+                </div>
+
+                <!--
+                  明細 DataGrid（行內編輯；詳 profiles/erp-components/DataGrid.md §進銷存明細 DataGrid）
+                  數量×單價 computed 小計、related 自動帶入欄（dim）、結轉後鎖列
+                -->
+                <div class="form-section">
+                  <div class="form-section__bar form-section__bar--actions">
+                    <h3>明細</h3>
+                    <!-- 帶入常用清單（精靈占位；模組專屬流程依 PRD 補實作） -->
+                    <button v-if="canEditLines" class="btn btn--outline-primary" @click="openTemplateWizard" :disabled="!form.locationId" :title="!form.locationId ? '請先選擇地點' : ''">帶入常用清單</button>
+                  </div>
+                  <div class="dg-lines">
+                    <div class="dg-lines__scroll">
+                      <table>
+                        <thead>
+                          <tr>
+                            <th class="col-idx">序號</th>
+                            <th class="col-prod" style="min-width:200px">商品 <span class="required">*</span></th>
+                            <th style="min-width:160px">描述</th>
+                            <th class="num" style="min-width:120px">數量 <span class="required">*</span></th>
+                            <th style="min-width:120px">單位 <span class="required">*</span></th>
+                            <th class="num" style="min-width:120px">單價</th>
+                            <th class="num" style="min-width:120px">預估小計</th>
+                            <th style="min-width:160px">建議供應商</th>
+                            <th style="min-width:160px">採購單號</th>
+                            <th class="col-ops" style="min-width:96px">
+                              <button v-if="canEditLines" class="ico-btn is-add-circle" @click="addLine" aria-label="新增明細">
+                                <span class="material-symbols-outlined">add_circle</span>
+                              </button>
+                            </th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <template v-if="form.lines.length === 0">
+                            <tr><td colspan="10" class="row-add-empty">無任何資料</td></tr>
+                          </template>
+                          <template v-else>
+                            <tr v-for="(line, idx) in form.lines" :key="line._key" :class="{ editing: line.editing, 'is-row-locked': !!line.poLineId }">
+                              <td class="col-idx"><span class="seq-cell">{{ idx + 1 }}</span></td>
+                              <!-- 商品（已結轉 poLineId 不可改） -->
+                              <td class="col-prod">
+                                <template v-if="line.editing && !line.poLineId">
+                                  <select class="select select--inline" v-model="line.productId" @change="onProductChange(line)">
+                                    <option v-for="p in products" :key="p.id" :value="p.id">{{ p.code }} - {{ p.name }}</option>
+                                  </select>
+                                </template>
+                                <template v-else>{{ productLabel(line.productId) }}</template>
+                              </td>
+                              <!-- 描述 -->
+                              <td>
+                                <input v-if="line.editing && !line.poLineId" class="input input--inline" v-model="line.description">
+                                <span v-else>{{ line.description || '—' }}</span>
+                              </td>
+                              <!-- 數量 -->
+                              <td class="num">
+                                <input v-if="line.editing && !line.poLineId" class="input input--inline num" type="number" min="0.01" step="1" v-model.number="line.qty">
+                                <span v-else>{{ line.qty }}</span>
+                              </td>
+                              <!-- 單位 -->
+                              <td>
+                                <select v-if="line.editing && !line.poLineId" class="select select--inline" v-model="line.uomId">
+                                  <option v-for="u in uomOptions(line.productId)" :key="u.id" :value="u.id">{{ u.name }}</option>
+                                </select>
+                                <span v-else>{{ uomLabel(line.uomId) }}</span>
+                              </td>
+                              <!-- 單價 -->
+                              <td class="num">
+                                <input v-if="line.editing && !line.poLineId" class="input input--inline num" type="number" min="0" step="0.01" v-model.number="line.price">
+                                <span v-else>{{ line.price ? line.price.toLocaleString() : '—' }}</span>
+                              </td>
+                              <!-- 預估小計：computed = 數量 × 單價，唯讀 -->
+                              <td class="num">{{ ((line.qty || 0) * (line.price || 0)).toLocaleString() }}</td>
+                              <!-- 建議供應商 -->
+                              <td>
+                                <select v-if="line.editing && !line.poLineId" class="select select--inline" v-model="line.partnerId">
+                                  <option :value="null"></option>
+                                  <option v-for="p in partners" :key="p.id" :value="p.id">{{ p.name }}</option>
+                                </select>
+                                <span v-else>{{ partnerLabel(line.partnerId) || '—' }}</span>
+                              </td>
+                              <!-- 採購單號（related：結轉後回填） -->
+                              <td>
+                                <span v-if="line.poNumber">{{ line.poNumber }}</span>
+                                <span v-else class="dim">—</span>
+                              </td>
+                              <!-- 操作：結轉後 lock；編輯態 save/cancel；否則 edit/delete -->
+                              <td class="col-ops">
+                                <template v-if="line.poLineId">
+                                  <span class="material-symbols-outlined dim" title="已結轉，不可修改">lock</span>
+                                </template>
+                                <template v-else-if="line.editing">
+                                  <button class="ico-btn is-save" @click="saveLine(line)" aria-label="儲存"><span class="material-symbols-outlined">save</span></button>
+                                  <button class="ico-btn is-cancel" @click="cancelLine(line)" aria-label="取消"><span class="material-symbols-outlined">close</span></button>
+                                </template>
+                                <template v-else-if="canEditLines">
+                                  <button class="ico-btn is-edit" @click="editLine(line)" aria-label="編輯"><span class="material-symbols-outlined">edit</span></button>
+                                  <button class="ico-btn is-delete" @click="deleteLine(line)" aria-label="刪除"><span class="material-symbols-outlined">delete</span></button>
+                                </template>
+                              </td>
+                            </tr>
+                          </template>
+                        </tbody>
+                        <!-- 小計列：Σ 預估小計，僅有資料時顯示 -->
+                        <tfoot v-if="form.lines.length > 0">
+                          <tr>
+                            <td colspan="6" class="text-right">合計</td>
+                            <td class="num">{{ form.totalAmount.toLocaleString() }}</td>
+                            <td colspan="3"></td>
+                          </tr>
+                        </tfoot>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!--
+                Form Footer：上下筆 + 狀態-按鈕矩陣（詳 profiles/erp-components/FormFooter.md §進銷存作業檔狀態-按鈕矩陣）
+                動詞 CTA 無 icon；按鈕分層級配色
+              -->
+              <footer class="form-footer">
+                <div class="form-footer__nav">
+                  <button class="ico-btn" :disabled="form.isNew || formIndex <= 1" @click="prevDoc" aria-label="上一筆"><span class="material-symbols-outlined">chevron_left</span></button>
+                  <span class="form-footer__pos">{{ form.isNew ? 1 : formIndex }} / {{ form.isNew ? recordTotal + 1 : recordTotal }}</span>
+                  <button class="ico-btn" :disabled="form.isNew || formIndex >= recordTotal" @click="nextDoc" aria-label="下一筆"><span class="material-symbols-outlined">chevron_right</span></button>
+                </div>
+                <div class="form-footer__right">
+                  <!-- 唯讀角色：只剩 tag -->
+                  <template v-if="isReadOnly">
+                    <span class="readonly-tag"><span class="material-symbols-outlined">visibility</span>唯讀檢視</span>
+                  </template>
+                  <template v-else>
+                    <!-- draft：刪除 / 儲存草稿 / 提交 -->
+                    <template v-if="form.state === 'draft'">
+                      <button v-if="!form.isNew" class="btn btn--outline-danger" @click="onDelete">刪除</button>
+                      <button class="btn btn--outline-primary" :disabled="hasEditingRow" @click="onSaveDraft">儲存草稿</button>
+                      <button class="btn btn--primary" :disabled="hasEditingRow" @click="onSubmit">提交</button>
+                    </template>
+                    <!-- submitted：退回 / 儲存變更 / 核准（限主管） -->
+                    <template v-else-if="form.state === 'submitted'">
+                      <button v-if="canApprove" class="btn btn--outline-danger" @click="onReject">退回</button>
+                      <button class="btn btn--outline-primary" :disabled="hasEditingRow" @click="onSave">儲存變更</button>
+                      <button v-if="canApprove" class="btn btn--primary" :disabled="hasEditingRow" @click="onApprove">核准</button>
+                    </template>
+                    <!-- approved：取消核准（限主管）/ 作廢 / 結轉採購單 -->
+                    <template v-else-if="form.state === 'approved'">
+                      <button v-if="canApprove" class="btn btn--outline-danger" @click="onUnapprove">取消核准</button>
+                      <button v-if="canApprove" class="btn btn--outline-danger" @click="onCancel">作廢</button>
+                      <button class="btn btn--primary" @click="openConvertWizard">結轉採購單</button>
+                    </template>
+                    <!-- partial：作廢 / 結轉採購單（不顯示取消核准） -->
+                    <template v-else-if="form.state === 'partial'">
+                      <button v-if="canApprove" class="btn btn--outline-danger" @click="onCancel">作廢</button>
+                      <button class="btn btn--primary" @click="openConvertWizard">結轉採購單</button>
+                    </template>
+                    <!-- done：終態，作廢 disabled -->
+                    <template v-else-if="form.state === 'done'">
+                      <button class="btn btn--outline-danger" disabled title="已結案；若需中止後續流程，請至對應下游單據作廢">作廢</button>
+                    </template>
+                    <!-- cancelled：終態，無動作 -->
+                  </template>
+                </div>
+              </footer>
+            </section>
+          </div>
+
+          <!-- Program info bar：左 programID、右版號 -->
+          <div class="program-info-bar">
+            <span>{{ programId }}</span>
+            <span>v{{ version }}</span>
+          </div>
+        </main>
+      </div>
+    </div>
+
+    <!--
+      ===== Modal =====
+      kind ∈ { confirm, info, warning, error, danger, deeplink }；confirmKind ∈ { primary, danger, outline }
+      結轉採購單精靈 / 載入常用清單精靈為進銷存常見但「模組專屬」流程，
+      依 PRD 於 modal__body 內補實作（此處留標準 confirm/info 結構示意）。
+    -->
+    <transition name="scrim">
+      <div v-if="modal.open" class="scrim" @click.self="closeModal" tabindex="-1">
+        <div class="modal" :class="'modal--' + modal.kind" role="dialog" aria-modal="true">
+          <div class="modal__header">
+            <span class="modal__icon material-symbols-outlined">{{ modalIcon(modal.kind) }}</span>
+            <div class="modal__title">{{ modal.title }}</div>
+          </div>
+          <div v-if="modal.body" class="modal__body">{{ modal.body }}</div>
+          <div v-if="modal.hint" class="modal__hint">{{ modal.hint }}</div>
+          <div class="modal__footer">
+            <button v-if="modal.cancelLabel" class="btn btn--outline" @click="closeModal">{{ modal.cancelLabel }}</button>
+            <button class="btn"
+              :class="{ 'btn--primary': modal.confirmKind === 'primary' || !modal.confirmKind, 'btn--danger': modal.confirmKind === 'danger', 'btn--outline': modal.confirmKind === 'outline' }"
+              @click="modal.onConfirm && modal.onConfirm()">{{ modal.confirmLabel || '確認' }}</button>
+          </div>
+        </div>
+      </div>
+    </transition>
+
+    <!-- ===== Toast：success / warning / error / info，3 秒自動消失 ===== -->
+    <div class="toast-host">
+      <transition-group name="toast">
+        <div v-for="t in toasts" :key="t.id" class="toast" :class="'toast--' + t.kind">
+          <span class="material-symbols-outlined">{{ toastIcon(t.kind) }}</span>
+          <span>{{ t.msg }}</span>
+        </div>
+      </transition-group>
+    </div>
+  </div>
+
+  <script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
+  <script src="../app.js"></script>
+</body>
+</html>

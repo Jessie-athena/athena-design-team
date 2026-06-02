@@ -22,7 +22,7 @@ allowed-tools: Read Write Edit Glob Grep
 | `profiles/erp-transaction.md` | ERP 作業檔規則（必讀） | `raw.githubusercontent.com/Jessie-athena/athena-design-team/main/skills/prototyper/profiles/erp-transaction.md` |
 | `profiles/erp-setup.md` | 模組類型為設定檔時加載 | `raw.githubusercontent.com/Jessie-athena/athena-design-team/main/skills/prototyper/profiles/erp-setup.md` |
 | `profiles/erp-components/*.md` | ListSearch / DataGrid / FormGroup / FormFooter 4 份元件規格 | `raw.githubusercontent.com/Jessie-athena/athena-design-team/main/skills/prototyper/profiles/erp-components/<name>.md` |
-| `templates/module-page.html` 或 `setup-page.html` | starter template，依模組類型挑一份 | `raw.githubusercontent.com/Jessie-athena/athena-design-team/main/skills/prototyper/templates/module-page.html` |
+| `templates/module-page.html` / `psi-transaction-page.html` / `setup-page.html` | starter template，依模組類型挑一份（財務 / 一般作業檔 → module-page；進銷存作業檔 → psi-transaction-page；設定檔 → setup-page） | `raw.githubusercontent.com/Jessie-athena/athena-design-team/main/skills/prototyper/templates/module-page.html` |
 | `REFERENCE.md` | token / 元件對照 / `app.js` 起手式（按需） | `raw.githubusercontent.com/Jessie-athena/athena-design-team/main/skills/prototyper/REFERENCE.md` |
 
 **抓取 troubleshooting**：
@@ -40,11 +40,13 @@ allowed-tools: Read Write Edit Glob Grep
     - `${CLAUDE_SKILL_DIR}/profiles/erp-components/ListSearch.md`（toolbar / search bar / RWD 收合）
     - `${CLAUDE_SKILL_DIR}/profiles/erp-components/DataGrid.md`（欄寬鎖 / sticky cell / 互動狀態）
     - `${CLAUDE_SKILL_DIR}/profiles/erp-components/FormGroup.md`（form-grid 4 欄 / 跨欄 modifier / RWD）
-    - `${CLAUDE_SKILL_DIR}/profiles/erp-components/FormFooter.md`（記錄分頁器 / 主 CTA / 更多操作 / dirty-guard）
+    - `${CLAUDE_SKILL_DIR}/profiles/erp-components/FormFooter.md`（記錄分頁器 / 主 CTA / 狀態-按鈕矩陣 / dirty-guard）
+  - **作業檔 Form View 另依需求載入**：`${CLAUDE_SKILL_DIR}/profiles/erp-components/SummaryCard.md`（單指標 + 4 步動態 stepper；進銷存擴充狀態機用）
 - **反覆審查問題**：`${CLAUDE_SKILL_DIR}/pitfalls.md`（每次製作前掃一眼）
 - **詳細展開（工作流明細 / 權重規則明細 / 決策題 / 完整 Examples / token / 元件對照 / `app.js` 起手式）**：`${CLAUDE_SKILL_DIR}/REFERENCE.md`
 - **Starter templates**：
-  - 作業檔（含狀態流程）：`${CLAUDE_SKILL_DIR}/templates/module-page.html`
+  - 財務 / 一般作業檔（含狀態流程，legacy `.erp-*`）：`${CLAUDE_SKILL_DIR}/templates/module-page.html`
+  - 進銷存作業檔（DS 對齊 `.app-*`；交易明細 / 6 值擴充狀態機 / 單指標 Summary Card）：`${CLAUDE_SKILL_DIR}/templates/psi-transaction-page.html`
   - 設定檔（master data，僅 active true/false）：`${CLAUDE_SKILL_DIR}/templates/setup-page.html`
 
 > **工具白名單**：本 skill frontmatter 的 `allowed-tools` 鎖定只用 `Read` / `Write` / `Edit` / `Glob` / `Grep`。設計用意——prototype 製作只需檔案讀寫與搜尋，**刻意不開放** `Bash` / `WebFetch` / `NotebookEdit` 等，避免製作流程被工具失控擴張。詳見 `README.md §工具白名單`。

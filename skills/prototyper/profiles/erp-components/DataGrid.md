@@ -329,3 +329,45 @@ background       : var(--bg-surface-default)
 | 建議 | 模組欄位 ≤ 5 且分支簡單時，可取代 80% Drawer 開啟 | 保留「更多操作」按鈕，作為複雜分支（如 formula 模式）的進階入口 |
 
 **落地策略**：先行內編輯；當該列觸發複雜分支（如 `compute_price === 'formula'`）時於該列顯示「📋 進階」icon，自動降級回 Drawer，避免欄位過多塞爆列高。
+
+---
+
+## 進銷存明細 DataGrid（交易明細擴充）
+
+> 適用進銷存作業檔（如請購單 / 採購單 / 銷貨單）Form View 內的明細 grid。搭配 `templates/psi-transaction-page.html`。交易明細與設定檔列表 / 上方 §行內編輯 的差異點集中於本節。
+
+### 與前述行內編輯的差異
+
+| 維度 | 前述（設定檔式快速編輯） | 交易明細（本節） |
+|---|---|---|
+| 欄位數 | ≤ 6 才建議 inline；多則走 Drawer | **可超過 6 欄仍維持 inline**（採購 / 銷貨明細天生寬表）；以水平捲動 + 操作欄 sticky-right 處理，**不**降級 Drawer |
+| 載體 | `.grid-wrap` | `.dg-lines > .dg-lines__scroll`（Form View 內，與 List 的 `.dg__scroll` 同理，唯一橫向捲軸） |
+| 新增列入口 | 「＋ 新增規則」文字列 | 表頭右側 `add_circle` icon button（`ico-btn is-add-circle`） |
+
+### Computed / related 欄位（唯讀，不可編）
+
+交易明細常見「選商品 → 自動帶入多欄」與「即時算小計」：
+
+| 欄位 | 規則 | 顯示 |
+|---|---|---|
+| 商品編號 / 商品名稱 | related，選商品後自動帶入 | `dim` 淡化色，readonly |
+| 採購單位 / 上次進價 / 庫存 | 選商品時 onchange 帶入（單位可改、其餘唯讀） | 唯讀欄 `dim` |
+| **預估小計 / 金額** | computed = `數量 × 單價`（即時，隨數量 / 單價變動重算） | readonly，`num` 右對齊；**不**做成可編輯欄 |
+
+- 即時算式：數量或單價變動時 `金額` 立即更新（範本以 `{{ (qty || 0) * (price || 0) }}` 行內示意；production 由 computed 欄落地）
+- 數值欄一律 `class="num"` 右對齊；千分位顯示；空值 `—`
+- 編輯態的數值 input 也加 `.num`（右對齊），與顯示態一致
+
+### 結轉後鎖列（carry-forward lock）
+
+進銷存明細結轉下游單據後，該列不可再改（避免來源與下游不一致）：
+
+- 判斷依據：明細列的下游關聯鍵存在（如 `po_line_id != null`）
+- 視覺：列加 `is-row-locked`；操作欄的 `edit` / `delete` **改為單一 `lock` icon**（`dim`，tooltip「已結轉，不可修改」）
+- 「採購單號」等 related 欄：結轉後回填單號；尚未結轉顯示 `—`（`dim`）
+- 與權限正交：即使有 `canEditLines`，已鎖列仍不可改
+
+### 合計列（tfoot）
+
+- 只 Σ 金額 / 預估小計欄，其餘欄空白；`form.lines.length > 0` 才渲染
+- 該 Σ 同步為 Summary Card 的單指標（詳 `SummaryCard.md` Layout B「預估總金額」）；兩處數字必一致

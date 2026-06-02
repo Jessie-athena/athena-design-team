@@ -40,7 +40,8 @@
 ## 檔案路徑
 
 - **starter template**:
-  - 作業檔 → `templates/module-page.html`（含 Summary Bar / Stepper / Smart Bar / 狀態動作群）
+  - 財務 / 一般作業檔 → `templates/module-page.html`（legacy `.erp-*` 命名；含 Summary Bar 多指標 / Stepper / Smart Bar / 狀態動作群）
+  - **進銷存作業檔** → `templates/psi-transaction-page.html`（DS 對齊 `.app-*` 命名；含單指標 Summary Card + 4 步動態 stepper / 交易明細 DataGrid / 結轉精靈占位 / 狀態-按鈕矩陣 footer；適用 6 值擴充狀態機，詳 §進銷存擴充狀態機）
   - 設定檔 → `templates/setup-page.html`（含設定檔側欄 / 批次刪除 / active chip / 儲存變更 footer）
 - **輸出**: `prototype/project/<模組中文名>.html`
 - **配套資源**: `prototype/app.js`、`prototype/app.css`、`prototype/ds/colors_and_type.css`
@@ -90,9 +91,16 @@ prototype 的 `prototype/ds/colors_and_type.css` 與 `prototype/app.css` 已預�
 - **左 programID**：格式 `<MODULE>-<CODE>`（如 `PSI-SO`、`AC-AP`、`HR-EMP`）；由對應 Odoo model 衍生
 - **右版號**：格式 `vX.Y.Z.A.B`（如 `v1.0.0.0.0`）
 
-### Class prefix
+### Class prefix（雙軌）
 
-沿用 `.erp-*` 前綴（legacy），與既有 template 一致；不改為 `.app-*`。
+依範本決定，**不可混用**：
+
+| 範本 | class 命名 | 說明 |
+|---|---|---|
+| `module-page.html`（財務 / 一般作業檔）、`setup-page.html`（設定檔） | `.erp-*`（legacy） | `.erp-header` / `.erp-body` / `.erp-main` / `.erp-footer`；保留不動，與既有 prototype 一致 |
+| `psi-transaction-page.html`（進銷存作業檔，及後續新範本） | `.app-*`（DS 對齊） | `.app-shell` / `.app-header` / `.app-body` / `.main-panel` / `.main-panel__content` / `.program-info-bar` / `.nav-rail__top·__under·__system`；與 `Shared.md §頁面框架` 實際 scaffold 一致 |
+
+> legacy `.erp-*` 命名是歷史包袱，與實際出貨設計已脫鉤；新範本一律採 DS 對齊的 `.app-*`。**既有財務 / 設定檔範本暫不回頭重命名**（風險高、效益低），但新模組請走 `.app-*`。
 
 ### Home icon 額外規範
 
@@ -113,6 +121,8 @@ prototype 頁面層級**不可**出現第二條捲軸。reviewer 反覆遇到的
 | `.erp-body`（nav-rail + main 的容器） | `flex: 1 1 auto; min-height: 0; overflow: hidden`（`min-height: 0` 是 flex child 允許縮小的必備） |
 | `.erp-main`（list-view / form-view 的容器） | `flex: 1 1 auto; min-height: 0; overflow: hidden; display: flex; flex-direction: column` |
 | `.list-view` / `.form-view` | `flex: 1 1 auto; min-height: 0; display: flex; flex-direction: column`；**禁**直接加 `overflow-y: auto` |
+
+> **`.app-*` 命名對應（進銷存範本）**：上表用 legacy `.erp-*`；採 `.app-*` 命名的 `psi-transaction-page.html` 套**同一套鎖高規則**，對應為 `.app-shell`（= `.shell`）/ `.app-body`（= `.erp-body`）/ `.main-panel`（= `.erp-main`）。唯一捲軸來源對應 `.dg__scroll`（= `.grid-wrap`，List 表身 X/Y）與 `.form-view__body`（Form 內容）。
 
 ### 唯一允許的捲軸來源
 
@@ -146,6 +156,32 @@ prototype 頁面層級**不可**出現第二條捲軸。reviewer 反覆遇到的
 
 - **IMPORTANT:**「已產生傳票」**不是獨立狀態**，由 `move_id` 是否存在判斷，顯示為 `chip--success`
 - 偏離此命名（如多個審核層級、加 `cancelled`）**須在 chat handoff 註明理由**
+
+### 進銷存擴充狀態機（documented variant）
+
+> 進銷存採購 / 銷貨等作業檔常需在「已核准」之後依**結轉進度**分流，canonical 4 值不足。下列為**已記錄變體**（documented deviation）——採用本變體即視為已滿足上方「偏離須註明理由」規則；chat handoff 仍須點名「採進銷存擴充狀態機」。搭配 `psi-transaction-page.html` 範本與 `SummaryCard.md` 的 4 步動態 stepper。
+
+**六值狀態（三終態 / 進行中擇一顯示）**
+
+| State | label | 流向 | 配色語意 |
+|---|---|---|---|
+| `draft` | 草稿 | → `submitted`（`action_submit`，取號）；可 `unlink`（僅草稿物理刪除） | — |
+| `submitted` | 已提交 | → `approved`（`action_approve`）/ 退回 `draft`（`action_reject`，二次確認） | — |
+| `approved` | 已核准 | → `submitted`（`action_unapprove`，二次確認；已部分結轉則阻擋）/ → `cancelled`（`action_cancel`）/ 結轉（`action_convert_po`） | — |
+| `partial` | 部分採購 | 進行中；可續結轉（`action_convert_po`）至 `done` / → `cancelled`（`action_cancel`）；**不可** `action_unapprove` | 第 ④ 步靛色 |
+| `done` | 已結案 | 終態（全部明細已結轉） | 第 ④ 步灰色 |
+| `cancelled` | 已取消 | 終態（已結轉的下游單據不受影響，由下游各自管理） | 整條 stepper 換紅色 pill |
+
+**動作命名**：`action_submit / action_approve / action_unapprove / action_reject（退回，已提交→草稿）/ action_cancel（作廢，已核准 / 部分採購→已取消）/ action_convert_po（結轉下游單據）`
+
+- **以 `action_cancel` 取代專案標準 `action_void`**：採購語境下「取消」較「作廢」精準（仍允許先前結轉的下游單據保留），這是與 canonical 的刻意偏離。
+- **結轉（convert）** 後依結果自動更新狀態：仍有未結轉明細 → `partial`；全部已結轉 → `done`。已結轉明細（`po_line_id != null`）不重複結轉、且該明細列鎖定（詳 `DataGrid.md §進銷存明細 DataGrid`）。
+- **再次核准警示**：`action_unapprove` 會設 `was_cancelled = true`；回到 `submitted` 時於 Summary Card 下方顯示 `form-banner.is-warning`「此單曾被取消核准，請重新確認明細後再次提交」，再次核准成功後自動消失。
+
+**Summary / Stepper / Footer 對應**：
+
+- Summary Card 用 **Layout B 單指標 + 4 步動態 stepper**（詳 `SummaryCard.md`）；第 ④ 步為 partial / done / placeholder 三選一，`cancelled` 改顯示紅色 pill。
+- Footer 用 **6 值狀態-按鈕矩陣**（詳 `FormFooter.md §進銷存作業檔狀態-按鈕矩陣`）。
 
 ---
 
@@ -487,14 +523,15 @@ App Shell 與多公司情境下的「公司別」過濾 dropdown **預設為空�
 
 ## 模組元件規格索引
 
-下列元件規格已獨立成檔，避免單檔過長造成漏讀。**載入 ERP profile 時這 4 份會一併自動載入**（由 `SKILL.md §支援檔案` 規定）；本表作為「快速跳轉」索引用途。
+下列元件規格已獨立成檔，避免單檔過長造成漏讀。**載入 ERP profile 時前 4 份會一併自動載入**（由 `SKILL.md §支援檔案` 規定）；`SummaryCard.md` 於作業檔 Form View 依需求載入。本表作為「快速跳轉」索引用途。
 
 | 元件 | 規格檔 |
 |---|---|
 | List 搜尋區（toolbar / search bar / RWD） | `profiles/erp-components/ListSearch.md` |
-| DataGrid（含行內編輯互動） | `profiles/erp-components/DataGrid.md` |
+| DataGrid（含行內編輯互動 / 進銷存明細擴充） | `profiles/erp-components/DataGrid.md` |
 | Form Group / form-grid RWD | `profiles/erp-components/FormGroup.md` |
-| Form Footer（記錄分頁器 / 主 CTA / 更多操作） | `profiles/erp-components/FormFooter.md` |
+| Form Footer（記錄分頁器 / 主 CTA / 狀態-按鈕矩陣） | `profiles/erp-components/FormFooter.md` |
+| Summary Card（單指標 + 4 步動態 stepper；作業檔 Form View） | `profiles/erp-components/SummaryCard.md` |
 
 > 撰寫 chat handoff 時若 prototype 命中其中任一元件，請在「對齊方向」段附上對應子檔路徑，方便 reviewer 直接跳到規格。
 
@@ -522,6 +559,8 @@ App Shell 與多公司情境下的「公司別」過濾 dropdown **預設為空�
 - [ ] Tab block: 表頭右側固定 add 按鈕（按鈕**無 add icon**，詳 §按鈕 icon 政策）；行內編輯模式有 save / cancel
 - [ ] Footer 三段: 上下筆 / 動作群（按鈕**分層級配色 + 無 icon**） / 「更多操作」下拉（**詳 `profiles/erp-components/FormFooter.md`**）
 - [ ] `form.moveId` 存在時顯示「已產生傳票」chip（**禁**當成獨立狀態加進 stepper）
+
+> **進銷存作業檔變體**：採 `psi-transaction-page.html` 時，上列「Summary bar 上下兩塊多指標」「Smart Bar」改為——單指標 Summary Card + 4 步動態 stepper（`SummaryCard.md`）、**無 Smart Bar**（進銷存關聯單純）、Footer 狀態-按鈕矩陣（`FormFooter.md`）、明細用交易明細 DataGrid（`DataGrid.md §進銷存明細 DataGrid`）。
 
 ---
 
@@ -613,13 +652,14 @@ App Shell 與多公司情境下的「公司別」過濾 dropdown **預設為空�
 
 通用清單通過後再逐項打勾:
 
-- [ ] App Shell 結構符合 `Shared.md §頁面框架`（56px header / 72px nav-rail / 28px info bar）；class 沿用 `.erp-*`
+- [ ] App Shell 結構符合 `Shared.md §頁面框架`（56px header / 72px nav-rail / 28px info bar）；class 命名依範本（財務 / 設定檔 `.erp-*`；進銷存 `.app-*`，詳 §App Shell → Class prefix）
 - [ ] breadcrumb 三層正確（模組分類 > 功能名 > 單號；分隔符 `>`）
 - [ ] nav-rail 高亮對應模組分類
 - [ ] programID 與版號格式正確（`vX.Y.Z.A.B`）
 - [ ] State machine 4 種狀態（含 voided）能在 Form View 正確呈現
 - [ ] 「已產生傳票」用 chip，**不在** stepper 內
 - [ ] Stepper 三狀態結構（`--active` / `--done` / pending + `.stepper__bar`）正確、矩陣對應 4 種 form.status
+- [ ] **（進銷存擴充狀態機時）** 6 值狀態正確（draft/submitted/approved/partial/done/cancelled）；Summary Card 用單指標 + 4 步動態 stepper（第 ④ 步 partial 靛 / done 灰 / placeholder；cancelled 換 pill，詳 `SummaryCard.md`）；Footer 用 6 值狀態-按鈕矩陣（詳 `FormFooter.md §進銷存作業檔狀態-按鈕矩陣`）；chat handoff 已點名「採進銷存擴充狀態機」
 - [ ] Smart Bar 在無關聯時整段不渲染；有關聯時用 `card-btn` 結構（無 link icon、count + 單位 + 標題 + `arrow_outward`）
 - [ ] Summary bar `sticky` + 上下兩塊 + 無 shadow
 - [ ] 所有 input 預設 Filled、read-only 用 `readonly` 屬性（**非** disabled）
