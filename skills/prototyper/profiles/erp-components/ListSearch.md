@@ -19,24 +19,23 @@
 └─ .search-bar__actions           (右：操作區，flex-shrink: 0 永不被擠壓)
    ├─ .btn-icon.is-primary        (搜尋 🔍 — 主色填底)
    ├─ .btn-icon.is-outline        (清除 🗑 — 主色描邊)
-   └─ .btn-icon.is-outline        (收合 / 展開 ▲▼ — 條件顯示)
+   └─ .btn-icon.is-outline        (收合 ▲ / 展開 ▼ — 條件顯示)
 ```
 
 ## Token 與尺寸
 
 | 項目 | 值 |
 |---|---|
-| 卡片背景 | `var(--bg-surface-default)` |
+| 卡片背景 | `#FFFFFF` |
 | 卡片邊框 | `1px solid var(--border-default)` |
-| 卡片圓角 | `var(--radius-lg)` |
+| 卡片圓角 | `8px`（`--radius-lg`） |
 | 卡片內距（展開） | `16px` 四邊 |
 | 卡片內距（收合） | `12px 16px` |
 | 欄位區與操作區水平 gap | `16px` |
 | 欄位之間 gap（展開） | `12px 16px`（垂直 12 / 水平 16） |
 | 欄位之間 gap（收合） | `8px` |
 | 欄位 min-width | **150px** |
-| 欄位高度（展開，含 label） | `62px`（label 18 + gap 4 + input 40） |
-| 欄位高度（收合，僅 input） | `40px` |
+| 欄位高度（展開＋收合，皆含 label） | `62px`（label 18 + gap 4 + input 40） |
 | input / select 高度 | `40px` |
 | 操作按鈕尺寸 | `40 × 40px` |
 | 操作按鈕之間 gap | `8px` |
@@ -59,9 +58,9 @@
 | **XL ≥ 1440** | 單列 5 欄 | `flex: 1 1 180px` | 不收合 |
 | **L 1280–1439** | 單列 5 欄 | `flex: 1 1 160px` | 不收合 |
 | **M 1024–1279** | 2 列換行（3+2 或 4+1） | `flex: 1 1 200px` | 偵測到換行 → 顯示「收合」按鈕 |
-| **S 768–1023** | **預設收合**，依寬度動態顯示 N 個欄位（至少 1 個） | 固定 `150px` | 預設 `.is-collapsed = true`；點「展開」可顯示全部 |
+| **S 768–1023** | 預設收合，依寬度動態顯示 N 個欄位（至少 1 個） | 固定 `150px` | 進入頁面 `searchCollapsed = true`；點「展開」可顯示全部 |
 
-> S 斷點下進入頁面時 **預設 `searchCollapsed = true`**，避免擠壓主要表格區域。
+> **跨斷點切換規則**：S → M/L/XL 自動展開；M/L/XL → S **不**自動收合（保留使用者目前已展開的狀態，欄位以自然換行呈現）。只有首次進入 S 才會預設收合。
 
 ## RWD 換行觸發條件
 
@@ -69,7 +68,7 @@
 
 1. **欄位數量 > 5**（預設 5 個 filter；新增第 6 個會直接掉到下一行）
 2. **外層容器寬度不足**：依當前斷點的 flex-basis 計算容納寬度；容器寬度低於該臨界值 → 最右側欄位優先換行
-3. **S 斷點預設收合**：進入頁面時直接套 `.is-collapsed`，跳過「先展開再收合」的中間狀態
+3. **S 斷點首次進入**：直接套 `.is-collapsed`，跳過「先展開再收合」的中間狀態
 
 ## 換行偵測（JS）
 
@@ -93,18 +92,18 @@
 
 - `.search-bar` 加上 `.is-collapsed`；卡片內距改 `12px 16px`
 - `.search-bar__fields` → `flex-wrap: nowrap; overflow: hidden`（強制單行）
-- 欄位 → `flex: 0 0 150px; height: 40px`；**label 隱藏**（`display: none`），只顯示 input
+- 欄位 → `flex: 0 0 150px`；**label 保留顯示**（與展開狀態一致，方便辨識）
 - 容納邏輯（即時計算）：
 
   ```
-  available = barInnerWidth - actionsWidth - fieldsPaddingRight
-  visibleCount = floor((available + gap) / (fieldWidth + gap))
+  available    = barInnerWidth - actionsWidth - outerGap(16)
+  visibleCount = floor((available + innerGap(8)) / (fieldWidth(150) + innerGap(8)))
   ```
 
 - 第 N 個欄位 `v-show="!searchCollapsed || collapsedVisibleCount > N-1"`
 - **容納不下的欄位完全隱藏**（`display: none`，**不切半、不模糊邊緣**）
 - 容器寬度變化時 `ResizeObserver` 即時重算
-- 操作區 → `align-self: center`（垂直置中）
+- 操作區 → `align-self: flex-end`（底部對齊輸入框）
 
 ## 收合按鈕 icon / title / aria-label 切換
 
@@ -128,9 +127,9 @@
 │ [公司別 ]   [狀態 ]                                  🔍 🗑 ▲    │
 └──────────────────────────────────────────────────────────────────┘
 
-[C] 收合 → 單行；左側保留容納得下的欄位（無 label），右側 3 顆按鈕
+[C] 收合 → 單行；左側保留容納得下的欄位（含 label），右側 3 顆按鈕
 ┌──────────────────────────────────────────────────────────────────┐
-│ [TP01]   [輸入名稱關鍵字]  [全部 ▾]              🔍 🗑 ▼        │
+│ [代碼  ▾] [名稱   ▾] [地點  ▾]                  🔍 🗑 ▼        │
 └──────────────────────────────────────────────────────────────────┘
 ```
 
@@ -138,21 +137,24 @@
 
 | 互動 | 行為 |
 |---|---|
-| 任一輸入框按 `Enter` | 觸發搜尋（`onSearch`） |
+| 任一輸入框按 `Enter` | 觸發搜尋（`applyFilters`） |
 | 點 🔍 搜尋 | 套用所有 filter，頁碼重設為 1 |
 | 點 🗑 清除 | 清空所有 filter 並重新查詢 |
 | 點 ▲ 收合 | `searchCollapsed = true`，卡片變單行 |
 | 點 ▼ 展開 | `searchCollapsed = false`，恢復多行展開 |
 | 視窗 resize | ResizeObserver 自動重算 `searchWrapped` 與 `collapsedVisibleCount` |
+| 跨斷點 S → M/L/XL | 自動展開（`searchCollapsed = false`） |
+| 跨斷點 M/L/XL → S | **不**自動收合，保留目前狀態 |
 
 ## 設計原則（給 reviewer 引用）
 
 1. **左欄位、右操作** 的二段式版面，操作區永不被擠壓、永不換行
 2. **欄位最小寬 150px**，是 RWD 換行的唯一觸發條件
 3. **操作按鈕數量隨狀態自動調整**（2 ↔ 3），收合按鈕僅在需要時出現
-4. **收合不是「完全隱藏」**，而是把可容納的欄位保留在原處（單行、無 label），常用 filter 仍可立即使用
+4. **收合不是「完全隱藏」**，而是把可容納的欄位保留在原處（單行、保留 label），常用 filter 仍可立即使用
 5. **不顯示半個欄位** — 容納不下就完全隱藏，避免視覺破碎
 6. 所有換行 / 容納計算均**即時動態，依容器寬度**，不依視窗寬度（適用側邊欄收合、嵌入面板等場景）
+7. **不會中途自動收合** — 一旦使用者處於展開狀態，縮窄容器只會讓欄位換行，不會強迫收合
 
 ---
 
