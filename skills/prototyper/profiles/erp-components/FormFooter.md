@@ -158,6 +158,25 @@
 | Viewer / 唯讀 | — | — | — | ✅ | ✅ |
 | 送出中 | disabled | disabled | spinner | — | disabled |
 
+## 進銷存作業檔狀態-按鈕矩陣
+
+> 適用採進銷存擴充狀態機（6 值）的作業檔（詳 `erp-transaction.md §進銷存擴充狀態機`）。右區 `__actions` 依 `form.state` 顯示對應按鈕群；沿用本檔結構 / RWD / A11y，僅按鈕內容不同。`convert`（結轉）/ `reject`（退回）/ `cancel`（作廢）為進銷存動作。
+
+| `form.state` | 右區按鈕（由左至右：條件按鈕 → 主 CTA） | 備註 |
+|---|---|---|
+| `draft` | `刪除`（outline-danger，`!isNew` 才顯示）/ `儲存草稿`（outline-primary）/ `提交`（primary） | 刪除 = 物理刪除（草稿限定） |
+| `submitted` | `退回`（outline-danger，限主管）/ `儲存變更`（outline-primary）/ `核准`（primary，限主管） | 退回 → 草稿（二次確認） |
+| `approved` | `取消核准`（outline-danger，限主管）/ `作廢`（outline-danger，限主管）/ `結轉採購單`（primary） | 已部分結轉則不顯示「取消核准」 |
+| `partial` | `作廢`（outline-danger，限主管）/ `結轉採購單`（primary） | **不顯示**「取消核准」 |
+| `done` | `作廢`（disabled，tooltip 提示改至下游單據作廢） | 終態 |
+| `cancelled` | 無動作按鈕 | 終態 |
+| 唯讀角色（`isReadOnly`） | 只剩 `👁 唯讀檢視` tag，移除所有動作按鈕 | `__nav` 仍可瀏覽切筆 |
+
+- **動詞 CTA 一律無 icon**（提交 / 核准 / 退回 / 作廢 / 結轉採購單 / 儲存草稿 / 儲存變更），對齊 `erp-transaction.md §按鈕 icon 政策`
+- **任一明細列編輯中**（`hasEditingRow`）：`儲存草稿` / `儲存變更` / `提交` / `核准` 等寫入類 CTA `:disabled`，避免半完成的列被帶入
+- **結轉 / 退回 / 取消核准 / 作廢** 皆走 `confirm` modal 或精靈（詳 `erp-transaction.md §進銷存擴充狀態機` 與範本的 modal 占位）
+- 本變體**無獨立「更多操作 ▾」下拉**（按鈕數有限）；若日後需「複製 / 列印」再依 §4 下拉規則加入
+
 ## A11y
 
 - Container `<footer>` 使用語意標籤；**不需** `role="contentinfo"`（已是 footer 元素）
