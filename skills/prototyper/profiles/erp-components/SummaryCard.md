@@ -67,7 +67,7 @@
 | 當前狀態 | 第 ④ 步顯示 | class modifier | 配色 | 性質 |
 |---|---|---|---|---|
 | `partial`（部分採購） | 部分採購 | `stepper__step--partial` | **靛色**填充 | 進行中（當前步） |
-| `done`（已結案） | 已結案 | `stepper__step--done` | **灰色**填充 | 終態（與「已通過綠底」做區隔，表示流程正常結束、無後續） |
+| `done`（已結案） | 已結案 | `stepper__step--final` | **灰色**填充 | 終態（**刻意不用 `--done`**——`--done` 是步驟 1–3 的「已通過綠底」；已結案是終態灰，須用獨立 modifier 與綠底區隔） |
 | `draft` / `submitted` / `approved`（前三步階段） | 「待結轉」或「—」 | `stepper__step--placeholder` | 圓底**淺灰** placeholder | 尚未定 |
 
 > `cancelled`（已取消）**不進 stepper**：整條 stepper 改顯示 `.voided-banner` 內一顆 `st-chip st-chip--cancelled`「已取消」pill（紅色），與財務 `voided → .pill-voided` 同理。
@@ -80,7 +80,7 @@
 | `submitted` | done ✓ | done | active | active | pending | pending | placeholder |
 | `approved` | done ✓ | done | done ✓ | done | active | active | placeholder |
 | `partial` | done ✓ | done | done ✓ | done | done ✓ | done | **partial（靛，當前）** |
-| `done` | done ✓ | done | done ✓ | done | done ✓ | done | **done（灰，終態）** |
+| `done` | done ✓ | done | done ✓ | done | done ✓ | done | **final（灰，終態；class `--final` 非 `--done`）** |
 | `cancelled` | ⛔ 整個 stepper 隱藏，改顯示 `.voided-banner` →「已取消」pill | — | — | — | — | — | — |
 
 > `was_cancelled = true` 且回到 `submitted` 時：stepper 維持四步（當前 active 落在第 ②），第 ④ 步仍 placeholder；另於 Summary Card 下方插入「再次核准警示」`form-banner.is-warning`（詳 `erp-transaction.md §進銷存擴充狀態機`）。
@@ -94,7 +94,7 @@
 | `stepState(n)` | `'done'` / `'active'` / `'pending'` | 第 n 步（1–3）的三狀態；對照上表 |
 | `stepClass(n)` | step modifier class | 由 `stepState(n)` 映射（pending 無 modifier） |
 | `lineClass(n)` | bar modifier class | 連接線狀態 = 左側 step 狀態（done / active / 無） |
-| `step4Class` | `stepper__step--partial` / `--done` / `--placeholder` | 第 ④ 步插槽 class，依 `form.state` |
+| `step4Class` | `stepper__step--partial` / `--final` / `--placeholder` | 第 ④ 步插槽 class，依 `form.state`（已結案用 `--final` 灰，**非** `--done` 綠） |
 | `step4Label` | `'部分採購'` / `'已結案'` / `'待結轉'` | 第 ④ 步文字 |
 | `isCancelled` | boolean | `form.state === 'cancelled'`，true 時整條 stepper 換 pill |
 
@@ -104,7 +104,7 @@
 .stepper { display: flex; align-items: flex-start; gap: 16px; }
 ```
 
-> 圓圈 `.stepper__num`（32×32, radius 100px）、連接線 `.stepper__bar`（width 40 / border-top 2px）的 pending / active / done 三狀態 token，沿用 `erp-transaction.md §Stepper 三狀態結構`。`--partial` 用靛色（`stepper__step--partial`）、`--placeholder` 用淺灰；兩者為本檔擴充，配色對齊 DS 對應語意色。
+> 圓圈 `.stepper__num`（32×32, radius 100px）、連接線 `.stepper__bar`（width 40 / border-top 2px）的 pending / active / done 三狀態 token，沿用 `erp-transaction.md §Stepper 三狀態結構`。本檔擴充三個第 ④ 步專用 modifier（皆非 canonical）：`--partial` 靛色（進行中）、`--final` 灰色（已結案終態，**與 `--done` 綠底區隔**）、`--placeholder` 淺灰（待定）；配色對齊 DS 對應語意色。
 
 ---
 
@@ -112,6 +112,6 @@
 
 - [ ] Summary Card `sticky` 置頂、無 shadow
 - [ ] Layout B：左單指標（放大 / 加粗 / 主色）+ 右 stepper
-- [ ] 4 步 stepper 前 3 步固定、第 ④ 步依 `form.state` 三選一（partial 靛 / done 灰 / placeholder 淺灰）
+- [ ] 4 步 stepper 前 3 步固定、第 ④ 步依 `form.state` 三選一（partial 靛 `--partial` / 已結案灰 `--final` / placeholder 淺灰 `--placeholder`）；已結案**不**用 `--done`（避免與步驟綠底混淆）
 - [ ] `cancelled` 時整條 stepper 換「已取消」pill，**不**塞進第 ④ 步當綠底
 - [ ] `was_cancelled && submitted` 時下方出現再次核准警示 banner
