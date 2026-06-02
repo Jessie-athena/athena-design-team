@@ -68,7 +68,7 @@ prototype 的 `prototype/ds/colors_and_type.css` 與 `prototype/app.css` 已預�
 
 ### Breadcrumb 層級
 
-三層固定順序：**模組分類** > **功能名稱** > **單號**（分隔符 `>`，**不**用 `/`）
+三層固定順序：**模組分類** > **功能名稱** > **單號**（分隔符用 iconify `material-symbols:chevron-right` icon，**不**用 `/`、**也不**用 `>` 文字字元；見 `Shared.md §Breadcrumb`）
 
 - 例：「進銷存 / 銷售訂單 / SO_2026_000123」
 - 新單時單號顯示 `—`（dash）
@@ -655,7 +655,7 @@ App Shell 與多公司情境下的「公司別」過濾 dropdown **預設為空�
 通用清單通過後再逐項打勾:
 
 - [ ] App Shell 結構符合 `Shared.md §頁面框架`（56px header / 72px nav-rail / 28px info bar）；class 命名依範本（財務 / 設定檔 `.erp-*`；進銷存 `.app-*`，詳 §App Shell → Class prefix）
-- [ ] breadcrumb 三層正確（模組分類 > 功能名 > 單號；分隔符 `>`）
+- [ ] breadcrumb 三層正確（模組分類 > 功能名 > 單號；分隔符用 iconify `material-symbols:chevron-right` icon，非 `>` / `/` 文字）
 - [ ] nav-rail 高亮對應模組分類
 - [ ] programID 與版號格式正確（`vX.Y.Z.A.B`）
 - [ ] State machine 4 種狀態（含 voided）能在 Form View 正確呈現

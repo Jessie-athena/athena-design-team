@@ -62,9 +62,9 @@
       </button>
       <nav class="erp-breadcrumb" aria-label="breadcrumb">
         <span>{{ breadcrumb.module }}</span>
-        <span class="erp-breadcrumb__sep">&gt;</span>
+        <iconify-icon class="erp-breadcrumb__sep" icon="material-symbols:chevron-right"></iconify-icon>
         <span>{{ breadcrumb.feature }}</span>
-        <span v-if="breadcrumb.record" class="erp-breadcrumb__sep">&gt;</span>
+        <iconify-icon v-if="breadcrumb.record" class="erp-breadcrumb__sep" icon="material-symbols:chevron-right"></iconify-icon>
         <span v-if="breadcrumb.record">{{ breadcrumb.record }}</span>
       </nav>
       <div class="erp-header__actions">

@@ -98,7 +98,8 @@ Header (1920×56, padding 8, gap 16)
 - 結構：`item / sep / item / sep / current`
 - 最後一層為 `.erp-breadcrumb__current`（**不可點**、weight 500、cursor default）
 - 前面層級 `.erp-breadcrumb__item`（可點、weight 400、hover 加 `rgba(15, 23, 42, 0.04)` 底色）
-- 分隔符：`>`、18px、灰色（**禁**用 `/`——`/` 是路徑語意，`>` 才是層級語意）
+- 分隔符：iconify `material-symbols:chevron-right`（`<iconify-icon class="erp-breadcrumb__sep" icon="material-symbols:chevron-right">`）、18px、灰色。chevron 形狀即「層級」語意；**禁**用 `/`（`/` 是路徑語意），**亦不要用 `>` 字元**——統一用 chevron-right icon。chevron-right 屬筆畫型，無 `-outline` 變體（見 `SKILL.md §4 icon 條`）
+  - **尺寸/顏色靠 `app.css` 既有 `.erp-breadcrumb__sep`**：`<iconify-icon>` 無內建尺寸，靠 CSS `font-size`（繼承到 icon）+ `color`（`currentColor`）決定。`.erp-breadcrumb__sep` 須有 `font-size: 18px` 與灰色 `color`，否則 icon 會以預設 1em / 繼承色渲染、尺寸跑掉。從文字 `>` 遷移到 icon 時若沒人改 app.css，**這是最容易被忽略的破點**（psi template 的 `.app-*` 家族對應 class 為 `.breadcrumb__sep`，規則同理）
 - **Favorite icon 緊接 current 之後**（**不在右側 actions**）；`.erp-breadcrumb__fav`、40×40
 
 > 麵包屑**層數與各層語意**由專案 profile 定義（如 ERP：模組分類 > 功能名稱 > 單號 三層）。

@@ -91,11 +91,11 @@
   - 詳 `erp-transaction.md §輸入欄樣式 → Filled 詳細視覺規格`
 - **為什麼會反覆犯**：(1) 訓練資料中 Bootstrap / Tailwind / Tailwind UI 預設 input 都是 outlined 白底 + 完整 1px 邊，AI 直覺套上；(2)「Filled」一詞在 web 通用語境意義不明（Material Filled vs 一般「filled in」），AI 沒區分；(3) Focus 加 ring（Tailwind 慣例）vs Material Filled 用 underline 變化的差異容易混淆。
 
-### [2026-05-20] Breadcrumb 分隔符用 `/` 而非 `>`
+### [2026-05-20] Breadcrumb 分隔符用 `/` 或 `>` 字元，而非 chevron-right icon
 
-- **症狀**：生出來的 breadcrumb 寫成 `<span>模組分類</span><span class="erp-breadcrumb__sep">/</span><span>功能名稱</span>...`；或 PRODUCE 風格的描述文字寫「模組分類 / 功能名稱 / 單號」。
-- **正確做法**：分隔符一律 `>`（HTML 中寫 `&gt;`）。`>` 才是「層級」語意；`/` 是「路徑」語意（URL / 檔案系統），不該用在 navigation breadcrumb。`profiles/Shared.md §Breadcrumb` 是視覺 SoT；`profiles/erp-transaction.md` 描述層級結構與 Handoff Checklist 也須一致；template `module-page.html` / `setup-page.html` 已預設成 `&gt;`，**不要改回 `/`**。
-- **為什麼會反覆犯**：訓練資料中 web app breadcrumb 兩種寫法都常見（Bootstrap 預設 `/`、Material 預設 `>`），AI 沒被提醒就走路徑直覺；且早期版本 Athena template 一度用 `/`，舊 prototype 看一眼又會被誤導回 `/`。
+- **症狀**：生出來的 breadcrumb 分隔符寫成文字字元 —— `<span class="erp-breadcrumb__sep">/</span>`（路徑風）或 `<span class="erp-breadcrumb__sep">&gt;</span>`（`>` 字元）；或 PRODUCE 風格的描述文字寫「模組分類 / 功能名稱 / 單號」。
+- **正確做法**：分隔符一律用 iconify `material-symbols:chevron-right`（`<iconify-icon class="erp-breadcrumb__sep" icon="material-symbols:chevron-right">`）。chevron-right 的 `>` 形狀即「層級」語意；**禁**用 `/`（路徑語意，URL / 檔案系統用，不該用在 navigation breadcrumb），**也不要用 `>` 純文字字元**——統一走 icon。`profiles/Shared.md §Breadcrumb` 是視覺 SoT；`profiles/erp-transaction.md` 層級結構與 Handoff Checklist 須一致；template `module-page.html` / `setup-page.html` 已預設成 chevron-right icon，**不要改回 `/` 或 `>` 文字**。chevron-right 屬筆畫型，無 `-outline` 變體（見 `SKILL.md §4 icon 條`）。
+- **為什麼會反覆犯**：訓練資料中 web app breadcrumb 文字分隔符（Bootstrap `/`、純 `>`）的範例量遠多於 icon 分隔符，AI 沒被提醒就走文字直覺；且早期版本 Athena template 一度用 `/`、後又改 `>` 文字，舊 prototype 看一眼又會被誤導回文字字元。
 
 ---
 
