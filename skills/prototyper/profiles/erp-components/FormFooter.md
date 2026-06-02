@@ -27,12 +27,12 @@
     <!-- 內容依「作業檔 / 設定檔」差異，順序：條件按鈕 → 更多操作 ▾ → 主 CTA -->
     <button class="btn btn-outline">啟用</button>
     <div class="btn-more">
-      <button class="btn btn-outline btn-more__btn">更多操作 ▾</button>
+      <button class="btn btn-outline btn-more__btn">更多操作 <iconify-icon icon="material-symbols:expand-more"></iconify-icon></button>
       <ul class="btn-more__menu">…</ul>
     </div>
     <button class="btn btn-primary">儲存變更</button>
     <!-- 唯讀狀態改顯示： -->
-    <span class="readonly-tag">👁 唯讀檢視</span>
+    <span class="readonly-tag"><iconify-icon icon="material-symbols:visibility-outline"></iconify-icon> 唯讀檢視</span>
   </div>
 </footer>
 ```

@@ -47,8 +47,9 @@
   <meta name="viewport" content="width=1280">
   <title>模組中文名 — Athena ERP</title>
   <link rel="stylesheet" href="../ds/colors_and_type.css">
-  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Symbols+Outlined">
   <link rel="stylesheet" href="../app.css">
+  <!-- Icon：Iconify web component（只用 material-symbols: 集；線條加 -outline，實心無後綴。見 SKILL.md §4 icon 條） -->
+  <script src="https://code.iconify.design/iconify-icon/2.1.0/iconify-icon.min.js"></script>
 </head>
 <body>
   <div id="app">
@@ -56,7 +57,8 @@
     <!-- ===== App Shell · Header（與 module-page 一致） ===== -->
     <header class="erp-header">
       <button class="erp-header__home" @click="goHome" aria-label="home">
-        <span class="material-symbols-outlined">home</span>
+        <!-- App shell chrome = 實心(無後綴)，見 Shared.md §App shell icon -->
+        <iconify-icon icon="material-symbols:home"></iconify-icon>
       </button>
       <nav class="erp-breadcrumb" aria-label="breadcrumb">
         <span>{{ breadcrumb.module }}</span>
@@ -67,10 +69,10 @@
       </nav>
       <div class="erp-header__actions">
         <button @click="toggleFavorite" :class="{ 'is-favorite': isFavorite }" aria-label="favorite">
-          <span class="material-symbols-outlined">{{ isFavorite ? 'star' : 'star_border' }}</span>
+          <iconify-icon :icon="isFavorite ? 'material-symbols:star' : 'material-symbols:star-outline'"></iconify-icon>
         </button>
-        <button aria-label="notifications"><span class="material-symbols-outlined">notifications</span></button>
-        <button aria-label="settings"><span class="material-symbols-outlined">settings</span></button>
+        <button aria-label="notifications"><iconify-icon icon="material-symbols:notifications"></iconify-icon></button>
+        <button aria-label="settings"><iconify-icon icon="material-symbols:settings"></iconify-icon></button>
         <button class="erp-header__avatar">{{ user.initials }}</button>
       </div>
     </header>
@@ -81,7 +83,8 @@
         <button v-for="item in navItems" :key="item.key"
                 :class="{ 'is-active': item.key === activeNav }"
                 @click="activeNav = item.key">
-          <span class="material-symbols-outlined">{{ item.icon }}</span>
+          <!-- App shell：nav-rail 用實心 glyph(無後綴)。item.icon 存完整 Iconify id，如 'material-symbols:account-balance' -->
+          <iconify-icon :icon="item.icon"></iconify-icon>
           <span class="nav-rail__label">{{ item.label }}</span>
         </button>
       </aside>
@@ -97,7 +100,8 @@
             <li v-for="item in group.items" :key="item.key"
                 :class="{ 'is-active': item.key === activeSettingKey }"
                 @click="openSetting(item.key)">
-              <span class="material-symbols-outlined">{{ item.icon }}</span>
+              <!-- item.icon 存完整 Iconify id -->
+              <iconify-icon :icon="item.icon"></iconify-icon>
               <span>{{ item.label }}</span>
             </li>
           </ul>
@@ -121,12 +125,12 @@
               </template>
               <template v-else>
                 <button class="btn btn--icon btn--danger-outline" @click="onBatchDelete" aria-label="batch delete">
-                  <span class="material-symbols-outlined">delete</span>
+                  <iconify-icon icon="material-symbols:delete-outline"></iconify-icon>
                 </button>
                 <span class="chip chip--selected">
                   已選取 {{ selectedRows.length }} 筆
                   <button class="chip__close" @click="clearSelection" aria-label="clear selection">
-                    <span class="material-symbols-outlined">close</span>
+                    <iconify-icon icon="material-symbols:close"></iconify-icon>
                   </button>
                 </span>
               </template>
@@ -192,10 +196,10 @@
                   </td>
                   <td class="sticky-right col-actions">
                     <button @click="openForm(row.id)" aria-label="edit">
-                      <span class="material-symbols-outlined">edit</span>
+                      <iconify-icon icon="material-symbols:edit-outline"></iconify-icon>
                     </button>
                     <button @click="onDeleteRow(row)" aria-label="delete" :disabled="!canDelete">
-                      <span class="material-symbols-outlined">delete</span>
+                      <iconify-icon icon="material-symbols:delete-outline"></iconify-icon>
                     </button>
                   </td>
                 </tr>
@@ -205,7 +209,7 @@
 
           <!-- Empty state：inbox icon + 主訊息 + 副說明 -->
           <div v-else class="empty-state">
-            <span class="material-symbols-outlined">inbox</span>
+            <iconify-icon icon="material-symbols:inbox-outline"></iconify-icon>
             <p class="empty-state__title">無符合條件的{{ entityLabel }}</p>
             <p class="empty-state__hint">請調整搜尋條件或 <a class="link" @click="onResetFilters">清除篩選</a></p>
           </div>
@@ -214,17 +218,17 @@
           <div v-if="rows.length > 0" class="pager">
             <div class="pager__left">
               <button @click="page = 1" :disabled="page <= 1" aria-label="first">
-                <span class="material-symbols-outlined">first_page</span>
+                <iconify-icon icon="material-symbols:first-page"></iconify-icon>
               </button>
               <button @click="prevPage" :disabled="page <= 1" aria-label="prev">
-                <span class="material-symbols-outlined">chevron_left</span>
+                <iconify-icon icon="material-symbols:chevron-left"></iconify-icon>
               </button>
               <span class="pager__page">{{ page }}</span>
               <button @click="nextPage" :disabled="page >= totalPages" aria-label="next">
-                <span class="material-symbols-outlined">chevron_right</span>
+                <iconify-icon icon="material-symbols:chevron-right"></iconify-icon>
               </button>
               <button @click="page = totalPages" :disabled="page >= totalPages" aria-label="last">
-                <span class="material-symbols-outlined">last_page</span>
+                <iconify-icon icon="material-symbols:last-page"></iconify-icon>
               </button>
               <select v-model.number="pageSize">
                 <option :value="20">20</option>
@@ -264,7 +268,8 @@
             無多狀態的設定檔（如純 active toggle 無 readonly 視角）可整段省略
           -->
           <div v-if="stateBanner" :class="['state-banner', 'state-banner--' + stateBanner.variant]">
-            <span class="material-symbols-outlined">{{ stateBanner.icon }}</span>
+            <!-- stateBanner.icon 存完整 Iconify id，如 'material-symbols:info-outline' -->
+            <iconify-icon :icon="stateBanner.icon"></iconify-icon>
             <span>{{ stateBanner.message }}</span>
           </div>
 
@@ -359,18 +364,18 @@
           <footer class="form-footer form-footer--setup">
             <div class="form-footer__nav">
               <button @click="prevRecord" :disabled="isNew || recordIndex <= 1" aria-label="prev">
-                <span class="material-symbols-outlined">chevron_left</span>
+                <iconify-icon icon="material-symbols:chevron-left"></iconify-icon>
               </button>
               <span class="form-footer__pos">{{ isNew ? '— / —' : `${recordIndex} / ${recordTotal}` }}</span>
               <button @click="nextRecord" :disabled="isNew || recordIndex >= recordTotal" aria-label="next">
-                <span class="material-symbols-outlined">chevron_right</span>
+                <iconify-icon icon="material-symbols:chevron-right"></iconify-icon>
               </button>
             </div>
             <div class="form-footer__actions">
               <button class="btn btn--danger-outline" @click="onDeleteForm" :disabled="!canDelete || isNew">刪除</button>
               <div class="dropdown">
                 <button class="btn btn--outline" @click="moreOpen = !moreOpen">
-                  更多操作<span class="material-symbols-outlined">expand_more</span>
+                  更多操作<iconify-icon icon="material-symbols:expand-more"></iconify-icon>
                 </button>
                 <ul v-if="moreOpen" class="dropdown__menu">
                   <li @click="onSaveAndCreate(); moreOpen = false">儲存後新增</li>
@@ -379,7 +384,7 @@
               </div>
               <button v-if="canSave" class="btn btn--primary" @click="onSave">儲存變更</button>
               <span v-else class="readonly-tag">
-                <span class="material-symbols-outlined">visibility</span>唯讀檢視
+                <iconify-icon icon="material-symbols:visibility-outline"></iconify-icon>唯讀檢視
               </span>
             </div>
           </footer>
@@ -411,7 +416,8 @@
     <!-- ===== Toast：success / warning / error / info，3 秒自動消失 ===== -->
     <div class="toast-stack">
       <div v-for="t in toasts" :key="t.id" :class="['toast', 'toast--' + t.kind]">
-        <span class="material-symbols-outlined">{{ toastIcon(t.kind) }}</span>
+        <!-- toastIcon() 回傳完整 Iconify id，如 'material-symbols:check-circle-outline' -->
+        <iconify-icon :icon="toastIcon(t.kind)"></iconify-icon>
         <span>{{ t.message }}</span>
       </div>
     </div>

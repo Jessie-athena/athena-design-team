@@ -126,10 +126,19 @@ allowed-tools: Read Write Edit Glob Grep
 ### 4. 通用硬性限制（每次輸出前自檢，違反即重做）
 
 - **IMPORTANT:** 預設 `<html lang="zh-Hant-TW">`（多語環境由 profile 指定）。**Why**：lang 屬性決定瀏覽器字型回退、斷字規則、螢幕閱讀器發音；錯設 `en` 時中文常被誤套西文字型，行高與標點間距整批跑掉
-- **IMPORTANT:** CSS 載入順序：design tokens CSS → Material Symbols → `app.css`。**Why**：tokens 必須先載入才能被後續 stylesheet 引用；`app.css` 寫應用層覆寫必須最後，否則 token 變數抓不到值、自訂樣式被 DS 預設蓋掉
+- **IMPORTANT:** CSS 載入順序：design tokens CSS → `app.css`；icon 改用 **Iconify web component**，在 `<head>` 以 `<script src="https://code.iconify.design/iconify-icon/2.1.0/iconify-icon.min.js"></script>` 載入（這是 JS web component，不是 CSS，見下方 icon 條），**不再載 Material Symbols 字型**。**Why**：tokens 必須先載入才能被後續 stylesheet 引用；`app.css` 寫應用層覆寫必須最後，否則 token 變數抓不到值、自訂樣式被 DS 預設蓋掉；Iconify script 早於 body 載入，custom element 才能在首次渲染前定義好
 - **IMPORTANT:** Vue 3 production CDN，**禁**引入其他 UI library。**Why**：prototype 用途是「reviewer 點一下開檔即試玩」，多加 library 增加下載 / 環境配置成本；視覺由 DS 已涵蓋，多餘 library 反成視覺噪音與整合阻力
 - **IMPORTANT:** 樣式寫到 `app.css`、互動寫到 `app.js`，**禁**在 `.html` 內嵌 `<style>` / `<script>`（CDN 與引用 `app.js` 的 `<script src>` 例外）。**Why**：prototype 後續會 port 到 production Vue SFC；三檔分離可直接貼進 `<template>` / `<script>` / `<style scoped>`，內嵌會逼下一手先 untangle
-- **IMPORTANT:** Icon variant 依 **Design System** 規定（Athena DS `components.css` / DS README §icon），prototype 不另立規則。**Why**：DS 是 icon 視覺的唯一來源；SKILL / profile / pitfalls 各自下規則會 drift。實作時直接看 DS：font family 用 `material-symbols-outlined` class（DS 指定的字型載入），實心 / 線條由 `font-variation-settings: 'FILL' 0/1` 決定，glyph 名禁用 `_outline` / `_outlined` 字尾（那是舊 Material Icons 慣例，新版 Material Symbols 沒有）
+- **IMPORTANT:** Icon 一律用 **Iconify web component**（`<iconify-icon>`），且**只用 `material-symbols:` 圖示集**——它渲染的就是 DS 指定的 Material Symbols 同一套字形，只是換成 web component 載入，**禁**另引 mdi / lucide / tabler 等其他 icon set。**Why**：DS 仍是「用哪個 glyph、實心還是線條」的唯一來源，Iconify 只是 prototype 的交付機制；限定 `material-symbols:` 前綴才不會讓 prototype 視覺偏離 DS、避免混搭。寫法：
+  - **標記**：`<iconify-icon icon="material-symbols:edit-outline" width="24"></iconify-icon>`；icon-only 按鈕仍需 `aria-label`
+  - **實心 vs 線條是 DS 的決定，不要自己反射選**：對應 DS 的 FILL 1 / 0 —— 實心 = 無後綴（`material-symbols:visibility`）、線條 = 加 `-outline`（`material-symbols:visibility-outline`）。
+    - **Athena DS 硬規則:App shell chrome 一律實心(FILL 1,無後綴)**——Header 的 首頁 / 通知 / 設定、Nav-rail 各項都用實心 glyph（`home` / `notifications` / `settings` / `account-balance` / `inventory-2` / `badge` / `cards-star`…）。**別反射套用「chrome 走線條(FILL 0)」的通則——那是本 skill 反覆踩的雷**(詳 `profiles/Shared.md §App shell icon` 與 `pitfalls.md`)。
+    - **例外**:`★ 我的最愛` 是 DS 規定的選取切換態,啟用 `star`(實心)、未啟用 `star-outline`(線條),維持切換不動。
+    - **內容區 icon**(操作鈕 / 空狀態 / 分頁 / 設定檔側欄等)依 DS 各自 variant(多為線條)。**不確定某個 icon 該實心還線條時回查 DS / template,別自行改動**
+  - **筆畫型 icon 沒有 `-outline` 變體**（check / chevron-left / chevron-right / arrow-outward / expand-more / close / list / tune / first-page / last-page…）——直接用 base 名，硬加 `-outline` 會抓不到圖（不渲染）。**不確定某 glyph 有沒有 `-outline` 時，base 名永遠存在；以 Iconify material-symbols 集實際有的名稱為準**
+  - **font glyph 名 → Iconify 名**：底線改連字號（`chevron_left`→`chevron-left`、`arrow_outward`→`arrow-outward`、`expand_more`→`expand-more`、`first_page`→`first-page`），`star_border`→`star-outline`
+  - **尺寸**用 `width` / `height` 屬性或 CSS `font-size`；**顏色**靠 `currentColor` 繼承，沿用既有 token 配色（`color: rgb(var(--token))`），**禁** inline hex
+  - **注意**：舊 font 版「禁用 `-outline` / `_outlined` 字尾」的規則**只適用字型**，**不適用** web component——這裡 `-outline` 正是線條變體的正確寫法，別搞反。常用對照表見 `REFERENCE.md §icon 對照`
 - **IMPORTANT:** 色彩 / 間距 / 圓角 / 陰影 / 字級必須使用 design tokens；**禁** inline hex、**禁** `@apply`。**Why**：prototype → production 重用同一份 token CSS，數值一次對齊；inline hex 失去與 DS 連動，DS 更新時 prototype 顯示舊色；`@apply` 把 token 烘進 component-scoped CSS，反而切斷 token 引用鏈
 - **IMPORTANT:** 寬度雙標（語義不同，勿混用）：**1440px** = Figma 設計畫布基準（design ↔ dev 規格對齊用，所有設計稿尺寸以此計）／**1280px** = prototype 預覽 viewport（template `<meta name="viewport" content="width=1280">` 已釘住，reviewer 開瀏覽器即以此寬看）。**不支援** `< 768px`（mobile）。RWD 4 斷點 XL / L / M / S 規格詳見 `REFERENCE.md §8 Responsive`；主要 grid 降欄關鍵斷點為 `@media (max-width: 1024px)` 強制 2 欄
 

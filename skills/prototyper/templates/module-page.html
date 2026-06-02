@@ -28,8 +28,9 @@
   <meta name="viewport" content="width=1280">
   <title>模組中文名 — Athena ERP</title>
   <link rel="stylesheet" href="../ds/colors_and_type.css">
-  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Symbols+Outlined">
   <link rel="stylesheet" href="../app.css">
+  <!-- Icon：Iconify web component（只用 material-symbols: 集；線條加 -outline，實心無後綴。見 SKILL.md §4 icon 條） -->
+  <script src="https://code.iconify.design/iconify-icon/2.1.0/iconify-icon.min.js"></script>
 </head>
 <body>
   <div id="app">
@@ -37,7 +38,8 @@
     <!-- ===== App Shell · Header ===== -->
     <header class="erp-header">
       <button class="erp-header__home" @click="goHome" aria-label="home">
-        <span class="material-symbols-outlined">home</span>
+        <!-- App shell chrome = 實心(無後綴)，見 Shared.md §App shell icon -->
+        <iconify-icon icon="material-symbols:home"></iconify-icon>
       </button>
       <nav class="erp-breadcrumb" aria-label="breadcrumb">
         <span>{{ breadcrumb.module }}</span>
@@ -48,10 +50,10 @@
       </nav>
       <div class="erp-header__actions">
         <button @click="toggleFavorite" :class="{ 'is-favorite': isFavorite }" aria-label="favorite">
-          <span class="material-symbols-outlined">{{ isFavorite ? 'star' : 'star_border' }}</span>
+          <iconify-icon :icon="isFavorite ? 'material-symbols:star' : 'material-symbols:star-outline'"></iconify-icon>
         </button>
-        <button aria-label="notifications"><span class="material-symbols-outlined">notifications</span></button>
-        <button aria-label="settings"><span class="material-symbols-outlined">settings</span></button>
+        <button aria-label="notifications"><iconify-icon icon="material-symbols:notifications"></iconify-icon></button>
+        <button aria-label="settings"><iconify-icon icon="material-symbols:settings"></iconify-icon></button>
         <button class="erp-header__avatar">{{ user.initials }}</button>
       </div>
     </header>
@@ -62,7 +64,8 @@
         <button v-for="item in navItems" :key="item.key"
                 :class="{ 'is-active': item.key === activeNav }"
                 @click="activeNav = item.key">
-          <span class="material-symbols-outlined">{{ item.icon }}</span>
+          <!-- App shell：nav-rail 用實心 glyph(無後綴)。item.icon 存完整 Iconify id，如 'material-symbols:account-balance' -->
+          <iconify-icon :icon="item.icon"></iconify-icon>
           <span class="nav-rail__label">{{ item.label }}</span>
         </button>
       </aside>
@@ -89,14 +92,14 @@
             <div class="toolbar__right">
               <div class="view-switch">
                 <button :class="{ 'is-active': view === 'list' }" @click="view = 'list'" aria-label="list view">
-                  <span class="material-symbols-outlined">list</span>
+                  <iconify-icon icon="material-symbols:list"></iconify-icon>
                 </button>
                 <button :class="{ 'is-active': view === 'form' }" @click="view = 'form'" aria-label="form view">
-                  <span class="material-symbols-outlined">description</span>
+                  <iconify-icon icon="material-symbols:description-outline"></iconify-icon>
                 </button>
               </div>
               <button class="btn btn--icon" @click="openColumnSettings" aria-label="settings">
-                <span class="material-symbols-outlined">tune</span>
+                <iconify-icon icon="material-symbols:tune"></iconify-icon>
               </button>
             </div>
           </div>
@@ -148,7 +151,7 @@
                   </td>
                   <td class="sticky-right col-actions">
                     <button @click="openForm(row.id)" aria-label="view">
-                      <span class="material-symbols-outlined">visibility</span>
+                      <iconify-icon icon="material-symbols:visibility-outline"></iconify-icon>
                     </button>
                   </td>
                 </tr>
@@ -166,7 +169,7 @@
 
           <!-- Empty state：inbox icon + 訊息 -->
           <div v-else class="empty-state">
-            <span class="material-symbols-outlined">inbox</span>
+            <iconify-icon icon="material-symbols:inbox-outline"></iconify-icon>
             <p>無符合條件的資料</p>
           </div>
 
@@ -179,10 +182,10 @@
             </select>
             <span class="pager__range">{{ pageRange }} / 共 {{ total }} 筆</span>
             <button @click="prevPage" :disabled="page <= 1" aria-label="prev">
-              <span class="material-symbols-outlined">chevron_left</span>
+              <iconify-icon icon="material-symbols:chevron-left"></iconify-icon>
             </button>
             <button @click="nextPage" :disabled="page >= totalPages" aria-label="next">
-              <span class="material-symbols-outlined">chevron_right</span>
+              <iconify-icon icon="material-symbols:chevron-right"></iconify-icon>
             </button>
           </div>
         </section>
@@ -204,7 +207,7 @@
               <ol v-else class="stepper">
                 <li class="stepper__step" :class="stepClass('draft')">
                   <span class="stepper__num">
-                    <span v-if="stepState('draft') === 'done'" class="material-symbols-outlined">check</span>
+                    <iconify-icon v-if="stepState('draft') === 'done'" icon="material-symbols:check"></iconify-icon>
                     <template v-else>1</template>
                   </span>
                   <span>草稿</span>
@@ -212,7 +215,7 @@
                 <span class="stepper__bar" :class="stepClass('draft', 'bar')"></span>
                 <li class="stepper__step" :class="stepClass('submitted')">
                   <span class="stepper__num">
-                    <span v-if="stepState('submitted') === 'done'" class="material-symbols-outlined">check</span>
+                    <iconify-icon v-if="stepState('submitted') === 'done'" icon="material-symbols:check"></iconify-icon>
                     <template v-else>2</template>
                   </span>
                   <span>已提交</span>
@@ -235,7 +238,7 @@
 
           <!--
             Smart Bar `card-btn` 結構（詳 profile §Smart Bar `card-btn` 結構）
-            禁加 link icon；每個 card-btn = count + 單位 + 標題 + arrow_outward
+            禁加 link icon；每個 card-btn = count + 單位 + 標題 + arrow-outward
             無關聯時整段不渲染；count === null 的條目（如「會計傳票」）省略 count + 單位
           -->
           <nav v-if="visibleRelations.length > 0" class="smart-bar">
@@ -246,7 +249,7 @@
                   <span v-if="rel.unit" class="card-btn__unit">{{ rel.unit }}</span>{{ rel.title }}
                 </span>
               </div>
-              <span class="card-btn__arrow material-symbols-outlined">arrow_outward</span>
+              <iconify-icon class="card-btn__arrow" icon="material-symbols:arrow-outward"></iconify-icon>
             </a>
           </nav>
 
@@ -324,7 +327,7 @@
                       </template>
                       <template v-else>
                         <button @click="editLine(line)" aria-label="edit">
-                          <span class="material-symbols-outlined">edit</span>
+                          <iconify-icon icon="material-symbols:edit-outline"></iconify-icon>
                         </button>
                       </template>
                     </td>
@@ -338,10 +341,10 @@
           <footer class="form-footer">
             <div class="form-footer__nav">
               <button @click="prevDoc" aria-label="prev doc">
-                <span class="material-symbols-outlined">chevron_left</span>上一筆
+                <iconify-icon icon="material-symbols:chevron-left"></iconify-icon>上一筆
               </button>
               <button @click="nextDoc" aria-label="next doc">
-                下一筆<span class="material-symbols-outlined">chevron_right</span>
+                下一筆<iconify-icon icon="material-symbols:chevron-right"></iconify-icon>
               </button>
             </div>
             <div class="form-footer__actions">
@@ -351,7 +354,7 @@
               <button v-if="form.status === 'approved'"  class="btn"              @click="onUnapprove">解核</button>
               <div class="dropdown">
                 <button class="btn" @click="moreOpen = !moreOpen">
-                  更多操作<span class="material-symbols-outlined">expand_more</span>
+                  更多操作<iconify-icon icon="material-symbols:expand-more"></iconify-icon>
                 </button>
                 <ul v-if="moreOpen" class="dropdown__menu">
                   <li @click="onVoid; moreOpen = false">作廢</li>
@@ -386,7 +389,8 @@
     <!-- ===== Toast：success / warning / error，3 秒自動消失 ===== -->
     <div class="toast-stack">
       <div v-for="t in toasts" :key="t.id" :class="['toast', 'toast--' + t.kind]">
-        <span class="material-symbols-outlined">{{ toastIcon(t.kind) }}</span>
+        <!-- toastIcon() 回傳完整 Iconify id，如 'material-symbols:check-circle-outline' -->
+        <iconify-icon :icon="toastIcon(t.kind)"></iconify-icon>
         <span>{{ t.message }}</span>
       </div>
     </div>

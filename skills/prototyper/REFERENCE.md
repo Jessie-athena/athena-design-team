@@ -13,7 +13,41 @@
 
 ## §2 Tech Baseline
 
-技術 baseline（HTML lang / CSS 載入順序 / Vue 3 CDN / `app.js` 與 `app.css` 分離 / Material Symbols icon）已列為 `SKILL.md §4 通用硬性限制`，本檔不重複，以 SKILL.md 為單一來源。
+技術 baseline（HTML lang / CSS 載入順序 / Vue 3 CDN / `app.js` 與 `app.css` 分離 / Iconify web component icon）已列為 `SKILL.md §4 通用硬性限制`，本檔不重複，以 SKILL.md 為單一來源。Icon 常用對照見本檔 §icon 對照。
+
+### §icon 對照（Material Symbols font → Iconify `material-symbols:`）
+
+規則見 `SKILL.md §4` icon 條：實心 = 無後綴、線條 = 加 `-outline`（**僅可填色的形狀型有 `-outline`**）；底線改連字號。**App shell chrome（Header + Nav-rail）一律實心(無後綴)**——見 `profiles/Shared.md §App shell icon`。下表為 template / 常見 UI 用到的對照，**不確定某 glyph 有沒有 `-outline` 時以 Iconify material-symbols 集實際存在者為準**（筆畫型沒有 `-outline`，直接用 base 名會 404）。
+
+| 用途 | 舊 font glyph | Iconify icon | 變體 |
+|---|---|---|---|
+| Home（App shell） | `home` | `material-symbols:home` | **實心** |
+| 我的最愛（啟用） | `star` | `material-symbols:star` | **實心** |
+| 我的最愛（未啟用） | `star_border` | `material-symbols:star-outline` | 線條（切換態例外） |
+| 通知（App shell） | `notifications` | `material-symbols:notifications` | **實心** |
+| 設定（App shell） | `settings` | `material-symbols:settings` | **實心** |
+| Nav-rail 各項（App shell） | — | `material-symbols:account-balance` / `inventory-2` / `badge` / `cards-star` … | **實心** |
+| 欄位設定 / tune | `tune` | `material-symbols:tune` | 筆畫（無 outline） |
+| List 視圖 | `list` | `material-symbols:list` | 筆畫（無 outline） |
+| Form 視圖 | `description` | `material-symbols:description-outline` | 線條 |
+| 檢視 | `visibility` | `material-symbols:visibility-outline` | 線條 |
+| 編輯 | `edit` | `material-symbols:edit-outline` | 線條 |
+| 刪除 | `delete` | `material-symbols:delete-outline` | 線條 |
+| 關閉 / chip 清除 | `close` | `material-symbols:close` | 筆畫（無 outline） |
+| 空狀態 | `inbox` | `material-symbols:inbox-outline` | 線條 |
+| 完成（stepper check） | `check` | `material-symbols:check` | 筆畫（無 outline） |
+| 上一頁 / 上一筆 | `chevron_left` | `material-symbols:chevron-left` | 筆畫（無 outline） |
+| 下一頁 / 下一筆 | `chevron_right` | `material-symbols:chevron-right` | 筆畫（無 outline） |
+| 第一頁 | `first_page` | `material-symbols:first-page` | 筆畫（無 outline） |
+| 最後一頁 | `last_page` | `material-symbols:last-page` | 筆畫（無 outline） |
+| 更多操作 | `expand_more` | `material-symbols:expand-more` | 筆畫（無 outline） |
+| Smart Bar 導向 | `arrow_outward` | `material-symbols:arrow-outward` | 筆畫（無 outline） |
+| Toast 成功 | `check_circle` | `material-symbols:check-circle-outline` | 線條 |
+| Toast 警告 | `warning` | `material-symbols:warning-outline` | 線條 |
+| Toast 錯誤 | `error` | `material-symbols:error-outline` | 線條 |
+| Toast / banner 資訊 | `info` | `material-symbols:info-outline` | 線條 |
+
+> 動態 icon（nav-rail `item.icon`、`toastIcon()`、`stateBanner.icon`）在 `app.js` data 直接存**完整 Iconify id**（nav-rail 屬 App shell → 實心，如 `material-symbols:account-balance`；toast/banner 等內容區依 DS，多為 `-outline`），template 用 `<iconify-icon :icon="...">` 綁定。`toastIcon()` 起手式見本檔 §`app.js` 骨架。
 
 ## §3 File Layout
 
@@ -402,6 +436,13 @@ createApp({
       toasts.value.push({ id, kind, message })
       setTimeout(() => { toasts.value = toasts.value.filter(t => t.id !== id) }, 3000)
     }
+    // toast / state-banner 等動態 icon：回傳完整 Iconify id（material-symbols: 集，線條用 -outline）
+    const toastIcon = (kind) => ({
+      success: 'material-symbols:check-circle-outline',
+      warning: 'material-symbols:warning-outline',
+      error:   'material-symbols:error-outline',
+      info:    'material-symbols:info-outline',
+    }[kind] || 'material-symbols:info-outline')
 
     // ===== State machine handlers（依 profile 命名） =====
     // 例:ERP profile 用 onSubmit / onApprove / onUnapprove / onVoid
@@ -433,7 +474,7 @@ createApp({
 
     return {
       breadcrumb, programId, version, navItems, activeNav, view, toasts,
-      stepState, stepClass, visibleRelations,
+      stepState, stepClass, visibleRelations, toastIcon,
     }
   }
 }).mount('#app')

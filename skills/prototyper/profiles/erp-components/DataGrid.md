@@ -154,7 +154,7 @@ List View 的表格本體；唯一的橫向 / 縱向捲軸來源。
 
 ## 空狀態
 
-無資料時隱藏整個 `.data-grid-block`，改顯示 `.empty-state`（48px `inbox` icon + 標題 + 說明）；**禁**保留空表頭。
+無資料時隱藏整個 `.data-grid-block`，改顯示 `.empty-state`（48px `material-symbols:inbox-outline` icon + 標題 + 說明）；**禁**保留空表頭。
 
 ---
 
@@ -263,7 +263,7 @@ background       : var(--bg-surface-default)
 ```
 
 - **數值欄**（最小數量 / 固定價格 / 折扣 %）：`text-align: right`，後綴單位（`%` ／ 幣別 code）用 `<span class="muted">`，`14px`、`color: var(--text-secondary)`
-- **下拉**：沿用既有 `.dropdown` + `.caret`，caret 圖示 `expand_more`
+- **下拉**：沿用既有 `.dropdown` + `.caret`，caret 圖示 `material-symbols:expand-more`
 - **日期區間**：沿用 drawer 內的 `.date-range__trigger`，按鈕高 `36px`，點擊展開 `.date-range__pop`（雙月曆）
 - **欄位間距**：cell `padding: 8px 12px`；同 cell 內多控制元件 `gap: 8px`
 

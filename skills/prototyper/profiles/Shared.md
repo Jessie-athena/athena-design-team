@@ -87,7 +87,10 @@ Header (1920×56, padding 8, gap 16)
 | Avatar 內圈（ring） | 30 × 30 | padding 3 / gap 10 | border 1px `#1F57D1`（$darken($primary,5%)）/ radius `1000px` |
 | Avatar `_Avatar` | 24 × 24 | padding 4 × 5 / gap 10 | bg `#1F57D1` / radius 20 / 文字 Roboto 500 / 11pt / color `#F2F0F4` |
 
-> **Icon variant 依 Design System** 規定（見 SKILL.md §4 icon 條）。本檔不另立 icon variant / glyph 命名規則。
+> ### App shell icon = 實心（Athena DS 硬規則）
+> App shell chrome —— **Header**（首頁 `home` / 通知 `notifications` / 設定 `settings`）與 **Nav-rail** 各項（`cards-star` / `account-balance` / `inventory-2` / `badge` / `settings`…）—— 一律用 Iconify `material-symbols:` 的**實心 glyph（無後綴）**，**禁**加 `-outline`。
+> **Why**：Athena DS 的 icon 對照表對 shell chrome 指定實心（FILL 1）。AI 常反射地把 chrome 做成線條（`home-outline` / `settings-outline`…），那是**錯的**，也是反覆出現的 review 問題（見 `pitfalls.md`）。
+> **例外**：favorite 切換 `star ↔ star-outline`（見下方 Breadcrumb）。**內容區 icon**（操作鈕 / 空狀態 / 分頁 / 設定檔側欄等）依 DS 各自 variant（多為線條）。glyph 名與 Iconify 機制見 `SKILL.md §4 icon 條`；本檔不另立命名規則。
 
 ### Breadcrumb
 
@@ -99,7 +102,7 @@ Header (1920×56, padding 8, gap 16)
 - **Favorite icon 緊接 current 之後**（**不在右側 actions**）；`.erp-breadcrumb__fav`、40×40
 
 > 麵包屑**層數與各層語意**由專案 profile 定義（如 ERP：模組分類 > 功能名稱 > 單號 三層）。
-> Favorite 的具體 glyph / FILL 由 DS 規定（star vs star_border 切換規則參照 DS components.css §icon）。
+> Favorite 啟用/未啟用切換：啟用 = `material-symbols:star`（實心）、未啟用 = `material-symbols:star-outline`（線條）；切換規則參照 DS components.css §icon。
 
 ---
 
@@ -159,8 +162,8 @@ DsNavigationA8 (72×100%, padding 8, gap 8, radius 12, bg #001D5A)
 | Active（`.is-active`） | bg **`#1F57D1`** / weight 500 |
 
 > **必含產品縮寫**字標（如「ERP」），位置在 `Under` 區末端的 `ItemSystem`，**不可遺失**——它不是「擺最下面就好」，是 Figma DsNavigationA8 的固定第 N+1 子節點。
-> Nav 項目（key / icon glyph / label / 順序）由專案 profile 定義。
-> Icon glyph 名與 FILL 軸依 Design System（見 SKILL.md §4 icon 條），本檔不另立規則。
+> Nav 項目（key / icon / label / 順序）由專案 profile 定義；`icon` 存完整 Iconify id，**Nav-rail 屬 App shell → 用實心 glyph（無後綴）**，如 `material-symbols:account-balance`（見上方 §App shell icon = 實心）。
+> Icon glyph 名與 Iconify 機制依 `SKILL.md §4 icon 條`，本檔不另立規則。
 
 ---
 

@@ -75,13 +75,15 @@ prototype 的 `prototype/ds/colors_and_type.css` 與 `prototype/app.css` 已預�
 
 ### Nav-rail 項目（5 項固定順序）
 
-| key | icon | label |
+Nav-rail 屬 **App shell → icon 一律實心(無後綴)**，存完整 Iconify id（見 `Shared.md §App shell icon`）。
+
+| key | icon（Iconify，實心） | label |
 |---|---|---|
-| `fav` | `star` | 我的最愛 |
-| `finance` | `account_balance` | 財務 |
-| `psi` | `inventory` | 進銷存 |
-| `hr` | `badge` | 人事 |
-| `config` | `settings` | 設定檔 |
+| `fav` | `material-symbols:cards-star` | 我的最愛 |
+| `finance` | `material-symbols:account-balance` | 財務 |
+| `psi` | `material-symbols:inventory-2` | 進銷存 |
+| `hr` | `material-symbols:badge` | 人事 |
+| `config` | `material-symbols:settings` | 設定檔 |
 
 - 產品縮寫文字 = `ERP`（位於 `.nav-rail__top`，**不可遺失**）
 - 模組分類 → 對應 nav-rail 高亮項：財務 → `finance` / 進銷存 → `psi` / 人事 → `hr` / 設定檔 → `config`
@@ -209,7 +211,7 @@ Form View 頂部的 summary bar 在實作時最常被改錯。**必依**以下�
 ```html
 <ol class="stepper">
   <li class="stepper__step stepper__step--done">
-    <span class="stepper__num"><span class="material-symbols-outlined">check</span></span>
+    <span class="stepper__num"><iconify-icon icon="material-symbols:check"></iconify-icon></span>
     <span>草稿</span>
   </li>
   <span class="stepper__bar stepper__bar--done"></span>
@@ -231,7 +233,7 @@ Form View 頂部的 summary bar 在實作時最常被改錯。**必依**以下�
 |---|---|---|---|
 | Pending | （無 modifier） | bg `rgba(var(--color-sf-primary), .08)` on `var(--bg-surface-default)`、border `1px solid var(--border-default)`、數字 `var(--text-primary)` 14px/400 | `var(--text-secondary)` 14px/400 |
 | Active | `--active` | bg `rgb(var(--color-sf-primary))`、border `1px solid rgb(var(--color-sf-primary))`、`box-shadow: inset 0 0 0 1px #fff`（內白環）、數字 `#fff` | `var(--text-primary)` |
-| Done | `--done` | bg `rgb(var(--color-sf-success))`、border `1px solid rgb(var(--color-sf-success))`、無 shadow、改顯示 check icon（Material Symbols, 20px, wght 600, `#fff`） | `var(--text-placeholder)`（比 pending 的 `--text-secondary` 更淡，視覺上「已淡化但已完成」） |
+| Done | `--done` | bg `rgb(var(--color-sf-success))`、border `1px solid rgb(var(--color-sf-success))`、無 shadow、改顯示 check icon（`material-symbols:check`, 20px, `#fff`） | `var(--text-placeholder)`（比 pending 的 `--text-secondary` 更淡，視覺上「已淡化但已完成」） |
 
 ### 連接線 `.stepper__bar`
 
@@ -288,7 +290,7 @@ ERP 的 Smart Bar **不是** 一排有 link icon 的文字連結。是一組以�
         <span v-if="rel.unit" class="card-btn__unit">{{ rel.unit }}</span>{{ rel.title }}
       </span>
     </div>
-    <span class="card-btn__arrow material-symbols-outlined">arrow_outward</span>
+    <iconify-icon class="card-btn__arrow" icon="material-symbols:arrow-outward"></iconify-icon>
   </a>
 </nav>
 ```
@@ -305,12 +307,12 @@ ERP 的 Smart Bar **不是** 一排有 link icon 的文字連結。是一組以�
 | `.card-btn__count` | `font-size: 18px; font-weight: 700; color: rgb(var(--color-sf-primary))` |
 | `.card-btn__unit` | `font-size: 11px; margin: 0 8px;` |
 | `.card-btn__title` | `font-size: 16px; font-weight: 400; color: rgb(var(--color-sf-primary))` |
-| `.card-btn__arrow` | 18×18px、Material Symbols `arrow_outward`、`wght: 500; opsz: 20; color: rgb(var(--color-sf-primary))` |
+| `.card-btn__arrow` | 18×18px、`material-symbols:arrow-outward`、`color: rgb(var(--color-sf-primary))`（尺寸用 `width/height` 或 font-size） |
 
 ### 互動
 
 - 所有 link `@click.prevent`（SPA 行為），點擊呼叫 `openRelated(rel)` 跳轉到對應列表 / 單據（handler 內依 `rel.type` 路由）
-- **禁加 link icon**（如 `<span class="material-symbols-outlined">link</span>`）
+- **禁加 link icon**（如 `<iconify-icon icon="material-symbols:link"></iconify-icon>`）
 - 整段 Smart Bar 內所有顏色統一 `rgb(var(--color-sf-primary))`，視覺動線左到右串連一致
 
 ---
@@ -407,11 +409,11 @@ ERP 的 Smart Bar **不是** 一排有 link icon 的文字連結。是一組以�
 | 次要 CTA（動詞標籤） | **禁加 icon** | `取消` / `清除` / `回列表` |
 | 危險動作 | **禁加 icon** | `批次作廢` |
 | icon-only 按鈕 | 必有 icon、必有 `aria-label` | settings / close / favorite |
-| 導向類（前/後筆、上下頁） | 允許 chevron | `chevron_left` 上一筆、`chevron_right` 下一筆 |
-| Dropdown trigger | 允許 `expand_more` | 「更多操作 expand_more」 |
+| 導向類（前/後筆、上下頁） | 允許 chevron | `material-symbols:chevron-left` 上一筆、`material-symbols:chevron-right` 下一筆 |
+| Dropdown trigger | 允許 `expand-more` | 「更多操作 `material-symbols:expand-more`」 |
 | Footer 按鈕 | 依 DS 分**層級配色**（primary / outline / text / danger / ghost），無 icon | 提交 = primary、解核 = outline、作廢 = danger |
 
-> 違反此政策的最常見錯誤：「新增」按鈕被加上 `<span class="material-symbols-outlined">add</span>新增`。動詞標籤本身已說明動作，icon 是噪音。
+> 違反此政策的最常見錯誤：「新增」按鈕被加上 `<iconify-icon icon="material-symbols:add"></iconify-icon>新增`。動詞標籤本身已說明動作，icon 是噪音。
 
 ---
 
@@ -555,7 +557,7 @@ App Shell 與多公司情境下的「公司別」過濾 dropdown **預設為空�
 - [ ] Stepper 三狀態結構正確（`--active` / `--done` / pending + `.stepper__bar`），詳 §Stepper 三狀態結構
 - [ ] Section 用 `bar + title + form-grid--4`；DynamicForm 外層無 border、padding 0（詳 §輸入欄樣式 + `profiles/erp-components/FormGroup.md`）
 - [ ] 必填欄位 label 加 `<span class="required">*</span>`；read-only 用 `readonly` 屬性，**禁**用 `disabled`
-- [ ] Smart Bar 用 `card-btn` 結構（無 link icon、count + 單位 + 標題 + `arrow_outward`），詳 §Smart Bar `card-btn` 結構；無關聯時整段不渲染
+- [ ] Smart Bar 用 `card-btn` 結構（無 link icon、count + 單位 + 標題 + `arrow-outward`），詳 §Smart Bar `card-btn` 結構；無關聯時整段不渲染
 - [ ] Tab block: 表頭右側固定 add 按鈕（按鈕**無 add icon**，詳 §按鈕 icon 政策）；行內編輯模式有 save / cancel
 - [ ] Footer 三段: 上下筆 / 動作群（按鈕**分層級配色 + 無 icon**） / 「更多操作」下拉（**詳 `profiles/erp-components/FormFooter.md`**）
 - [ ] `form.moveId` 存在時顯示「已產生傳票」chip（**禁**當成獨立狀態加進 stepper）
@@ -660,7 +662,7 @@ App Shell 與多公司情境下的「公司別」過濾 dropdown **預設為空�
 - [ ] 「已產生傳票」用 chip，**不在** stepper 內
 - [ ] Stepper 三狀態結構（`--active` / `--done` / pending + `.stepper__bar`）正確、矩陣對應 4 種 form.status
 - [ ] **（進銷存擴充狀態機時）** 6 值狀態正確（draft/submitted/approved/partial/done/cancelled）；Summary Card 用單指標 + 4 步動態 stepper（第 ④ 步 partial 靛 / done 灰 / placeholder；cancelled 換 pill，詳 `SummaryCard.md`）；Footer 用 6 值狀態-按鈕矩陣（詳 `FormFooter.md §進銷存作業檔狀態-按鈕矩陣`）；chat handoff 已點名「採進銷存擴充狀態機」
-- [ ] Smart Bar 在無關聯時整段不渲染；有關聯時用 `card-btn` 結構（無 link icon、count + 單位 + 標題 + `arrow_outward`）
+- [ ] Smart Bar 在無關聯時整段不渲染；有關聯時用 `card-btn` 結構（無 link icon、count + 單位 + 標題 + `arrow-outward`）
 - [ ] Summary bar `sticky` + 上下兩塊 + 無 shadow
 - [ ] 所有 input 預設 Filled、read-only 用 `readonly` 屬性（**非** disabled）
 - [ ] 動詞 CTA 按鈕無 icon（新增 / 提交 / 核准 / 儲存 / 查詢 / 取消 / 清除）
