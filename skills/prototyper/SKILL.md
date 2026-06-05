@@ -21,7 +21,7 @@ allowed-tools: Read Write Edit Glob Grep
 | `profiles/Shared.md` | 跨專案共用 profile（**所有專案前置必讀**） | `raw.githubusercontent.com/Jessie-athena/athena-design-team/main/skills/prototyper/profiles/Shared.md` |
 | `profiles/erp-transaction.md` | ERP 作業檔規則（必讀） | `raw.githubusercontent.com/Jessie-athena/athena-design-team/main/skills/prototyper/profiles/erp-transaction.md` |
 | `profiles/erp-setup.md` | 模組類型為設定檔時加載 | `raw.githubusercontent.com/Jessie-athena/athena-design-team/main/skills/prototyper/profiles/erp-setup.md` |
-| `profiles/erp-components/*.md` | ListSearch / DataGrid / FormGroup / FormFooter 4 份元件規格 | `raw.githubusercontent.com/Jessie-athena/athena-design-team/main/skills/prototyper/profiles/erp-components/<name>.md` |
+| `profiles/erp-components/*.md` | ListSearch / DataGrid / FormGroup / FormFooter（4 份必抓）+ Stepper / SummaryCard（作業檔必抓） | `raw.githubusercontent.com/Jessie-athena/athena-design-team/main/skills/prototyper/profiles/erp-components/<name>.md` |
 | `templates/module-page.html` / `psi-transaction-page.html` / `setup-page.html` | starter template，依模組類型挑一份（財務 / 一般作業檔 → module-page；進銷存作業檔 → psi-transaction-page；設定檔 → setup-page） | `raw.githubusercontent.com/Jessie-athena/athena-design-team/main/skills/prototyper/templates/module-page.html` |
 | `REFERENCE.md` | token / 元件對照 / `app.js` 起手式（按需） | `raw.githubusercontent.com/Jessie-athena/athena-design-team/main/skills/prototyper/REFERENCE.md` |
 
@@ -38,10 +38,12 @@ allowed-tools: Read Write Edit Glob Grep
   - 若單據類型為**設定檔** (master data，依 `erp-transaction.md §類型判斷準則` 判定) → 另載入 `${CLAUDE_SKILL_DIR}/profiles/erp-setup.md`（含設定檔側欄、List/Form 自檢、資料狀態矩陣、刪除機制等）
   - **ERP 專案載入時，無論作業檔 / 設定檔，自動載入下列 4 份元件規格檔**（List View 與 Form View 幾乎都會用到，避免漏讀）：
     - `${CLAUDE_SKILL_DIR}/profiles/erp-components/ListSearch.md`（toolbar / search bar / RWD 收合）
-    - `${CLAUDE_SKILL_DIR}/profiles/erp-components/DataGrid.md`（欄寬鎖 / sticky cell / 互動狀態）
+    - `${CLAUDE_SKILL_DIR}/profiles/erp-components/DataGrid.md`（欄寬鎖 / sticky cell / 互動狀態 / 狀態 chip）
     - `${CLAUDE_SKILL_DIR}/profiles/erp-components/FormGroup.md`（form-grid 4 欄 / 跨欄 modifier / RWD）
     - `${CLAUDE_SKILL_DIR}/profiles/erp-components/FormFooter.md`（記錄分頁器 / 主 CTA / 狀態-按鈕矩陣 / dirty-guard）
-  - **作業檔 Form View 另依需求載入**：`${CLAUDE_SKILL_DIR}/profiles/erp-components/SummaryCard.md`（單指標 + 4 步動態 stepper；進銷存擴充狀態機用）
+  - **作業檔另載**（設定檔免載）：
+    - `${CLAUDE_SKILL_DIR}/profiles/erp-components/Stepper.md`（狀態 Stepper：步序判定 / 動態第 ④ 步 / 驗收七值 / voided-banner；設定檔無 Stepper）
+    - `${CLAUDE_SKILL_DIR}/profiles/erp-components/SummaryCard.md`（Summary Card 兩種 Layout；單指標 + 4 步動態 stepper、6 值結轉模型插槽）
 - **反覆審查問題**：`${CLAUDE_SKILL_DIR}/pitfalls.md`（每次製作前掃一眼）
 - **詳細展開（工作流明細 / 權重規則明細 / 決策題 / 完整 Examples / token / 元件對照 / `app.js` 起手式）**：`${CLAUDE_SKILL_DIR}/REFERENCE.md`
 - **Starter templates**：

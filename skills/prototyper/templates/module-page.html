@@ -144,7 +144,7 @@
                   <td>{{ row.summary }}</td>
                   <td class="text-right">{{ formatAmount(row.amount) }}</td>
                   <td>
-                    <span :class="['status-pill', 'status-pill--' + row.status]">
+                    <span :class="['st-chip', 'st-chip--' + row.status]">
                       {{ stateLabel(row.status) }}
                     </span>
                     <span v-if="row.moveId" class="chip chip--success">已產生傳票</span>
@@ -202,30 +202,33 @@
             <!-- 上區：標題 + Stepper / voided pill -->
             <div class="summary-card__upper">
               <h1 class="summary-card__title">{{ form.docNo || '新單' }}</h1>
-              <span v-if="form.status === 'voided'" class="pill-voided">已作廢</span>
-              <!-- Stepper 三狀態結構（詳 profile §Stepper 三狀態結構） -->
-              <ol v-else class="stepper">
-                <li class="stepper__step" :class="stepClass('draft')">
-                  <span class="stepper__num">
-                    <iconify-icon v-if="stepState('draft') === 'done'" icon="material-symbols:check"></iconify-icon>
+              <!-- voided：不進 stepper，整段換 voided-banner（詳 profiles/erp-components/Stepper.md §voided-banner） -->
+              <div v-if="form.status === 'voided'" class="voided-banner">
+                <span class="st-chip st-chip--voided voided-banner__pill">已作廢</span>
+              </div>
+              <!-- 狀態 Stepper（詳 profiles/erp-components/Stepper.md；本骨架為基本型 3 步） -->
+              <div v-else class="stepper">
+                <div class="stepper__step" :class="stepClass(1)">
+                  <span class="stepper__bubble">
+                    <iconify-icon v-if="stepState(1) === 'done'" icon="material-symbols:check"></iconify-icon>
                     <template v-else>1</template>
                   </span>
-                  <span>草稿</span>
-                </li>
-                <span class="stepper__bar" :class="stepClass('draft', 'bar')"></span>
-                <li class="stepper__step" :class="stepClass('submitted')">
-                  <span class="stepper__num">
-                    <iconify-icon v-if="stepState('submitted') === 'done'" icon="material-symbols:check"></iconify-icon>
+                  <span class="stepper__label">草稿</span>
+                </div>
+                <span class="stepper__line" :class="lineClass(2)"></span>
+                <div class="stepper__step" :class="stepClass(2)">
+                  <span class="stepper__bubble">
+                    <iconify-icon v-if="stepState(2) === 'done'" icon="material-symbols:check"></iconify-icon>
                     <template v-else>2</template>
                   </span>
-                  <span>已提交</span>
-                </li>
-                <span class="stepper__bar" :class="stepClass('submitted', 'bar')"></span>
-                <li class="stepper__step" :class="stepClass('approved')">
-                  <span class="stepper__num">3</span>
-                  <span>已核准</span>
-                </li>
-              </ol>
+                  <span class="stepper__label">已提交</span>
+                </div>
+                <span class="stepper__line" :class="lineClass(3)"></span>
+                <div class="stepper__step" :class="stepClass(3)">
+                  <span class="stepper__bubble">3</span>
+                  <span class="stepper__label">已核准</span>
+                </div>
+              </div>
             </div>
             <!-- 下區：關鍵指標 + 已產生傳票 chip -->
             <div class="summary-card__lower">

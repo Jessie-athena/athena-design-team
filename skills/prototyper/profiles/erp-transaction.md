@@ -185,6 +185,27 @@ prototype 頁面層級**不可**出現第二條捲軸。reviewer 反覆遇到的
 - Summary Card 用 **Layout B 單指標 + 4 步動態 stepper**（詳 `SummaryCard.md`）；第 ④ 步為 partial / done / placeholder 三選一，`cancelled` 改顯示紅色 pill。
 - Footer 用 **6 值狀態-按鈕矩陣**（詳 `FormFooter.md §進銷存作業檔狀態-按鈕矩陣`）。
 
+### 進銷存擴充狀態機 — 七值驗收模型（documented variant）
+
+> 與上方 6 值**結轉模型**（請購單類：狀態由本單結轉進度驅動）平行的第二個已記錄變體：**驗收模型**（採購單類：狀態由**下游驗收單回寫**驅動）。採用本變體同樣視為已滿足「偏離須註明理由」；chat handoff 須點名「採進銷存擴充狀態機（驗收模型）」。
+
+**七值狀態（兩終態 + 可結清的進行態）**
+
+| State | label | 流向 | 第 ④ 步呈現 |
+|---|---|---|---|
+| `draft` | 草稿 | → `submitted`（`action_submit`） | placeholder「已驗收」灰 |
+| `submitted` | 已提交 | → `approved`（`action_approve`）；可作廢 | placeholder |
+| `approved` | 已核准 | → `submitted`（`action_unapprove`）；可作廢；產生驗收單後由驗收量回寫 → `partial` | placeholder |
+| `partial` | 部分驗收 | 全部到齊 → `received`；結清（`action_settle`，放棄未到量）→ `settled`；**唯一可結清的狀態** | `--partial` 藍「部分驗收」 |
+| `received` | 已驗收 | 終態（全部到齊） | `--final` 藍「已驗收」 |
+| `settled` | 已結清 | 終態（放棄剩餘未到量） | `--settled` 藍「已結清」 |
+| `voided` | 已作廢 | 終態（`submitted` / `approved` 可作廢，沿用 `action_void`） | 整條 stepper 換 `.voided-banner` |
+
+- **partial / received 非按鈕觸發**：由驗收單的驗收量決定——尚有未到量＝部分驗收，全部到齊＝已驗收。
+- **與 6 值模型的差異**：終態用語（已驗收/已結清 vs 已結案）、終止動作（`action_void` vs `action_cancel`）、第 ④ 步配色（驗收模型一律藍 vs 結轉模型 partial 靛 / done 灰）。兩變體**不可混用**於同一模組。
+- **再次核准警示**：`action_unapprove` 會設 `was_unapproved = true`；回到 `submitted` 時於 Summary Card 下方顯示 `form-banner.is-warning`「此單曾被取消核准，請重新確認明細後再次提交核准。」
+- 步序映射、判定邏輯、樣式 token、引用程式碼 → 詳 `profiles/erp-components/Stepper.md`。
+
 ---
 
 ## Summary Bar 結構
@@ -193,68 +214,24 @@ Form View 頂部的 summary bar 在實作時最常被改錯。**必依**以下�
 - 採 `position: sticky; top: 0`，滾動時固定在 main 區域頂部
 - **無 shadow**（DS 預設卡片無陰影；shadow 只在 hover/dialog 用）
 - 分**上下兩塊**：
-  - 上區：標題（單號）+ Stepper 或 voided pill
+  - 上區：標題（單號）+ Stepper 或 voided-banner
   - 下區：關鍵指標（總金額 / 幣別 / 建立者 / 「已產生傳票」chip）
   - 兩塊之間用 `1px solid var(--border-default)` 分隔，**不**用 shadow
 - padding：上下各 `var(--space-3xl)`（24px），左右隨 main panel
 - 寬度撐滿 main panel；圓角延續 main panel 的 12px
 
-> voided 狀態下，上區的 stepper 改顯示 `pill-voided`（紅色膠囊），其他結構不變。
+> voided 狀態下，上區的 stepper 整段改顯示 `.voided-banner`（內含紅色 `st-chip` 徽章），其他結構不變。規格見 `profiles/erp-components/Stepper.md §voided-banner`。
 
 ---
 
-## Stepper 三狀態結構
-`<ol class="stepper">` 內每個 step 是 `<li class="stepper__step">`，step 之間插入 `<span class="stepper__bar">` 連接線。
+## 狀態 Stepper
 
-### 結構
+完整元件規格 → **`profiles/erp-components/Stepper.md`**（作業檔必載）。重點速記：
 
-```html
-<ol class="stepper">
-  <li class="stepper__step stepper__step--done">
-    <span class="stepper__num"><iconify-icon icon="material-symbols:check"></iconify-icon></span>
-    <span>草稿</span>
-  </li>
-  <span class="stepper__bar stepper__bar--done"></span>
-  <li class="stepper__step stepper__step--active">
-    <span class="stepper__num">2</span>
-    <span>已提交</span>
-  </li>
-  <span class="stepper__bar"></span>
-  <li class="stepper__step">
-    <span class="stepper__num">3</span>
-    <span>已核准</span>
-  </li>
-</ol>
-```
-
-### 三種 step 狀態
-
-| 狀態 | class modifier | 圓圈 `.stepper__num` (32×32, radius 100px) | 標籤文字 |
-|---|---|---|---|
-| Pending | （無 modifier） | bg `rgba(var(--color-sf-primary), .08)` on `var(--bg-surface-default)`、border `1px solid var(--border-default)`、數字 `var(--text-primary)` 14px/400 | `var(--text-secondary)` 14px/400 |
-| Active | `--active` | bg `rgb(var(--color-sf-primary))`、border `1px solid rgb(var(--color-sf-primary))`、`box-shadow: inset 0 0 0 1px #fff`（內白環）、數字 `#fff` | `var(--text-primary)` |
-| Done | `--done` | bg `rgb(var(--color-sf-success))`、border `1px solid rgb(var(--color-sf-success))`、無 shadow、改顯示 check icon（`material-symbols:check`, 20px, `#fff`） | `var(--text-placeholder)`（比 pending 的 `--text-secondary` 更淡，視覺上「已淡化但已完成」） |
-
-### 連接線 `.stepper__bar`
-
-- 預設：`width: 40px`、`border-top: 2px solid var(--border-default)`、`margin-top: 15px`（對齊圓圈中心）
-- `--active`：`border-top-color: rgb(var(--color-sf-primary))`
-- `--done`：`border-top-color: rgb(var(--color-sf-success))`
-
-### 狀態 × step 對應矩陣
-
-| `form.status` | Step 1 草稿 | Bar 1 | Step 2 已提交 | Bar 2 | Step 3 已核准 |
-|---|---|---|---|---|---|
-| `draft` | active | pending | pending | pending | pending |
-| `submitted` | done ✓ | done | active | active | pending |
-| `approved` | done ✓ | done | done ✓ | done | active |
-| `voided` | ⛔ 整個 stepper 隱藏，改顯示 `.pill-voided`（bg `rgba(var(--color-sf-error), .12)`, border `1px solid rgb(var(--color-sf-error))`, color `rgb(var(--color-sf-error))`, 12px medium, 36px 高，文字「已作廢」） | — | — | — | — |
-
-### 容器
-
-```css
-.stepper { display: flex; align-items: flex-start; gap: 16px; }
-```
+- 結構：`<div class="stepper">` 內 `stepper__step`（含 `stepper__bubble` + `stepper__label`），step 之間插 `<span class="stepper__line">` 連接線
+- 判定邏輯：每步 `n` 相對 `stepCur(state)` → `--done`（綠 + check）/ `--current`（藍 + 內白環）/ 預設灰；連接線 `.is-done` / `.is-current` / 預設灰
+- 步數依模組狀態機：基本型 3 步（canonical 4 值）／4 步動態第 ④ 步（進銷存擴充：6 值結轉模型見 `SummaryCard.md`、七值驗收模型見 §進銷存擴充狀態機）
+- `voided` / `cancelled` 整段改 `.voided-banner`（內含紅色 `st-chip` 徽章），不顯示 Stepper
 
 ---
 
@@ -479,9 +456,9 @@ App Shell 與多公司情境下的「公司別」過濾 dropdown **預設為空�
 | Sidebar / NavRail | nav-rail + 設定檔側欄 | `<aside class="nav-rail">` | `<NavigationRail>` / `<AppSidebar>` | `<ejs-sidebar>` |
 | ContentSection / 區段容器 | Form section block | `<section class="form-section">` | `<ContentSection>` | — |
 | SearchPanel | List 搜尋區 | `<div class="search-bar">` | `<SearchPanel>` | — |
-| StatusBadge / Badge / 狀態 pill | List 狀態欄、Summary | `<span class="status-pill">` | `<StatusBadge>` | — (自製) |
+| StatusBadge / Badge / 狀態 chip | List 狀態欄、Summary | `<span class="st-chip">` | `<StatusBadge>` | — (自製) |
 | Tab / 分頁 | Form 內 Tab block | `<button class="tab">` | (B 類) | `<ejs-tab>` |
-| Stepper | 作業檔狀態流程 | `<ol class="stepper">` | (B 類) | `<ejs-stepper>` |
+| Stepper | 作業檔狀態流程 | `<div class="stepper">` | (B 類) | `<ejs-stepper>` |
 | Button | CTA、操作 | `<button class="btn btn--primary">` | (B 類) | `<ejs-button>` |
 | FAB | 浮動主動作 | `<button class="fab">` | (B 類) | `<ejs-fab>` |
 | AutoComplete / Lookup | FK 到主檔（含搜尋）| `<input>` + suggest | (B 類) | `<ejs-autocomplete>` |
@@ -553,8 +530,8 @@ App Shell 與多公司情境下的「公司別」過濾 dropdown **預設為空�
 
 ## Form View 七項自檢
 
-- [ ] Summary bar 為 `sticky` + 上下兩塊（標題/stepper / 指標）+ 無 shadow + padding 24px（詳 §Summary Bar 結構）；`form.status === 'voided'` 改顯示 pill（不顯示 stepper）
-- [ ] Stepper 三狀態結構正確（`--active` / `--done` / pending + `.stepper__bar`），詳 §Stepper 三狀態結構
+- [ ] Summary bar 為 `sticky` + 上下兩塊（標題/stepper / 指標）+ 無 shadow + padding 24px（詳 §Summary Bar 結構）；`form.status === 'voided'` 改顯示 `.voided-banner`（不顯示 stepper）
+- [ ] Stepper 判定邏輯正確（`--current` / `--done` / pending + `.stepper__line .is-current/.is-done`；動態第 ④ 步走 `step4Class`），詳 `profiles/erp-components/Stepper.md`
 - [ ] Section 用 `bar + title + form-grid--4`；DynamicForm 外層無 border、padding 0（詳 §輸入欄樣式 + `profiles/erp-components/FormGroup.md`）
 - [ ] 必填欄位 label 加 `<span class="required">*</span>`；read-only 用 `readonly` 屬性，**禁**用 `disabled`
 - [ ] Smart Bar 用 `card-btn` 結構（無 link icon、count + 單位 + 標題 + `arrow-outward`），詳 §Smart Bar `card-btn` 結構；無關聯時整段不渲染
@@ -591,7 +568,7 @@ App Shell 與多公司情境下的「公司別」過濾 dropdown **預設為空�
 | Smart Bar (card-btn) | 關聯單據列 | **不使用**（設定檔通常無下游關聯） |
 | 模組分類 nav-rail | 財務 / 進銷存 / 人事 | **設定檔** |
 | List 工具列批次操作 | 批次提交 / 批次作廢 / 批次匯出 | **僅批次刪除**；icon-only danger 按鈕 + `[已選取 N 筆 ×]` chip |
-| List 狀態欄 | status-pill (4 種狀態) | **st-chip**（啟用 / 停用）；display only, **不在列表 toggle** |
+| List 狀態欄 | st-chip（依模組狀態機 4–7 種狀態） | **st-chip**（啟用 / 停用）；display only, **不在列表 toggle** |
 | List 操作欄 | view (👁) | **edit + delete**（兩個 icon button） |
 | Form 章節結構 | 基本資料 + Smart Bar + Tabs（明細） | 基本資料 → 附加群組（依模組）→（可選）稽核軌跡 |
 | Form `active` 欄位 | n/a | **Dropdown**「啟用 / 停用」；**非** `boolean_toggle` widget |
@@ -632,7 +609,7 @@ App Shell 與多公司情境下的「公司別」過濾 dropdown **預設為空�
 |---|---|
 | 「已產生傳票」要不要當第 5 個狀態？ | **不要**。它是 chip，由 `move_id` 是否存在判斷，與 4 個狀態正交 |
 | Smart Bar 沒有關聯單據？ | 整段 `<nav>` 不渲染，**不留空 bar** |
-| 狀態欄要 pill 還是 stepper？ | List View 用 pill；Form View summary card 用 stepper（voided 改 pill） |
+| 狀態欄要 chip 還是 stepper？ | List View 用 st-chip；Form View summary card 用 stepper（voided / cancelled 改 voided-banner） |
 
 > 通用決策題見 `REFERENCE.md §6`。
 
@@ -660,8 +637,9 @@ App Shell 與多公司情境下的「公司別」過濾 dropdown **預設為空�
 - [ ] programID 與版號格式正確（`vX.Y.Z.A.B`）
 - [ ] State machine 4 種狀態（含 voided）能在 Form View 正確呈現
 - [ ] 「已產生傳票」用 chip，**不在** stepper 內
-- [ ] Stepper 三狀態結構（`--active` / `--done` / pending + `.stepper__bar`）正確、矩陣對應 4 種 form.status
-- [ ] **（進銷存擴充狀態機時）** 6 值狀態正確（draft/submitted/approved/partial/done/cancelled）；Summary Card 用單指標 + 4 步動態 stepper（第 ④ 步 partial 靛 / done 灰 / placeholder；cancelled 換 pill，詳 `SummaryCard.md`）；Footer 用 6 值狀態-按鈕矩陣（詳 `FormFooter.md §進銷存作業檔狀態-按鈕矩陣`）；chat handoff 已點名「採進銷存擴充狀態機」
+- [ ] Stepper 判定邏輯（`--current` / `--done` / pending + `.stepper__line`）正確、`stepCur` 步序映射對應所有 form.status（詳 `profiles/erp-components/Stepper.md`）
+- [ ] **（進銷存擴充狀態機・結轉模型）** 6 值狀態正確（draft/submitted/approved/partial/done/cancelled）；Summary Card 用單指標 + 4 步動態 stepper（第 ④ 步 partial 靛 / done 灰 / placeholder；cancelled 換 voided-banner，詳 `SummaryCard.md`）；Footer 用 6 值狀態-按鈕矩陣（詳 `FormFooter.md §進銷存作業檔狀態-按鈕矩陣`）；chat handoff 已點名「採進銷存擴充狀態機（結轉模型）」
+- [ ] **（進銷存擴充狀態機・驗收模型）** 七值狀態正確（draft/submitted/approved/partial/received/settled/voided）；第 ④ 步 partial/received/settled 一律藍、placeholder 灰（詳 `Stepper.md §七狀態總表`）；`was_unapproved` 回到 submitted 時顯示再次核准警示橫幅；chat handoff 已點名「採進銷存擴充狀態機（驗收模型）」
 - [ ] Smart Bar 在無關聯時整段不渲染；有關聯時用 `card-btn` 結構（無 link icon、count + 單位 + 標題 + `arrow-outward`）
 - [ ] Summary bar `sticky` + 上下兩塊 + 無 shadow
 - [ ] 所有 input 預設 Filled、read-only 用 `readonly` 屬性（**非** disabled）
