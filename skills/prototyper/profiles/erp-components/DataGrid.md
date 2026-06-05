@@ -148,11 +148,31 @@ DS 對齊命名以 `.dg` / `.dg-lines` 為**權威**。早期財務範本（`mod
 
 ### 狀態 Chip `.st-chip`
 
-- 高度 `28px`、`border-radius: var(--radius-full)`、padding `0 8px 0 6px`、`min-width: 49px`
+- 高度 `28px`、`border-radius: var(--radius-full)`、padding `0 8px 0 6px`、`min-width: 49px`（表格內緊湊版；獨立使用的 36px DS Chips 本體見 `Stepper.md §voided-banner`，色彩模式兩者共用）
 - 字 `12px` / Medium / line-height `1.3` / letter-spacing `0.1px`
+- 色彩模式統一：背景 = 狀態色 12% tint、邊框 + 文字 = 狀態色實色
+- chip 在 cell 中**靠左**（隨欄位 `text-align: left`），不置中
+
+**設定檔兩態**
+
 - `.st-chip--active`：背景 `rgba(var(--color-sf-success), .12)`、邊框 + 文字 `rgb(var(--color-sf-success))`
 - `.st-chip--inactive`：背景 `rgba(var(--color-sf-error), .12)`、邊框 + 文字 `rgb(var(--color-sf-error))`
-- chip 在 cell 中**靠左**（隨欄位 `text-align: left`），不置中
+
+**作業檔狀態（canonical 4 值 + 進銷存擴充；狀態定義詳 `Stepper.md` / `erp-transaction.md §State Machine`）**
+
+| class | 標籤 | 狀態色 |
+|---|---|---|
+| `.st-chip--draft` | 草稿 | 中性灰：背景 `var(--bg-surface-variant)`、邊框 `var(--border-strong)`、文字 `var(--text-secondary)` |
+| `.st-chip--submitted` | 已提交 | `rgb(var(--color-sf-primary))` 藍 |
+| `.st-chip--approved` | 已核准 | `rgb(var(--color-sf-success))` 綠 |
+| `.st-chip--partial` | 部分驗收 / 部分採購 | `rgb(var(--color-sf-primary))` 藍 |
+| `.st-chip--received` | 已驗收 | `rgb(var(--color-sf-primary))` 藍 |
+| `.st-chip--settled` | 已結清 | `rgb(var(--color-sf-primary))` 藍 |
+| `.st-chip--done` | 已結案 | 中性灰（同 draft 模式） |
+| `.st-chip--voided` | 已作廢 | `rgb(var(--color-sf-error))` 紅 |
+| `.st-chip--cancelled` | 已取消 | `rgb(var(--color-sf-error))` 紅 |
+
+> 各態色相為**語意色推導**（對齊 Stepper「綠=完成、藍=進行中/驗收終態、紅=作廢/取消、灰=未取號/已結案」），尚未逐態經 DS 正式定義；DS 補定義後以 DS 為準。各模組依其狀態機取用對應 class 即可。
 
 ### 操作按鈕 `.ico-btn`
 

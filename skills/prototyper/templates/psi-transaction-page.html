@@ -329,38 +329,38 @@
                       <div v-if="isCancelled" class="voided-banner">
                         <span class="st-chip st-chip--cancelled voided-banner__pill">已取消</span>
                       </div>
-                      <!-- 否則 4 步動態 stepper（第 ④ 步 = partial/done/placeholder） -->
-                      <ol v-else class="stepper">
-                        <li class="stepper__step" :class="stepClass(1)">
-                          <span class="stepper__num">
+                      <!-- 否則 4 步動態 stepper（第 ④ 步 = partial/done/placeholder；詳 Stepper.md） -->
+                      <div v-else class="stepper">
+                        <div class="stepper__step" :class="stepClass(1)">
+                          <span class="stepper__bubble">
                             <iconify-icon v-if="stepState(1) === 'done'" icon="material-symbols:check"></iconify-icon>
                             <template v-else>1</template>
                           </span>
-                          <span>草稿</span>
-                        </li>
-                        <span class="stepper__bar" :class="lineClass(1)"></span>
-                        <li class="stepper__step" :class="stepClass(2)">
-                          <span class="stepper__num">
+                          <span class="stepper__label">草稿</span>
+                        </div>
+                        <span class="stepper__line" :class="lineClass(2)"></span>
+                        <div class="stepper__step" :class="stepClass(2)">
+                          <span class="stepper__bubble">
                             <iconify-icon v-if="stepState(2) === 'done'" icon="material-symbols:check"></iconify-icon>
                             <template v-else>2</template>
                           </span>
-                          <span>已提交</span>
-                        </li>
-                        <span class="stepper__bar" :class="lineClass(2)"></span>
-                        <li class="stepper__step" :class="stepClass(3)">
-                          <span class="stepper__num">
+                          <span class="stepper__label">已提交</span>
+                        </div>
+                        <span class="stepper__line" :class="lineClass(3)"></span>
+                        <div class="stepper__step" :class="stepClass(3)">
+                          <span class="stepper__bubble">
                             <iconify-icon v-if="stepState(3) === 'done'" icon="material-symbols:check"></iconify-icon>
                             <template v-else>3</template>
                           </span>
-                          <span>已核准</span>
-                        </li>
-                        <span class="stepper__bar" :class="lineClass(3)"></span>
-                        <!-- 第 ④ 步：三選一動態插槽（partial 靛 / done 灰 / placeholder 灰待定） -->
-                        <li class="stepper__step" :class="step4Class">
-                          <span class="stepper__num">4</span>
-                          <span>{{ step4Label }}</span>
-                        </li>
-                      </ol>
+                          <span class="stepper__label">已核准</span>
+                        </div>
+                        <span class="stepper__line" :class="lineClass(4)"></span>
+                        <!-- 第 ④ 步：三選一動態插槽（partial 靛 / done 灰 / placeholder 灰待定）；永遠走 step4Class，不套 --current -->
+                        <div class="stepper__step" :class="step4Class">
+                          <span class="stepper__bubble">4</span>
+                          <span class="stepper__label">{{ step4Label }}</span>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>

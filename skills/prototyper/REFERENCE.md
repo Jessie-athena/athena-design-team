@@ -411,7 +411,7 @@ Prototype 階段所有元件用 **原生 HTML + Tailwind class + Vue directive**
 | 自製 `<table class="grid">` | ERP:`<ejs-grid>` |
 | `<dialog>` 自製 | ERP:`<ejs-dialog>` |
 | `<button class="btn btn--primary">` | ERP:`<ejs-button isPrimary>` |
-| `<span class="status-pill">` | ERP:`<DsStatusBadge>` |
+| `<span class="st-chip">` | ERP:`<DsStatusBadge>` |
 | `<aside class="nav-rail">` | ERP:`<DsSideNavMenu>` |
 
 > 其他專案的對應由各自 profile 補完。
@@ -465,22 +465,15 @@ createApp({
     // ===== State machine handlers（依 profile 命名） =====
     // 例:ERP profile 用 onSubmit / onApprove / onUnapprove / onVoid
 
-    // ===== Stepper helpers（ERP profile §Stepper 三狀態結構） =====
-    // form.status ∈ stateOrder 時：step 在 cur 前 = done、等於 cur = active、之後 = pending
-    // bar 的狀態 = 左側 step 的狀態（見 profile 對應矩陣）
-    const stateOrder = ['draft', 'submitted', 'approved']
-    const stepState = (s) => {
-      const cur = stateOrder.indexOf(form.status)
-      const idx = stateOrder.indexOf(s)
-      if (idx < cur) return 'done'
-      if (idx === cur) return 'active'
-      return 'pending'
-    }
-    const stepClass = (s, kind = 'step') => {
-      const st = stepState(s)
-      if (st === 'pending') return ''
-      return kind === 'bar' ? `stepper__bar--${st}` : `stepper__step--${st}`
-    }
+    // ===== Stepper helpers（詳 profiles/erp-components/Stepper.md） =====
+    // 每步 n 相對 stepCur()：n < 當前 = done（綠+check）、n = 當前 = current（藍+內白環）、之後 = pending 灰
+    // lineClass(n) = 第 n 步「左側」連接線：is-done / is-current（正連向當前步）/ 灰
+    // 基本型 3 步只用 draft/submitted/approved；擴充狀態機映射照抄不影響（驗收七值 / 結轉 6 值見 Stepper.md）
+    const stepCur = () => ({ draft:1, submitted:2, approved:3, partial:4, received:5, settled:4, voided:3 }[form.status] || 1)
+    const stepState = (n) => { const c = stepCur(); return n < c ? 'done' : n === c ? 'current' : 'pending' }
+    const stepClass = (n) => { const st = stepState(n); return st === 'pending' ? '' : `stepper__step--${st}` }
+    const lineClass = (n) => { const c = stepCur(); return n < c ? 'is-done' : n === c ? 'is-current' : '' }
+    // 動態第 ④ 步型另加 step4Class / step4Label（見 Stepper.md §引用程式碼）；第 ④ 步永遠走 step4Class，不套 --current
 
     // ===== Smart Bar（ERP profile §Smart Bar `card-btn` 結構） =====
     // form.relations 形狀：[{ type, count, unit, title }, ...]
@@ -492,7 +485,7 @@ createApp({
 
     return {
       breadcrumb, programId, version, navItems, activeNav, view, toasts,
-      stepState, stepClass, visibleRelations, toastIcon, modalIcon,
+      stepState, stepClass, lineClass, visibleRelations, toastIcon, modalIcon,
     }
   }
 }).mount('#app')
