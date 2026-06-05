@@ -188,4 +188,5 @@ function step4Label(s){ return s==='partial'?'部分驗收':s==='settled'?'已�
 ```
 
 > 基本型（3 步）省略第 ④ 步與 `step4Class` / `step4Label`；結轉模型把 `stepCur` 換成 6 值映射、`step4Class/Label` 換成 partial/done/placeholder 三選一（`SummaryCard.md`）。
+> **簽名差異**：本檔為可單測的純函式版（顯式傳 `s` 狀態）；`app.js` 實作慣例是閉包版（內部讀 `form.status`，呼叫端只傳 `n`，如 `stepClass(1)`），見 `REFERENCE.md §app.js 骨架`。
 > Template 內的 Vue binding 寫法見 `templates/module-page.html`（基本型）與 `templates/psi-transaction-page.html`（4 步動態）。

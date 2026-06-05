@@ -89,11 +89,19 @@ skills/prototyper/
 ├── pitfalls.md         反覆出現的審查問題（dated entries，第 2 次以上才寫入）
 ├── profiles/
 │   ├── Shared.md       跨專案頁面框架（Header 56px / Nav-rail 72px / Info Bar 28px）
-│   ├── erp-transaction.md          ERP 專屬：State Machine / Summary Bar / Stepper / Smart Bar / DataGrid / Form Footer / 設定檔類型判斷
-│   └── erp-setup.md    ERP 設定檔（master data）專屬：側欄 / List/Form 自檢 / 資料狀態矩陣 / 刪除機制
+│   ├── erp-transaction.md          ERP 專屬：State Machine（含進銷存擴充兩變體）/ Summary Bar / Smart Bar / 設定檔類型判斷
+│   ├── erp-setup.md    ERP 設定檔（master data）專屬：差異速查 / 側欄 / List/Form 自檢 / 資料狀態矩陣 / 刪除機制
+│   └── erp-components/ 元件規格（載入規則見 SKILL.md §支援檔案——單一來源）
+│       ├── ListSearch.md   toolbar / search bar / RWD 收合（ERP 自動載入）
+│       ├── DataGrid.md     .dg / .dg-lines / 狀態 chip（ERP 自動載入）
+│       ├── FormGroup.md    form-grid 4 欄 / 跨欄 / RWD（ERP 自動載入）
+│       ├── FormFooter.md   記錄分頁器 / 狀態-按鈕矩陣 / dirty-guard（ERP 自動載入）
+│       ├── Stepper.md      狀態 Stepper：步序判定 / 動態第 ④ 步 / voided-banner（作業檔必載）
+│       └── SummaryCard.md  Summary Card 兩種 Layout / 6 值結轉插槽（作業檔必載）
 └── templates/
-    ├── module-page.html 作業檔 starter（含狀態流程）
-    └── setup-page.html  設定檔 starter（master data，僅 active）
+    ├── module-page.html           財務 / 一般作業檔 starter（legacy .erp-*）
+    ├── psi-transaction-page.html  進銷存作業檔 starter（DS 對齊 .app-*，4 步動態 stepper）
+    └── setup-page.html            設定檔 starter（master data，僅 active）
 ```
 
 ---
@@ -106,7 +114,8 @@ skills/prototyper/
 | **永遠** | `profiles/Shared.md` | 頁面框架基底，所有專案前置必讀 |
 | **依專案** | `profiles/<project>.md` | 專案專屬覆寫（ERP 即 `erp-transaction.md`） |
 | **依類型** | `profiles/<project>-setup.md` | 設定檔模組才載入（依 `erp-transaction.md §類型判斷準則`，ERP 即 `erp-setup.md`） |
-| **依專案（ERP 一律載入）** | `profiles/erp-components/*.md` | 4 份 ERP 元件規格（ListSearch / DataGrid / FormGroup / FormFooter），List View 與 Form View 幾乎都會用到 |
+| **依專案（ERP 一律載入）** | `profiles/erp-components/` 4 份 | ListSearch / DataGrid / FormGroup / FormFooter，List View 與 Form View 幾乎都會用到 |
+| **依類型（作業檔必載）** | `profiles/erp-components/Stepper.md`、`SummaryCard.md` | 狀態 Stepper 與 Summary Card；設定檔免載（載入規則單一來源 = `SKILL.md §支援檔案`） |
 | **按需** | `pitfalls.md` | 每次製作前掃一眼，避免重蹈覆轍 |
 | **按需** | `REFERENCE.md` | 需要工作流明細 / token / 元件對照 / `app.js` 範本時查 |
 | **按需** | `templates/*.html` | 階段 2「複製 starter」時讀取 |

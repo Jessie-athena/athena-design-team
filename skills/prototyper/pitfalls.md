@@ -56,7 +56,7 @@
 | **App shell chrome 用 `-outline` 線條版**（`home-outline` / `notifications-outline` / `settings-outline` / `account-balance-outline`…）| **App shell chrome 一律實心(無後綴)**:`home` / `notifications` / `settings` / `account-balance` / `inventory-2` / `badge` / `cards-star`——Athena DS 規定 shell = 實心(FILL 1)，**別反射套「chrome 走線條」通則**。例外:favorite 切換 `star ↔ star-outline`。內容區 icon（操作鈕/空狀態/分頁/設定檔側欄）才依 DS 走線條。詳 `profiles/Shared.md §App shell icon` |
 | DataGrid 操作欄做成 hover 才浮出 | 操作欄永遠顯示，凍結在右側 |
 | 卡片預設加 `box-shadow` | 預設**無 shadow**（只用 1px outline-variant 邊框）；shadow 僅出現在 hover 或 dialog/popover 等浮層 |
-| Summary card 是一塊，內容平鋪 | Summary 區分**上區（title + stepper / status pill）+ 下區（指標 / 關聯資訊）**兩塊，`position: sticky`，無 shadow，padding 24px |
+| Summary card 是一塊，內容平鋪 | Summary 依 Layout 分區（A：上區 title + stepper / voided-banner、下區指標；B：左單指標、右 stepper），`position: sticky`，無 shadow，padding 24px；詳 `SummaryCard.md` |
 | Smart Bar 用 `<a><iconify-icon icon="material-symbols:link"></iconify-icon>標題</a>` | 用 `.smart-bar > .card-btn` 結構，**無 link icon**；每個 card-btn 內含 count + 單位 + 標題 + `arrow-outward`；詳細結構見 profile |
 | Stepper 步驟只做「當前 / 已過」兩態，或第 ④ 步直接套當前態 | 三態（pending / **current** / done）+ 連接線 `.stepper__line`（`.is-done` / `.is-current` / 灰）；done 顯示 check icon、current 內白環、pending 灰；動態第 ④ 步永遠走 `step4Class`，不套 `--current`；詳 `profiles/erp-components/Stepper.md` |
 | 主要 CTA 按鈕（新增 / 提交 / 儲存）帶 icon 強調 | CTA 標籤本身就是動詞，**禁加 icon**；icon 只用在 icon-only 按鈕（如 settings / close）或導向類（如 chevron-left「上一筆」） |
