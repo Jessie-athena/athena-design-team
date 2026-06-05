@@ -19,7 +19,7 @@
 
 1. **對應 Odoo model**（如 `psi.sale_order`，衍生 `programID = PSI-SO`）
 2. **模組分類**（財務 / 進銷存 / 人事 / 設定檔，決定 breadcrumb 與 nav-rail 高亮）
-3. **單據類型**（**作業檔 / 設定檔**，決定走哪份 starter template 與下游章節）— 判斷準則見 §設定檔（Master Data）特化規則
+3. **單據類型**（**作業檔 / 設定檔**，決定走哪份 starter template 與下游章節）— 判斷準則見 §設定檔（Master Data）類型判斷
 
 ## 規格抽取表（PM 文件 → prototype）
 
@@ -467,7 +467,7 @@ App Shell 與多公司情境下的「公司別」過濾 dropdown **預設為空�
 | ProgressBar | 進度條 | `<div class="progress">` | (B 類) | `<ejs-progressbar>` |
 | Spinner | inline loading | `<span class="spinner">` | (B 類) | `<ejs-spinner>` |
 
-> **Switch / boolean_toggle 刻意不列**：設定檔 `active` 強制用 `<DropdownInput>`「啟用 / 停用」（見 §設定檔特化規則）。
+> **Switch / boolean_toggle 刻意不列**：設定檔 `active` 強制用 `<DropdownInput>`「啟用 / 停用」（見 `erp-setup.md §作業檔 vs 設定檔 差異速查`）。
 > 「(B 類)」= 共享庫 `@web-erp/shared-ui` 尚未封裝；production 化暫直用 Syncfusion。
 > **C 類（提案待建）**：`AmountSummaryCard`、`DropdownGrid`（3 欄變體）等個別模組提案，需評估後才進共享庫；prototype 階段以 Tailwind 行內組合替代。
 
@@ -543,13 +543,9 @@ App Shell 與多公司情境下的「公司別」過濾 dropdown **預設為空�
 
 ---
 
-## 設定檔（Master Data）特化規則
+## 設定檔（Master Data）類型判斷
 
-> 「設定檔」(master data) 的 UI 慣例與「作業檔」(transaction documents) 不同。判斷類型後，**以下章節 override 前述作業檔慣例**：
-> - State Machine、Summary Bar (stepper)、Smart Bar、Form Footer 動作群 — **全部不適用**
-> - List View 批次操作、Form View 章節結構、Footer — **依設定檔規範重寫**
-> - Modal / Toast / Empty State、輸入欄樣式、按鈕 icon 政策 — **沿用本檔前述章節**
-> - App Shell — 沿用 `Shared.md §頁面框架` + 本檔 §App Shell 規範
+> 「設定檔」(master data) 的 UI 慣例與「作業檔」(transaction documents) 不同。本檔只負責**判型**；差異速查、覆寫章節、完整規範全在 `${CLAUDE_SKILL_DIR}/profiles/erp-setup.md`。
 
 ### 類型判斷準則（命中任一即為設定檔）
 
@@ -558,37 +554,7 @@ App Shell 與多公司情境下的「公司別」過濾 dropdown **預設為空�
 - 規格中**無**「狀態流程圖」、**無**「核准 / 提交 / 作廢」動作
 - 模組分類為「設定檔」（nav-rail 第 5 項）
 
-### 作業檔 vs 設定檔 差異速查
-
-| 維度 | 作業檔 (default) | 設定檔 (override) |
-|---|---|---|
-| State machine | draft / submitted / approved / voided | 僅 `active`: true/false |
-| Form Summary Bar | sticky, 上下兩塊, stepper + 指標 | **不使用**；以麵包屑 + Page Title 取代 |
-| Stepper | 三狀態 (pending/active/done) + bar | **不使用** |
-| Smart Bar (card-btn) | 關聯單據列 | **不使用**（設定檔通常無下游關聯） |
-| 模組分類 nav-rail | 財務 / 進銷存 / 人事 | **設定檔** |
-| List 工具列批次操作 | 批次提交 / 批次作廢 / 批次匯出 | **僅批次刪除**；icon-only danger 按鈕 + `[已選取 N 筆 ×]` chip |
-| List 狀態欄 | st-chip（依模組狀態機 4–7 種狀態） | **st-chip**（啟用 / 停用）；display only, **不在列表 toggle** |
-| List 操作欄 | view (👁) | **edit + delete**（兩個 icon button） |
-| Form 章節結構 | 基本資料 + Smart Bar + Tabs（明細） | 基本資料 → 附加群組（依模組）→（可選）稽核軌跡 |
-| Form `active` 欄位 | n/a | **Dropdown**「啟用 / 停用」；**非** `boolean_toggle` widget |
-| Form 動作按鈕 | 提交 / 核准 / 解核 / 作廢 + 更多 | 刪除（danger outline）/ 更多操作（儲存後新增、複製）/ **儲存變更** (primary) |
-| Form Footer 左群 | 上下筆 (prev/next doc) | 上下筆（`[‹] {n}/{total} [›]`）；新增（`route.id === 'new'`）時整組停用 |
-| 稽核軌跡 | n/a（暫不在 prototype 表現） | **表單內 Group**（最近 5 筆 tracking inline）；**不使用 Odoo chatter** |
-| 設定檔側欄 | 不使用 | **使用**（main panel 左側列出同組設定，方便跳轉） |
-
-### → 詳細設定檔規範
-
-判定為設定檔後，載入 **`${CLAUDE_SKILL_DIR}/profiles/erp-setup.md`** 取得完整規範：
-
-- 設定檔側欄
-- List View 七項自檢（設定檔版）
-- Form View 七項自檢（設定檔版）
-- 設定檔資料狀態矩陣（`.is-archived-view` / `.is-readonly-view` / `.is-keep-editable`）
-- Form Footer（設定檔版）
-- 設定檔 Modal / Toast 特有場景
-- 設定檔刪除機制（「紅框白底紅字」家族視覺規格）
-- 設定檔 Handoff Checklist
+判定為**設定檔** → 載入 `${CLAUDE_SKILL_DIR}/profiles/erp-setup.md`，依其「作業檔 vs 設定檔差異速查」與覆寫章節調整本檔規則；判定為**作業檔** → 本檔即完整規範，不需 erp-setup.md。
 
 ---
 

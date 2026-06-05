@@ -101,7 +101,7 @@
 
 ## ERP profile
 
-<!-- App Shell / state machine / Smart Bar / handoff 五項相關；設定檔特化規則相關 -->
+<!-- App Shell / state machine / Smart Bar / handoff 五項相關；設定檔規範（erp-setup.md）相關 -->
 
 ### [2026-05-18] 刪除按鈕用紅框白底紅字（非實心紅底）
 
