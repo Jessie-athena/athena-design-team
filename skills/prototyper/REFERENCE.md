@@ -140,7 +140,7 @@
 1. 拿 Pass 1 確認過的 schema → 複製 profile 指定的 starter template → 目標路徑
    - 作業檔（transaction documents，含狀態流程）→ `${CLAUDE_SKILL_DIR}/templates/module-page.html`
    - 設定檔（master data，僅 active true/false）→ `${CLAUDE_SKILL_DIR}/templates/setup-page.html`
-   - 類型判斷準則由 profile 規定（ERP 見 `${CLAUDE_SKILL_DIR}/profiles/erp-transaction.md §設定檔（Master Data）特化規則`）
+   - 類型判斷準則由 profile 規定（ERP 見 `${CLAUDE_SKILL_DIR}/profiles/erp-transaction.md §設定檔（Master Data）類型判斷`）
 2. 替換 App Shell（結構與尺寸見 `profiles/Shared.md §頁面框架`；breadcrumb 層級、nav 項目、programID / version 等具體值見專案 profile）
 3. 建構 List View（自檢項目見 profile，作業檔與設定檔有獨立清單）
 4. 建構 Form View（自檢項目見 profile，作業檔與設定檔有獨立清單）
@@ -176,7 +176,7 @@
 | 必填判斷只在前端？ | Prototype 階段視覺上有 `*` 即可；validation 邏輯由 production code 處理 |
 | 狀態欄要 pill 還是 stepper？ | List 用 pill；Form summary card 用 stepper |
 | 響應式欄位太多被截斷？ | 橫向 scroll；**禁**隱藏關鍵欄位 |
-| 規格沒提「狀態流程」是不是缺漏？ | 不一定。設定檔（master data）本來就沒有狀態機，僅 `active`；參照 profile 的設定檔特化規則 |
+| 規格沒提「狀態流程」是不是缺漏？ | 不一定。設定檔（master data）本來就沒有狀態機，僅 `active`；參照 `erp-setup.md §作業檔 vs 設定檔 差異速查` |
 
 ---
 
@@ -193,7 +193,7 @@
 1. 觸發前確認：模組中文名（區域設定檔）、profile（ERP）、來源（同類舊模組）、輸出（`prototype/project/區域設定檔.html`）
 2. 階段 0 跨專案複用：從舊 .html 抽介面規格（欄位 / 狀態 / 關聯），舊模組視為 Tier 4 參考
 3. 判斷為設定檔（master data，僅 active）→ 複製 `templates/setup-page.html`
-4. 套用 §設定檔（Master Data）特化規則 + §設定檔資料狀態矩陣
+4. 套用 `erp-setup.md`（差異速查 + 設定檔資料狀態矩陣）
 5. List/Form 完成後跑 ERP §設定檔 Handoff Checklist
 
 **關鍵守則**：舊模組是 Tier 4 參考；若新模組另有 PRD（Tier 2），PRD 優先於舊模組。

@@ -1,10 +1,10 @@
 # Form Group 分群與 form-grid RWD
 
 > 屬於 `profiles/erp-transaction.md` 的延伸元件規格。
-> 載入時機：實作該元件（或審查含該元件的 prototype）時依需求載入；不會隨 erp profile 自動載入。
+> 載入時機：隨 ERP profile **自動載入**（無論作業檔 / 設定檔；由 `SKILL.md §支援檔案` 規定——該處為載入規則的**單一來源**）。
 >
 > 上層 profile：`profiles/erp-transaction.md`
-> 同層元件：`ListSearch.md` / `DataGrid.md` / `FormGroup.md` / `FormFooter.md`
+> 同層元件：`ListSearch.md` / `DataGrid.md` / `FormGroup.md` / `FormFooter.md` / `SummaryCard.md` / `Stepper.md`
 
 ---
 

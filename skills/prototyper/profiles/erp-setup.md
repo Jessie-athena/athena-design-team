@@ -1,6 +1,6 @@
 # Athena ERP Profile — 設定檔（Master Data）
 
-> 本檔承接 `erp-transaction.md §設定檔（Master Data）特化規則` 的「類型判斷」與「差異速查」，提供設定檔模組的完整製作規範。
+> 本檔承接 `erp-transaction.md §設定檔（Master Data）類型判斷`（判型準則在該檔），提供設定檔模組的**差異速查與完整製作規範**。
 >
 > **載入條件**：於 `erp-transaction.md` 完成類型判斷後，若判定為**設定檔**才載入本檔；作業檔（transaction documents）不需要。
 >
@@ -8,7 +8,28 @@
 >
 > **沿用的章節**：
 > - `erp-transaction.md`：App Shell、輸入欄樣式、按鈕 icon 政策、Modal/Toast/Empty State、PRD 元件對照
-> - `profiles/erp-components/ListSearch.md`、`profiles/erp-components/DataGrid.md`、`profiles/erp-components/FormGroup.md`、`profiles/erp-components/FormFooter.md`（4 個元件子檔，已從 `erp-transaction.md` 獨立出來）
+> - `profiles/erp-components/ListSearch.md`、`profiles/erp-components/DataGrid.md`、`profiles/erp-components/FormGroup.md`、`profiles/erp-components/FormFooter.md`（4 個元件子檔，已從 `erp-transaction.md` 獨立出來；設定檔無 Stepper / Summary Card，`Stepper.md` / `SummaryCard.md` 不載）
+
+---
+
+## 作業檔 vs 設定檔 差異速查
+
+| 維度 | 作業檔 (default) | 設定檔 (override) |
+|---|---|---|
+| State machine | canonical 4 值（draft / submitted / approved / voided）；進銷存可擴充（6 值結轉 / 七值驗收，詳 `erp-transaction.md §進銷存擴充狀態機`） | 僅 `active`: true/false |
+| Form Summary Card | sticky；Layout A 多指標 / Layout B 單指標 + stepper（詳 `SummaryCard.md`） | **不使用**；以麵包屑 + Page Title 取代 |
+| Stepper | 步序判定（pending/current/done）+ `stepper__line`；動態第 ④ 步（詳 `Stepper.md`） | **不使用** |
+| Smart Bar (card-btn) | 關聯單據列 | **不使用**（設定檔通常無下游關聯） |
+| 模組分類 nav-rail | 財務 / 進銷存 / 人事 | **設定檔** |
+| List 工具列批次操作 | 批次提交 / 批次作廢 / 批次匯出 | **僅批次刪除**；icon-only danger 按鈕 + `[已選取 N 筆 ×]` chip |
+| List 狀態欄 | st-chip（依模組狀態機 4–7 種狀態） | **st-chip**（啟用 / 停用）；display only, **不在列表 toggle** |
+| List 操作欄 | view (👁) | **edit + delete**（兩個 icon button） |
+| Form 章節結構 | 基本資料 + Smart Bar + Tabs（明細） | 基本資料 → 附加群組（依模組）→（可選）稽核軌跡 |
+| Form `active` 欄位 | n/a | **Dropdown**「啟用 / 停用」；**非** `boolean_toggle` widget |
+| Form 動作按鈕 | 提交 / 核准 / 解核 / 作廢 + 更多（依狀態機變體增減） | 刪除（danger outline）/ 更多操作（儲存後新增、複製）/ **儲存變更** (primary) |
+| Form Footer 左群 | 上下筆 (prev/next doc) | 上下筆（`[‹] {n}/{total} [›]`）；新增（`route.id === 'new'`）時整組停用 |
+| 稽核軌跡 | n/a（暫不在 prototype 表現） | **表單內 Group**（最近 5 筆 tracking inline）；**不使用 Odoo chatter** |
+| 設定檔側欄 | 不使用 | **使用**（main panel 左側列出同組設定，方便跳轉） |
 
 ---
 

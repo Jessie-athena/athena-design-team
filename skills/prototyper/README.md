@@ -66,7 +66,7 @@ Skill 會：
 Skill 會：
 1. 從舊 `.html` 抽出介面規格（欄位 / 狀態 / 關聯）
 2. 判斷為設定檔 → 複製 `templates/setup-page.html`
-3. 套用設定檔特化規則 + 資料狀態矩陣
+3. 套用 erp-setup.md（差異速查 + 資料狀態矩陣）
 4. 產出新模組 `.html`
 
 ### 場景 3 — 純 chat 描述

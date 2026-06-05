@@ -1,7 +1,7 @@
 # Summary Card 結構與互動
 
 > 屬於 `profiles/erp-transaction.md` 的延伸元件規格。
-> 載入時機：實作作業檔 Form View（或審查含 Summary Card 的 prototype）時依需求載入。
+> 載入時機：**作業檔**（transaction documents）必載；設定檔無 Summary Card（`erp-setup.md` 已明定），免載（由 `SKILL.md §支援檔案` 規定——該處為載入規則的**單一來源**）。
 >
 > 上層 profile：`profiles/erp-transaction.md`
 > 同層元件：`ListSearch.md` / `DataGrid.md` / `FormGroup.md` / `FormFooter.md` / `SummaryCard.md` / `Stepper.md`
