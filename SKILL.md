@@ -25,40 +25,23 @@ Act as a coordinated AI product design team with 14 specialized roles covering t
 
 ---
 
-## 執行模式（Hybrid：自動偵測環境）
+## 執行模式（三模式，自動偵測）
 
-先判斷目前環境是否有 **Agent tool（可 spawn subagents）**，例如 Claude Code。
+依**可用工具**判斷模式，由上往下檢查、命中即停（不要用環境變數嗅探 — 檢查自己的工具清單就是最可靠的偵測）：
 
-### Mode 1 — 有 Agent tool（Claude Code）：subagent 編排
+1. **有 team 協作工具**（可送訊息給具名 teammate 的 SendMessage + 共享 task list 的建立／認領／完成工具）→ **Mode 3（Agent Team）可用**
+2. **否則，有可 spawn subagent 的 Agent / Task 工具** → **Mode 1（Subagent 編排）**
+3. **兩者皆無** → **Mode 2（單一上下文角色切換）**
 
-每個角色以獨立 subagent 執行。好處：上下文隔離（角色不互相污染）、調研可真平行、每個角色都讀滿自己的完整定義。
+Mode 3「可用」不等於「該用」。選用判準是一個問題：**這個任務的角色之間需要來回討論、互相挑戰嗎？**
 
-Subagent prompt 模板：
+- **需要** → Mode 3：完整新功能設計（策略↔互動↔文案會反覆對焦）、critique 多方辯論、usability 多假設對撞、角色需即時互問（如 ux-writer 當場跟 interaction-designer 確認 state 觸發條件）
+- **不需要** → Mode 1：單向接力（handoff 鏈）、只要結果不要過程對話（三路調研各跑各的）、1–3 棒的短任務
+- **不確定 → 用 Mode 1**。Team 的 token 成本顯著較高且為實驗性功能，只有「角色間來回討論本身會提升品質」時才升級
 
-```
-你是 Athena 產品設計團隊的 <role>。
-1. 先完整讀取 <此 skill 的絕對路徑>/skills/<role>/SKILL.md，
-   依其角色定位、工作模式、輸出格式與自檢清單執行。
-2. 任務：<具體任務描述>
-3. 上游輸入：<上游角色產出的檔案路徑，或內嵌內容>
-4. 將產出寫入：<工作目錄>/<序號>-<role>.md
-5. 輸出語言：繁體中文為主，技術術語保留英文。
-```
+**回退規則**：偵測不到 team 工具就靜默退回 Mode 1、偵測不到 Agent tool 就退回 Mode 2 — 不要嘗試呼叫不存在的工具，也不要中斷任務。無論哪個模式，產出一律遵循 `design-run/<feature-slug>/` 編號檔案慣例 — 模式只改變協作方式，不改變交付物。
 
-注意事項：
-- **Subagents 之間不共享對話上下文** — 上游產出必須以檔案路徑或內嵌內容明確傳遞，不能假設下游「看得到」前面的對話。
-- 工作目錄慣例：`design-run/<feature-slug>/`，每個角色產出一個編號檔案（如 `01-requirement-analyst.md`、`02a-ux-researcher.md`），讓任何角色都能往回追溯。
-- 三路調研（`ux-researcher` + `market-insight-analyst` + `data-analyst`）**在同一回合 spawn 三個 subagents 平行執行**，全部完成後再餵給 `product-strategist`。
-- 順序型角色（策略 → 互動 → 視覺 → 文案）依序 spawn，把前一棒的產出路徑傳給下一棒。
-
-### Mode 2 — 無 Agent tool（Claude.ai 等）：單一上下文角色切換
-
-在同一對話中依序切換角色。規則：
-
-- 切換角色前**先讀取該角色的 SKILL.md 全文**，再開始扮演。
-- 每段產出開頭標明目前角色（如 `## 🔎 requirement-analyst`），讓使用者知道現在是誰在說話。
-- 「平行調研」改為依序執行，但每個角色仍須完整走完自己的輸出模板，不可因為前面已有內容而省略。
-- 一次只扮演一個角色，產出完成才換下一個 — 混合視角會讓輸出失去角色該有的深度。
+**確定模式後，讀取 `references/execution-modes.md` 中對應模式的那一節**（subagent / teammate 的 prompt 模板、task dependency 映射、通訊與產出慣例、卡住處理都在裡面），再開始執行。Mode 3 另須先讀 `skills/design-lead/SKILL.md` — team lead 固定是主對話本身，由你承擔 design-lead 的編排與品質守門職能。
 
 ---
 

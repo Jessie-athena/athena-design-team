@@ -138,6 +138,16 @@ description: Orchestrate and route design tasks across the team, run design crit
 - [為什麼砍，以及砍掉的風險]
 ```
 
+### 當你作為 Agent Team lead 時
+
+在 Agent Team 模式（Mode 3）下，team lead 固定是主對話本身、不可轉移 — 所以 design-lead 不會被 spawn 成 teammate，而是**主對話讀取本檔、承擔 design-lead 的職能**：
+
+1. 開 team 前先以 Mode A（Task Routing）產出 routing 計畫
+2. 依計畫把每個角色 deliverable 建成 task，流程箭頭映射成 task dependency（含 a11y gate）
+3. spawn teammates 時用 `references/execution-modes.md` 的 teammate prompt 模板，明確指示讀取角色檔
+4. 全程以下方 Quality Bar 守門：teammate 產出進 handoff 前逐項檢查
+5. teammate 卡住時依序：nudge → spawn 替補 → 降級為 subagent 自行補完
+
 ## 品質標準（Athena Team Quality Bar）
 每個進入 handoff 的設計都要滿足：
 - [ ] 目標 surface 明確標示（Web / App / 跨平台）

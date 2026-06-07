@@ -125,12 +125,15 @@ data-analyst → ux-researcher → usability-tester → interaction-designer
 3. 開啟新對話，Claude 會自動根據任務觸發對應角色（已實測：設計類任務正確觸發、API / DB / debug 類任務正確不觸發）
 4. 若想指定角色，直接在對話中說明：「用 `ux-researcher` 幫我規劃 5 場訪談」
 
-### 執行架構（Hybrid 自動偵測）
+### 執行架構（三模式自動偵測）
 
-主 SKILL.md 會偵測環境採用對應模式：
+主 SKILL.md 依可用工具偵測環境，採用對應模式（細節見 `references/execution-modes.md`）：
 
-- **Claude Code（有 Agent tool）— subagent 編排**：每個角色以獨立 subagent 執行，上下文隔離、三路調研真平行；角色產出依 `design-run/<feature-slug>/` 慣例存成編號檔案，供下游追溯
-- **Claude.ai（無 subagents）— 單一上下文角色切換**：依序切換角色，每次切換前先讀完該角色的 SKILL.md 全文，每段產出標明目前角色
+- **Mode 1 — Subagent 編排**（Claude Code）：每個角色以獨立 subagent 執行，上下文隔離、三路調研真平行；適合單向接力流程。角色產出依 `design-run/<feature-slug>/` 慣例存成編號檔案，供下游追溯
+- **Mode 2 — 單一上下文角色切換**（Claude.ai）：依序切換角色，每次切換前先讀完該角色的 SKILL.md 全文，每段產出標明目前角色
+- **Mode 3 — Agent Team 編排**（Claude Code + 實驗性 Agent Teams）：主對話當 team lead（承擔 design-lead 職能），角色為可互相通訊的 teammates，共享 task list 並以 dependency 映射設計流程（含 a11y gate）；適合角色間需要來回討論、互相挑戰的長流程。未啟用時自動退回 Mode 1
+
+三種模式的交付物完全一致（`design-run/` 編號檔案）— 模式只改變協作方式。
 
 範例指令：
 - 「幫我解析這份 PRD」→ 自動觸發 `requirement-analyst`

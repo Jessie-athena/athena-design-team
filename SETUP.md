@@ -24,7 +24,19 @@
    cp -r <repo> ~/.claude/skills/athena-design-team
    ```
 3. 重啟 Claude Code
-4. 在 Claude Code 中，主 skill 觸發後會以 **subagent 編排模式**執行（角色上下文隔離、調研平行），詳見 README「執行架構」
+4. 在 Claude Code 中，主 skill 觸發後預設以 **subagent 編排模式**執行（角色上下文隔離、調研平行），詳見 README「執行架構」
+
+#### （選配）啟用 Agent Team 模式（Mode 3）
+
+讓角色成為可互相通訊、共享 task list 的 teammates，適合需要角色間來回討論的長流程：
+
+1. 確認 Claude Code 版本 ≥ 2.1.32（`claude --version`）
+2. 在 `~/.claude/settings.json` 加入：
+   ```json
+   { "env": { "CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS": "1" } }
+   ```
+3. 重啟 Claude Code。主 skill 會自動偵測 team 工具並在適合的任務升級為 Mode 3
+4. 未啟用時自動退回 subagent 模式，產出不受影響（此為實驗性功能，token 成本較高）
 
 ---
 
@@ -104,3 +116,6 @@
 | 角色觸發錯誤 | 在對話開頭明確指定：「用 `ux-researcher` 處理」 |
 | MCP 存取失敗 | 到 Claude settings 重新連結對應工具 |
 | 輸出中英混雜過重 | 在對話中補：「輸出語言：繁中為主，僅保留 spec / component / token 的英文」 |
+| Team 工具沒出現（Mode 3 沒生效） | 檢查 `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1` 是否設定、版本 ≥ 2.1.32、是否重啟 |
+| Teammate 卡住 / task 久滯 in-progress | Lead 先 SendMessage nudge；無效 spawn 替補 teammate；仍無效降級 subagent 補完 |
+| Team 結束後殘留 tmux session | `tmux ls` 查看、`tmux kill-session -t <名稱>` 清理 |
