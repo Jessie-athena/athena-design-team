@@ -19,12 +19,12 @@
 
 ### 方式 B：Claude Code
 1. Clone 這個 repo 到本機
-2. 複製到你的 Claude Code skills 路徑：
+2. 整包複製到你的 Claude Code skills 路徑（保持目錄結構，主 SKILL.md 會用相對路徑 `skills/<role>/SKILL.md` 指引 Claude 讀取角色檔）：
    ```bash
-   cp -r skills/* ~/.claude/skills/
-   cp SKILL.md ~/.claude/skills/athena-design-team/SKILL.md
+   cp -r <repo> ~/.claude/skills/athena-design-team
    ```
 3. 重啟 Claude Code
+4. 在 Claude Code 中，主 skill 觸發後會以 **subagent 編排模式**執行（角色上下文隔離、調研平行），詳見 README「執行架構」
 
 ---
 

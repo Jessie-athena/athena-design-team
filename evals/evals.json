@@ -1,0 +1,55 @@
+{
+  "skill_name": "athena-design-team",
+  "evals": [
+    {
+      "id": 0,
+      "eval_name": "prd-parsing-single-role",
+      "prompt": "幫我解析這份 PRD：evals/fixtures/prd-low-stock-alert.md，下週要跟 PM 對焦，我需要知道哪些地方有問題。",
+      "expected_output": "應觸發 requirement-analyst 角色（先讀取其角色檔），依其輸出格式產出：scope gap 清單（如安全水位設定方式未定、App 唯讀未確認）、模糊驗收標準（「警示要即時」「效能要好」無可測量定義）、未言明假設、交付風險（下個 sprint 時程 vs 範圍）。繁中輸出、技術術語保留英文。",
+      "files": ["evals/fixtures/prd-low-stock-alert.md"],
+      "assertions": [
+        "acts-as-requirement-analyst: 產出展現 requirement-analyst 角色模板的核心結構證據 — 至少包含錨點檢查與 §6 Gap 矩陣（或對應的逐段 gap 分析），僅有角色標籤不算通過",
+        "catches-undefined-realtime: 指出「警示要即時」缺乏可測量的定義（如幾秒內、何種通知管道）",
+        "catches-safety-stock-gap: 安全水位設定未決被正確分類為 P0 / blocker / 前置依賴（不只是 out-of-scope 提及）",
+        "catches-app-readonly-ambiguity: 指出 App 唯讀與否未確認，影響範圍估計",
+        "flags-vague-performance-nfr: 明確點名 PRD 非功能需求段落的「效能要好」缺乏可測量驗收標準",
+        "flags-vague-usability-nfr: 明確點名 PRD 非功能需求段落的「介面要簡潔易用」缺乏可驗收方法",
+        "flags-timeline-risk: 指出下個 sprint 上線的時程風險",
+        "zh-tw-with-english-terms: 繁體中文為主，技術術語（scope / sprint / spec 等）保留英文"
+      ]
+    },
+    {
+      "id": 1,
+      "eval_name": "error-message-direct-role",
+      "prompt": "我們 ERP 的庫存調整單在儲存時會遇到三種錯誤：一是調整後庫存會變負數、二是單據已被其他使用者鎖定編輯中、三是網路逾時儲存失敗。幫我寫這三個 error message，Web 跟 App 都要用。",
+      "expected_output": "應觸發 ux-writer 角色（先讀取其角色檔），依其格式產出三組 error message：說明發生什麼、為什麼、使用者下一步能做什麼；標明目標 surface（Web / App / 跨平台）；繁中文案、保留必要英文術語；符合 voice & tone 原則，避免責備使用者。",
+      "files": [],
+      "assertions": [
+        "acts-as-ux-writer: 產出展現 ux-writer 角色模板的結構證據 — 套用其 error message framework（發生什麼＋為什麼＋怎麼辦三段式），僅有角色標籤不算通過",
+        "covers-all-three-errors: 三種錯誤（負庫存、單據鎖定、網路逾時）都有對應文案",
+        "message-has-cause-and-action: 每則 error message 說明發生什麼，並給使用者明確的下一步（如重試、聯繫鎖定者、稍後再試）",
+        "error-type-correctly-attributed: 三種錯誤的歸因正確 — 負庫存為使用者輸入問題（語氣引導修正）、鎖定為狀態衝突（提供不卡住的出路）、逾時為系統問題（不甩鍋使用者）",
+        "declares-surface: Web 與 App 文案有至少一處具體且有理由的差異（如元件選擇、字數限制），相同文案複製兩份不算通過",
+        "no-user-blaming: 文案不責備使用者、不使用內部技術 jargon",
+        "zh-tw-with-english-terms: 繁體中文文案，必要技術術語保留英文"
+      ]
+    },
+    {
+      "id": 2,
+      "eval_name": "multi-role-orchestration",
+      "prompt": "PM 丟了一個方向：要在我們的 ERP 加「低庫存自動補貨建議」功能，老闆下週想看到初步的設計方向。目前只有口頭描述沒有 PRD。幫我從頭規劃這件事該怎麼進行，並把前期該做的功課做出來。",
+      "expected_output": "應展現多角色編排：先由 design-lead 或主 skill 產出 routing 計畫；接著執行前期角色（requirement-analyst 釐清需求缺口、三路調研至少執行 ux-researcher 與 market-insight-analyst、product-strategist 框架問題與 MVP 範圍）。在有 Agent tool 的環境應以 subagents 平行執行調研。每個角色的產出應依其角色檔模板、可互相銜接，且明確標示各段落由哪個角色產出。",
+      "files": [],
+      "assertions": [
+        "routing-plan-present: 開頭有明確的 routing 計畫（將執行哪些角色、什麼順序、為什麼），並說明本輪刻意不做哪些下游階段",
+        "multiple-distinct-roles: 至少 3 個不同角色的產出，且每段明確標示由哪個角色產出",
+        "roles-follow-templates: 抽查 requirement-analyst 與 product-strategist 的產出須包含其角色檔指名的必備段落 — requirement-analyst：錨點檢查 + §6 Gap 矩陣；product-strategist：HMW（≥3 層）+ MoSCoW（含 Won't）。缺任一指名段落且無因地制宜的明確說明即不通過",
+        "discovery-feeds-strategy: 策略層的 MVP 決策至少引用兩路調研（ux / market / data）的具體發現作為依據，可追溯到上游檔案段落",
+        "mvp-scope-defined: 有具體的 MVP 範圍切分與成功指標",
+        "surface-declared: 互動 / 設計相關產出標明目標 surface（Web / App / 跨平台）",
+        "outputs-traceable: 產出之間可互相追溯（下游引用上游的檔案或段落）",
+        "honest-disclosure: 缺乏真實輸入（無 PRD、無真實數據、無受訪者）時，產出明確標示哪些是假說 / 占位資料 / 待驗證項目，而非偽裝成已驗證的事實"
+      ]
+    }
+  ]
+}
