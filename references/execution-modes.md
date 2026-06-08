@@ -4,6 +4,19 @@
 
 模式偵測階梯與選用 rubric 見主 SKILL.md — 本檔假設你已經選好模式。
 
+## 三模式速覽
+
+模式依**自己可用的工具**偵測（不嗅探環境變數），與「選了哪個角色」正交 — 任何角色在 Mode 1 都能 spawn 成 subagent。下表只供確認該讀哪一節；完整偵測階梯見主 SKILL.md §執行模式，回退規則見本檔末「回退規則」。
+
+| 模式 | 典型載體 | 怎麼協作 | 適用 |
+|------|---------|---------|------|
+| **Mode 1** Subagent 編排 | 有 Agent/Task 工具（如 Claude Code） | 每角色獨立 subagent：上下文隔離、三路調研真平行、各讀滿自己的角色檔 | **單向接力**：handoff 鏈、只要結果不要過程對話、1–3 棒短任務 |
+| **Mode 2** 單一上下文角色切換 | 無 spawn 能力（如 Claude.ai） | 同一對話依序切換；切換前讀完角色檔全文、每段標明角色；平行調研改依序但不省模板 | 無 spawn 能力時的保底路線 |
+| **Mode 3** Agent Team 編排 | 有 team 協作工具（Claude Code + 實驗性 Agent Teams） | 主對話當 team lead（承擔 design-lead 職能）；teammates 可互通訊、共享 task list、dependency 映射含 a11y gate | **角色間需來回討論、互相挑戰**的長流程 |
+
+> 「典型載體」是常見對應，非定義 — 真正判準是工具清單（Claude Code 若未掛 subagent 工具也會落到 Mode 2）。
+> Mode 3 偵測到 team 工具只代表**可用**，非**該用**：唯有「角色間來回討論本身會提升品質」才升級（token 成本高、實驗性）；不確定一律用 Mode 1。
+
 ---
 
 ## Mode 1 — Subagent 編排（有 Agent tool）
