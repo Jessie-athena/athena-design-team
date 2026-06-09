@@ -50,6 +50,22 @@
         "outputs-traceable: 產出之間可互相追溯（下游引用上游的檔案或段落）",
         "honest-disclosure: 缺乏真實輸入（無 PRD、無真實數據、無受訪者）時，產出明確標示哪些是假說 / 占位資料 / 待驗證項目，而非偽裝成已驗證的事實"
       ]
+    },
+    {
+      "id": 3,
+      "eval_name": "oneliner-cs-request-triage",
+      "prompt": "業務在 Slack 丟了一句話需求（內容見 evals/fixtures/oneliner-cs-request.md），沒有 PRD。幫我分析這個需求，下週要回他。",
+      "expected_output": "應觸發 requirement-analyst 角色（先讀取其角色檔），辨識輸入為「一句話 / 口頭方向」型態並宣告走輸入來源分流的高釐清深度路徑：把缺漏的四錨點列為 PM 待答（而非偽造）、點出「加複製按鈕」是解法並回推底層需求、產出假設地圖（含類別 + 風險×信心），不在缺 PRD 下偽造完整 §6 規格。繁中輸出、技術術語保留英文。",
+      "files": ["evals/fixtures/oneliner-cs-request.md"],
+      "assertions": [
+        "acts-as-requirement-analyst: 產出展現 requirement-analyst 角色模板的核心結構證據（錨點檢查 / 待答清單 / 假設等指名段落），僅有角色標籤不算通過",
+        "triages-input-source: 開頭明確辨識輸入為「一句話 / 口頭方向（無 PRD）」型態，並宣告套用對應的高釐清深度路徑（先還原需求本質再分析）",
+        "recovers-anchors-as-todo: 四錨點（PRD / Odoo model / prototype / 模組分類）缺項被正確列入 PM 待答清單，而非自行編造填補",
+        "need-not-solution: 明確點出「加複製按鈕」是使用者提出的解法而非需求，並回推底層需求（如快速重用 / 重開歷史銷貨單），把原始解法當成待驗證假設",
+        "assumption-map-present: 產出假設地圖，至少含一個類別歸類（desirability / viability / feasibility / usability）且標示風險與信心，並指出高風險低信心者優先驗證",
+        "no-fabricated-section6: 未在缺 PRD 的情況下偽造完整 §6 介面規格（欄位表 / Modal 文案等）；§6 相關段落以「待 PRD 補」或 gap 方式呈現",
+        "zh-tw-with-english-terms: 繁體中文為主，技術術語（scope / model / prototype 等）保留英文"
+      ]
     }
   ]
 }
