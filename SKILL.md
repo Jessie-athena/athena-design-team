@@ -48,7 +48,9 @@ Mode 3「可用」不等於「該用」。**能力具備時，命中下列任一
 
 > Team 的 token 成本顯著較高且為實驗性功能。判斷錨點是上面的升級清單，**不在清單內就用 Mode 1** — 不要用模糊的「不確定」當理由停在 Mode 1，也不要把不需要來回討論的接力硬升成 Team。
 
-**回退規則**：偵測不到 team 工具就靜默退回 Mode 1、偵測不到 Agent tool 就退回 Mode 2 — 不要嘗試呼叫不存在的工具，也不要中斷任務。無論哪個模式，產出一律遵循 `design-run/<feature-slug>/` 編號檔案慣例 — 模式只改變協作方式，不改變交付物。
+> ⚠️ **環境相依（實測 2026-06-10）**：「角色間自主來回」**取決於 `Agent` 工具 schema 是否有 `team_name` / `name` 參數**，升級 Mode 3 前先檢查。**有** → teammate 真正掛入 team，peer `SendMessage` 互答可行（實測 PASS；teammate 的 team 工具非原生，spawn prompt 須指示用 ToolSearch 載入）。**沒有** → spawn 出的只是孤立 subagent，上面靠 peer 辯論獲益的情景拿不到，跨角色一律 lead-mediated（relay + 檔案），此時 Mode 3 實質 ≈「Mode 1 + lead 管的 task 板」，按 Mode 1 走即可。詳見 `references/execution-modes.md` §環境相依。
+
+**回退規則**：偵測不到 `TeamCreate` → 先 `ToolSearch`（`select:TeamCreate`）試載；仍無且任務**命中上方升級清單** → **明示告知使用者一次**（缺 `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1` 旗標或 Claude Code 版本過舊，已知 2.1.170 可用；啟用方法見 `references/execution-modes.md` §啟用前提）**再退 Mode 1 繼續任務** — 告知不阻塞；不命中升級清單則靜默退。偵測不到 Agent tool 就退回 Mode 2。兩種回退都不要嘗試呼叫不存在的工具、不要中斷任務。無論哪個模式，產出一律遵循 `design-run/<feature-slug>/` 編號檔案慣例 — 模式只改變協作方式，不改變交付物。
 
 **確定模式後，讀取 `references/execution-modes.md` 中對應模式的那一節**（subagent / teammate 的 prompt 模板、task dependency 映射、通訊與產出慣例、卡住處理都在裡面），再開始執行。Mode 3 另須先讀 `skills/design-lead/SKILL.md` — team lead 固定是主對話本身，由你承擔 design-lead 的編排與品質守門職能。
 
