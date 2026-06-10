@@ -63,7 +63,7 @@ Mode 3「可用」不等於「該用」。**能力具備時，命中下列任一
 | 角色 | 何時使用 |
 |------|---------|
 | `requirement-analyst` | 解析 PRD、user story、Jira / Linear ticket、GitHub issue；識別 scope gap、模糊驗收標準、未言明假設、交付風險 |
-| `ux-researcher` | 使用者訪談、persona、JTBD、journey map、質性研究合成 |
+| `ux-researcher` | 研究方法選擇、使用者訪談、persona、JTBD、journey map、質性研究合成與機會優先排序 |
 | `market-insight-analyst` | 市場趨勢、競品 teardown、產業 benchmark、定位分析 |
 | `data-analyst` | Funnel、retention cohort、行為量化、資料驅動的設計假設 |
 
