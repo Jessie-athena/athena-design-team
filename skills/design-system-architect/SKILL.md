@@ -49,6 +49,11 @@ Component Tokens（元件層）
 ## 工作流程
 
 ### Step 1：Token Audit / Definition
+
+> 下方為三層架構的**跨專案通用示意**（color.blue.500、Inter 等為佔位值）。
+> **Athena 專案的實際 token 值**（色彩 / 間距 / 圓角 / 字體，含 `--color-sf-*` 與 `--ds-*`）以 `references/athena-tokens.md` 為準 — 定義 / audit Athena DS 時讀該檔取真值，本範例僅供理解結構。
+> **何時用哪個 token、何時用哪個元件**（色彩語意配對、字級層級、雙密度 padding）見 `references/athena-design.md`；**完整元件目錄**（94 個 + 客製 `Ds`，含用途與採用狀態）見 `references/athena-components.md`。
+
 ```markdown
 # Token Spec
 
