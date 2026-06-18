@@ -97,6 +97,12 @@ Athena 是 **B2B Web/App 產品**（資料密集、單據交易、跨平台、Sy
 
 **補入流程**：先 `get_variable_defs` 解析 token → 填 §3–5 的 `{token}`；`get_design_context` 補結構與量測；多狀態元件再 `get_screenshot` 驗證；最後人工補 §6–12。每次補入後更新 §0 的 `last-synced` 與 `figma-node`。
 
+**已知 SOP 缺口（演練實證，2026-06-18 Button）**：
+- **Effects（shadow / focus-ring）無 token**：`athena-tokens.md` 目前只有 color/border/space/radius/typography，**無 shadow 群組**。Figma 的 `$shadow-*` / `$shadow-focus-ring*` 對不上任何 token → 依本檔 §2.2 規則**停下回報**，flag DS owner 補 token，**勿臆造**。
+- **`get_variable_defs` 不含 padding/height**：尺寸量測需 `get_design_context` 於**單一 variant** 取（整個元件集 metadata 常 >80k 過大）。
+- **Figma 變數命名**：元件級為 `Component_btn/$state`（如 `Primary_btn/$primary-bg-color-hover`），值若為 two-stop（`#2877EE,#FFFFFF`）代表「base + state-layer 疊層」，非單一色；落地以疊層實作。
+- **變數即權威**：variant 集 / 互動疊層以 Figma 變數為準，覆蓋散文假設（演練修正了 Button 的 hover 疊層與 variant 集）。
+
 ---
 
 ## 6. 範例 A — Button（Lite 層）
