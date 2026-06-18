@@ -334,17 +334,23 @@
 
 ## Shadow / Elevation
 
-> 來源：FAI2 Figma Library 的 `$shadow-*` 效果變數（2026-06-18 由 Button 元件集 `16773-15148` 補入）。Figma 以多層 `DROP_SHADOW` 表示；下表轉為 CSS `box-shadow`（`#RRGGBBAA` alpha 轉小數：`4D`≈0.30、`26`≈0.15、`40`≈0.25）。
-> 命名沿用 `--ds-*` Athena 自有層慣例（Figma 原名為 `$shadow-*`）。本批僅含元件集出現的 4 個；其餘階（lg / xl…）待後續節點補。
+> 來源：FAI2 Figma Library **「Styles - Shadow」** 效果樣式集（節點 `25426:10916`，2026-06-18 完整補入）。下表 `box-shadow` 值**逐字照 Figma**（保留原多層順序與小數 alpha），未改寫。
+> 命名沿用 `--ds-*` Athena 自有層慣例；Figma 原名為 `$shadow-*` / `$appbar-*-shadow`，對照如下。共 9 個（完整，非部分）。
 
-| Token | Figma 原名 | CSS box-shadow |
-|-------|-----------|----------------|
-| `--ds-shadow-none` | `$shadow-none` | `0 0 0 0 rgb(0 0 0 / 0.25)` |
-| `--ds-shadow-sm` | `$shadow-sm` | `0 1px 2px 0 rgb(0 0 0 / 0.30), 0 1px 3px 1px rgb(0 0 0 / 0.15)` |
-| `--ds-shadow-md` | `$shadow-md` | `0 2px 6px 2px rgb(0 0 0 / 0.15), 0 1px 2px 0 rgb(0 0 0 / 0.30)` |
-| `--ds-shadow-focus-ring1` | `$shadow-focus-ring1` | `0 0 0 1px rgb(255 255 255), 0 0 0 3px rgb(0 0 0)` |
+| Token | Figma 原名 | box-shadow（逐字照 Figma） | 用途 |
+|-------|-----------|--------------------------|------|
+| `--ds-shadow-none` | `$shadow-none` | `0px 0px 0px 0px rgba(0, 0, 0, 0.25)` | 無陰影（佔位，保留疊放規格） |
+| `--ds-shadow-sm` | `$shadow-sm` | `0px 1px 2px 0px rgba(0, 0, 0, 0.3), 0px 1px 3px 1px rgba(0, 0, 0, 0.15)` | 最小提升（hover 卡片等） |
+| `--ds-shadow-md` | `$shadow-md` | `0px 2px 6px 2px rgba(0, 0, 0, 0.15), 0px 1px 2px 0px rgba(0, 0, 0, 0.3)` | 中提升（dropdown / menu） |
+| `--ds-shadow-lg` | `$shadow-lg` | `0px 1px 3px 0px rgba(0, 0, 0, 0.3), 0px 4px 8px 3px rgba(0, 0, 0, 0.15)` | 大提升（popover / drawer） |
+| `--ds-shadow-xl` | `$shadow-xl` | `0px 2px 3px 0px rgba(0, 0, 0, 0.3), 0px 6px 10px 4px rgba(0, 0, 0, 0.15)` | 更大提升（dialog） |
+| `--ds-shadow-2xl` | `$shadow-2xl` | `0px 4px 4px 0px rgba(0, 0, 0, 0.3), 0px 8px 12px 6px rgba(0, 0, 0, 0.15)` | 最大提升（modal / 全屏 overlay） |
+| `--ds-shadow-focus-ring1` | `$shadow-focus-ring1` | `0px 0px 0px 3px rgba(0, 0, 0, 1), 0px 0px 0px 1px rgba(255, 255, 255, 1)` | 鍵盤 focus 指示環 |
+| `--ds-shadow-appbar-top` | `$appbar-top-shadow` | `0px -0.3px 0.9px 0px rgba(0, 0, 0, 0.1), 0px -1.6px 3.6px 0px rgba(0, 0, 0, 0.13)` | App bar 上緣陰影（向上投射） |
+| `--ds-shadow-appbar-bottom` | `$appbar-bottom-shadow` | `0px 0.3px 0.9px 0px rgba(0, 0, 0, 0.1), 0px 1.6px 3.6px 0px rgba(0, 0, 0, 0.13)` | App bar 下緣陰影（向下投射） |
 
-> `--ds-shadow-focus-ring1`：白色 1px 內環 + 黑色 3px 外環（Figma 原序為黑 spread 3、白 spread 1；CSS 上以白在前疊出內白外黑的焦點環）。**用於鍵盤 focus 指示**——元件 focus 態引用此 token，取代「2px primary outline」的舊假設。
+> 提升階梯：`none < sm < md < lg < xl < 2xl`（y 位移與模糊遞增）。`appbar-top` / `appbar-bottom` 為方向性邊緣陰影（y 為負/正），非提升階梯一員。
+> **`--ds-shadow-focus-ring1`**：Figma 定義序為「黑 3px 外環 + 白 1px 內環」；**用於鍵盤 focus**，取代舊「2px primary outline」假設。落地若需「內白外黑」可見雙環，CSS 實作時把白色 1px 那層列前（視覺意圖），token 值本身以 Figma 為準保留原序。
 
 ---
 
