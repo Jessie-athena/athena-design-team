@@ -24,7 +24,7 @@
 | 元件 | 設計文件 | 狀態 |
 |------|---------|------|
 | Button | [`components/Button.md`](../components/Button.md) | ✅ 已產出（Lite） |
-| st-chip（狀態徽章 / `DsStatusBadge`） | `components/st-chip.md` | ⬜ 待補（schema §7 已有草稿範例） |
+| st-chip（狀態徽章 / `DsStatusBadge`） | [`components/st-chip.md`](../components/st-chip.md) | ✅ 已產出（Full；色 / class 落地引用 prototyper DataGrid.md / Stepper.md） |
 | Grid（DataGrid） | `components/DataGrid.md` | ⬜ 待補（深度規格已在 `prototyper/profiles/erp-components/DataGrid.md`，待收編為設計文件） |
 | Stepper | `components/Stepper.md` | ⬜ 待補（同上，`prototyper` Stepper.md） |
 | Tab / Dialog / FAB / TextBox / NumericTextBox / DropDownList / DatePicker / Toast / Skeleton | — | ⬜ 待補 |
