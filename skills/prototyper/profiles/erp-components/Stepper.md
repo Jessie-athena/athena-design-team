@@ -5,6 +5,8 @@
 >
 > 上層 profile：`profiles/erp-transaction.md`
 > 同層元件：`ListSearch.md` / `DataGrid.md` / `FormGroup.md` / `FormFooter.md` / `SummaryCard.md` / `Stepper.md`
+>
+> **上游設計文件**：`../../../design-system-architect/references/components/Stepper.md`（格式見 `component-doc-schema.md`）。分工——**設計文件**是 what/why/token/state/a11y 的權威；**本 profile** 是「如何用單檔 HTML/CSS class 落地」的實作層。本檔的語意色 / 步序狀態決策待收編進設計文件後改為引用，避免兩處漂移。
 
 ---
 

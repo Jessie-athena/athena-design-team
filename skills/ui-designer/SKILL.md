@@ -13,7 +13,7 @@ description: Visual design for product screens — visual hierarchy, layout, typ
 2. **Layout**：Grid、spacing、breakpoint 應用
 3. **Typography**：字體選擇、尺寸階、行高、對比
 4. **Color application**：正確套用 semantic token
-5. **Component 應用**：挑選 / 組合現有 component
+5. **Component 應用**：挑選 / 組合現有 component。挑用前到 `design-system-architect/references/components/<元件>.md`（格式見 `component-doc-schema.md`）取該元件的 variants / states / usage rules，**不自行臆測**；若該元件在 `athena-components.md` 標 **⬜ 待分類**，需 flag「採用狀態未定，待 `design-system-architect` 治理確認」，不逕自採用
 6. **跨平台視覺一致性**：Web / App 視覺氣質統一
 
 ## 觸發時機
@@ -61,6 +61,9 @@ description: Visual design for product screens — visual hierarchy, layout, typ
 ```
 
 ### Step 2：Screen Design
+
+> 下方 spec 的 token 名（`text-2xl` / `bg-surface` / `bg-primary`…）為**跨專案通用佔位**。**Athena 實作**請改用真實 token：字級 `--font-size-sf-*`、色彩 `--color-sf-*`、間距 `--ds-space-*`——何時用哪個見 `design-system-architect/references/athena-design.md`，值見 `athena-tokens.md`。
+
 每個 screen 輸出設計 spec：
 ```markdown
 # UI Spec — [Screen Name]

@@ -53,6 +53,7 @@ Component Tokens（元件層）
 > 下方為三層架構的**跨專案通用示意**（color.blue.500、Inter 等為佔位值）。
 > **Athena 專案的實際 token 值**（色彩 / 間距 / 圓角 / 字體，含 `--color-sf-*` 與 `--ds-*`）以 `references/athena-tokens.md` 為準 — 定義 / audit Athena DS 時讀該檔取真值，本範例僅供理解結構。
 > **何時用哪個 token、何時用哪個元件**（色彩語意配對、字級層級、雙密度 padding）見 `references/athena-design.md`；**完整元件目錄**（94 個 + 客製 `Ds`，含用途與採用狀態）見 `references/athena-components.md`。
+> **逐元件設計文件格式**（章節 / 來源標記 / token-reference / Figma 補入 / Lite·Full 分層）見 `references/component-doc-schema.md`；已產出文件在 `references/components/`（Step 2 產出依此）。
 
 ```markdown
 # Token Spec
@@ -120,9 +121,20 @@ Component Tokens（元件層）
 | easing.standard | cubic-bezier(0.4, 0, 0.2, 1) |
 ```
 
-### Step 2：Component Spec
+### Step 2：Component Spec → 產出逐元件設計文件
+
+> **格式單一來源：`references/component-doc-schema.md`**（章節結構、來源標記制 🎨/🔗/📋、token-reference 規則、Figma 補入 SOP、Lite/Full 分層）。產出落點：`references/components/<Component>.md`（首發範例 `Button.md`）。
+>
+> 流程：
+> 1. **判層**：原子控制元件（Button / TextBox / Checkbox…）→ **Lite**；資料密集・複合元件（DataGrid / Stepper / Dialog…）→ **Full**。判層心法見 schema §3。
+> 2. **填結構化區塊（§3–5）**：視覺值一律 `{token}` reference（對映 `athena-tokens.md` 真值），**禁** raw hex/px；對不上既有 token 時停下回報，勿臆造。
+> 3. **Figma 補入**：可由 `get_variable_defs`（token）/ `get_design_context`（結構·量測）/ `get_screenshot`（狀態驗證）回填 §3–5，其餘 §6–12 人工/PRD。對應表見 schema §5。
+> 4. **收編而非另定**：與 `prototyper/profiles/erp-components/*.md`（DataGrid / Stepper…）重疊處用**引用**，不重寫 token 決策（避免漂移）。
+>
+> 下方為 spec **格式雛形的跨專案通用示意**（`color.blue.500` 等為佔位）；**Athena 實際產出**請改套 schema 並用真實 `--color-sf-*` / `--ds-*` token，完整對照見 `references/components/Button.md`。
+
 ```markdown
-# Component — Button
+# Component — Button（跨專案佔位示意；Athena 真版見 references/components/Button.md）
 
 ## API
 | Prop | Type | Default | 說明 |
@@ -228,8 +240,9 @@ Component Tokens（元件層）
 
 ## 輸出品質清單
 - [ ] Token 三層架構清楚？
+- [ ] 元件設計文件依 `references/component-doc-schema.md` 產出（已判 Lite/Full、來源標記齊、視覺值全 `{token}` 無 raw 值）？
 - [ ] 每個 component 有 API + states + tokens + a11y + usage rule？
-- [ ] 跨平台差異有明確對照表？
+- [ ] 跨平台差異有明確指引（Full 採 adaptive 逐斷點，非單純縮放）？
 - [ ] Don'ts 寫清楚避免誤用？
 - [ ] 有 governance 流程避免野生 component？
 

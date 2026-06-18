@@ -16,6 +16,23 @@
 
 ---
 
+## 設計文件索引（✅ 已採用元件）
+
+> 每個 ✅ 已採用元件的**逐元件設計文件**落點。格式見 `component-doc-schema.md`；產出由 `SKILL.md §Step 2` 負責。
+> 為避免每張表格塞入大量空欄（多數元件仍 ⬜ 待分類無設計文件），設計文件連結集中於此單一索引，不分散到下方各分類表。
+
+| 元件 | 設計文件 | 狀態 |
+|------|---------|------|
+| Button | [`components/Button.md`](../components/Button.md) | ✅ 已產出（Lite） |
+| st-chip（狀態徽章 / `DsStatusBadge`） | `components/st-chip.md` | ⬜ 待補（schema §7 已有草稿範例） |
+| Grid（DataGrid） | `components/DataGrid.md` | ⬜ 待補（深度規格已在 `prototyper/profiles/erp-components/DataGrid.md`，待收編為設計文件） |
+| Stepper | `components/Stepper.md` | ⬜ 待補（同上，`prototyper` Stepper.md） |
+| Tab / Dialog / FAB / TextBox / NumericTextBox / DropDownList / DatePicker / Toast / Skeleton | — | ⬜ 待補 |
+
+> 收編原則：`prototyper` 既有的深度元件規格（DataGrid / Stepper / SummaryCard…）為「prototype 單檔 HTML/CSS 落地層」；設計文件是「what/why/token/state 的權威」。補設計文件時**引用** profile，不重寫 token 決策（見 `component-doc-schema.md §8`）。
+
+---
+
 ## 1. 佈局與導覽（Layout & Navigation）
 
 > Import 多來自 `@syncfusion/ej2-vue-navigations` / `-layouts`。
