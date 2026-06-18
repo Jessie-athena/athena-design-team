@@ -23,16 +23,14 @@ last-synced: 2026-06-18   # 🎨 get_variable_defs + get_screenshot；紀錄見�
 ## 3. 視覺規格 Tokens　🎨🔗
 
 ```yaml
-# md（預設）尺寸；padding 並列雙密度（Default 緊湊 = 資料/列表場景；Comfortable = 表單/觸控）
-height:  36px                                   # 🎨 量測值，待 get_design_context 對齊 token
-padding:
-  default:     "{ds-space-padding-medium} {ds-space-padding-large}"        # 🎨 量測待補（變數未含 padding；需 get_design_context 單一 variant）
-  comfortable: "{ds-space-padding-large} {ds-space-padding-extra-large}"   # 🎨 量測待補
-radius:  "{ds-radius-small}"                     # 🎨🔗 Figma Radius/RadiusSm = 4px ⚠️ 與 athena-design.md「按鈕 8px」衝突，待 DS owner 確認
+# 🎨 get_design_context 節點 16773:15233（Size=Medium, Type=Primary, Enabled）量測
+height:  36px                                   # 🎨 Medium（Small 32 / Large 40）
+padding: "{ds-space-padding-medium} {ds-space-padding-extra-large}"   # 🎨🔗 8px / 16px（Figma px-16 py-8，Default 密度；Comfortable 未在 Figma variant 編碼，待確認）
+radius:  "{ds-radius-small}"                     # 🎨🔗 Figma Radius/RadiusSm = 4px（已裁示採 Figma，athena-design.md 散文同步改 4px）
 radius_pill: "{ds-radius-10extra-large}"         # 🎨🔗 Figma Radius/Radius10Xl = 1000px（pill 變體，見截圖）
-font:    "{font-size-sf-text-md} / {font-weight-sf-medium}"   # 🔗 14px / 500（Figma「Label/14pt/Medium」line-height 1.3、letter-spacing 0.1px）
-icon:    20px                                    # 🎨
-gap:     "{ds-space-padding-small}"              # 🔗 icon↔label 4px（量測待 get_design_context 確認）
+font:    "{font-size-sf-text-md} / {font-weight-sf-medium}"   # 🔗 14px / 500；line-height 1.5、letter-spacing 0.24px（Figma 套「Body Content/14pt/Medium」）
+icon:    18px                                    # 🎨 修正（先前假設 20px）
+gap:     "{ds-space-padding-small}"              # 🎨🔗 icon↔label 4px（Figma gap-4 確認）
 ```
 
 ## 4. Variants　🎨🔗
@@ -63,15 +61,14 @@ danger:                               # 🎨 Figma Danger_btn
 ```yaml
 hover:    { overlay: "{color-sf-primary-btn-hover-8}" }     # 🎨🔗 ColorSf/primary-btn-hover-8 = white 8%（非 darken）
 active:   { overlay: "{color-sf-primary-btn-pressed-12}" }  # 🎨🔗 ColorSf/primary-btn-pressed-12 = white 12%（pressed）
-focus:    { ring: "$shadow-focus-ring1" }                   # ⚠️ Figma 用 drop-shadow 效果（黑 spread 3 + 白 spread 1）；
-                                                            #    athena-tokens.md 無 shadow token → 無法 token-reference，待 DS owner 補（見文末紀錄）
+focus:    { ring: "{ds-shadow-focus-ring1}" }               # 🎨🔗 已補：白 1px 內環 + 黑 3px 外環（athena-tokens.md §Shadow）
 disabled: { fg: "{color-sf-on-surface-opacity38}", border: "{color-sf-outline}" }  # 🎨🔗 text 38% / 邊框 outline；bg 另以 opacity 疊層處理
 loading:  { spinner: "{color-sf-on-primary}", label: dim }   # 📋 Figma 未含 loading 態，沿用慣例
 ```
 
 ## 9. a11y　📋
 
-- Focus ring：Figma 為 `$shadow-focus-ring1` 雙層 drop-shadow（黑 spread 3 + 白 spread 1）；**athena-tokens.md 尚無對應 shadow token**，待 DS owner 補定義（見文末紀錄）。
+- Focus ring：`{ds-shadow-focus-ring1}`（白 1px 內環 + 黑 3px 外環；已補入 `athena-tokens.md §Shadow`）。
 - 鍵盤：Enter·Space 觸發。
 - icon-only button **必填** `aria-label`。
 - Mobile min touch target 44×44。
@@ -111,7 +108,14 @@ loading:  { spinner: "{color-sf-on-primary}", label: dim }   # 📋 Figma 未含
 1. hover/pressed 疊層 = **白色 8% / 12%**（`primary-btn-hover-8` / `-pressed-12`），非 darken-opacity。
 2. variant 集 = primary / secondary / **success** / danger（補上 success；移除無佐證的 ghost）。
 
-**⚠️ 待 DS owner 裁示（schema「對不上停下回報」觸發）**：
-1. **focus-ring 無對應 token**：Figma 用 `$shadow-focus-ring1`（drop-shadow 效果），但 `athena-tokens.md` 無 shadow / elevation token 章節。→ 建議在 tokens 補 shadow 群組（含 focus-ring），否則 focus 態無法 token-reference。
-2. **按鈕圓角衝突**：Figma 矩形鈕 = `Radius/RadiusSm` **4px**；`athena-design.md` 散文寫「按鈕 8px」。另有 pill 變體 = `Radius/Radius10Xl` 1000px。→ 需確認真值並統一兩處。
-3. **disabled bg 表示法**：Figma 以 two-stop（如 `#2877EE,#FFFFFF`）表示 base + 疊層，非單一色；落地需以 state-layer 疊加實作，padding/height 待 `get_design_context` 補量測。
+**✅ 已解（2026-06-18 後續）**：
+- **focus-ring token 已補**：`athena-tokens.md §Shadow` 新增 `--ds-shadow-none/sm/md/focus-ring1`（來源 FAI2 `$shadow-*`）；§5 focus 改引用 `{ds-shadow-focus-ring1}`。
+- **尺寸已量測**（`get_design_context` 節點 16773:15233）：Medium 36px、padding 8/16px、radius 4px、icon 18px、gap 4px、label line-height 1.5 / letter-spacing 0.24px。
+
+**✅ 已裁示**：
+- **按鈕圓角**：採 Figma `RadiusSm` **4px**（變數 + 渲染 CSS 雙重佐證）；`athena-design.md §圓角搭配` 散文已從 8px 改 4px。pill 變體 = 1000px。
+
+**⚠️ 仍待確認（次要）**：
+1. **輸入框圓角**：散文原與按鈕同列 8px，現按鈕改 4px；輸入框實際值待另以 Figma 確認（暫標待同步）。
+2. **disabled bg 表示法**：Figma 以 two-stop（如 `#2877EE,#FFFFFF`）表示 base + 疊層，非單一色；落地以 state-layer 疊加實作。
+3. **Comfortable 密度 padding**：Figma variant 未編碼密度，Comfortable 值待確認。

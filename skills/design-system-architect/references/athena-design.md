@@ -129,7 +129,7 @@ Material 3 的色彩是**成對使用**的：每個「容器/底色」都有對�
 | 卡片 / 區段內距 | `extra-large` 16 / 20 |
 | 區段之間 margin | `3extra-large`–`4extra-large` 24–32 / 32–40 |
 | 頁面外框 margin | `4extra-large`+ 32+ / 40+ |
-| 圓角搭配 | 按鈕/輸入 `--ds-radius-large` 8、卡片 `--ds-radius-extra-large` 12、pill/全圓 `--ds-radius-10extra-large` 1000 |
+| 圓角搭配 | 按鈕 `--ds-radius-small` 4（FAI2 Figma 校準 2026-06-18；輸入框待同步確認，先前誤記 8px）、卡片 `--ds-radius-extra-large` 12、pill / 全圓 `--ds-radius-10extra-large` 1000 |
 | 邊框寬度 | 一般 `--ds-borderwidth-small` 1px、強調/focus `--ds-borderwidth-medium` 2px |
 
 ---

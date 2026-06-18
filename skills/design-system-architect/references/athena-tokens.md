@@ -32,6 +32,7 @@
 - [Border Width](#border-width)
 - [Space（雙密度）](#space雙密度)
 - [Radius](#radius)
+- [Shadow / Elevation](#shadow--elevation)
 - [Typography](#typography)
   - [Font Family](#font-family)
   - [Font Size](#font-size)
@@ -328,6 +329,22 @@
 | `--ds-radius-8extra-large` | `40px` |
 | `--ds-radius-9extra-large` | `48px` |
 | `--ds-radius-10extra-large` | `1000px` |
+
+---
+
+## Shadow / Elevation
+
+> 來源：FAI2 Figma Library 的 `$shadow-*` 效果變數（2026-06-18 由 Button 元件集 `16773-15148` 補入）。Figma 以多層 `DROP_SHADOW` 表示；下表轉為 CSS `box-shadow`（`#RRGGBBAA` alpha 轉小數：`4D`≈0.30、`26`≈0.15、`40`≈0.25）。
+> 命名沿用 `--ds-*` Athena 自有層慣例（Figma 原名為 `$shadow-*`）。本批僅含元件集出現的 4 個；其餘階（lg / xl…）待後續節點補。
+
+| Token | Figma 原名 | CSS box-shadow |
+|-------|-----------|----------------|
+| `--ds-shadow-none` | `$shadow-none` | `0 0 0 0 rgb(0 0 0 / 0.25)` |
+| `--ds-shadow-sm` | `$shadow-sm` | `0 1px 2px 0 rgb(0 0 0 / 0.30), 0 1px 3px 1px rgb(0 0 0 / 0.15)` |
+| `--ds-shadow-md` | `$shadow-md` | `0 2px 6px 2px rgb(0 0 0 / 0.15), 0 1px 2px 0 rgb(0 0 0 / 0.30)` |
+| `--ds-shadow-focus-ring1` | `$shadow-focus-ring1` | `0 0 0 1px rgb(255 255 255), 0 0 0 3px rgb(0 0 0)` |
+
+> `--ds-shadow-focus-ring1`：白色 1px 內環 + 黑色 3px 外環（Figma 原序為黑 spread 3、白 spread 1；CSS 上以白在前疊出內白外黑的焦點環）。**用於鍵盤 focus 指示**——元件 focus 態引用此 token，取代「2px primary outline」的舊假設。
 
 ---
 
