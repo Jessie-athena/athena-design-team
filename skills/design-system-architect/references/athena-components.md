@@ -27,7 +27,8 @@
 | st-chip（狀態徽章 / `DsStatusBadge`） | [`components/st-chip.md`](../components/st-chip.md) | ✅ 已產出（Full；色 / class 落地引用 prototyper DataGrid.md / Stepper.md） |
 | Grid（DataGrid） | [`components/DataGrid.md`](../components/DataGrid.md) | ✅ 已產出（Full；class / 尺寸 / 互動色 / 凍結欄 / 行內編輯落地引用 prototyper DataGrid.md） |
 | Stepper | [`components/Stepper.md`](../components/Stepper.md) | ✅ 已產出（Full；步序狀態 / 語意色 / 判定邏輯 / voided-banner 落地引用 prototyper Stepper.md） |
-| Tab / Dialog / FAB / TextBox / NumericTextBox / DropDownList / DatePicker / Toast / Skeleton / SummaryCard | — | ⬜ 待補 |
+| SummaryCard | [`components/SummaryCard.md`](../components/SummaryCard.md) | ✅ 已產出（Full；Layout A/B、sticky 無 shadow、4 步動態 stepper 落地引用 prototyper SummaryCard.md） |
+| Tab / Dialog / FAB / TextBox / NumericTextBox / DropDownList / DatePicker / Toast / Skeleton | — | ⬜ 待補 |
 
 > 收編原則：`prototyper` 既有的深度元件規格（DataGrid / Stepper / SummaryCard…）為「prototype 單檔 HTML/CSS 落地層」；設計文件是「what/why/token/state 的權威」。補設計文件時**引用** profile，不重寫 token 決策（見 `component-doc-schema.md §8`）。
 
