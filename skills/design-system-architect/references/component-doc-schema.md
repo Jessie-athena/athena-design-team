@@ -250,3 +250,41 @@ Chip 本身唯讀無互動態；其「狀態值」即 §4 variant。表格列承
 - [ ] 來源標記（🎨/🔗/📋）逐區塊標齊
 - [ ] §13 三向連結可達（tokens / prototyper profile / code）
 - [ ] 已收編而非另定：與 prototyper profile 重疊處用引用，不重寫 token 決策
+
+---
+
+## 9. 背景與落地紀錄
+
+> 此格式於首批元件落地時定版；原獨立決策報告已收編於此。格式規範本身是上方 §1–§8，本節只補「為何要做、怎麼落地、還沒做什麼」。
+
+### 9.1 確立此格式前的現況問題
+
+三套「元件」表述彼此不互引、詳盡度與 token 真偽不一致：
+
+- `design-system-architect` 的 Component Spec（SKILL.md §Step 2）用佔位 token（`color.primary`），真值是 `--color-sf-primary`；
+- `prototyper/profiles/erp-components/*.md`（`DataGrid.md` / `Stepper.md`…）是最深的真實規格，卻沒被當「元件設計文件」收編；
+- `athena-components.md` 是孤立目錄，✅ 元件沒連到任何設計文件。
+
+→ 解法：確立「逐元件設計文件」為**單一權威格式**（即本檔 §1–§8），三 skill 各就各位指向它。
+
+### 9.2 三 skill 落地分工與狀態
+
+**`design-system-architect`（架構擁有者）**
+- ✅ §Step 2 改為「依本 schema 產出設計文件（先判 Lite/Full）」，並補 Figma 補入流程；範例標為跨專案佔位、指向真版。
+- ✅ 新增本檔（架構定義）＋ `references/components/Button.md`（首發 Lite 範例，真實 token）。
+- ✅ `athena-components.md` 新增「設計文件索引」段，✅ 元件連到 `components/<name>.md`（未產出標待補）。
+- ✅ 輸出品質清單補「依 schema 產出」「跨平台採 adaptive」兩項。
+
+**`ui-designer`（消費者）**
+- ✅ 「Component 應用」職責補：挑用前到設計文件取 variants/states/usage，不臆測；選 ⬜ 待分類 元件須 flag 治理。
+- ✅ Step 2 UI Spec 範例 token 標為跨專案佔位，指向 `athena-design.md` / `athena-tokens.md` 真值。
+
+**`prototyper`（引用者）**
+- ✅ `DataGrid.md` / `Stepper.md` / `SummaryCard.md` 開頭加「上游設計文件」指標與分工說明（設計文件＝權威；profile＝單檔 HTML/CSS 落地層）。
+- 不動 `allowed-tools` 與單檔交付定位。
+
+### 9.3 後續（非本批）
+
+- 逐步補 `references/components/` 其餘 ✅ 已採用元件設計文件：優先 `st-chip` / `DataGrid` / `Stepper`（深度規格已在 prototyper，待收編引用）。
+- 首個真實元件做一次「Figma 補入」演練（`get_variable_defs` 填 §3–5），驗證對不上 token 會停下回報。
+- 其餘 prototyper 複合 profile（ListSearch / FormGroup / FormFooter）是否各自對應設計文件，待 DS owner 決定（多為佈局 pattern 而非單一 Syncfusion 元件）。
