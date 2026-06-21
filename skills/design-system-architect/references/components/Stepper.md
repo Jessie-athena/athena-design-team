@@ -31,50 +31,41 @@ last-synced: —
 voided / cancelled 時整段改 .voided-banner（內含一顆 danger st-chip）
 ```
 
-子元素：bubble（圓形步點）、label（步驟名）、line（連接線）。第 ④ 步為動態插槽（驗收 / 結轉模型專屬，見 §4）。
+子元素：bubble（圓形步點）、label（步驟名）、line（連接線）。終態步為動態插槽（驗收 / 結轉模型專屬，見 §4）。
 
 ## 3. 視覺規格 Tokens　🎨🔗
 
 ```yaml
+# token-ref 的值在此給；無 token 的量測 px（bubble/check/label/line 尺寸）不重印，單一來源見 profile §尺寸與字體
 bubble:
-  size:    32px                              # 🎨 量測值
+  size:    "見 profile §尺寸與字體"           # 量測值無 token
   radius:  "{ds-radius-10extra-large}"       # 🔗 圓形 999/1000px
-  border:  "{ds-borderwidth-small} {color-sf-outline-variant}"   # 🔗 1px 預設灰框
+  border:  "{ds-borderwidth-small} {color-sf-outline-variant}"   # 🔗 1px 預設灰框（current/終態步改 {color-sf-primary}，見 §5）
   font:    "{font-size-sf-text-md} / {font-weight-sf-normal}"    # 🔗 14px / 400（內字或數字）
-  check:   18px                              # 🎨 material-symbols:check（筆畫型無 -outline）
+  check:   "見 profile"                      # material-symbols:check（筆畫型無 -outline）
 label:
-  font:    "13px / {font-weight-sf-normal}"  # 🎨🔗 13px（無對應 size token，介於 sm12/md14）；當前·終態 {font-weight-sf-medium} 500
+  font:    "size 見 profile / {font-weight-sf-normal}"  # label 字級無對應 size token（介於 sm12/md14）；當前·終態 {font-weight-sf-medium} 500
   fg:      "{color-sf-on-surface}"           # 🔗 主要文字；pending/placeholder 用 {color-sf-on-surface-variant}
 line:
-  height:  2px                               # 🎨
-  flex:    "1 1 28px（min 28 / max 56px）"
-  align:   "margin-top: 16px 對齊圓心"
-container-gap: 16px                          # 🎨（= {ds-space-padding-extra-large} Default 概念對齊）
+  height / flex / align: "見 profile §尺寸與字體"   # 量測值無 token（高度 / flex 28–56px / margin 對齊）
+container-gap: "見 profile（≈ {ds-space-padding-extra-large} Default 概念對齊）"
 motion:  "background / color 200ms ease-out；尊重 prefers-reduced-motion → 0ms"
 ```
 
-> label `13px` 與 line `28/56px`、bubble `32px` 為量測值，`athena-tokens.md` 無精確對應；落地以 profile 為準，待 DS 對齊 size token。
+> bubble / line / label 的量測 px `athena-tokens.md` 無精確對應；**單一來源在 profile §尺寸與字體**，本檔不重印（schema §8）。
 
 ## 4. Patterns / Types　🎨🔗
 
-步數與狀態集**依各模組 PRD 狀態機決定**（PRD 沒列的狀態禁自動補）。三種已驗證 pattern 共用結構命名、判定邏輯與樣式 token，差異只在**第 ④ 步動態插槽**；**不可混用**於同一模組：
+步數**動態**：依各模組 PRD 狀態機決定，**最少 3 步、上不封頂**（PRD 沒列的狀態禁自動補）。三種已驗證 pattern 共用結構命名、判定邏輯與樣式 token，差異只在**終態步（動態插槽）的狀態集與 label**；**不可混用**於同一模組：
 
-```yaml
-basic:            # 基本型 3 步
-  states:  "canonical 4 值（draft / submitted / approved + voided 分支）"
-  stepCur: "{ draft:1, submitted:2, approved:3 }"
-  step4:   none   # 無第 ④ 步與 step4 helper
-acceptance:       # 驗收模型 4 步（動態第 ④ 步）
-  states:  "7 值（+ partial / received / settled），由下游驗收單回寫；首見採購單"
-  stepCur: "{ draft:1, submitted:2, approved:3, partial:4, received:5, settled:4, voided:3 }"
-  step4:   "partial 藍『部分驗收』/ received 藍『已驗收』(終態) / settled 藍『已結清』(終態)"
-convert:          # 結轉模型 4 步（動態第 ④ 步）
-  states:  "6 值（+ partial / done / cancelled），由本單結轉進度驅動；首見請購單"
-  stepCur: "{ draft:1, submitted:2, approved:3, partial:4, done:5, cancelled:3 }"
-  step4:   "partial 靛『部分採購』/ done 灰『已結案』(終態) / placeholder"
-```
+| pattern | 狀態集 | 終態步呈現 |
+|---|---|---|
+| **basic** 基本型 | canonical 4 值（draft / submitted / approved + voided 分支） | 無動態插槽 |
+| **acceptance** 驗收模型 | 7 值（+ partial / received / settled），由下游驗收單回寫；首見採購單 | partial / received / settled — **一律 primary 藍**，label 異 |
+| **convert** 結轉模型 | 6 值（+ partial / done / cancelled），由本單結轉進度驅動；首見請購單 | partial / done — **一律 primary 藍**（2026-06-21 取消靛 / 灰），label 異；未達為 placeholder 灰 |
 
-> 第 ④ 步是例外，永遠以 `step4Class` / `step4Label` 計算，**不套**一般 `--current` 判定（見 §5）。狀態 → 步序完整映射與 JS helper（`stepCur` / `stepState` / `stepClass` / `lineClass` / `step4Class` / `step4Label`）以 profile 為權威。
+> 終態（動態插槽）步永遠以 `step4Class` / `step4Label` 計算，**不套**一般 `--current` 判定，但**配色與當前步相同**（皆 primary 藍 + 內白環，見 §5）。
+> **stepCur 步序映射、判定邏輯、JS helper（`stepCur` / `stepState` / `stepClass` / `lineClass` / `step4Class` / `step4Label`）的權威在 prototyper `Stepper.md` profile**（schema §8「不重寫」）；本檔不重印映射物件，需查映射請見 profile / `erp-transaction.md` 狀態機。
 
 ## 5. States　🎨🔗
 
@@ -82,15 +73,17 @@ convert:          # 結轉模型 4 步（動態第 ④ 步）
 
 ```yaml
 # 判定：n < 當前 → done；n = 當前 → current；n > 當前 → pending（無 modifier）
-done:        { bubble: "{color-sf-success}", icon: check, label: "{color-sf-on-surface}" }       # 🔗 綠 #12B76A
-current:     { bubble: "{color-sf-primary} + 內白環(inset 1px #fff)", label: "{color-sf-on-surface} / 500" }  # 🔗 藍 #2877EE
-pending:     { bubble: "primary 8% 疊白 + {color-sf-outline-variant} 框", label: "{color-sf-on-surface-variant}" }  # 🎨🔗 底⚠疊白實色
-placeholder: { bubble: "同 pending（第 ④ 步未確定）", label: "{color-sf-on-surface-variant}" }    # 第 ④ 步專屬
-# ── 第 ④ 步終態（不套 --current）──
-partial:     { acceptance: "{color-sf-primary} 藍 + 內白環", convert: "靛色填充（見 SummaryCard.md）" }   # 進行中
-final:       { acceptance: "{color-sf-primary} 藍 + 內白環", convert: "灰色填充（已結案，刻意不用 done 綠避混淆）" }  # received / done 終態
-settled:     { bubble: "{color-sf-primary} 藍 + 內白環（僅驗收模型）" }                              # 已結清終態
+done:        { bubble: "{color-sf-success}", icon: check, label: "{color-sf-on-surface}" }       # 🔗 綠 #12B76A（已通過的中間步）
+current:     { bubble: "{color-sf-primary} + 內白環 inset 1px {color-sf-surface}", label: "{color-sf-on-surface} / 500" }  # 🔗 藍 #2877EE
+pending:     { bubble: "primary 8% 疊白 + {color-sf-outline-variant} 框", label: "{color-sf-on-surface-variant}" }  # 🔗 疊層用 {color-sf-primary-opacity-8}；落地實色見 profile
+placeholder: { bubble: "同 pending（終態步未達）", label: "{color-sf-on-surface-variant}" }
+# ── 終態（動態插槽）步：不套 --current 判定，但配色＝當前步（2026-06-21 統一）──
+partial / final / settled:
+  bubble: "一律 {color-sf-primary} 藍 + 內白環 inset 1px {color-sf-surface}（= current 視覺；驗收 / 結轉模型皆同）"
+  label:  "{color-sf-on-surface} / 500（label 由 step4Label 區分：部分驗收·採購 / 已驗收·已結案 / 已結清）"
 ```
+
+> 當前步 / 終態步 bubble 完整規格：`border-radius: 100px`（{ds-radius-10extra-large} 全圓）/ `border: {ds-borderwidth-small} {color-sf-primary}` / `fill: {color-sf-primary}` / `box-shadow: 0 0 0 1px {color-sf-surface} inset`（內白環）。
 
 ### 連接線 `.stepper__line`
 
@@ -114,8 +107,8 @@ banner-chip:    # = st-chip standalone（danger variant），見 st-chip.md §3 
   text:    "{color-sf-danger} / {font-size-sf-text-sm} / {font-weight-sf-medium}"  # 🔗 紅 / 12px / 500
 ```
 
-> **語意色僅五種**：綠（完成）、藍（當前 / 進行中 / 驗收終態）、靛（結轉 partial）、紅（作廢 / 取消）、中性灰（未達 / 結轉已結案）。**禁**為個別狀態另造新色。
-> ⚠️ pending/placeholder bubble 底「primary 8% 疊白實色」無單一 token；落地見 profile。靛色（結轉 partial）詳 `SummaryCard.md`。
+> **語意色僅四種**：綠（已完成的中間步）、藍（當前步 + 所有終態步，含 partial / received / settled / done）、紅（作廢 / 取消，走 voided-banner）、中性灰（未達 / placeholder）。**禁**為個別狀態另造新色（2026-06-21 取消「靛」與「結轉已結案灰」）。
+> pending / placeholder bubble 底為 primary 8% 疊層；sticky 不需，落地實色細節以 profile 為準。
 
 ## 6. Behavior　📋
 
@@ -126,8 +119,8 @@ banner-chip:    # = st-chip standalone（danger variant），見 st-chip.md §3 
 
 ## 7. RWD / 響應式　📋
 
-- 桌面 / 平板：水平排列，line `flex:1 1 28px`（min 28 / max 56px）自適應寬度。
-- 窄螢幕：step 最小寬 64px（`flex:0 0 auto`）；步數多時容器可橫向捲動，**不**壓縮 bubble 尺寸。
+- 桌面 / 平板：水平排列，連接線自適應伸縮（flex 量測值見 profile §尺寸與字體）。
+- 窄螢幕：step 固定最小寬（見 profile）；步數多時容器可橫向捲動，**不**壓縮 bubble 尺寸。
 - 與 Summary Card 佈局連動：Layout A 上區右側 / Layout B 右區（見 `SummaryCard.md`）。
 
 ## 8. Keyboard　📋
@@ -169,16 +162,13 @@ Read-only 元件，**不在 Tab 順序內**（無互動焦點）。狀態變更�
 - 子元件：`st-chip.md`（voided-banner 內 danger 徽章 = standalone 36px 版）
 - **落地權威（步序狀態 / 語意色 / 判定邏輯 / voided-banner / JS helper，勿在此重寫）**：`prototyper/profiles/erp-components/Stepper.md`
 - 狀態機權威：`prototyper/profiles/erp-transaction.md §State Machine` / §進銷存擴充狀態機
-- 佈局載體：`prototyper/profiles/erp-components/SummaryCard.md`（Layout A/B 插槽、靛色 partial）
+- 佈局載體：`prototyper/profiles/erp-components/SummaryCard.md`（Layout A/B 動態插槽）
 - Code：Syncfusion Stepper；helper 見 profile
 
 ---
 
-## 待 DS 正式定義（缺口彙整）
+## 量測值（落地權威在 profile，本檔不重印）
 
-> 依 schema §2.2，以下對不上既有 token，**未臆造**；列此供 DS owner 補定後回填。
+> 以下為元件專屬量測值，非可複用 design token——單一來源在 prototyper `Stepper.md §尺寸與字體`，本檔僅引用、不重寫（schema §8）：bubble 32px / line 2px·28–56px / container gap 16px / label 13px。需精確值請見 profile。
 
-1. **label 字級 13px**：`athena-tokens.md` 有 `text-sm` 12px / `text-md` 14px，無 13px；待對齊。
-2. **bubble 32px / line 28–56px / container gap 16px**：量測值，待對齊 size / space token。
-3. **pending·placeholder bubble 底「primary 8% 疊白實色」**：sticky 不需，但與 DataGrid 同屬「疊白實色」缺口家族，待 DS 一併定義。
-4. **結轉模型靛色（partial）**：語意色第「靛」色未在 `athena-tokens.md` 立 token（現由 `SummaryCard.md` 落地）；五語意色中唯一無 token 者，待 DS 補定。
+> **已解（2026-06-21）**：原「結轉模型靛色」與「pending 疊白實色無 token」兩項缺口——靛色經設計裁示**取消**（終態步一律 primary 藍，無需新色 / 新 token）；pending 疊層用既有 `{color-sf-primary-opacity-8}`，sticky 實色非 Stepper 所需。Stepper 已無待 DS 補定的 token 缺口。

@@ -81,21 +81,21 @@ layout_B:        # 單指標 + stepper（左右兩區）
 | loading | 金額 / stepper 區 Skeleton 佔位（非 spinner），保留卡片高度避免跳版 |
 | 金額為 0 / 未計算 | 顯示 `—` 或 `0`（依模組語意），不隱藏整卡 |
 
-### 內含 Stepper 的 4 步動態插槽（結轉模型 6 值）
+### 內含 Stepper 的動態終態插槽（結轉模型 6 值）
 
-前 3 步固定（草稿 / 已提交 / 已核准），**第 ④ 步三選一互斥**插槽。bubble / line 的 pending·current·done 視覺沿用 `Stepper.md §樣式規則`；本元件擴充第 ④ 步三 modifier：
+前段步固定（草稿 / 已提交 / 已核准…），**終態步三選一互斥**插槽（步數動態，最少 3、上不封頂）。bubble / line 的 pending·current·done 視覺沿用 `Stepper.md §樣式規則`；終態步三 modifier：
 
-| 當前 `form.state` | 第 ④ 步顯示 | class | 配色 |
+| 當前 `form.state` | 終態步顯示 | class | 配色 |
 |---|---|---|---|
-| `partial`（部分採購） | 部分採購 | `stepper__step--partial` | **靛色**填充（進行中） |
-| `done`（已結案） | 已結案 | `stepper__step--final` | **灰色**填充（終態；**刻意不用 `--done` 綠**，避免與步驟 1–3 已通過綠底混淆） |
+| `partial`（部分採購） | 部分採購 | `stepper__step--partial` | **primary 藍** + 內白環（進行中） |
+| `done`（已結案） | 已結案 | `stepper__step--final` | **primary 藍** + 內白環（終態；2026-06-21 起與當前步同色，靠 label 區分，不再用灰；仍非 `--done` 綠） |
 | `draft` / `submitted` / `approved` | 待結轉 / — | `stepper__step--placeholder` | 淺灰 placeholder |
 | `cancelled`（已取消） | **整條 stepper 隱藏** → `.voided-banner` 內紅色 `st-chip--cancelled`「已取消」pill | — | 見 `Stepper.md §voided-banner` |
 
 狀態 × step 完整對應矩陣、`is-current` 連接線索引規則（線索引 = 其右側 step 序號；藍線永遠連向當前步）以 profile §狀態×step 對應矩陣為權威。
 
-> **再次核准**：`was_cancelled && state==='submitted'` 時 stepper 維持 4 步（active 落第 ②、第 ④ 步仍 placeholder），另於卡片下方插入「再次核准警示」`form-banner.is-warning`（詳 `erp-transaction.md`）。
-> ⚠️ **靛色（partial）** 為五語意色中唯一未在 `athena-tokens.md` 立 token 者，現由 profile 落地；待 DS 補定（與 Stepper.md 缺口同源）。
+> **再次核准**：`was_cancelled && state==='submitted'` 時 stepper active 落前段步、終態步仍 placeholder，另於卡片下方插入「再次核准警示」`form-banner.is-warning`（詳 `erp-transaction.md`）。
+> **設計修正（2026-06-21）**：原「partial 靛 / done 灰」已取消——終態步**一律 primary 藍**（與當前步同視覺），無需新色 / 新 token。
 
 ## 6. Behavior　📋
 
@@ -149,7 +149,7 @@ App ≠ 縮小 Web：
 
 - Tokens：`../athena-tokens.md` §Surface / §Shadow（`--ds-shadow-none`）/ §Space / §Primary / §Typography
 - 語意對照：`../athena-design.md` §中性·背景 / §字級（金額用 h5、label 用 text-sm）/ §間距
-- 子元件：`Stepper.md`（內含狀態 stepper，含結轉模型第 ④ 步靛色）、`st-chip.md`（voided-banner / 已產生傳票 chip）、`DataGrid.md`（合計列 Σ → 單指標金額來源）
+- 子元件：`Stepper.md`（內含狀態 stepper，終態步一律 primary 藍）、`st-chip.md`（voided-banner / 已產生傳票 chip）、`DataGrid.md`（合計列 Σ → 單指標金額來源）
 - **落地權威（layout / token / 4 步動態 stepper，勿在此重寫）**：`prototyper/profiles/erp-components/SummaryCard.md`
 - Layout A 完整規格：`prototyper/profiles/erp-transaction.md §Summary Bar 結構`
 - 狀態機權威：`erp-transaction.md §進銷存擴充狀態機`
@@ -162,5 +162,6 @@ App ≠ 縮小 Web：
 > 依 schema §2.2，以下對不上既有 token，**未臆造**；列此供 DS owner 補定後回填。
 
 1. **`.summary-card__amount` 字級**：profile 僅標「放大 / 加粗」，未指定 size token；暫對 `h5` 20px，待 Figma 量測確認。
-2. **結轉模型靛色（第 ④ 步 partial）**：五語意色中唯一無 token 者，與 `Stepper.md` / `DataGrid.md` 缺口同源，待 DS 一併補定。
-3. **wrap 左右 padding「隨 main panel」**：非固定值，依版面 context；落地見 profile。
+2. **wrap 左右 padding「隨 main panel」**：非固定值，依版面 context；落地見 profile。
+
+> **已解（2026-06-21）**：原「結轉模型靛色」缺口經設計裁示**取消**——終態步一律 primary 藍，無需新色 / 新 token。

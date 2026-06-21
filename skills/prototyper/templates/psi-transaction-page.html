@@ -355,7 +355,7 @@
                           <span class="stepper__label">已核准</span>
                         </div>
                         <span class="stepper__line" :class="lineClass(4)"></span>
-                        <!-- 第 ④ 步：三選一動態插槽（partial 靛 / done 灰 / placeholder 灰待定）；永遠走 step4Class，不套 --current -->
+                        <!-- 第 ④ 步：三選一動態插槽（partial / done 皆 primary 藍、placeholder 灰待定）；永遠走 step4Class，不套 --current -->
                         <div class="stepper__step" :class="step4Class">
                           <span class="stepper__bubble">4</span>
                           <span class="stepper__label">{{ step4Label }}</span>

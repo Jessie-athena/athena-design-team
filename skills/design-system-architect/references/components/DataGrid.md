@@ -38,13 +38,14 @@ last-synced: —
 
 ```yaml
 # data-dense 元件：以 Default（緊湊）為主；表單內明細可採 Comfortable padding
+# token-ref 的值在此給；無 token 的量測值與疊白實色不重印，指 profile 為單一來源（schema §8）
 header:
-  height:    45px                              # 🎨 量測值，待對齊 token
-  bg:        "狀態色：primary 5% 疊白實心色 ≈ #F4F8FE"   # ⚠️ 無單一 token（sticky 表頭須實色，禁 rgba）；落地見 profile §表頭
+  height:    "見 profile §尺寸"                  # 量測值無 token，單一來源在 profile
+  bg:        "見 profile §表頭"                  # primary 5% 疊白實色，無單一 token，sticky 須實色
   font:      "{font-size-sf-text-md} / {font-weight-sf-medium}"  # 🔗 14px / 500
-  divider:   "{ds-borderwidth-small} {color-sf-outline}"         # 🔗 1px 欄間垂直分隔（高 26px）
+  divider:   "{ds-borderwidth-small} {color-sf-outline}"         # 🔗 1px 欄間垂直分隔（高度量測見 profile）
 row:
-  height:    50px                              # 🎨 顯示型；行內編輯態 40→56px（見 §6）
+  height:    "見 profile §尺寸"                  # 顯示型 / 行內編輯態量測值，單一來源在 profile
   cell-pad:  "{ds-space-padding-extra-large}"  # 🔗 水平 16px（padding: 0 16px）
   font:      "{font-size-sf-text-md}"          # 🔗 14px
   fg:        "{color-sf-on-surface}"           # 🔗 主要文字 rgb(15 23 42)
@@ -59,7 +60,7 @@ special-cell:
   empty:     "—（em dash）"                     # 禁「無」/「N/A」
 ```
 
-> 表頭實色 `#F4F8FE`＝primary 5% 疊白後實心色：sticky 表頭浮在滾動內容上，若用 `rgba()` 會透出下層。此「疊白後實色」無單一 token，落地以 profile 值為準。
+> sticky 表頭 / 凍結欄須用**疊白後實心色**（primary/on-surface 透明色疊白的合成結果）：浮在滾動內容上若用 `rgba()` 會透出下層。這組實色**無單一 token**，其字面值的**單一來源在 profile** `§表頭` / `§列狀態與 Hover`，本檔不重印（避免兩處漂移）。
 
 ## 4. Types / Variants　🎨🔗
 
@@ -87,16 +88,16 @@ inline_edit_grid:    # .dg-lines 行內編輯型
 
 ### 列互動多層（淺→深，品牌藍為基底逐級加深）
 
-| 狀態 | 普通 cell（非 sticky） | Sticky cell（**須實色**） | token 對映 |
-|---|---|---|---|
-| 一般列（奇數） | `{color-sf-surface}` | `#ffffff` | 🔗 white |
-| 斑馬列（偶數） | `{color-sf-on-surface-opacity4}` | `#F5F6F8`（疊白實色） | 🔗 普通 cell 對得上；sticky 實色⚠️無 token |
-| Hover | primary 6% | `#F2F7FE` | ⚠️ `.06` 非標準 alpha，無 token（介於 `-5`/`-8`） |
-| 選取 `.is-selected` | primary 10% | `#E6F1FD` | ⚠️ `.10` 無 token（有 `-8`/`-11`/`-12`） |
-| 選取 + Hover | `{color-sf-primary-opacity-14}` | `#E1ECFC` | 🔗 普通 cell `.14` 對得上；sticky 實色⚠️無 token |
+| 狀態 | 普通 cell（非 sticky）— 半透明疊層 | Sticky cell（須實色）|
+|---|---|---|
+| 一般列（奇數） | `{color-sf-surface}` 白 | 同（白） |
+| 斑馬列（偶數） | `{color-sf-on-surface-opacity4}` | 疊白實色 — **見 profile** |
+| Hover | primary 6%（`rgba({color-sf-primary}, .06)`，無 pre-wrap token） | 疊白實色 — **見 profile** |
+| 選取 `.is-selected` | primary 10%（`rgba({color-sf-primary}, .10)`） | 疊白實色 — **見 profile** |
+| 選取 + Hover | `{color-sf-primary-opacity-14}` | 疊白實色 — **見 profile** |
 
-> **為什麼 sticky 必須補實色**：sticky cell 浮在滾動內容上，rgba 透明色會讓下層穿透、破壞 hover/selected 反饋。每個互動態都需「疊白後固體色」配套；色相須與一般 cell 一致（只是 alpha 換實色），**禁**用不同色相讓凍結欄像獨立區塊。
-> **缺口處置**：上表 ⚠️ 標記項以 prototyper profile §列狀態與 Hover 為落地權威；要正式收進 token 需 DS 補定「互動疊層階梯（5/6/8/10/12/14%）」與「對應疊白實色」兩組，目前不臆造。
+> 互動層淺→深，品牌藍逐級加深（4→6→10→14%）。**非 sticky cell** 用半透明疊層（上表左欄；`.06` / `.10` 無 pre-wrap token，落地以 `rgba(var(--color-sf-primary), .06/.10)` 表示，非新 token）。
+> **sticky cell 須實色**：浮在滾動內容上，rgba 會穿透、破壞反饋；故每態需「疊白後固體色」配套，色相與非 sticky 一致、僅 alpha 換實色。這組實色字面值的**單一來源在 prototyper profile** `§列狀態與 Hover`，本檔不重印（schema §8 不重寫、避免漂移）。
 
 ### 資料生命週期（必含）
 
@@ -203,10 +204,10 @@ App ≠ 縮小的 Web。資料表在窄螢幕的替代佈局：
 
 ---
 
-## 待 DS 正式定義（缺口彙整）
+## 無 token 值的單一來源（不重印於本檔）
 
-> 依 schema §2.2，以下對不上既有 token，**未臆造**；列此供 DS owner 補定後回填，並把 §5 ⚠️ 項改為 token-reference。
+> 以下值在 `athena-tokens.md` 無對應 token；依 schema §2.2「禁臆造」，**不在本檔造 token、也不重印字面值**，其唯一字面來源在 prototyper `DataGrid.md` profile，本檔一律引用。若 DS 日後要正式立 token，於 `athena-tokens.md` 補定後再回頭把這些引用改為 token-reference。
 
-1. **互動疊層階梯**：斑馬 4% / hover 6% / selected 10% / selected+hover 14%——`athena-tokens.md` 僅有 primary `-5/-8/-11/-12/-14/-16` 與 `on-surface-opacity4`，缺 `.06` / `.10` 兩階。
-2. **疊白後實色（sticky 配套）**：表頭 `#F4F8FE`、斑馬 `#F5F6F8`、hover `#F2F7FE`、selected `#E6F1FD`、selected+hover `#E1ECFC`——sticky 欄必需的「不透明」版本，無對應實色 token。
-3. **列高 45 / 50px、表頭欄間分隔線高 26px**：量測值，待對齊 space / size token。
+1. **疊白後實色（sticky 配套）**：表頭 / 斑馬 / hover / selected / selected+hover 的不透明版——單一來源：profile `§表頭` / `§列狀態與 Hover`。
+2. **互動疊層階梯非標準階**：`.06`（hover）/ `.10`（selected）無 pre-wrap token；落地以 `rgba(var(--color-sf-primary), .06/.10)` 表示（非新 token）。
+3. **元件量測值**：列高 45 / 50px、表頭欄間分隔線高 26px 等——單一來源：profile `§尺寸`。

@@ -68,9 +68,9 @@
 
 | 當前狀態 | 第 ④ 步顯示 | class modifier | 配色 | 性質 |
 |---|---|---|---|---|
-| `partial`（部分採購） | 部分採購 | `stepper__step--partial` | **靛色**填充 | 進行中（當前步） |
-| `done`（已結案） | 已結案 | `stepper__step--final` | **灰色**填充 | 終態（**刻意不用 `--done`**——`--done` 是步驟 1–3 的「已通過綠底」；已結案是終態灰，須用獨立 modifier 與綠底區隔） |
-| `draft` / `submitted` / `approved`（前三步階段） | 「待結轉」或「—」 | `stepper__step--placeholder` | 圓底**淺灰** placeholder | 尚未定 |
+| `partial`（部分採購） | 部分採購 | `stepper__step--partial` | **primary 藍**填充 + 內白環 | 進行中（當前步） |
+| `done`（已結案） | 已結案 | `stepper__step--final` | **primary 藍**填充 + 內白環 | 終態（2026-06-21 起與當前步同色；靠 label 區分，不再用灰） |
+| `draft` / `submitted` / `approved`（前三步階段） | 「待結轉」或「—」 | `stepper__step--placeholder` | 圓底**淺灰** placeholder | 尚未達到 |
 
 > `cancelled`（已取消）**不進 stepper**：整條 stepper 改顯示 `.voided-banner` 內一顆 `st-chip st-chip--cancelled`「已取消」pill（紅色），與 canonical `voided` 同理（徽章視覺詳 `Stepper.md §voided-banner`）。
 
@@ -81,8 +81,8 @@
 | `draft` | current | （灰） | pending | （灰） | pending | （灰） | placeholder |
 | `submitted` | done ✓ | is-current | current | （灰） | pending | （灰） | placeholder |
 | `approved` | done ✓ | is-done | done ✓ | is-current | current | （灰） | placeholder |
-| `partial` | done ✓ | is-done | done ✓ | is-done | done ✓ | is-current | **partial（靛，當前）** |
-| `done` | done ✓ | is-done | done ✓ | is-done | done ✓ | is-done | **final（灰，終態；class `--final` 非 `--done`）** |
+| `partial` | done ✓ | is-done | done ✓ | is-done | done ✓ | is-current | **partial（primary 藍，當前）** |
+| `done` | done ✓ | is-done | done ✓ | is-done | done ✓ | is-done | **final（primary 藍，終態；class `--final`，色同當前步）** |
 | `cancelled` | ⛔ 整個 stepper 隱藏，改顯示 `.voided-banner` →「已取消」pill | — | — | — | — | — | — |
 
 > 連接線索引 = 其**右側** step 的序號（`lineClass(2)` 是 ①→② 之間那條）；`is-current` 藍線永遠**連向**當前步，非從當前步出發。
@@ -98,13 +98,13 @@
 | `stepState(n)` | `'done'` / `'current'` / `'pending'` | 第 n 步（1–3）的三狀態；對照上表 |
 | `stepClass(n)` | step modifier class（`stepper__step--done` / `--current`） | 由 `stepState(n)` 映射（pending 無 modifier） |
 | `lineClass(n)` | `'is-done'` / `'is-current'` / `''` | 第 n 步**左側**連接線 `.stepper__line`：n < 當前 → `is-done`（綠）、n = 當前 → `is-current`（藍，正連向當前步）、之後 → 灰 |
-| `step4Class` | `stepper__step--partial` / `--final` / `--placeholder` | 第 ④ 步插槽 class，依 `form.state`（已結案用 `--final` 灰，**非** `--done` 綠） |
+| `step4Class` | `stepper__step--partial` / `--final` / `--placeholder` | 第 ④ 步插槽 class，依 `form.state`（`--partial` / `--final` 皆 primary 藍、僅 label 異；`--placeholder` 灰；**皆非** `--done` 綠） |
 | `step4Label` | `'部分採購'` / `'已結案'` / `'待結轉'` | 第 ④ 步文字 |
 | `isCancelled` | boolean | `form.state === 'cancelled'`，true 時整條 stepper 換 pill |
 
 ### 容器與視覺 token
 
-圓圈 `.stepper__bubble`（32×32, radius full）、連接線 `.stepper__line`（高 2px / flex 28–56px）的 pending / current / done 三狀態 token 與容器規則，沿用 **`Stepper.md §樣式規則`**。本檔擴充三個第 ④ 步專用 modifier（結轉模型配色）：`--partial` 靛色（進行中）、`--final` 灰色（已結案終態，**與 `--done` 綠底區隔**）、`--placeholder` 淺灰（待定）；驗收模型的第 ④ 步配色（一律藍）見 `Stepper.md`。
+圓圈 `.stepper__bubble`（32×32, radius full）、連接線 `.stepper__line`（高 2px / flex 28–56px）的 pending / current / done 三狀態 token 與容器規則，沿用 **`Stepper.md §樣式規則`**。第 ④ 步三 modifier 配色（2026-06-21 統一）：`--partial`（進行中）與 `--final`（終態）**皆 primary 藍 + 內白環**（= 當前步視覺，靠 label 區分）、`--placeholder` 淺灰（待定）；驗收模型亦同（一律藍），詳 `Stepper.md`。
 
 ---
 
@@ -112,6 +112,6 @@
 
 - [ ] Summary Card `sticky` 置頂、無 shadow
 - [ ] Layout B：左單指標（放大 / 加粗 / 主色）+ 右 stepper
-- [ ] 4 步 stepper 前 3 步固定、第 ④ 步依 `form.state` 三選一（partial 靛 `--partial` / 已結案灰 `--final` / placeholder 淺灰 `--placeholder`）；已結案**不**用 `--done`（避免與步驟綠底混淆）
+- [ ] 動態 stepper（最少 3 步、上不封頂）前段固定、終態步依 `form.state` 三選一（`--partial` / `--final` 皆 primary 藍、`--placeholder` 灰）；終態步**不**用 `--done` 綠（避免與已通過中間步混淆）
 - [ ] `cancelled` 時整條 stepper 換「已取消」pill，**不**塞進第 ④ 步當綠底
 - [ ] `was_cancelled && submitted` 時下方出現再次核准警示 banner

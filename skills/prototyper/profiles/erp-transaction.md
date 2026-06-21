@@ -170,8 +170,8 @@ prototype 頁面層級**不可**出現第二條捲軸。reviewer 反覆遇到的
 | `draft` | 草稿 | → `submitted`（`action_submit`，取號）；可 `unlink`（僅草稿物理刪除） | — |
 | `submitted` | 已提交 | → `approved`（`action_approve`）/ 退回 `draft`（`action_reject`，二次確認） | — |
 | `approved` | 已核准 | → `submitted`（`action_unapprove`，二次確認；已部分結轉則阻擋）/ → `cancelled`（`action_cancel`）/ 結轉（`action_convert_po`） | — |
-| `partial` | 部分採購 | 進行中；可續結轉（`action_convert_po`）至 `done` / → `cancelled`（`action_cancel`）；**不可** `action_unapprove` | 第 ④ 步靛色 |
-| `done` | 已結案 | 終態（全部明細已結轉） | 第 ④ 步灰色 |
+| `partial` | 部分採購 | 進行中；可續結轉（`action_convert_po`）至 `done` / → `cancelled`（`action_cancel`）；**不可** `action_unapprove` | 終態步 primary 藍 |
+| `done` | 已結案 | 終態（全部明細已結轉） | 終態步 primary 藍 |
 | `cancelled` | 已取消 | 終態（已結轉的下游單據不受影響，由下游各自管理） | 整條 stepper 換紅色 pill |
 
 **動作命名**：`action_submit / action_approve / action_unapprove / action_reject（退回，已提交→草稿）/ action_cancel（作廢，已核准 / 部分採購→已取消）/ action_convert_po（結轉下游單據）`
@@ -202,7 +202,7 @@ prototype 頁面層級**不可**出現第二條捲軸。reviewer 反覆遇到的
 | `voided` | 已作廢 | 終態（`submitted` / `approved` 可作廢，沿用 `action_void`） | 整條 stepper 換 `.voided-banner` |
 
 - **partial / received 非按鈕觸發**：由驗收單的驗收量決定——尚有未到量＝部分驗收，全部到齊＝已驗收。
-- **與 6 值模型的差異**：終態用語（已驗收/已結清 vs 已結案）、終止動作（`action_void` vs `action_cancel`）、第 ④ 步配色（驗收模型一律藍 vs 結轉模型 partial 靛 / done 灰）。兩變體**不可混用**於同一模組。
+- **與 6 值模型的差異**：終態用語（已驗收/已結清 vs 已結案）、終止動作（`action_void` vs `action_cancel`）。第 ④ 步配色兩模型**一律 primary 藍**（2026-06-21 統一，取消結轉模型 partial 靛 / done 灰）。兩變體**不可混用**於同一模組。
 - **再次核准警示**：`action_unapprove` 會設 `was_unapproved = true`；回到 `submitted` 時於 Summary Card 下方顯示 `form-banner.is-warning`「此單曾被取消核准，請重新確認明細後再次提交核准。」
 - 步序映射、判定邏輯、樣式 token、引用程式碼 → 詳 `profiles/erp-components/Stepper.md`。
 
@@ -604,7 +604,7 @@ App Shell 與多公司情境下的「公司別」過濾 dropdown **預設為空�
 - [ ] State machine 4 種狀態（含 voided）能在 Form View 正確呈現
 - [ ] 「已產生傳票」用 chip，**不在** stepper 內
 - [ ] Stepper 判定邏輯（`--current` / `--done` / pending + `.stepper__line`）正確、`stepCur` 步序映射對應所有 form.status（詳 `profiles/erp-components/Stepper.md`）
-- [ ] **（進銷存擴充狀態機・結轉模型）** 6 值狀態正確（draft/submitted/approved/partial/done/cancelled）；Summary Card 用單指標 + 4 步動態 stepper（第 ④ 步 partial 靛 / done 灰 / placeholder；cancelled 換 voided-banner，詳 `SummaryCard.md`）；Footer 用 6 值狀態-按鈕矩陣（詳 `FormFooter.md §進銷存作業檔狀態-按鈕矩陣`）；chat handoff 已點名「採進銷存擴充狀態機（結轉模型）」
+- [ ] **（進銷存擴充狀態機・結轉模型）** 6 值狀態正確（draft/submitted/approved/partial/done/cancelled）；Summary Card 用單指標 + 動態 stepper（終態步 partial / done 一律 primary 藍、placeholder 灰；cancelled 換 voided-banner，詳 `SummaryCard.md`）；Footer 用 6 值狀態-按鈕矩陣（詳 `FormFooter.md §進銷存作業檔狀態-按鈕矩陣`）；chat handoff 已點名「採進銷存擴充狀態機（結轉模型）」
 - [ ] **（進銷存擴充狀態機・驗收模型）** 七值狀態正確（draft/submitted/approved/partial/received/settled/voided）；第 ④ 步 partial/received/settled 一律藍、placeholder 灰（詳 `Stepper.md §七狀態總表`）；`was_unapproved` 回到 submitted 時顯示再次核准警示橫幅；chat handoff 已點名「採進銷存擴充狀態機（驗收模型）」
 - [ ] Smart Bar 在無關聯時整段不渲染；有關聯時用 `card-btn` 結構（無 link icon、count + 單位 + 標題 + `arrow-outward`）
 - [ ] Summary bar `sticky` + 上下兩塊 + 無 shadow

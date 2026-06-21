@@ -250,6 +250,7 @@ Chip 本身唯讀無互動態；其「狀態值」即 §4 variant。表格列承
 - [ ] 來源標記（🎨/🔗/📋）逐區塊標齊
 - [ ] §13 三向連結可達（tokens / prototyper profile / code）
 - [ ] 已收編而非另定：與 prototyper profile 重疊處用引用，不重寫 token 決策
+- [ ] **無重複字面值**：凡 `athena-tokens.md` 已有 token，一律 `{token}` reference；**無對應 token 的具體值（疊白實色、元件量測 px、非標準 alpha、狀態機 stepCur / 矩陣）不在設計文件重印**，改指其單一來源（profile 或 `erp-transaction.md`）。要新增 token 須先在 `athena-tokens.md`（上游 CSS / Figma 真值）補定——`athena-tokens.md` 是上游匯出的忠實鏡像，**禁在設計文件就地造 token、或把同一字面值寫死兩份**（避免兩處漂移）。
 
 ---
 

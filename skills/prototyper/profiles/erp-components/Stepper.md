@@ -102,15 +102,24 @@
 
 ### 步驟狀態
 
+> 步數**動態**：依各模組狀態機而定，最少 3 步、上不封頂（非固定 4 步）。以下狀態通則適用任意步數的每一步。
+
 | class | Bubble 內容 | Bubble 色 | Label 色 | 用途 |
 |---|---|---|---|---|
 | `--done` | check 圖示 | `rgb(var(--color-sf-success))` /* #12B76A 綠 */ | `var(--text-primary)` /* #0F172A */ | 已通過的步驟 |
-| `--current` | 數字 | `rgb(var(--color-sf-primary))` /* #2877EE 藍 */ + 內白環 `inset 0 0 0 1px #fff` | `var(--text-primary)` / 500 | 進行中的步驟 |
-| `--placeholder` | 數字 4 | `rgba(var(--color-sf-primary), .08)` over `var(--bg-surface-default)`，框 `var(--border-default)` /* #D7DAE0 */ | `var(--text-secondary)` /* #67717E */ | 第 ④ 步尚未確定 |
-| `--partial` | 數字 4 | 驗收模型：`rgb(var(--color-sf-primary))` 藍 + 內白環／結轉模型：**靛色**填充（見 `SummaryCard.md`） | `var(--text-primary)` / 500 | 部分驗收 / 部分採購（進行中） |
-| `--final` | 數字 4 | 驗收模型：`rgb(var(--color-sf-primary))` 藍 + 內白環／結轉模型：**灰色**填充（已結案；刻意不用 `--done` 綠，避免與步驟綠底混淆） | `var(--text-primary)` / 500 | 已驗收 / 已結案（終態） |
-| `--settled` | 數字 4 | `rgb(var(--color-sf-primary))` + 內白環（僅驗收模型） | `var(--text-primary)` / 500 | 已結清（終態） |
+| `--current` | 數字 | `rgb(var(--color-sf-primary))` /* #2877EE 藍 */ + 內白環 `inset 0 0 0 1px var(--bg-surface-default)` | `var(--text-primary)` / 500 | 進行中（當前）步驟 |
+| `--partial` / `--final` / `--settled` | 數字 | **一律 `rgb(var(--color-sf-primary))` 藍 + 內白環**（= `--current` 視覺；驗收 / 結轉模型皆同，不再分靛 / 灰） | `var(--text-primary)` / 500 | 終態步：部分驗收·採購 / 已驗收·已結案 / 已結清；色相同，僅 label 由 `step4Label` 區分 |
+| `--placeholder` | 數字 | `rgba(var(--color-sf-primary), .08)` over `var(--bg-surface-default)`，框 `var(--border-default)` /* #D7DAE0 */ | `var(--text-secondary)` /* #67717E */ | 終態步尚未達到（未確定） |
 | （無 modifier，pending） | 數字 | `rgba(var(--color-sf-primary), .08)` over `var(--bg-surface-default)`，框 `var(--border-default)` | `var(--text-secondary)` | 未達的步驟 |
+
+> **當前步 / 終態步 bubble 完整規格**（primary 藍實心）：
+> ```css
+> border-radius: 100px;                                   /* 全圓 = var(--radius-full) */
+> border: 1px solid var(--ColorSf-primary, #2877EE);
+> fill:   var(--ColorSf-primary, #2877EE);                /* 落地以 background 實作 */
+> box-shadow: 0 0 0 1px var(--ColorSf-surface, #FFF) inset;  /* 內白環 */
+> ```
+> **設計修正（2026-06-21）**：取消「結轉模型 partial 靛色 / done 灰色」分歧——當前步與終態步**一律 primary 藍**。理由：步數隨表單動態（3～N 步），不宜以「第 ④ 步特定色」綁死；終態步用 primary 藍與當前步一致，靠 label 區分語意即可。
 
 ### 連接線 `.stepper__line`
 
@@ -132,7 +141,7 @@
 | 容器 | `.stepper { display: flex; align-items: flex-start; gap: 16px; }` |
 | 轉場 | `background / color 200ms ease-out` |
 
-> **語意色僅五種**：綠（完成）、藍（當前 / 進行中 / 驗收模型終態）、靛（結轉模型 partial）、紅（作廢 / 取消）、中性灰（未達 / 結轉模型已結案）。**禁**為個別狀態另造新色。
+> **語意色僅四種**：綠（已完成的中間步）、藍（當前步 + 所有終態步，含 partial / received / settled / done）、紅（作廢 / 取消，走 voided-banner 不進 stepper）、中性灰（未達 / placeholder）。**禁**為個別狀態另造新色（已於 2026-06-21 取消「靛」「結轉已結案灰」兩種變體色）。
 
 ## voided-banner
 
