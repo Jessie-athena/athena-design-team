@@ -54,6 +54,7 @@ Component Tokens（元件層）
 > **Athena 專案的實際 token 值**（色彩 / 間距 / 圓角 / 字體，含 `--color-sf-*` 與 `--ds-*`）以 `references/athena-tokens.md` 為準 — 定義 / audit Athena DS 時讀該檔取真值，本範例僅供理解結構。
 > **何時用哪個 token、何時用哪個元件**（色彩語意配對、字級層級、雙密度 padding）見 `references/athena-design.md`；**完整元件目錄**（94 個 + 客製 `Ds`，含用途與採用狀態）見 `references/athena-components.md`。
 > **逐元件設計文件格式**（章節 / 來源標記 / token-reference / Figma 補入 / Lite·Full 分層）見 `references/component-doc-schema.md`；已產出文件在 `references/components/`（Step 2 產出依此）。
+> **此架構的決策與緣由**（為何不用行銷官網範本、六個 B2B DS 基準、三 skill 分工）見 `component-doc-architecture.md`（定版報告，記錄 why；格式權威仍以 schema 檔為準）。
 
 ```markdown
 # Token Spec

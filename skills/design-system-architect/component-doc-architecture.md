@@ -1,7 +1,7 @@
 # Component 元件設計文件架構 — 定版報告
 
 > 狀態：**定版（已落地首批）**。本報告記錄分析與決策；**架構格式的單一權威**是
-> `skills/design-system-architect/references/component-doc-schema.md`（本檔不重複其內容，避免漂移）。
+> `references/component-doc-schema.md`（本檔不重複其內容，避免漂移）。
 >
 > 任務：(1) 整理 `ui-designer` / `design-system-architect` / `prototyper` 三 skill 的優化項目；
 > (2) 規劃 **Component 元件設計文件說明架構**，供後續由 Figma 讀取元件後逐欄補入。
@@ -49,7 +49,7 @@
 - **Content 輕量章節**：只放該元件特有文案，一般 microcopy 連 `ux-writer`。
 - **收編不漂移**：與 `prototyper` profile 重疊處用引用，不重寫 token 決策。
 
-> 完整章節結構（§0–§13）、Figma 讀取→章節對應 SOP、自檢清單、Lite(Button)/Full(st-chip) 範例 → 見 `skills/design-system-architect/references/component-doc-schema.md`。
+> 完整章節結構（§0–§13）、Figma 讀取→章節對應 SOP、自檢清單、Lite(Button)/Full(st-chip) 範例 → 見 `references/component-doc-schema.md`。
 
 ---
 
