@@ -24,28 +24,25 @@
 
 ## Token 與尺寸
 
-| 項目 | 值 |
+> 卡片背景 / 邊框 / 圓角、各內距、gap、欄位高度、input 與按鈕尺寸等字面值見 app.css `.search-bar`（展開）/ `.search-bar.is-collapsed`（收合）/ `.search-bar__fields .field`；本表僅記語意角色。
+
+| 項目 | 角色 |
 |---|---|
-| 卡片背景 | `#FFFFFF` |
-| 卡片邊框 | `1px solid var(--border-default)` |
-| 卡片圓角 | `8px`（`--radius-lg`） |
-| 卡片內距（展開） | `16px` 四邊 |
-| 卡片內距（收合） | `12px 16px` |
-| 欄位區與操作區水平 gap | `16px` |
-| 欄位之間 gap（展開） | `12px 16px`（垂直 12 / 水平 16） |
-| 欄位之間 gap（收合） | `8px` |
-| 欄位 min-width | **150px** |
-| 欄位高度（展開＋收合，皆含 label） | `62px`（label 18 + gap 4 + input 40） |
-| input / select 高度 | `40px` |
-| 操作按鈕尺寸 | `40 × 40px` |
-| 操作按鈕之間 gap | `8px` |
+| 卡片背景 / 邊框 / 圓角 | 白底卡片、`var(--border-default)` 邊、`--radius-lg` 圓角 |
+| 卡片內距 | 展開四邊一致；收合上下較緊 |
+| 欄位區與操作區水平 gap | 二段式版面的分隔距 |
+| 欄位之間 gap | 展開（垂直 < 水平）/ 收合較緊 |
+| 欄位 min-width | RWD 換行唯一觸發門檻（見 §RWD） |
+| 欄位高度 | 展開＋收合皆含 label，兩態等高 |
+| input / select 高度 | 與操作按鈕齊高 |
+| 操作按鈕尺寸 / 之間 gap | 正方 icon button；固定 shrink |
 
 ## 展開狀態（預設）
 
 - `.search-bar` → `display: flex; flex-wrap: nowrap; align-items: flex-start`
 - `.search-bar__fields` → `display: flex; flex-wrap: wrap; align-items: flex-end; flex: 1 1 auto; min-width: 0`
 - `.search-bar__actions` → `flex-shrink: 0; align-self: stretch; align-items: flex-end`
-- 每個 `.field` → `flex: 1 1 150px; min-width: 150px`
+- 每個 `.field` → `flex: 1 1 <欄位 min-width>; min-width: <同值>`（欄位 min-width 值見 app.css `.search-bar__fields .field`）
 - 寬度足夠 → 欄位等寬平均分配，並排同一行
 - 寬度不足 → 欄位自動換行（操作區固定在第一行右上不被擠下）
 
@@ -53,12 +50,14 @@
 
 > 對應 `REFERENCE.md §8` 的 XL / L / M / S 四斷點。Search Bar 採「Flex Wrap → 自動收合」兩階段策略，避免水平捲動。
 
-| 斷點 | 欄位排列 | 欄位 flex-basis | 收合行為 |
-|---|---|---|---|
-| **XL ≥ 1440** | 單列 5 欄 | `flex: 1 1 180px` | 不收合 |
-| **L 1280–1439** | 單列 5 欄 | `flex: 1 1 160px` | 不收合 |
-| **M 1024–1279** | 2 列換行（3+2 或 4+1） | `flex: 1 1 200px` | 偵測到換行 → 顯示「收合」按鈕 |
-| **S 768–1023** | 預設收合，依寬度動態顯示 N 個欄位（至少 1 個） | 固定 `150px` | 進入頁面 `searchCollapsed = true`；點「展開」可顯示全部 |
+> 各斷點的欄位 flex-basis 字面值見 app.css `@media` 區塊（`.search-bar__fields .field`）；本表記斷點門檻與排列／收合行為。
+
+| 斷點 | 欄位排列 | 收合行為 |
+|---|---|---|
+| **XL ≥ 1440** | 單列 5 欄（較寬 flex-basis） | 不收合 |
+| **L 1280–1439** | 單列 5 欄（中 flex-basis） | 不收合 |
+| **M 1024–1279** | 2 列換行（3+2 或 4+1，較寬 flex-basis） | 偵測到換行 → 顯示「收合」按鈕 |
+| **S 768–1023** | 預設收合，依寬度動態顯示 N 個欄位（至少 1 個；固定欄寬） | 進入頁面 `searchCollapsed = true`；點「展開」可顯示全部 |
 
 > **跨斷點切換規則**：S → M/L/XL 自動展開；M/L/XL → S **不**自動收合（保留使用者目前已展開的狀態，欄位以自然換行呈現）。只有首次進入 S 才會預設收合。
 
@@ -90,14 +89,14 @@
 
 點擊 ▲ → `searchCollapsed = true`，整張卡片切換為**單行模式**：
 
-- `.search-bar` 加上 `.is-collapsed`；卡片內距改 `12px 16px`
+- `.search-bar` 加上 `.is-collapsed`；卡片內距收緊（值見 app.css `.search-bar.is-collapsed`）
 - `.search-bar__fields` → `flex-wrap: nowrap; overflow: hidden`（強制單行）
-- 欄位 → `flex: 0 0 150px`；**label 保留顯示**（與展開狀態一致，方便辨識）
-- 容納邏輯（即時計算）：
+- 欄位 → 固定不縮（`flex: 0 0` 欄寬，欄寬同 min-width；值見 app.css）；**label 保留顯示**（與展開狀態一致，方便辨識）
+- 容納邏輯（即時計算；式中 `outerGap` / `innerGap` / `fieldWidth` 取 app.css `.search-bar` 對應數值）：
 
   ```
-  available    = barInnerWidth - actionsWidth - outerGap(16)
-  visibleCount = floor((available + innerGap(8)) / (fieldWidth(150) + innerGap(8)))
+  available    = barInnerWidth - actionsWidth - outerGap
+  visibleCount = floor((available + innerGap) / (fieldWidth + innerGap))
   ```
 
 - 第 N 個欄位 `v-show="!searchCollapsed || collapsedVisibleCount > N-1"`
@@ -149,7 +148,7 @@
 ## 設計原則（給 reviewer 引用）
 
 1. **左欄位、右操作** 的二段式版面，操作區永不被擠壓、永不換行
-2. **欄位最小寬 150px**，是 RWD 換行的唯一觸發條件
+2. **欄位最小寬**（值見 app.css `.search-bar__fields .field`）是 RWD 換行的唯一觸發條件
 3. **操作按鈕數量隨狀態自動調整**（2 ↔ 3），收合按鈕僅在需要時出現
 4. **收合不是「完全隱藏」**，而是把可容納的欄位保留在原處（單行、保留 label），常用 filter 仍可立即使用
 5. **不顯示半個欄位** — 容納不下就完全隱藏，避免視覺破碎
@@ -166,19 +165,21 @@
 
 ### §1 按鈕 token 表
 
-| 按鈕類型 | 範例 | bg | border | text / icon | radius | padding |
-|---|---|---|---|---|---|---|
-| Primary CTA（動詞） | 「新增」/「查詢」 | `#2877EE` | 1px `#2877EE` | `#FFFFFF` / Roboto Medium 14px / line-height 150% / letter-spacing 0.24px | 4 | 10 × 16 |
-| Secondary outline（動詞） | 「取消」/「清除」/「篩選」 | `rgba(255,255,255,0.0001)` 透明 | 1px `#7F8996`（$border） | `#0F172A` / Roboto Medium 14px | 4 | 10 × 16 |
-| Icon Button（primary） | 列印 / 下載 / 收藏快捷 | `rgba(255,255,255,0.0001)` 透明 | 1px `#2877EE` | inner icon 20 × 20 / 色 `#2877EE` | 4 | 10 × 20 |
-| Icon Button（danger） | 批次刪除 | `rgba(255,255,255,0.0001)` 透明 | 1px `#F4493E` | inner icon 20 × 20 / 色 `#F4493E` | 4 | 10 × 20 |
-| 分隔線（Line） | 介於 icon button 群 | — | **1px `#D7DAE0`（$border-light）/ rotate 90deg** | — | — | width 40 / height 0 |
-| Filter button | 「篩選」 | 同 Secondary outline | 同 Secondary outline | label + tune icon 20×20 色 `#0F172A` | 4 | 10 × 16 |
+> bg / border / text / icon 色、radius、padding 字面值見 app.css（Primary CTA `.btn--primary`、icon button `.btn-icon-sq--primary` / `--danger-outline`、分隔線 `.toolbar__sep`）；本表記語意角色與易踩點。
 
-**統一尺寸**：
-- 帶 label 按鈕高度 `40px`；Primary CTA 寬度依文字長度（範例「新增」134px、「查詢」97px）
-- Icon Button 一律 `40 × 40px`
-- 按鈕群之間 gap `12px`（toolbar 內）/ `8px`（search bar 操作區）
+| 按鈕類型 | 範例 | 視覺角色 |
+|---|---|---|
+| Primary CTA（動詞） | 「新增」/「查詢」 | primary 填底、白字、Roboto Medium |
+| Secondary outline（動詞） | 「取消」/「清除」/「篩選」 | 透明底 + `$border` 描邊、`$text-primary` 字 |
+| Icon Button（primary） | 列印 / 下載 / 收藏快捷 | 透明底 + primary 描邊、inner icon primary 色 |
+| Icon Button（danger） | 批次刪除 | 透明底 + error 描邊、inner icon error 色 |
+| 分隔線（Line） | 介於 icon button 群 | `$border-light` 直立細線（旋轉 90deg） |
+| Filter button | 「篩選」 | 同 Secondary outline + tune icon |
+
+**統一尺寸**（值見 app.css）：
+- 帶 label 按鈕齊高；Primary CTA 寬度依文字長度自適應
+- Icon Button 一律正方
+- 按鈕群之間 gap：toolbar 內較寬、search bar 操作區較窄
 
 **動詞 CTA 不加 icon**：
 - 「新增」「查詢」「清除」「取消」**禁加 icon**；CTA label 本身已說明動作
@@ -191,25 +192,29 @@
 
 #### 視覺規格
 
-| 狀態 | bg | border-bottom | text | 其他 |
-|---|---|---|---|---|
-| Default（未選） | `#EDF0F7`（surface-variant） | 1px `#7F8996` | placeholder `#67717E` | — |
-| Filled-in（已選） | `#EDF0F7` | 1px `#7F8996` | value `#49454E` | — |
-| **Focus** | `#EDF0F7` | **2px `#2877EE`**（primary，加粗為 2px） | `#49454E` | **禁加 outline ring** |
-| Selected item label（在 context menu 內） | — | — | **`#2877EE`** | 高亮整列 |
+> bg / border-bottom / text 色字面值見 app.css `.select`（filled 風格）；本表記各態語意。
+
+| 狀態 | 語意 |
+|---|---|
+| Default（未選） | surface-variant 底、`$border` 底線、placeholder 灰字 |
+| Filled-in（已選） | 同底線、value 深字 |
+| **Focus** | 底線**加粗為 primary 色**；**禁加 outline ring** |
+| Selected item label（在 context menu 內） | label 轉 primary 色、高亮整列 |
 
 #### 結構
 
-| 屬性 | 值 |
-|---|---|
-| 寬度 | 200px / min-width 150px |
-| 高度 | 40px |
-| border-radius | `4px 4px 0 0`（**僅上方圓角**，Material Filled 簽名） |
-| padding | `0 0 0 10px`（左內距 10，右側留 32 給 caret icon 容器） |
-| Inner gap（文字 ↔ icon） | 6px |
-| Caret icon 容器 | 32 × 32（內含 `material-symbols:keyboard-arrow-down` 16×16 色 `#3C4A5B`） |
+> 寬度 / 高度 / radius / padding / icon 容器尺寸字面值見 app.css `.select`；本表記結構規則。
 
-> Focus 時底線加粗為 2px primary 色，**不**加 outline ring（Tailwind 慣例 ring 在 Material Filled 是錯的，常見反射錯誤見 `pitfalls.md` [2026-05-20] Filled input 條目）。
+| 屬性 | 規則 |
+|---|---|
+| 寬度 | 固定寬 + min-width 下限（值見 app.css） |
+| 高度 | 與其他 filter 控制元件齊高 |
+| border-radius | **僅上方圓角**（Material Filled 簽名） |
+| padding | 左內距 + 右側預留 caret icon 容器空間 |
+| Inner gap（文字 ↔ icon） | 小間距 |
+| Caret icon 容器 | 正方容器，內含 `material-symbols:keyboard-arrow-down` |
+
+> Focus 時底線加粗為 primary 色，**不**加 outline ring（Tailwind 慣例 ring 在 Material Filled 是錯的，常見反射錯誤見 `pitfalls.md` [2026-05-20] Filled input 條目）。
 
 ### §3 Context Menu（DropdownList 展開）
 
@@ -217,43 +222,47 @@
 
 #### 容器
 
-| 屬性 | 值 |
+> 寬度 / 背景 / radius 字面值見 app.css；本表記規則。
+
+| 屬性 | 規則 |
 |---|---|
-| 寬度 | 同 trigger 寬度（200px） |
-| 背景 | `#FFFFFF`（疊一層 linear-gradient 0deg 但實質為純白） |
-| border-radius | `4px` |
+| 寬度 | 同 trigger 寬度 |
+| 背景 | 純白（疊一層 linear-gradient 0deg 但實質純白） |
+| border-radius | 小圓角 |
 | z-index | 高於 toolbar（依專案 layer policy） |
 
 #### 列項（每列 = Atom / Context Menu）
 
-| 屬性 | 值 |
+> 列高 / padding / 字級字面值見 app.css；本表記規則。
+
+| 屬性 | 規則 |
 |---|---|
-| 列高 | 32px |
-| padding | `3px 8px` |
-| inner gap | 65px（label 與右側 shortcut 之間，**目前未啟用 shortcut**，預留設計） |
-| Label | Roboto 400 / 14px / line-height 150% / letter-spacing 0.24px / color `#0F172A` |
+| 列高 | 與其他選單列齊高 |
+| padding | 上下窄、左右一致 |
+| inner gap | label 與右側 shortcut 之間（**目前未啟用 shortcut**，預留設計） |
+| Label | Roboto 400、`$text-primary` 色 |
 
 #### 互動狀態
 
-| 狀態 | row bg | label color | 用途 |
-|---|---|---|---|
-| Default | transparent | `#0F172A` | 一般列項 |
-| **Hover** | `rgba(15, 23, 42, 0.05)` | `#0F172A` | 滑鼠停留 |
-| Selected | （由 selected item color 規則決定，目前僅 label 變 primary） | **`#2877EE`** | 已選項 |
+> row bg / label color 字面值見 app.css；本表記語意。
 
-> Hover 用 `rgba(15, 23, 42, 0.05)` 是 DS 規定，不是隨手寫的灰色。
+| 狀態 | 語意 | 用途 |
+|---|---|---|
+| Default | transparent 底、`$text-primary` 字 | 一般列項 |
+| **Hover** | DS 規定的中性深色半透明疊層（**非隨手灰色**） | 滑鼠停留 |
+| Selected | label 轉 primary 色 | 已選項 |
 
 #### Header（context menu 中分群標題）
 
-`Atom / Context Menu Header`（高 32，含「Header」字標）：
-- Label：Roboto Medium 14px / color `#0F172A`
-- 與下一段之間用 1px `#D7DAE0`（`$flyout-border`）分隔
+`Atom / Context Menu Header`（含「Header」字標）：
+- Label：Roboto Medium、`$text-primary` 色
+- 與下一段之間用 `$flyout-border` 細線分隔
 
 #### add 列（context menu 末尾 + Add 按鈕，可選）
 
 當 DropdownList 支援「新增選項」時，context menu 最末加一列：
-- 高 32px、border-top 1px `#D7DAE0`
-- 含 Plus icon 16×16 色 `#2877EE` + label `#2877EE` Roboto Medium 14px
+- 列頂加 `$flyout-border` 細線
+- 含 Plus icon + label（皆 primary 色、Roboto Medium）
 - 點擊觸發「新增此選項」流程
 
 ---
@@ -275,21 +284,23 @@
 
 ### 視覺規格
 
-| 元素 | 規格 |
+> 尺寸 / 色 / 字級字面值見 app.css `.chip--selected` / `.chip--selected__close`；本表記語意與結構。
+
+| 元素 | 規則 |
 |---|---|
-| `.chip--selected` | `display: inline-flex; align-items: center; gap: 6px; height: 40px; padding: 8px 16px; background: transparent; border: 1px solid rgb(var(--color-sf-info))`（#2E90FA）`; border-radius: var(--radius-sm)`（4px）`; color: rgb(var(--color-sf-info)); font: Roboto Medium 14px / line-height 150% / letter-spacing .24px; white-space: nowrap` |
-| `.chip--selected__close` | `16×16; display: inline-flex; align-items: center; justify-content: center; background: transparent; border: none; cursor: pointer; color: rgb(var(--color-sf-info)); padding: 0` |
-| close icon | `material-symbols:close`，font-size 16px |
-| close hover | `background: rgba(var(--color-sf-info), .10); border-radius: var(--radius-xs)`（2px） |
+| `.chip--selected` | inline-flex、透明底 + info 色描邊、`--radius-sm` 圓角、info 色字、不換行；與 toolbar 按鈕齊高 |
+| `.chip--selected__close` | 正方、透明底無框、info 色、可點 |
+| close icon | `material-symbols:close` |
+| close hover | info 色淡底 + 小圓角 |
 
 ### 互動
 
 - 出現條件：`v-if="selectedIds.length > 0"`（且 `canSelect`，詳 `Permissions.md`）。
 - 與 toolbar 主操作互斥：未選取顯示主 CTA（新增 / 匯入…）；選取 > 0 顯示批次操作群 + `chip--selected`。
 - 點 close → `clearSelection` 清空 `selectedIds` 並退出批次模式（toolbar 切回主操作）。
-- 高度 `40px` 與 toolbar 其他按鈕齊高，視覺對齊同一列。
+- 高度與 toolbar 其他按鈕齊高，視覺對齊同一列。
 
-> 用 info 藍（#2E90FA）而非 primary 藍（#2877EE）：批次選取是「當前選取範圍」的中性提示，與主操作 CTA 的 primary 色刻意區隔。
+> 用 info 色而非 primary 色：批次選取是「當前選取範圍」的中性提示，與主操作 CTA 的 primary 色刻意區隔（兩色值見 app.css）。
 
 ---
 
@@ -321,21 +332,23 @@
 
 ### 視覺規格（重點）
 
-| 元素 | 規格 |
+> 尺寸 / 色 / 位移字面值見 app.css（`.date-range__trigger` / `.date-range__pop` / `.cal__month` / `.cal__daynum` / `.cal__day.is-start` / `.cal__day.in-range` / `.cal__btn`）；本表記結構與語意。
+
+| 元素 | 規則 |
 |---|---|
-| `.date-range__trigger` | 沿用 `.input.filled`（filled 底 + 上圓角 + 底線；詳 `erp-transaction.md §輸入欄樣式`）；`display: flex; align-items: center; justify-content: space-between; gap: 8px; width: 100%; text-align: left; cursor: pointer` |
-| placeholder 態 | `.is-placeholder .date-range__text { color: var(--text-placeholder)`（#67717E）`}` |
-| `.date-range__icon` | `material-symbols:calendar-today-outline`，18px，色 `var(--text-secondary)` |
-| `.date-range__pop` | `position: absolute; top: calc(100% + 6px); left: 0; z-index: 41; background: #FFFFFF; border: 1px solid var(--border-default)`（#D7DAE0）`; border-radius: var(--radius-lg)`（8px）`; box-shadow: var(--shadow-e4)`（menu 層） |
-| `.cal__month` | `width: 252px`；雙月以 `border-left: 1px solid #EEF0F3` 分隔 |
-| `.cal__daynum` | `32×32; border-radius: var(--radius-full); font-size: 12px`；hover `background: rgba(var(--color-sf-primary), .10)` |
-| 選取端點（`.is-start` / `.is-end`） | `background: rgb(var(--color-sf-primary))`（#2877EE）`; color: #FFFFFF` |
-| 區間中段（`.in-range`） | `background: rgba(var(--color-sf-primary), .12)`（淡藍帶，端點半寬） |
-| `.cal__btn` | `height: 32px; padding: 7px 12px; border: none; background: transparent; border-radius: var(--radius-sm); font: Medium 14px; color: rgb(var(--color-sf-primary))`；hover `background: rgba(var(--color-sf-primary), .08)` |
+| `.date-range__trigger` | 沿用 `.input.filled`（filled 底 + 上圓角 + 底線；詳 `erp-transaction.md §輸入欄樣式`）；flex 兩端對齊、左對齊文字、可點 |
+| placeholder 態 | `.is-placeholder .date-range__text` 轉 placeholder 灰字（`var(--text-placeholder)`） |
+| `.date-range__icon` | `material-symbols:calendar-today-outline`，`var(--text-secondary)` 色 |
+| `.date-range__pop` | 絕對定位於 trigger 下方、純白底 + `var(--border-default)` 邊 + `--radius-lg` 圓角 + menu 層陰影；z-index 高於 backdrop |
+| `.cal__month` | 雙月並排，月與月以細線分隔 |
+| `.cal__daynum` | 圓形日格（`--radius-full`）；hover primary 淡底 |
+| 選取端點（`.is-start` / `.is-end`） | primary 實底、白字 |
+| 區間中段（`.in-range`） | primary 淡藍帶（端點半寬） |
+| `.cal__btn` | 透明底文字鈕、`--radius-sm`、primary 字；hover primary 淡底 |
 
 ### 互動
 
 - 點 trigger 開 popup；點 backdrop / 再點 trigger / `Esc` 關閉。
 - 選第一天為 start、第二天為 end；反序自動對調；區間中段顯示 `.in-range` 淡藍帶。
 - 「確定」寫回 `range.from / range.to` 並更新 trigger 文字（格式 `YYYY-MM-DD ～ YYYY-MM-DD`）；「清除」清空兩端並回 placeholder。
-- 與搜尋區其他欄位同高（trigger = 40px filled），佔一個 `.field` 槽位（換行 / 收合行為比照 §RWD）。
+- 與搜尋區其他欄位同高（trigger = filled 輸入欄高，值見 app.css），佔一個 `.field` 槽位（換行 / 收合行為比照 §RWD）。

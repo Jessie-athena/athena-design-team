@@ -41,7 +41,7 @@ Athena 是 **B2B Web/App 產品**（資料密集、單據交易、跨平台、Sy
 
 - 視覺值一律寫 `{token-name}`，**禁** raw hex / px（與三 skill 既有「禁 inline hex」一致）。
 - `{}` 內為 `athena-tokens.md` 的 token **去前綴簡名**：`{color-sf-primary}` / `{ds-radius-large}` / `{font-size-sf-text-md}`（落地 CSS 時還原為 `var(--color-sf-primary)` 等）。
-- 非 token 的固定量測值（如 Figma 量到的 `height: 36px`）可直接寫值，但標 🎨 並註明「量測值，待對齊 token」。
+- 非 token 的固定量測值（如 Figma 量到的 `height: 36px`）標 🎨 註明「量測值，待對齊 token」；其**字面值的單一來源是 `prototyper/assets/app.css`（canonical CSS，值權威）**，設計文件與 profile 一律**指向 app.css 不重印**（避免兩處漂移）。
 - **對不上既有 token 時停下回報，禁臆造新 token**（與 `figma-design-system/SKILL.md` Step 3、`athena-components.md` 治理原則一致）。
 
 ### 2.3 結構化 vs 散文
@@ -250,7 +250,7 @@ Chip 本身唯讀無互動態；其「狀態值」即 §4 variant。表格列承
 - [ ] 來源標記（🎨/🔗/📋）逐區塊標齊
 - [ ] §13 三向連結可達（tokens / prototyper profile / code）
 - [ ] 已收編而非另定：與 prototyper profile 重疊處用引用，不重寫 token 決策
-- [ ] **無重複字面值**：凡 `athena-tokens.md` 已有 token，一律 `{token}` reference；**無對應 token 的具體值（疊白實色、元件量測 px、非標準 alpha、狀態機 stepCur / 矩陣）不在設計文件重印**，改指其單一來源（profile 或 `erp-transaction.md`）。要新增 token 須先在 `athena-tokens.md`（上游 CSS / Figma 真值）補定——`athena-tokens.md` 是上游匯出的忠實鏡像，**禁在設計文件就地造 token、或把同一字面值寫死兩份**（避免兩處漂移）。
+- [ ] **無重複字面值**：凡 `athena-tokens.md` 已有 token，一律 `{token}` reference；**無對應 token 的具體 CSS 值（疊白實色、元件量測 px、非標準 alpha）不在設計文件、也不在 profile 重印**，改指**值權威 `prototyper/assets/app.css`**（canonical CSS）；狀態機邏輯（stepCur / 矩陣 / JS helper）非 CSS 值，單一來源在 profile / `erp-transaction.md`。要新增 token 須先在 `athena-tokens.md`（上游 CSS / Figma 真值）補定——`athena-tokens.md` 是上游匯出的忠實鏡像，**禁在設計文件就地造 token、或把同一字面值寫死兩份**（避免兩處漂移）。
 
 ---
 
@@ -281,11 +281,29 @@ Chip 本身唯讀無互動態；其「狀態值」即 §4 variant。表格列承
 - ✅ Step 2 UI Spec 範例 token 標為跨專案佔位，指向 `athena-design.md` / `athena-tokens.md` 真值。
 
 **`prototyper`（引用者）**
-- ✅ `DataGrid.md` / `Stepper.md` / `SummaryCard.md` 開頭加「上游設計文件」指標與分工說明（設計文件＝權威；profile＝單檔 HTML/CSS 落地層）。
+- ✅ `DataGrid.md` / `Stepper.md` / `SummaryCard.md` 開頭改為**三權威分工**區塊（見下方 §9.4）：**值權威＝`prototyper/assets/app.css`**、**用法權威＝profile**（class / 行為 / app.js 邏輯）、**契約權威＝設計文件**。
+- profile 已**瘦身**：不再複印 CSS 字面值（px / hex / rgba），改指 app.css；保留 class 名、行為、markup、JS helper。
 - 不動 `allowed-tools` 與單檔交付定位。
 
 ### 9.3 後續（非本批）
 
-- 逐步補 `references/components/` 其餘 ✅ 已採用元件設計文件：優先 `st-chip` / `DataGrid` / `Stepper`（深度規格已在 prototyper，待收編引用）。
+- `references/components/` 已收編：`Button` / `DataGrid` / `Stepper` / `SummaryCard` / `st-chip`（5 件）。其餘 ✅ 已採用元件設計文件待逐步補。
 - 首個真實元件做一次「Figma 補入」演練（`get_variable_defs` 填 §3–5），驗證對不上 token 會停下回報。
 - 其餘 prototyper 複合 profile（ListSearch / FormGroup / FormFooter）是否各自對應設計文件，待 DS owner 決定（多為佈局 pattern 而非單一 Syncfusion 元件）。
+- **已知 class-name 漂移待對齊**（瘦身 profile 時發現，非本批）：`prototyper/profiles/erp-components/*.md` 部分 class 名與 `assets/app.css` 不一致——`.btn-icon.is-primary` vs `.btn-icon-sq--primary`、`.form-field`/`.help`/`h2` vs `.field`/`.field__helper`/`h3`、`.form-footer__actions`/`.btn-more__menu` vs `.form-footer__right`/`.popover`。屬「用法權威」內部一致性，待另案以 app.css 為準收斂。
+
+### 9.4 值權威下沉至 canonical CSS 資產（2026-06-23）
+
+> 背景：以 Figma 校正後，`prototyper/assets/app.css`（+ `assets/ds/`）成為 prototype 產出時**逐字複製不重寫**的 canonical 元件樣式。實測「依 profile 文字規格重寫 app.css」selector 覆蓋率僅約標準一半、容器級數值大量漂移——故樣式準確對齊只能靠複製 canonical CSS。
+
+此後三層元件表述的權威切分由「依元件切」改為「依關注點切」，每層只答一個問題、彼此引用不複印：
+
+| 層 | 角色 | 答的問題 |
+|---|---|---|
+| `athena-tokens.md` | 值的原子 | token 真值（唯一寫 raw px/hex） |
+| **`prototyper/assets/app.css` + `ds/`** | **★值權威** | 編譯後 canonical 實作（無 token 對應的尺寸 / 疊白實色 / alpha 階） |
+| `design-system-architect/references/components/*.md` | ★契約權威 | 語意 / variants / states / a11y / 跨平台（token-reference，**不寫 raw 值**） |
+| `prototyper/profiles/erp-components/*.md` | ★用法權威 | 套哪個 class / 互動行為 / markup / app.js 邏輯（**不複印 CSS 值**） |
+| `ui-designer` | 消費者 | 挑用前查契約；契約未產出時退查 profile + app.css（§9.2） |
+
+落地動作（本批）：① 解開 architect↔profile 互指權威死結（架構 frontmatter `authority` 與 profile 開頭改三權威分工，移除「待收編」語）；② profile md 瘦身刪 CSS 值副本改指 app.css；③ ui-designer 補設計文件未產出時的 fallback；④ 本節同步。

@@ -38,13 +38,15 @@
 
 ## 視覺規格
 
-| 元素 | 規格 |
+> 尺寸 / 內距 / 圓角 / 字級與兩 variant 的色票字面值見 app.css `.rel-banner`（含 `--info` / `--reverse`）；本節僅記設計**規則**。
+
+| 元素 | 規則 |
 |---|---|
-| `.rel-banner` | `display: flex; align-items: flex-start; gap: var(--space-md)`（8px）`; margin: var(--space-xl) var(--space-3xl) 0`（16px 上 / 24px 左右 / 對齊 main panel）`; padding: 12px 14px; border-radius: var(--radius-lg)`（8px）`; font-size: 13px; line-height: 1.6; border: 1px solid` |
-| icon | `font-size: 18px; flex: none; margin-top: 1px` |
-| `--info` | 背景 `rgba(var(--color-sf-primary), .06)`、邊框 `rgba(var(--color-sf-primary), .30)`、文字 `#1F3A5F`（深藍可讀）、icon 色 `rgb(var(--color-sf-primary))`（#2877EE） |
-| `--reverse` | 背景 `rgba(var(--color-sf-warning), .08)`、邊框 `rgba(var(--color-sf-warning), .35)`、文字 `#7A4A00`（深棕可讀）、icon 色 `rgb(var(--color-sf-warning))`（#F79009） |
-| `strong` | `font-weight: 700`，承襲橫幅文字色 |
+| `.rel-banner` | flex 橫向、icon 與文字頂端對齊、單線細邊框、圓角；外距對齊 main panel（值見 app.css） |
+| icon | 固定不縮、與首行文字頂端微調對齊（值見 app.css） |
+| `--info` | primary 藍系：淺底 + 中淺邊框 + 深藍可讀文字、icon 為 primary 實色（值見 app.css） |
+| `--reverse` | warning 橘系：淺底 + 中淺邊框 + 深棕可讀文字、icon 為 warning 實色（值見 app.css） |
+| `strong` | 加粗，承襲橫幅文字色 |
 
 > 兩種 variant 只差色票；語意——`--info` 中性說明（藍）、`--reverse` 沖銷 / 需注意（橘）。**禁**用紅色（紅保留給作廢 / 錯誤，避免語氣過重）。
 

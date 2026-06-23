@@ -3,13 +3,13 @@ name: st-chip（狀態徽章）
 category: 回饋與狀態
 tier: full           # 視覺簡單，但承載單據狀態生命週期、多態、作業檔/設定檔兩套 → 走 Full §4
 status: ✅ 已採用（客製 DsStatusBadge；表格內為 .st-chip class）
-authority: prototyper DataGrid.md §狀態 Chip / Stepper.md §voided-banner（各態色相為語意推導，DS 尚未逐態正式定義）
+authority: 契約＝本檔；色相 / 尺寸值落地＝prototyper/assets/app.css（值權威）；class 套用導引＝prototyper DataGrid.md §狀態 Chip / Stepper.md §voided-banner（各態色相為語意推導，DS 尚未逐態正式定義）
 figma-node: —        # 🎨 Figma 補入時填 <FILE_KEY>/<NODE_ID>
 version: v0.1
 last-synced: —
 ---
 
-> 依 `../component-doc-schema.md` 產出。**色相 / class / 尺寸的落地權威是 prototyper profile**（見 §13）；本檔做語意整理與 token-reference，重疊處引用、不重寫決策（schema §8）。DS 正式逐態定義後以 DS 為準。
+> 依 `../component-doc-schema.md` 產出。三權威分工：**色相 / 尺寸值權威＝`prototyper/assets/app.css`（canonical CSS，複製不重寫）**；**class 套用導引＝prototyper profile**（見 §13）；**本檔＝契約**（語意整理 + token-reference），重疊處引用、不重寫決策（schema §8）。DS 正式逐態定義後以 DS 為準。
 
 ## 1. 概述　📋
 
@@ -96,7 +96,8 @@ Chip 本身**唯讀、無互動態**；其「狀態值」即 §4 的 variant。�
 
 - 語意色：`../athena-design.md` §狀態色（草稿=中性/已提交=info/已核准=success/已作廢=danger）
 - Tokens：`../athena-tokens.md` §Primary / §Status（Success/Danger）/ §Radius / §Typography
-- **落地權威（class / 尺寸 / 色，勿在此重寫）**：
+- **值權威（尺寸 / 色，勿在此重寫）**：`prototyper/assets/app.css`（canonical CSS）
+- **用法權威（class 套用導引）**：
   - 表格緊湊版 → `prototyper/profiles/erp-components/DataGrid.md §狀態 Chip`
   - 獨立 36px 版 → `prototyper/profiles/erp-components/Stepper.md §voided-banner`
 - Code：客製 `DsStatusBadge`

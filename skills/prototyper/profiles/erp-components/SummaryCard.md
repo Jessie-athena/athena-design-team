@@ -6,7 +6,11 @@
 > 上層 profile：`profiles/erp-transaction.md`
 > 同層元件：`ListSearch.md` / `DataGrid.md` / `FormGroup.md` / `FormFooter.md` / `SummaryCard.md` / `Stepper.md` / `Permissions.md` / `RelBanner.md` / `Skeleton.md`
 >
-> **上游設計文件**：`../../../design-system-architect/references/components/SummaryCard.md`（格式見 `component-doc-schema.md`；複合元件，Full 層）。分工——**設計文件**是 what/why/token/state/a11y 的權威；**本 profile** 是「如何用單檔 HTML/CSS class 落地」的實作層。本檔的 layout / token 決策待收編進設計文件後改為引用，避免兩處漂移。
+> **三權威分工**：
+> - **值權威＝`../../assets/app.css`（canonical CSS，複製不重寫）**——padding / sticky / 金額字級等字面值以此為準；本檔**不複印 CSS 數值**（要改數值改 app.css）。
+> - **本 profile＝用法權威**——負責 layout class 套用、4 步動態 stepper 行為、app.js 邏輯。
+> - **契約權威＝上游設計文件** `../../../design-system-architect/references/components/SummaryCard.md`（格式見 `component-doc-schema.md`；複合元件，Full 層）：what/why/token-reference/state/a11y。
+> Layout A 的完整規格見 `erp-transaction.md`；內部 Stepper 行為依 `Stepper.md`。遇具體 px/hex 一律指 app.css，避免兩處漂移。
 
 ---
 
@@ -41,11 +45,12 @@
 ### 視覺原則
 
 - `position: sticky; top: 0`，滾動時固定在 main panel 頂部；**無 shadow**（DS 卡片無陰影）
-- 左指標是「本單據最關鍵數字」：字級放大、加粗、主色強調；唯讀；幣別符號 + 千分位
+- 左指標是「本單據最關鍵數字」：字級放大、加粗、主色強調；唯讀；幣別符號 + 千分位（字級值見 app.css `.summary-card__amount`）
 - 左右兩區之間靠 `justify-content: space-between` 分置；不加分隔線
-- padding 由 `.summary-card-wrap` 控制（上下 24px，左右隨 main panel）
+- padding 由 `.summary-card-wrap` 控制（上下內距值見 app.css `.summary-card-wrap`，左右隨 main panel）
+- **`.summary-card__left` 預設方向是 flex column**（label 在上、金額在下；預設見 app.css `.summary-card__left`）。若該單**無單一金額、左側改放多個 metric-block 並排**（如盤點單左側放「明細筆數 / 過時警示」兩個**非金額**指標），需在模組 override 區把它改成 `flex-direction: row`——這是 Layout B 與 Layout A 之外的常見變體，**勿**因此改用 Layout A（Layout A 是上下兩塊、含傳票 chip 的財務型）
 
-> **單指標設計理由**：當單據階段尚未涉及稅額 / 互抵等複雜計算（如請購階段），只需呈現單一彙總金額供核准參考。需要多指標時改用 Layout A。
+> **單指標設計理由**：當單據階段尚未涉及稅額 / 互抵等複雜計算（如請購階段），只需呈現單一彙總金額供核准參考。需要多指標時改用 Layout A；若只是「左側放 2–3 個輕量非金額指標」則用上方 row override 變體即可，不必升級 Layout A。
 
 ---
 
@@ -104,7 +109,7 @@
 
 ### 容器與視覺 token
 
-圓圈 `.stepper__bubble`（32×32, radius full）、連接線 `.stepper__line`（高 2px / flex 28–56px）的 pending / current / done 三狀態 token 與容器規則，沿用 **`Stepper.md §樣式規則`**。第 ④ 步三 modifier 配色（2026-06-21 統一）：`--partial`（進行中）與 `--final`（終態）**皆 primary 藍 + 內白環**（= 當前步視覺，靠 label 區分）、`--placeholder` 淺灰（待定）；驗收模型亦同（一律藍），詳 `Stepper.md`。
+圓圈 `.stepper__bubble`、連接線 `.stepper__line` 的 pending / current / done 三狀態 token 與容器規則（尺寸 / 色字面值見 app.css），沿用 **`Stepper.md §樣式規則`**。第 ④ 步三 modifier 配色（2026-06-21 統一）：`--partial`（進行中）與 `--final`（終態）**皆 primary 藍 + 內白環**（= 當前步視覺，靠 label 區分）、`--placeholder` 淺灰（待定）；驗收模型亦同（一律藍），詳 `Stepper.md`。
 
 ---
 

@@ -99,9 +99,9 @@ blocked()        { return (this.view === 'list' || this.view === 'detail') && !t
 |---|---|
 | `.perm-block` | `height: 100%; display: flex; align-items: center; justify-content: center; padding: var(--space-6xl)`（48px）`; background: transparent` |
 | `.perm-state` | `display: flex; flex-direction: column; align-items: center; text-align: center; gap: var(--space-xl)`（16px）`; max-width: 460px` |
-| `.perm-state__icon` | icon 字級 ~96px（或 SVG 160px）；色 `var(--border-strong)`（#7F8996，沉穩不搶眼） |
-| `.perm-state__title` | Noto Sans TC 22px / 700 / line-height 1.3 / `var(--text-primary)`（#0F172A） |
-| `.perm-state__msg` | 14px / line-height 1.6 / `var(--text-secondary)`（#67717E）；內 `strong { color: var(--text-primary); font-weight: 700; }` |
+| `.perm-state__icon` | icon 字級 ~96px（或 SVG 160px）；色 `var(--border-strong)`（沉穩不搶眼，token 值見 `ds/`） |
+| `.perm-state__title` | Noto Sans TC 22px / 700 / line-height 1.3 / `var(--text-primary)` |
+| `.perm-state__msg` | 14px / line-height 1.6 / `var(--text-secondary)`；內 `strong { color: var(--text-primary); font-weight: 700; }` |
 | 返回鈕 | `.btn.btn--outline-primary`（動詞 CTA 無 icon，詳 `erp-transaction.md §按鈕 icon 政策`） |
 
 ### 互動

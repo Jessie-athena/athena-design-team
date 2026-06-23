@@ -5,6 +5,8 @@
 >
 > 上層 profile：`profiles/erp-transaction.md`
 > 同層元件：`ListSearch.md` / `DataGrid.md` / `FormGroup.md` / `FormFooter.md` / `SummaryCard.md` / `Stepper.md` / `Permissions.md` / `RelBanner.md` / `Skeleton.md`
+>
+> **值權威＝`../../assets/app.css`（canonical CSS，產出時複製不重寫）**——所有尺寸 / 色 / 圓角字面值以此為準；本檔**不複印 CSS 數值**（要改數值改 app.css）。本檔為**用法權威**：class 套用、grid RWD 規則、欄位狀態行為、markup 結構。遇具體 px/hex 一律指 app.css，避免兩處漂移。
 
 ---
 
@@ -14,37 +16,37 @@ Form View 主體由多個 Group（`.form-section`）組成，每個 Group 內以
 
 ```
 .form-section
-├─ .form-section__bar           ← 群組標題列（5×21 藍直條 + 14px Bold Primary 標題）
+├─ .form-section__bar           ← 群組標題列（藍直條 + Bold Primary 標題；尺寸 / 色見 app.css）
 └─ .form-section__body
     └─ .form-grid               ← Grid 容器（決定 RWD 行為）
         └─ .form-field          ← 單一欄位（label + input + help）
-            ├─ label            ← 13px Medium，必填 * 紅色
-            ├─ input.filled     ← 40px 高、padding 0 10px
-            └─ .help（.is-error）  ← min-height 16px（永遠佔位，避免錯誤訊息出現時欄位位移）
+            ├─ label            ← Medium，必填 * 紅色（尺寸見 app.css）
+            ├─ input.filled     ← Filled 輸入欄（高度 / 內距見 app.css）
+            └─ .help（.is-error）  ← 永遠佔位（保留最小高度，避免錯誤訊息出現時欄位位移；值見 app.css）
 ```
 
-## Sizing & Spacing
+## Sizing & Spacing（規則；尺寸值見 app.css）
 
-| 元素 | 規格 |
+| 元素 | 規則 |
 |---|---|
-| Section 之間垂直 gap | `24px` |
-| 群組標題到內容 padding | `padding-bottom: 16px`（標題列） |
-| Grid row / column gap | `gap: 16px` |
-| Field 內 label → input | `gap: 6px` |
-| Field 內 input → help | `.help { min-height: 16px }`（永遠保留佔位） |
-| Input 高度 | `40px` |
-| Input 內距 | 左右 `padding: 0 10px`；select 右側 `padding-right: 36px`（讓出 caret） |
-| Textarea 預設高 | `min-height: 100px`，`resize: vertical` |
+| Section 之間垂直 gap | 固定垂直間距區隔（值見 app.css `.form-section`） |
+| 群組標題到內容 padding | 標題列下方留白（值見 app.css `.form-section__bar`） |
+| Grid row / column gap | row / column 等距（值見 app.css `.form-grid`） |
+| Field 內 label → input | label 與 input 留小 gap（值見 app.css） |
+| Field 內 input → help | `.help` 永遠保留佔位（最小高度，避免位移；值見 app.css） |
+| Input 高度 | 固定行高輸入欄（值見 app.css） |
+| Input 內距 | 左右內距；select 右側額外讓出 caret 空間（值見 app.css） |
+| Textarea 預設高 | 有最小高、`resize: vertical`（值見 app.css `.input--textarea`） |
 
 ## form-grid 變體與 RWD
 
-**核心原則：用 `minmax(300px, 1fr)` + `auto-fit` 自動換行；≤ 1024px 強制 2 欄。最小欄位寬度 300px。**
+**核心原則：用 `auto-fit` + 最小欄位寬度自動換行；≤ 1024px 強制 2 欄。最小欄位寬度為 300px（此門檻為 RWD 規則，實際 `grid-template-columns` 值見 app.css `.form-grid`）。**
 
-| Grid 變體 | template-columns | 適用 |
+| Grid 變體 | 行為 | 適用 |
 |---|---|---|
-| `.form-grid`（預設） | `repeat(auto-fit, minmax(300px, 1fr))` | 一般 3~4 欄並列（基本資料） |
-| `.form-grid--2` | `repeat(auto-fit, minmax(300px, 1fr))` | 地址 / 聯絡（配合 `--full` 跨欄） |
-| `.form-grid--1` | `minmax(300px, 1fr)` | 單欄區塊（備註 / textarea） |
+| `.form-grid`（預設） | auto-fit 多欄並列 | 一般 3~4 欄並列（基本資料） |
+| `.form-grid--2` | auto-fit 多欄（配合 `--full` 跨欄） | 地址 / 聯絡 |
+| `.form-grid--1` | 單欄 | 單欄區塊（備註 / textarea） |
 
 ## 跨欄 modifier
 
@@ -53,70 +55,67 @@ Form View 主體由多個 Group（`.form-section`）組成，每個 Group 內以
 
 ## 斷點對照表（對應 `REFERENCE.md §8` 四斷點）
 
+> 斷點門檻（1440 / 1280 / 1024 / 768）為**文件化 RWD 規則**；各斷點 padding 等實際值見 app.css。
+
 | 代號 | 範圍 | 自動欄數 | padding | 跨欄 modifier 表現 |
 |---|---|---|---|---|
-| **XL** | ≥ 1440px | 4 欄（餘額空間平分） | `32px` 左右內距 | `--span-3` 維持 3 欄 |
-| **L** | 1280–1439px | 4 欄（緊縮） | `24~32px` | `--span-3` 維持 3 欄 |
-| **M** | 1024–1279px | 3 欄（auto-fit 自然收斂） | `24px` | `--span-3` → 降為 2 欄 |
-| **S** | 768–1023px | **強制 2 欄** | **`20px`** | 所有 `--span` 皆變 2 欄 |
+| **XL** | ≥ 1440px | 4 欄（餘額空間平分） | 較寬左右內距（值見 app.css） | `--span-3` 維持 3 欄 |
+| **L** | 1280–1439px | 4 欄（緊縮） | 略收內距（值見 app.css） | `--span-3` 維持 3 欄 |
+| **M** | 1024–1279px | 3 欄（auto-fit 自然收斂） | 中內距（值見 app.css） | `--span-3` → 降為 2 欄 |
+| **S** | 768–1023px | **強制 2 欄** | 較窄內距（值見 app.css） | 所有 `--span` 皆變 2 欄 |
 | — | < 768px | 不支援 | — | — |
 
 ### 為何 ≤ 1024 強制 2 欄而非繼續 auto-fit？
 
-在 ~1000px 時 auto-fit 仍可能給 3 欄但每欄擠到 300px 邊界，標籤易折行；強制 2 欄能維持較寬欄位與更易讀的標籤。
+在 ~1000px 時 auto-fit 仍可能給 3 欄但每欄擠到最小寬度邊界，標籤易折行；強制 2 欄能維持較寬欄位與更易讀的標籤。
 
-```css
-@media (max-width: 1024px) {
-  .form-grid       { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  .form-view__body { padding: 20px; }
-}
-```
+> 實作：`@media (max-width: 1024px)` 將 `.form-grid` 改為固定 2 欄、收窄 `.form-view__body` padding（規則為 4 欄→2 欄；template-columns / padding 值見 app.css）。
 
 ## 複合欄位 `.field-phone`（含國碼 + 號碼）
 
-- 容器 `.field-phone` → `display: flex; gap: 8px; min-width: 300px`
-- 國碼 select → `width: 110px; flex: 0 0 110px`
-- 號碼 input → `flex: 1 1 auto; min-width: 0`（避免 flex item 撐爆）
+- 容器 `.field-phone` → `display: flex`，國碼與號碼並排（gap / min-width 值見 app.css）
+- 國碼 select → 固定窄寬不縮（`flex: 0 0 …`；寬度值見 app.css）
+- 號碼 input → `flex: 1 1 auto; min-width: 0`（吃滿剩餘空間，避免 flex item 撐爆）
 - 當父 grid 縮到 1 欄時，**複合欄位內部仍維持並排**，不再分行
 
-## `.input.filled` 各狀態
+## `.input.filled` 各狀態（行為規則；尺寸 / 色值見 app.css）
 | 狀態 | 視覺 |
 |---|---|
-| **Default** | 底色 `var(--bg-surface-variant)` (`#EDF0F7`)、底線 `1px solid var(--border-strong)` (`#7F8996`)、`border-radius: 4px 4px 0 0`（**僅上方圓角**，Material Filled 簽名特徵） |
+| **Default** | 底色 `var(--bg-surface-variant)`、底線 `var(--border-strong)`、**僅上方圓角**（Material Filled 簽名特徵） |
 | **Hover** | 底線顏色不變，僅 `cursor: text` |
-| **Focus** | **底線 `2px solid rgb(var(--color-sf-primary))`**，**禁加 outline ring**（焦點靠底線變色表達） |
+| **Focus** | 底線加粗轉 `rgb(var(--color-sf-primary))`，**禁加 outline ring**（焦點靠底線變色表達） |
 | **Filled**（有值） | 同 default |
-| **Error**（`.is-error`） | 底線 `2px solid rgb(var(--color-sf-error))`；下方 `.help.is-error` 同色顯示訊息 |
-| **Readonly** | 背景透明、底線 `1px solid var(--border-default)`、文字 `var(--text-primary)`；`cursor: default`；**不觸發** focus 樣式 |
+| **Error**（`.is-error`） | 底線轉 `rgb(var(--color-sf-error))`；下方 `.help.is-error` 同色顯示訊息 |
+| **Readonly** | 背景透明、底線 `var(--border-default)`、文字 `var(--text-primary)`；`cursor: default`；**不觸發** focus 樣式 |
 | **Disabled** | 同 readonly；select 額外隱藏 caret 圖示 |
 
 ## `.input.filled.is-select`
 
-- 用原生 `<select>` + `appearance: none` + 自繪 caret（右側 8px 處 `16×16` SVG triangle）
-- 右側 `padding-right: 36px` 預留 caret 空間
+- 用原生 `<select>` + `appearance: none` + 自繪 caret（右側 SVG triangle；尺寸 / 位置見 app.css）
+- 右側保留 `padding-right` 讓出 caret 空間（值見 app.css）
 - Hover → `cursor: pointer`
-- Focus 行為與 text input 一致（2px Primary 底線）
-- Disabled / Readonly → caret 隱藏、`padding-right` 收回 `10px`、`cursor: default`
+- Focus 行為與 text input 一致（加粗 Primary 底線）
+- Disabled / Readonly → caret 隱藏、`padding-right` 收回（值見 app.css）、`cursor: default`
 
-## Textarea
+## Textarea（`.input--textarea`）
 
-- `min-height: 100px`、`resize: vertical`
-- padding 改為 `10px` 四邊（承載多行）
+- 有最小高、`resize: vertical`（值見 app.css）
+- padding 改為四邊均等（承載多行；值見 app.css）
 - Readonly：背景透明，與 input 一致
 
 ## Group Header 樣式
 
 ```
-.form-section__bar              高度自動，padding 0 0 16px 0
-├─ ::before                     5×21 直條，rgb(var(--color-sf-primary))，margin-right 10px
-└─ h2.form-section__title       font-size: 14px / font-weight: 700 / color: rgb(var(--color-sf-primary))
+.form-section__bar              高度自動，底部留白（值見 app.css）
+├─ ::before                     藍直條，rgb(var(--color-sf-primary))（尺寸 / 右間距見 app.css）
+└─ h2.form-section__title       Bold，color: rgb(var(--color-sf-primary))（字級見 app.css）
 ```
 
 **規則**：
 
 - 群組標題**不**加底線、**不**加背景
 - **不**放任何輔助文字 / icon 在標題列右側（保持極簡）
-- Group 之間以 `gap: 24px` 區隔，**不**用分隔線
+- Group 之間以固定間距區隔（值見 app.css），**不**用分隔線
 
 ## 欄位排列原則（撰寫表單時）
 
@@ -125,11 +124,11 @@ Form View 主體由多個 Group（`.form-section`）組成，每個 Group 內以
 3. **代號 / 狀態類短欄位**放第一行右側，**地址 / 備註類長欄位**用 `--full` 整列
 4. **每行不超過 4 欄**，視覺上一掃即看完一列
 5. 若一列只剩 1~2 欄，補上空白 `<div class="form-field"></div>` 維持 grid 對齊
-6. Help text 高度**永遠保留 `min-height: 16px`**，避免錯誤訊息出現時欄位位移
+6. Help text 高度**永遠保留最小高度佔位**（值見 app.css），避免錯誤訊息出現時欄位位移
 
 ## Readonly / Archived 全域樣式
 
-整張表單為唯讀（`.is-readonly-view`）或停用後檢視（`.is-archived-view`）時，所有 `.input` 變透明背景 + `1px solid var(--border-default)` 底線 + `var(--text-secondary)` 文字色 + `pointer-events: none`；select caret 隱藏。例外規則與切換時機**詳見 `profiles/erp-setup.md §設定檔資料狀態矩陣`**。
+整張表單為唯讀（`.is-readonly-view`）或停用後檢視（`.is-archived-view`）時，所有 `.input` 變透明背景 + `var(--border-default)` 底線 + `var(--text-secondary)` 文字色 + `pointer-events: none`（底線粗細值見 app.css）；select caret 隱藏。例外規則與切換時機**詳見 `profiles/erp-setup.md §設定檔資料狀態矩陣`**。
 
 ## A11y
 

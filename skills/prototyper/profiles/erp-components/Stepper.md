@@ -6,7 +6,11 @@
 > 上層 profile：`profiles/erp-transaction.md`
 > 同層元件：`ListSearch.md` / `DataGrid.md` / `FormGroup.md` / `FormFooter.md` / `SummaryCard.md` / `Stepper.md` / `Permissions.md` / `RelBanner.md` / `Skeleton.md`
 >
-> **上游設計文件**：`../../../design-system-architect/references/components/Stepper.md`（格式見 `component-doc-schema.md`）。分工——**設計文件**是 what/why/token/state/a11y 的權威；**本 profile** 是「如何用單檔 HTML/CSS class 落地」的實作層。本檔的語意色 / 步序狀態決策待收編進設計文件後改為引用，避免兩處漂移。
+> **三權威分工**：
+> - **值權威＝`../../assets/app.css`（canonical CSS，複製不重寫）**——bubble / line / label 尺寸、語意色實色字面值以此為準；本檔**不複印 CSS 數值**。
+> - **本 profile＝用法權威**——負責步序判定邏輯、`stepCur` 等 JS helper、狀態×step 映射、voided-banner 行為（JS 邏輯非 CSS，落 `app.js`，由本檔主導）。
+> - **契約權威＝上游設計文件** `../../../design-system-architect/references/components/Stepper.md`（格式見 `component-doc-schema.md`）：what/why/token-reference/state/a11y。
+> 本檔保留判定邏輯與 class 行為、查 app.css 的導引；遇具體 px/hex 一律指 app.css，避免兩處漂移。
 
 ---
 
@@ -107,45 +111,41 @@
 
 > 步數**動態**：依各模組狀態機而定，最少 3 步、上不封頂（非固定 4 步）。以下狀態通則適用任意步數的每一步。
 
-| class | Bubble 內容 | Bubble 色 | Label 色 | 用途 |
-|---|---|---|---|---|
-| `--done` | check 圖示 | `rgb(var(--color-sf-success))` /* #12B76A 綠 */ | `var(--text-primary)` /* #0F172A */ | 已通過的步驟 |
-| `--current` | 數字 | `rgb(var(--color-sf-primary))` /* #2877EE 藍 */ + 內白環 `inset 0 0 0 1px var(--bg-surface-default)` | `var(--text-primary)` / 500 | 進行中（當前）步驟 |
-| `--partial` / `--final` / `--settled` | 數字 | **一律 `rgb(var(--color-sf-primary))` 藍 + 內白環**（= `--current` 視覺；驗收 / 結轉模型皆同，不再分靛 / 灰） | `var(--text-primary)` / 500 | 終態步：部分驗收·採購 / 已驗收·已結案 / 已結清；色相同，僅 label 由 `step4Label` 區分 |
-| `--placeholder` | 數字 | `rgba(var(--color-sf-primary), .08)` over `var(--bg-surface-default)`，框 `var(--border-default)` /* #D7DAE0 */ | `var(--text-secondary)` /* #67717E */ | 終態步尚未達到（未確定） |
-| （無 modifier，pending） | 數字 | `rgba(var(--color-sf-primary), .08)` over `var(--bg-surface-default)`，框 `var(--border-default)` | `var(--text-secondary)` | 未達的步驟 |
+> 每態的色 / 內白環實際值見 app.css（`.stepper__step--*`）；本表記語意色與用途。
 
-> **當前步 / 終態步 bubble 完整規格**（primary 藍實心）：
-> ```css
-> border-radius: 100px;                                   /* 全圓 = var(--radius-full) */
-> border: 1px solid var(--ColorSf-primary, #2877EE);
-> fill:   var(--ColorSf-primary, #2877EE);                /* 落地以 background 實作 */
-> box-shadow: 0 0 0 1px var(--ColorSf-surface, #FFF) inset;  /* 內白環 */
-> ```
+| class | Bubble 內容 | Bubble 語意色 | Label | 用途 |
+|---|---|---|---|---|
+| `--done` | check 圖示 | success 綠 | 主要文字 | 已通過的步驟 |
+| `--current` | 數字 | primary 藍 + 內白環 | 主要文字 / 加粗 | 進行中（當前）步驟 |
+| `--partial` / `--final` / `--settled` | 數字 | **一律 primary 藍 + 內白環**（= `--current` 視覺；驗收 / 結轉模型皆同，不再分靛 / 灰） | 主要文字 / 加粗 | 終態步：部分驗收·採購 / 已驗收·已結案 / 已結清；色相同，僅 label 由 `step4Label` 區分 |
+| `--placeholder` | 數字 | primary 淺底疊白 + 灰框 | 次要文字 | 終態步尚未達到（未確定） |
+| （無 modifier，pending） | 數字 | primary 淺底疊白 + 灰框 | 次要文字 | 未達的步驟 |
+
+> 當前步 / 終態步 bubble = primary 藍實心 + 內白環（全圓；完整 CSS 見 app.css `.stepper__step--current .stepper__bubble`）。
 > **設計修正（2026-06-21）**：取消「結轉模型 partial 靛色 / done 灰色」分歧——當前步與終態步**一律 primary 藍**。理由：步數隨表單動態（3～N 步），不宜以「第 ④ 步特定色」綁死；終態步用 primary 藍與當前步一致，靠 label 區分語意即可。
 
 ### 連接線 `.stepper__line`
 
-| class | 色彩 | 規則 |
+| class | 語意色 | 規則 |
 |---|---|---|
-| （無） | `var(--border-default)` /* #D7DAE0 灰 */ | 區段在當前步驟之後（未達） |
-| `.is-done` | `rgb(var(--color-sf-success))` /* #12B76A 綠 */ | 區段在當前步驟之前（已過） |
-| `.is-current` | `rgb(var(--color-sf-primary))` /* #2877EE 藍 */ | 區段正連向當前步驟 |
+| （無） | 灰（border-default） | 區段在當前步驟之後（未達） |
+| `.is-done` | success 綠 | 區段在當前步驟之前（已過） |
+| `.is-current` | primary 藍 | 區段正連向當前步驟 |
 
 ### 尺寸與字體
 
-| 項目 | 規格 |
-|---|---|
-| Bubble | 32 × 32px，圓角 999px（`--radius-full`），`1px solid var(--border-default)` |
-| Bubble 內字 / 圖示 | Roboto 14px/400；check 圖示 18px（`material-symbols:check`，筆畫型無 `-outline`） |
-| Label | Noto Sans TC 13px/400（**當前與終態 500**） |
-| Step 最小寬 | 64px（`flex: 0 0 auto`），bubble 與 label gap 6px |
-| Line | 高 2px，`flex: 1 1 28px`，min 28 / max 56px，`margin-top: 16px` 對齊圓心 |
-| 容器 | `.stepper { display: flex; align-items: flex-start; gap: 16px; }` |
-| 轉場 | `background / color 200ms ease-out` |
+> 所有 px / 字級 / 間距值見 app.css `.stepper`；本節僅記結構與 icon 規則：
+
+- Bubble：圓形實色步點（圓角全圓、細邊框）
+- Bubble 內字 / 圖示：check 圖示用 `material-symbols:check`（**筆畫型無 `-outline`**）
+- Label：當前與終態加粗
+- Step：固定不縮（`flex: 0 0 auto`），bubble 與 label 留小 gap
+- Line：細橫線，`flex` 伸縮對齊圓心
+- 容器：`.stepper { display: flex; align-items: flex-start; }`
+- 轉場：background / color ease-out（時間見 app.css）
 
 > **語意色（基本型 / 結轉 / 驗收模型）僅四種**：綠（已完成的中間步）、藍（當前步 + 所有終態步，含 partial / received / settled / done）、紅（作廢 / 取消，走 voided-banner 不進 stepper）、中性灰（未達 / placeholder）。**禁**為個別狀態另造新色（已於 2026-06-21 取消「靛」「結轉已結案灰」兩種變體色）。
-> **唯一例外**：**庫存單 5 步**的**過場步**（`waiting` 等待前置作業 / `assigned` 就緒）當前態用**橘**（`rgb(var(--color-sf-warning))` #F79009 + 內白環），對應 Odoo stock.picking 過場態的既有設計，**僅限該變體**（見 §庫存單 5 步）；其餘步序仍走上述四色。
+> **唯一例外**：**庫存單 5 步**的**過場步**（`waiting` 等待前置作業 / `assigned` 就緒）當前態用**橘**（warning 色 + 內白環，值見 app.css），對應 Odoo stock.picking 過場態的既有設計，**僅限該變體**（見 §庫存單 5 步）；其餘步序仍走上述四色。
 
 ## 庫存單 5 步（含過場步）
 
@@ -176,7 +176,7 @@
 | 5 | 已核准 | `done` | `approved` | 一般步（終態 / 可編輯型再分 voided 分支） |
 
 - **唯讀型恆停終態**：系統產生即為終態（唯讀 `done` / 可編輯歷史單 `approved`），stepper 顯示前 4 步 `--done` 綠、第 5 步 `--current`。可編輯型在 draft / submitted 等中間態時照下方判定逐步呈現。
-- **過場步配色**：過場步（waiting / assigned）**當其為當前步**時，bubble 與 label 用**橘色** `rgb(var(--color-sf-warning))`（#F79009）+ 內白環，標示「系統處理中、非使用者待辦」；一旦越過則照常規 `--done` 綠。這是與前三變體最大的差異——前三者沒有橘色過場步。
+- **過場步配色**：過場步（waiting / assigned）**當其為當前步**時，bubble 與 label 用**橘色**（warning 色 + 內白環，值見 app.css），標示「系統處理中、非使用者待辦」；一旦越過則照常規 `--done` 綠。這是與前三變體最大的差異——前三者沒有橘色過場步。
 - **判定邏輯**：沿用通用規則（`n < stepCur` → `--done` 綠 / `n === stepCur` → current / `n > stepCur` → 灰），唯「current 且該步是過場步」時 current 色由藍改橘。
 - **可編輯型 voided**：`form.state === 'voided'` 時整段 Stepper 改 `.voided-banner`（紅色「已作廢」徽章），不顯示 5 步（見 §voided-banner）。
 
@@ -200,7 +200,7 @@ function stkStepClass(n,s,map){
 }
 ```
 
-> 對應樣式：`.stepper__step--waiting .stepper__bubble { background: rgb(var(--color-sf-warning)); box-shadow: inset 0 0 0 1px #fff; }` 與 `.stepper__step--waiting .stepper__label { color: var(--text-primary); font-weight: 500; }`。橘色**只**用於過場步的 current 態，不擴及連接線（連接線仍依 is-done / is-current 綠 / 藍）。
+> 對應樣式 `.stepper__step--waiting`（bubble 橘底 + 內白環、label 加粗）見 app.css。橘色**只**用於過場步的 current 態，不擴及連接線（連接線仍依 is-done / is-current 綠 / 藍）。
 
 ## voided-banner
 
@@ -212,13 +212,10 @@ function stkStepClass(n,s,map){
 </div>
 ```
 
-徽章視覺基準 = **DS Chips 元件（danger variant）**：
+徽章視覺基準 = **DS Chips 元件（danger variant）**（尺寸 / 色值見 app.css `.voided-banner` / `.st-chip--voided`）：
 
 - Anatomy：DS Chips（Avatar / Left Icon / Label / Right Icon 槽位皆 `display: none`，僅 Label）
-- 高 36px、padding `8px 16px`、圓角 48px（`--radius-full`）
-- 背景 `rgba(var(--color-sf-error), .12)` /* $danger 12% */
-- 邊框 `1px solid rgb(var(--color-sf-error))` /* #F4493E */
-- Label：Roboto 12px / Medium / line-height 130% / letter-spacing 0.1px / `rgb(var(--color-sf-error))`
+- 獨立版（比表格緊湊版高）、全圓角、danger 三件套（底 = danger 12% tint、邊框 + 字 = danger 實色）
 
 ## 狀態流轉（驗收模型）
 

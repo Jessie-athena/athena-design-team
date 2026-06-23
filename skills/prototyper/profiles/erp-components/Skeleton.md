@@ -17,28 +17,16 @@
 | class | 用途 | 形狀 |
 |---|---|---|
 | `.sk` | shimmer 基底（所有骨架共用動畫） | 由行內 `style="width;height"` 決定 |
-| `.sk-line` | 文字 / 欄位列骨架 | `border-radius: var(--radius-sm)`（4px） |
-| `.sk-pill` | 按鈕 / chip 骨架 | `width: 220px; height: 36px; border-radius: var(--radius-full)` |
+| `.sk-line` | 文字 / 欄位列骨架 | 小圓角（值見 app.css `.sk-line`） |
+| `.sk-pill` | 按鈕 / chip 骨架 | 固定寬高、全圓角（值見 app.css `.sk-pill`） |
 
 ## 視覺規格
 
-```css
-.sk {
-  display: block;
-  border-radius: var(--radius-md);                 /* 6px */
-  background: linear-gradient(90deg, #EEF0F3 25%, #F6F7F9 37%, #EEF0F3 63%);
-  background-size: 400% 100%;
-  animation: sk-shimmer 1.2s ease infinite;
-}
-.sk-line { border-radius: var(--radius-sm); }       /* 4px */
-.sk-pill { width: 220px; height: 36px; border-radius: var(--radius-full); }
+> 圓角 / 漸層色票 / 動畫時長與 size 的字面值全在 app.css（`.sk` / `.sk-line` / `.sk-pill` / `@keyframes sk-shimmer`）；本節僅記設計**規則**。
 
-@keyframes sk-shimmer { 0% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
-@media (prefers-reduced-motion: reduce) { .sk { animation: none; } }
-```
-
-- 漸層三段灰（`#EEF0F3 → #F6F7F9 → #EEF0F3`）是 DS 骨架色票，**禁**改用其他灰或加邊框。
+- shimmer 動畫：三段灰漸層橫向流動（DS 骨架色票，**禁**改用其他灰或加邊框）；動畫定義於 app.css `@keyframes sk-shimmer`。
 - 尺寸用行內 `style` 表達骨架的寬高（如 `<span class="sk sk-line" style="width:60%;height:14px"></span>`），形狀類別只決定圓角。
+- `prefers-reduced-motion: reduce` 時停 shimmer 動畫、保留靜態灰塊（app.css 已內建 media query）。
 
 ## 用法樣板
 

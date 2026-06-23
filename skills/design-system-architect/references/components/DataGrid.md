@@ -3,14 +3,14 @@ name: DataGrid（資料表格 / Grid）
 category: 資料展示與表格
 tier: full           # 承載資料列、多層 states、跨斷點欄位優先級、行內編輯生命週期 → Full
 status: ✅ 已採用（Syncfusion Grid；ERP 落地以 .dg / .dg-lines class）
-authority: prototyper DataGrid.md（class / 尺寸 / 互動色 / 凍結欄 / 行內編輯落地權威）；行為層 DataGrid.vue
+authority: 契約＝本檔；視覺值落地＝prototyper/assets/app.css（canonical CSS，值權威）；class·凍結欄·行內編輯行為＝prototyper/profiles/erp-components/DataGrid.md（用法權威）；行為層 DataGrid.vue
 figma-node: —        # 🎨 Figma 補入時填 <FILE_KEY>/<NODE_ID>
 version: v0.1
 last-synced: —
 ---
 
-> 依 `../component-doc-schema.md`（Full 層）產出。**class / 尺寸 / 互動色 / 凍結欄 / 行內編輯的落地權威是 `prototyper/profiles/erp-components/DataGrid.md`**（見 §13）；本檔做 what/why/token/state/a11y 整理與 token-reference，重疊處引用、不重寫決策（schema §8）。
-> ⚠️ **已知 token 缺口**：表格的斑馬 / hover / selected 多層互動色多為「品牌色透明疊白後的實心色」或非標準 alpha（如 `.06` / `.10`），`athena-tokens.md` 無單一對應 token。依 schema §2.2 **不臆造**，這些值以 prototyper profile 為落地權威，本檔僅標語意與缺口（見 §5）。
+> 依 `../component-doc-schema.md`（Full 層）產出。三權威分工：**視覺值（尺寸 / 互動色 / 疊白實色）權威＝`prototyper/assets/app.css`（canonical CSS，產出時複製不重寫）**；**class 套用 / 凍結欄 / 行內編輯行為權威＝`prototyper/profiles/erp-components/DataGrid.md`**（見 §13）；**本檔＝契約**（what/why/token-reference/state/a11y），重疊處引用、不重寫決策（schema §8）。
+> ⚠️ **已知 token 缺口**：表格的斑馬 / hover / selected 多層互動色多為「品牌色透明疊白後的實心色」或非標準 alpha（如 `.06` / `.10`），`athena-tokens.md` 無單一對應 token。依 schema §2.2 **不臆造**，這些值的字面落地以 `prototyper/assets/app.css` 為值權威，本檔僅標語意與缺口（見 §5）。
 
 ## 1. 概述　📋
 
@@ -60,7 +60,7 @@ special-cell:
   empty:     "—（em dash）"                     # 禁「無」/「N/A」
 ```
 
-> sticky 表頭 / 凍結欄須用**疊白後實心色**（primary/on-surface 透明色疊白的合成結果）：浮在滾動內容上若用 `rgba()` 會透出下層。這組實色**無單一 token**，其字面值的**單一來源在 profile** `§表頭` / `§列狀態與 Hover`，本檔不重印（避免兩處漂移）。
+> sticky 表頭 / 凍結欄須用**疊白後實心色**（primary/on-surface 透明色疊白的合成結果）：浮在滾動內容上若用 `rgba()` 會透出下層。這組實色**無單一 token**，其字面值的**單一來源在 `prototyper/assets/app.css`**（canonical CSS；profile `§表頭` / `§列狀態與 Hover` 提供 class / 語意導引），本檔不重印（避免兩處漂移）。
 
 ## 4. Types / Variants　🎨🔗
 
@@ -97,7 +97,7 @@ inline_edit_grid:    # .dg-lines 行內編輯型
 | 選取 + Hover | `{color-sf-primary-opacity-14}` | 疊白實色 — **見 profile** |
 
 > 互動層淺→深，品牌藍逐級加深（4→6→10→14%）。**非 sticky cell** 用半透明疊層（上表左欄；`.06` / `.10` 無 pre-wrap token，落地以 `rgba(var(--color-sf-primary), .06/.10)` 表示，非新 token）。
-> **sticky cell 須實色**：浮在滾動內容上，rgba 會穿透、破壞反饋；故每態需「疊白後固體色」配套，色相與非 sticky 一致、僅 alpha 換實色。這組實色字面值的**單一來源在 prototyper profile** `§列狀態與 Hover`，本檔不重印（schema §8 不重寫、避免漂移）。
+> **sticky cell 須實色**：浮在滾動內容上，rgba 會穿透、破壞反饋；故每態需「疊白後固體色」配套，色相與非 sticky 一致、僅 alpha 換實色。這組實色字面值的**單一來源在 `prototyper/assets/app.css`**（canonical CSS；profile `§列狀態與 Hover` 提供 class / 語意導引），本檔不重印（schema §8 不重寫、避免漂移）。
 
 ### 資料生命週期（必含）
 
@@ -197,8 +197,9 @@ App ≠ 縮小的 Web。資料表在窄螢幕的替代佈局：
 
 - Tokens：`../athena-tokens.md` §Primary / §Surface / §On-* / §Outline / §Space / §Radius / §Typography
 - 語意對照：`../athena-design.md` §中性·背景·文字·邊框 / §間距（雙密度）
-- 子元件：`st-chip.md`（狀態欄徽章，色 / class 落地引用 profile）
-- **落地權威（class / 尺寸 / 互動色 / 凍結欄 / 行內編輯，勿在此重寫）**：`prototyper/profiles/erp-components/DataGrid.md`
+- 子元件：`st-chip.md`（狀態欄徽章，色 / class 落地引用 app.css / profile）
+- **值權威（尺寸 / 互動色 / 疊白實色，勿在此重寫）**：`prototyper/assets/app.css`（canonical CSS）
+- **用法權威（class 套用 / 凍結欄 / 行內編輯行為）**：`prototyper/profiles/erp-components/DataGrid.md`
 - 上層 profile：`prototyper/profiles/erp-transaction.md`；同層 `SummaryCard.md` / `Stepper.md` / `FormGroup.md` / `FormFooter.md` / `ListSearch.md`
 - Code：`@syncfusion/ej2-vue-grids`、行為層 `DataGrid.vue`、驗證 `useGridValidation`
 
@@ -206,8 +207,8 @@ App ≠ 縮小的 Web。資料表在窄螢幕的替代佈局：
 
 ## 無 token 值的單一來源（不重印於本檔）
 
-> 以下值在 `athena-tokens.md` 無對應 token；依 schema §2.2「禁臆造」，**不在本檔造 token、也不重印字面值**，其唯一字面來源在 prototyper `DataGrid.md` profile，本檔一律引用。若 DS 日後要正式立 token，於 `athena-tokens.md` 補定後再回頭把這些引用改為 token-reference。
+> 以下值在 `athena-tokens.md` 無對應 token；依 schema §2.2「禁臆造」，**不在本檔造 token、也不重印字面值**，其唯一字面來源在 `prototyper/assets/app.css`（canonical CSS），本檔一律引用（profile 提供 class / 語意導引）。若 DS 日後要正式立 token，於 `athena-tokens.md` 補定後再回頭把這些引用改為 token-reference。
 
-1. **疊白後實色（sticky 配套）**：表頭 / 斑馬 / hover / selected / selected+hover 的不透明版——單一來源：profile `§表頭` / `§列狀態與 Hover`。
+1. **疊白後實色（sticky 配套）**：表頭 / 斑馬 / hover / selected / selected+hover 的不透明版——單一來源：app.css（profile `§表頭` / `§列狀態與 Hover` 導引）。
 2. **互動疊層階梯非標準階**：`.06`（hover）/ `.10`（selected）無 pre-wrap token；落地以 `rgba(var(--color-sf-primary), .06/.10)` 表示（非新 token）。
-3. **元件量測值**：列高 45 / 50px、表頭欄間分隔線高 26px 等——單一來源：profile `§尺寸`。
+3. **元件量測值**：列高 45 / 50px、表頭欄間分隔線高 26px 等——單一來源：app.css（profile `§尺寸` 導引）。

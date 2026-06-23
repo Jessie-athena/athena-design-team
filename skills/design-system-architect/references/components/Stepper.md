@@ -3,13 +3,13 @@ name: Stepper（狀態流程指示器）
 category: 流程與其他
 tier: full           # 承載單據狀態生命週期、多 pattern（基本/驗收/結轉）、多步序狀態與終止分支 → Full
 status: ✅ 已採用（Syncfusion Stepper；ERP 落地以 .stepper class）
-authority: prototyper Stepper.md（步序狀態 / 語意色 / 判定邏輯 / voided-banner 落地權威）；狀態機 erp-transaction.md
+authority: 契約＝本檔；視覺值落地（語意色 / bubble·line 尺寸）＝prototyper/assets/app.css（值權威）；判定邏輯 / JS helper / voided-banner 行為＝prototyper/profiles/erp-components/Stepper.md（用法權威）；狀態機 erp-transaction.md
 figma-node: —        # 🎨 Figma 補入時填 <FILE_KEY>/<NODE_ID>
 version: v0.1
 last-synced: —
 ---
 
-> 依 `../component-doc-schema.md`（Full 層）產出。**步序狀態 / 語意色 / 判定邏輯 / voided-banner / JS helper 的落地權威是 `prototyper/profiles/erp-components/Stepper.md`**（見 §13）；本檔做 what/why/token/state/a11y 整理與 token-reference，重疊處引用、不重寫決策（schema §8）。狀態機（含七值驗收 / 6 值結轉模型）權威在 `erp-transaction.md`。
+> 依 `../component-doc-schema.md`（Full 層）產出。三權威分工：**視覺值（語意色實色 / bubble·line·label 尺寸）權威＝`prototyper/assets/app.css`（canonical CSS，複製不重寫）**；**判定邏輯 / JS helper（`stepCur` 等）/ voided-banner 行為權威＝`prototyper/profiles/erp-components/Stepper.md`**（見 §13；JS 邏輯非 CSS，落 `app.js`，由 profile 主導）；**本檔＝契約**（what/why/token-reference/state/a11y）。狀態機（含七值驗收 / 6 值結轉模型）權威在 `erp-transaction.md`。
 
 ## 1. 概述　📋
 
@@ -52,7 +52,7 @@ container-gap: "見 profile（≈ {ds-space-padding-extra-large} Default 概念�
 motion:  "background / color 200ms ease-out；尊重 prefers-reduced-motion → 0ms"
 ```
 
-> bubble / line / label 的量測 px `athena-tokens.md` 無精確對應；**單一來源在 profile §尺寸與字體**，本檔不重印（schema §8）。
+> bubble / line / label 的量測 px `athena-tokens.md` 無精確對應；**單一來源在 `prototyper/assets/app.css`**（canonical CSS；profile `§尺寸與字體` 提供 class / 語意導引），本檔不重印（schema §8）。
 
 ## 4. Patterns / Types　🎨🔗
 
@@ -160,7 +160,8 @@ Read-only 元件，**不在 Tab 順序內**（無互動焦點）。狀態變更�
 - Tokens：`../athena-tokens.md` §Primary / §Status — Success·Danger / §Outline / §Radius / §Typography / §Space
 - 語意對照：`../athena-design.md` §狀態色（綠=完成 / 藍=進行中 / 紅=作廢）
 - 子元件：`st-chip.md`（voided-banner 內 danger 徽章 = standalone 36px 版）
-- **落地權威（步序狀態 / 語意色 / 判定邏輯 / voided-banner / JS helper，勿在此重寫）**：`prototyper/profiles/erp-components/Stepper.md`
+- **值權威（語意色實色 / bubble·line·label 尺寸，勿在此重寫）**：`prototyper/assets/app.css`（canonical CSS）
+- **用法權威（判定邏輯 / voided-banner 行為 / JS helper）**：`prototyper/profiles/erp-components/Stepper.md`
 - 狀態機權威：`prototyper/profiles/erp-transaction.md §State Machine` / §進銷存擴充狀態機
 - 佈局載體：`prototyper/profiles/erp-components/SummaryCard.md`（Layout A/B 動態插槽）
 - Code：Syncfusion Stepper；helper 見 profile
@@ -169,6 +170,6 @@ Read-only 元件，**不在 Tab 順序內**（無互動焦點）。狀態變更�
 
 ## 量測值（落地權威在 profile，本檔不重印）
 
-> 以下為元件專屬量測值，非可複用 design token——單一來源在 prototyper `Stepper.md §尺寸與字體`，本檔僅引用、不重寫（schema §8）：bubble 32px / line 2px·28–56px / container gap 16px / label 13px。需精確值請見 profile。
+> 以下為元件專屬量測值，非可複用 design token——單一來源在 `prototyper/assets/app.css`（canonical CSS；profile `Stepper.md §尺寸與字體` 提供 class / 語意導引），本檔僅引用、不重寫（schema §8）：bubble 32px / line 2px·28–56px / container gap 16px / label 13px。需精確值請見 app.css。
 
 > **已解（2026-06-21）**：原「結轉模型靛色」與「pending 疊白實色無 token」兩項缺口——靛色經設計裁示**取消**（終態步一律 primary 藍，無需新色 / 新 token）；pending 疊層用既有 `{color-sf-primary-opacity-8}`，sticky 實色非 Stepper 所需。Stepper 已無待 DS 補定的 token 缺口。

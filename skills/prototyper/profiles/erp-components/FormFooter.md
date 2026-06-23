@@ -45,52 +45,59 @@
 
 ## Container Token
 
-| 屬性 | 值 |
+> 尺寸 / padding / 背景 / 框線實際值見 app.css `.form-footer`；本節僅記排版規則。
+
+| 屬性 | 規則 |
 |---|---|
 | `position` | `sticky`（隨 `.form-view` flex column 釘底） |
 | `flex-shrink` | `0`（永遠不被壓縮） |
-| `display` / 排版 | `flex` / `align-items: center` / `justify-content: space-between` |
-| `padding` | **桌機 `12px 24px`** ／ 平板 `12px 16px` ／ 手機 `10px 12px` |
-| `background` | `var(--bg-surface-default)` |
-| `border-top` | `1px solid var(--border-default)` |
-| `box-shadow` | 內容可捲動時加 footer top shadow；內容未滿一頁時移除。**DS 目前無對應 token**（`--shadow-e1` 是 card / dropdown 用、方向錯），請先在 `REFERENCE.md §9` 新增 `--shadow-footer-top`（建議值 `0 -2px 8px rgba(var(--color-sf-neutral), .04)` 或對應 DS 規格）再引用；prototype 階段未補 token 前可暫時省略 shadow |
-| `z-index` | `5`（高於表單內容，低於 modal / toast） |
-| `min-height` | `64px`（保留 40px CTA + 12×2 padding） |
+| `display` / 排版 | `flex` / `align-items: center` / `justify-content: space-between`（左右兩端分置） |
+| `padding` | 桌機 / 平板 / 手機三段（值見 app.css；RWD 行為見 §RWD 斷點） |
+| `background` | `var(--bg-surface-default)`（值見 app.css） |
+| `border-top` | `var(--border-default)` 細線（值見 app.css） |
+| `box-shadow` | 內容可捲動時加 footer top shadow；內容未滿一頁時移除。**DS 目前無對應 token**（`--shadow-e1` 是 card / dropdown 用、方向錯），請先在 `REFERENCE.md §9` 新增 `--shadow-footer-top`（對應 DS 規格）再引用；prototype 階段未補 token 前可暫時省略 shadow |
+| `z-index` | 高於表單內容、低於 modal / toast（值見 app.css） |
+| `min-height` | 保留 CTA 高度 + 上下 padding（值見 app.css） |
 
 ## 左：`__nav`（記錄分頁器）
 
-| 屬性 | 值 |
+> 尺寸 / 字級 / 間距 / hover 底色實際值見 app.css `.form-footer__nav`；本表記結構與行為規則。
+
+| 屬性 | 規則 |
 |---|---|
-| 元件 | `pg-btn 32×32` + `.form-footer__pos` |
+| 元件 | `pg-btn`（方形 icon 鈕）+ `.form-footer__pos`（值見 app.css） |
 | 顯示格式 | `{當前筆數} / {總筆數}`；**新增模式 `1 / {總筆數 + 1}`** |
-| 字級 | 13px / `color: var(--text-secondary)` / `font-variant-numeric: tabular-nums` |
-| 間距 | `gap: 4px`，pos 左右 `padding: 0 4px` |
-| Hover | `background: rgba(var(--color-sf-primary), .08)`；顏色升至 `var(--text-primary)` |
-| Disabled | `opacity: .38; cursor: not-allowed` |
+| 字級 | `var(--text-secondary)` + `tabular-nums`（值見 app.css） |
+| Hover | 升至 `var(--text-primary)` + primary 淺底（值見 app.css） |
+| Disabled | 淡化 + `cursor: not-allowed`（值見 app.css） |
 
 ## 右：`__actions`
 
-| 屬性 | 值 |
+> 排列 / 按鈕尺寸 / 下拉定位實際值見 app.css（`.form-footer__right` / `.btn-outline` / `.popover`）；本表記結構規則。
+
+| 屬性 | 規則 |
 |---|---|
-| 排列 | `display: flex; align-items: center; gap: 8px` |
-| 按鈕高度 | 統一 `40px`（CTA / Outline / Dropdown 同高） |
+| 排列 | `display: flex; align-items: center`（值見 app.css） |
+| 按鈕高度 | CTA / Outline / Dropdown 統一同高（值見 app.css） |
 | 主 CTA | `.btn.btn-primary`，寬度自適應、永遠靠右 |
-| Outline | `.btn-outline`：`border: 1px solid rgb(var(--color-sf-primary))`、`border-radius: var(--radius-sm)`、`padding: 10px 16px` |
-| 下拉 menu | `position: absolute; left: 0; bottom: calc(100% + 4px)`（向上彈、左對齊按鈕） |
+| Outline | `.btn-outline`：`border` 用 `rgb(var(--color-sf-primary))`、`border-radius: var(--radius-sm)`（值見 app.css） |
+| 下拉 menu | `position: absolute`、向上彈、左對齊按鈕（值見 app.css） |
 
 ## RWD 斷點
+
+> 各斷點的 padding / gap / min-width 等實際值見 app.css；本表記斷點門檻與版面行為（門檻為 logic，必留）。
 
 | 斷點 | 行為 |
 |---|---|
 | **≥ 1024px（桌機）** | 預設樣式；左右兩段水平並列 |
-| **768–1023px（平板）** | padding 改 `12px 16px`；`__actions` `gap: 6px`；下拉 menu `min-width: 180px` |
-| **< 768px（手機）** | ① Footer 改 `flex-direction: column-reverse; align-items: stretch; gap: 8px`（CTA 在上、分頁器在下）<br>② 右區按鈕 `flex: 1`，主 CTA `min-width: 50%`；條件按鈕與「更多操作」各佔等寬<br>③ 「儲存變更」標籤可縮為「儲存」<br>④ 分頁器 `justify-content: center`<br>⑤ Footer 高度允許自動長至約 `120px` |
-| **< 360px** | 下拉 menu 改 `position: fixed; left: 12px; right: 12px; bottom: 64px`（鋪滿避免被裁切） |
+| **768–1023px（平板）** | padding 收窄、`__actions` gap 縮小、下拉 menu 加最小寬（值見 app.css） |
+| **< 768px（手機）** | ① Footer 改 `flex-direction: column-reverse; align-items: stretch`（CTA 在上、分頁器在下）<br>② 右區按鈕 `flex: 1`，主 CTA 過半寬；條件按鈕與「更多操作」各佔等寬<br>③ 「儲存變更」標籤可縮為「儲存」<br>④ 分頁器 `justify-content: center`<br>⑤ Footer 高度允許自動長高（值見 app.css） |
+| **< 360px** | 下拉 menu 改 `position: fixed` 左右鋪滿（避免被裁切；值見 app.css） |
 
 ## 鍵盤 / 觸控
 
-- 按鈕 hit-target **不小於 `40×40px`**（pg-btn `32×32` 在桌機 ok，手機自動放大至 `40×40`）
-- Focus ring：使用 DS 預設 `outline: 2px solid rgb(var(--color-sf-primary)); outline-offset: 2px`，**不可移除**
+- 按鈕 hit-target **不小於 40×40**（A11y 最小觸控；pg-btn 桌機較小但手機自動放大至 40×40，尺寸值見 app.css）
+- Focus ring：使用 DS 預設 outline（`rgb(var(--color-sf-primary))`，值見 app.css），**不可移除**
 
 ## 互動規則
 
@@ -126,8 +133,8 @@
 |---|---|
 | 開合 | 點按鈕 toggle；再次點按鈕關閉 |
 | 外部關閉 | 點 menu 以外區域、按 `Esc`、滾動表單、視窗 resize 皆關閉 |
-| 彈出位置 | 預設向上彈（`bottom: calc(100% + 4px)`），左對齊按鈕 left |
-| 邊界翻轉 | 若上方空間 < `200px`，改向下彈；若右側超出 viewport，自動 right-align |
+| 彈出位置 | 預設向上彈、左對齊按鈕 left（offset 值見 app.css `.popover`） |
+| 邊界翻轉 | 若上方空間 < 200px，改向下彈；若右側超出 viewport，自動 right-align（門檻為 logic） |
 | 鍵盤 | `Enter / Space` 開合；開啟後 `↑/↓` 切換項目、`Enter` 觸發、`Esc` 關閉 |
 | 項目 disabled | `.is-disabled` → `cursor: not-allowed`；hover 不變色；點擊無反應 |
 | 內建項目 | 「儲存並新增」、「複製」、（可選）「刪除」、「停用」。新增模式下「複製」disabled |

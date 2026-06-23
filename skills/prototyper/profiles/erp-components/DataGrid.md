@@ -6,7 +6,11 @@
 > 上層 profile：`profiles/erp-transaction.md`
 > 同層元件：`ListSearch.md` / `DataGrid.md` / `FormGroup.md` / `FormFooter.md` / `SummaryCard.md` / `Stepper.md` / `Permissions.md` / `RelBanner.md` / `Skeleton.md`
 >
-> **上游設計文件**：`../../../design-system-architect/references/components/DataGrid.md`（格式見 `component-doc-schema.md`）。分工——**設計文件**是 what/why/token/state/a11y 的權威（Lite/Full、token-reference、跨平台 adaptive）；**本 profile** 是「如何用單檔 HTML/CSS class 落地」的實作層。本檔的 token / 狀態決策待收編進設計文件後改為引用，避免兩處漂移。
+> **三權威分工**：
+> - **值權威＝`../../assets/app.css`（canonical CSS，產出時複製不重寫）**——所有尺寸 / 色 / 疊白實色的字面值以此為準；本檔**不複印 CSS 數值**（要改數值改 app.css）。
+> - **本 profile＝用法權威**——負責 class 套用、凍結欄 / 行內編輯互動行為、markup 結構、app.js 邏輯。
+> - **契約權威＝上游設計文件** `../../../design-system-architect/references/components/DataGrid.md`（格式見 `component-doc-schema.md`）：what/why/token-reference/state/a11y/跨平台 adaptive。
+> 本檔保留 class 名與行為說明、查 app.css 區塊的導引；遇具體 px/hex 一律指 app.css，避免兩處漂移。
 
 ---
 
@@ -39,24 +43,21 @@ DS 對齊命名以 `.dg` / `.dg-lines` 為**權威**。早期財務範本（`mod
 
 兩種 grid 共用的尺寸、框線與表頭規則。
 
-### 尺寸
+> 尺寸 / 框線 / 表頭實色的字面值見 app.css `.dg`（表頭列高 / 資料列高 / cell padding / 字級）；本節僅記設計**規則**。
 
-- 表頭列高 `45px`，資料列高 `50px`
-- 儲存格水平內距 `16px`（`padding: 0 16px`）
-- 字級 `14px`、`color: var(--text-primary)`、垂直置中
+### 尺寸與邊框（規則）
 
-### 邊框與圓角（重要設計指示）
-
-- Grid **無圓角、無外框**，只在頂端帶一條分隔線：`border-top: 1px solid var(--border-default)`
-- 列間以 `border-bottom: 1px solid var(--border-default)` 分隔；**最後一列不畫底線**（避免與外層下緣疊出兩條）
+- 表頭列、資料列、cell 水平內距、字級：值見 app.css；cell 文字垂直置中
+- Grid **無圓角、無外框**，只在頂端帶一條分隔線（`border-top`）
+- 列間 `border-bottom` 分隔；**最後一列不畫底線**（避免與外層下緣疊出兩條）
 - 儲存格內容 `white-space: nowrap`（不換行，超出以水平捲動處理）
 
-### 表頭（`th`）
+### 表頭（`th`）規則
 
-- 背景 `#F4F8FE`（等同 `rgba(40,119,238,.05)` 疊白的**實心色**——sticky 表頭必須用實心色，避免捲動時下層內容透出）
-- 字重 `font-weight: 500`、`text-align: left`（**含「狀態」欄**）
+- 背景用**疊白後實心色**——sticky 表頭必須實色，避免捲動時下層內容透出（色值見 app.css `.dg thead th`）
+- 字重 medium、`text-align: left`（**含「狀態」欄**）
 - `position: sticky; top: 0`（捲動時固定）
-- 欄與欄以**垂直分隔線**區隔：`th:not(:last-child)::after`，寬 `1px`、高 `26px`、色 `#7F8996`（= `var(--border-strong)`）；最後一欄不畫
+- 欄與欄以**垂直分隔線**區隔（`th:not(:last-child)::after`；尺寸 / 色見 app.css）；最後一欄不畫
 - **無下邊框**
 
 ---
@@ -80,16 +81,16 @@ DS 對齊命名以 `.dg` / `.dg-lines` 為**權威**。早期財務範本（`mod
 - **不使用** `table-layout: fixed`（讓欄位依內容自然撐開）
 - 一般欄位 HTML **不要寫死** `style="width:..."`，由 CSS 統一控制
 
-### 欄位寬度
+### 欄位寬度（class 對應；px 值見 app.css）
 
-| 欄位類型 | min-width | width |
+| 欄位類型 | class | 規則 |
 |---|---|---|
-| 一般資料欄（`th` / `td`） | **200px** | auto |
-| Checkbox 欄 `.col-check` | **50px** | 50px（固定、置中，**禁**自適應） |
-| 操作欄 `.col-actions`（1 顆按鈕） | **56px** | 56px（固定，套 `.col-actions--single`） |
-| 操作欄 `.col-actions`（2 顆按鈕） | **96px** | 96px（固定，預設 `.col-actions`） |
+| 一般資料欄（`th` / `td`） | — | 有 min-width、width auto |
+| Checkbox 欄 | `.col-check` | 固定寬、置中，**禁**自適應 |
+| 操作欄（1 顆按鈕） | `.col-actions.col-actions--single` | 固定窄寬 |
+| 操作欄（2 顆按鈕） | `.col-actions`（預設） | 固定寬 |
 
-> **操作欄寬度鎖定**：兩種寬度都用 `width / min-width / max-width + box-sizing: border-box` 三件套鎖死，避免 grid auto-fit 在窄視窗下擠壓按鈕。
+> **操作欄寬度鎖定**：用 `width / min-width / max-width + box-sizing: border-box` 三件套鎖死，避免 grid auto-fit 在窄視窗下擠壓按鈕（值見 app.css `.col-actions`）。
 
 ### 欄位優先級與 RWD 顯示規則
 
@@ -113,54 +114,48 @@ DS 對齊命名以 `.dg` / `.dg-lines` 為**權威**。早期財務範本（`mod
 
 ### Sticky 凍結欄
 
-- **左凍結**：`position: sticky`
-  - 第 1 欄（checkbox）`.sticky-l` → `left: 0`
-  - 第 2 欄（主鍵，如館別代號）`.sticky-l-2` → `left: 50px`（緊接 checkbox 寬度）
-- **右凍結**：`.sticky-r` → `right: 0`（操作欄）
-- z-index 階層：`thead th.sticky-*` = `3`；`tbody td.sticky-*` = `1`；一般 `thead th` = `2`
+- **左凍結**（`position: sticky`）：第 1 欄 checkbox `.sticky-l`（`left: 0`）；第 2 欄主鍵 `.sticky-l-2`（緊接 checkbox 寬，offset 見 app.css）
+- **右凍結**：`.sticky-r`（`right: 0`，操作欄）
+- z-index 階層：`thead th.sticky-*` 最高、`tbody td.sticky-*` 最低、一般 `thead th` 居中（值見 app.css）
 - **依設計指示：凍結欄不使用深度陰影提示**（`box-shadow` 強調凍結邊會視覺破碎）
 
 ### 列狀態與 Hover（核心）
 
-互動層次由淺到深，皆以品牌藍為基底逐級加深：**斑馬 → Hover → 選取 → 選取+Hover**。
+互動層次由淺到深，皆以品牌藍為基底逐級加深：**斑馬 → Hover → 選取 → 選取+Hover**（各態實際色值見 app.css `.dg` 列狀態區塊）。每態分兩套：
 
-| 狀態 | 普通 cell（非 sticky） | Sticky cell（**必須實色**） |
+| 狀態 | 普通 cell（非 sticky） | Sticky cell |
 |---|---|---|
-| 一般列（奇數） | `#fff`（= `var(--bg-surface-default)`） | `#ffffff` |
-| 斑馬列（偶數） | `rgba(15, 23, 42, .04)` | `#F5F6F8` |
-| Hover | `rgba(40,119,238,.06)` | `rgb(242, 247, 254)` |
-| 選取 `.is-selected` | `rgba(40,119,238,.10)` | `rgb(230, 241, 253)` |
-| 選取 + Hover | `rgba(40,119,238,.14)` | `rgb(225, 236, 252)` |
+| 一般列（奇數） | 白 | 白（實色） |
+| 斑馬列（偶數） | 半透明疊層 | **疊白後實色** |
+| Hover | primary 半透明疊層 | **疊白後實色** |
+| 選取 `.is-selected` | primary 半透明疊層（較深） | **疊白後實色** |
+| 選取 + Hover | primary 半透明疊層（最深） | **疊白後實色** |
 
 > **為什麼 sticky 必須補實色？** Sticky cell 浮在下方滾動內容之上；若用 `rgba()` 透明色，scroll 時下層 cell 會穿透顯現，破壞 hover/selected 的視覺反饋。每個互動狀態都必須有對應的「疊白後固體色」配套。
-> **禁**改用不同色相讓 sticky 欄看起來是獨立區塊；色相要與一般 cell 一致，只是 alpha 換實色（疊白後 ≈ `#F5F6F8`，對應 DS 內部 `--bg-surface-variant`）。表頭凍結沿用表頭實心色 `#F4F8FE`。
+> **禁**改用不同色相讓 sticky 欄看起來是獨立區塊；色相要與一般 cell 一致，只是 alpha 換實色。表頭凍結沿用表頭實心色。（疊白實色字面值全在 app.css。）
 
 ### 特殊列
 
-- **群組列 `.group-row`**（preset 分群）：背景 `rgba(40,119,238,.06)`、字重 `500`、藍字 `var(--color-sf-primary)`、列高 `38px`
-- **焦點還原閃爍 `.row-flash`**：捲動位置還原時，目標列以 `row-flash` 動畫 `1.2s` 由藍底（`rgba(40,119,238,.22)`）漸退至透明
+- **群組列 `.group-row`**（preset 分群）：primary 淺底、字重 medium、藍字（值見 app.css）
+- **焦點還原閃爍 `.row-flash`**：捲動位置還原時，目標列由藍底漸退至透明（動畫 / 色見 app.css）
 
 ### 特殊資料型態
 
 - **主鍵 / 代碼欄** `.code-cell`：`font-family: var(--font-family-mono); font-feature-settings: 'tnum'; font-weight: 500`
 - **可點擊連結** `.dg__link`：藍字 `var(--color-sf-primary)`、`font-weight: 500`；hover 加底線
   - **唯讀變體** `.link-cell--static`：外觀同 `.dg__link` 但 `cursor: default`、hover **不**加底線——用於「看起來像連結但當前無權限 / 無目標可跳」的情境（如唯讀角色）
-  - **關聯標籤** `.dg__rtag`：連結文字後綴的灰字註記（如「（退料單）」），`margin-left: 6px; font-size: 12px; color: var(--text-secondary)`；標示該列是衍生 / 沖銷單
+  - **關聯標籤** `.dg__rtag`：連結文字後綴的灰字註記（如「（退料單）」，尺寸 / 色見 app.css）；標示該列是衍生 / 沖銷單
 - **次要灰字** `.dg__muted` / `.text-secondary`（如電話）：`color: var(--text-secondary)`（電話另加 `font-family: var(--font-family-mono)`）
 - **空值顯示**：一律 `—`（em dash），**禁**用「無」「N/A」
 - **關聯欄位顯示**：只顯示**名稱**，**不顯示代碼前綴**（如「北區」而非「N · 北區」）
 
 ### 狀態 Chip `.st-chip`
 
-- 高度 `28px`、`border-radius: var(--radius-full)`、padding `0 8px 0 6px`、`min-width: 49px`（表格內緊湊版；獨立使用的 36px DS Chips 本體見 `Stepper.md §voided-banner`，色彩模式兩者共用）
-- 字 `12px` / Medium / line-height `1.3` / letter-spacing `0.1px`
-- 色彩模式統一：背景 = 狀態色 12% tint、邊框 + 文字 = 狀態色實色
+- 表格內緊湊版（尺寸 / 字級見 app.css `.st-chip`）；獨立使用的 36px DS Chips 本體見 `Stepper.md §voided-banner`，色彩模式兩者共用
+- 色彩模式統一：背景 = 狀態色 12% tint、邊框 + 文字 = 狀態色實色（每態實際色見 app.css）
 - chip 在 cell 中**靠左**（隨欄位 `text-align: left`），不置中
 
-**設定檔兩態**
-
-- `.st-chip--active`：背景 `rgba(var(--color-sf-success), .12)`、邊框 + 文字 `rgb(var(--color-sf-success))`
-- `.st-chip--inactive`：背景 `rgba(var(--color-sf-error), .12)`、邊框 + 文字 `rgb(var(--color-sf-error))`
+**設定檔兩態**：`.st-chip--active`（success 綠）/ `.st-chip--inactive`（error 紅），三件套同上（色見 app.css）
 
 **作業檔狀態（canonical 4 值 + 進銷存擴充；狀態定義詳 `Stepper.md` / `erp-transaction.md §State Machine`）**
 
@@ -182,8 +177,7 @@ DS 對齊命名以 `.dg` / `.dg-lines` 為**權威**。早期財務範本（`mod
 
 ### 操作按鈕 `.ico-btn`
 
-- `40 × 40px`、icon `20px`、`border-radius: var(--radius-sm)`、預設背景透明
-- Hover：`background: rgba(var(--color-sf-primary), .08)`
+- 方形按鈕、icon 置中、圓角、預設背景透明；Hover 加 primary 淺底（尺寸 / 色見 app.css `.ico-btn`）
 - `.is-edit` / `.is-view`（唯讀模式切 chevron）共用同一規格
 
 ### 互動規則
@@ -200,7 +194,7 @@ DS 對齊命名以 `.dg` / `.dg-lines` 為**權威**。早期財務範本（`mod
 
 ### 空狀態
 
-無資料時隱藏整個 `.dg`，改顯示 `.empty-state`（48px `material-symbols:inbox-outline` icon + 標題 + 說明）；**禁**保留空表頭。
+無資料時隱藏整個 `.dg`，改顯示 `.empty-state`（大尺寸 `material-symbols:inbox-outline` icon + 標題 + 說明；尺寸見 app.css）；**禁**保留空表頭。
 
 ---
 
@@ -212,48 +206,46 @@ DS 對齊命名以 `.dg` / `.dg-lines` 為**權威**。早期財務範本（`mod
 
 ```
 .dg-lines
-  .dg-lines__header   ← 標題列，背景 rgba(40,119,238,.04)，底部分隔線；右側 add 鈕
+  .dg-lines__header   ← 標題列，primary 淺底，底部分隔線；右側 add 鈕（色見 app.css）
   .dg-lines__scroll   ← overflow-x: auto（唯一橫向捲軸）
     table             ← table-layout: auto
 ```
 
-### 列狀態與 Hover
+### 列狀態與 Hover（色值見 app.css `.dg-lines`）
 
 | 狀態 | 背景 |
 |---|---|
-| 一般列 | `#fff` |
-| 斑馬列（偶數） | `rgba(15, 23, 42, .04)` |
-| 編輯中 `.editing` | `var(--ColorSf-flyout, #FFF)` 疊層（淡白 flyout 底，帶上下分隔線標示編輯態） |
+| 一般列 | 白 |
+| 斑馬列（偶數） | 半透明疊層 |
+| 編輯中 `.editing` | 淡白 flyout 疊層（帶上下分隔線標示編輯態） |
 
 ### 凍結欄
 
 > 採購單規範 PRD §6.3.4：**僅序號凍結左、操作凍結右**。
 
-- 序號 `.col-idx`：`60px`、置中、`sticky left: 0`
-- 商品 `.col-prod`：`min-width: 200px`、`sticky left: 60px`（部分情境凍結）
-- 操作 `.col-ops`：`56px`、`sticky right: 0`
-- 凍結欄各狀態實心底：表頭 `#F4F8FE`、偶數列 `#F5F6F8`、編輯列同 flyout 疊層
+- 序號 `.col-idx`：置中、`sticky left: 0`
+- 商品 `.col-prod`：有 min-width、`sticky left:`（緊接序號寬，部分情境凍結）
+- 操作 `.col-ops`：`sticky right: 0`
+- 凍結欄各狀態實心底（表頭 / 偶數列 / 編輯列疊層）：色值見 app.css
 
 ### 行內輸入元件
 
 `.input--inline` / `.select--inline`：
 
-- 高 `40px`、字 `14px`、letter-spacing `0.24px`
-- **底線式輸入**：`border-bottom: 1px solid #7F8996`，圓角 `4px 4px 0 0`（上圓下平）
-- `.select--inline` 右側留 `32px` 給箭頭；placeholder 用 `.select-placeholder`，色 `var(--color-athena-placeholder)`
-- 欄位間距：cell `padding: 8px 12px`；同 cell 內多控制元件 `gap: 8px`
-- `:focus` → `border-bottom: 1px solid var(--border-focus)`（#2877EE）；`.is-error` → 紅底線 + helper（見 §驗證）
+- **底線式輸入**（`border-bottom`，圓角上圓下平）；尺寸 / 色見 app.css
+- `.select--inline` 右側留空給箭頭；placeholder 用 `.select-placeholder`
+- `:focus` → 底線轉 focus 色；`.is-error` → 紅底線 + helper（見 §驗證）
 
 ### 採購單專屬
 
 - `.col-center`：序號／贈品欄置中
-- `.gift-yes`：贈品標記橘字 `#C2630A`、字重 `500`（採購明細「是否贈品」欄的**文字式**標記）
-- `.gift-tag`：贈品**徽章式**標記（緊貼商品名後），對齊基準 `庫存模組`（出庫 / 領料明細）——`display: inline-flex; align-items: center; height: 20px; margin-left: 8px; padding: 0 8px; border-radius: 10px; font: Medium 11px / line-height 1; background: rgba(113,7,220,.10); color: #7107DC; border: 1px solid rgba(113,7,220,.35)`（紫，與狀態語意色不衝突）。文字式 `.gift-yes` 用於獨立「贈品」欄；徽章式 `.gift-tag` 用於商品名行內標註，**依版面擇一**
-- 金額欄唯讀值靠右、`tabular-nums`；總金額 `.is-amount-total` 字重 `700`、色 `#0F172A`
+- `.gift-yes`：贈品**文字式**標記（採購明細「是否贈品」欄；橘字，色見 app.css）
+- `.gift-tag`：贈品**徽章式**標記（緊貼商品名後），對齊基準 `庫存模組`（出庫 / 領料明細）——紫色 inline-flex 小徽章，與狀態語意色不衝突（完整樣式見 app.css `.gift-tag`）。文字式 `.gift-yes` 用於獨立「贈品」欄；徽章式 `.gift-tag` 用於商品名行內標註，**依版面擇一**
+- 金額欄唯讀值靠右、`tabular-nums`；總金額套 `.is-amount-total`（加粗，見 app.css）
 
 ### 必填標記
 
-- `th .required`：紅字 `var(--color-sf-error)`、`12px`、左留 `2px`
+- `th .required`：紅色星號標記（樣式見 app.css `.required`）
 
 ### 進入 / 離開編輯（互動行為）
 
@@ -283,10 +275,10 @@ DS 對齊命名以 `.dg` / `.dg-lines` 為**權威**。早期財務範本（`mod
 
 #### 驗證
 
-- **即時驗證**：`@blur` 時驗證；錯誤欄加 `.is-error`，下方 `8px` helper 顯紅字
+- **即時驗證**：`@blur` 時驗證；錯誤欄加 `.is-error`，下方 helper 顯紅字
 - **儲存時驗證**：點「✓ 確認」整列重驗，第一個錯誤欄自動 focus 並 scroll 到視野
 - 錯誤訊息採既有 `fieldErrors` 樣板（例：「適用項目」為必填、「固定價格」須 > 0、生效日不可晚於失效日）
-- Helper 緊貼 cell 下方**不撐高列高**：`position: absolute; top: 100%; left: 12px`；字 `12px`、`var(--text-error)`；被表格邊界裁切則翻轉往上
+- Helper 緊貼 cell 下方**不撐高列高**：`position: absolute`（不佔列高，定位 / 字級見 app.css）；被表格邊界裁切則翻轉往上
 
 #### 確認與取消
 
@@ -304,12 +296,12 @@ DS 對齊命名以 `.dg` / `.dg-lines` 為**權威**。早期財務範本（`mod
 | 狀態 | 顯示 |
 |---|---|
 | Readonly | ✏️ edit（`.is-edit`）＋ 🗑 delete（`.is-delete`） |
-| Editing | ✓ check 主色實心（`.is-confirm`）＋ ✕ close 灰邊框（`.is-cancel`）；間距 `gap: 4px` |
+| Editing | ✓ check 主色實心（`.is-confirm`）＋ ✕ close 灰邊框（`.is-cancel`）；小間距 gap |
 | Loading（儲存中） | `progress_activity` 旋轉，主色 |
 
 ### RWD 與寬度
 
-- 列內控制元件 `min-width: 120px`；`≥ 1280px` 正常顯示；`< 1280px` 自動橫向滾動
+- 列內控制元件有最小寬（見 app.css）；`≥ 1280px` 正常顯示；`< 1280px` 自動橫向滾動
 - 編輯列右側動作欄 `.col-ops` 維持 `sticky right: 0`，避免操作鈕被裁切
 
 ### 無障礙（A11y）
@@ -336,24 +328,26 @@ DS 對齊命名以 `.dg` / `.dg-lines` 為**權威**。早期財務範本（`mod
 
 ## 五、Checkbox（`.cb`）
 
-- `18 × 18px`、`1.5px` 邊框 `var(--border-strong)`、圓角 `4px`
-- Hover：邊框轉藍 `var(--color-sf-primary)`，並顯圓形 halo（`::before inset -7px`，底色 `rgba(--color-sf-primary-opacity-8)`）
-- Focus：`box-shadow: 0 0 0 3px rgba(--color-sf-primary-opacity-16)`
+- 方形、細邊框、圓角（尺寸見 app.css `.cb`）
+- Hover：邊框轉藍，並顯圓形 halo（`::before`，primary 淺底）
+- Focus：primary 淺色 focus ring
 - 勾選 / 半選：填入品牌藍
 
 ---
 
 ## 六、動畫規範（Motion）
 
+> 動畫場景一覽（時間 / 緩動 / 位移值見 app.css 對應 transition / keyframes）：
+
 | 場景 | 動畫 |
 |---|---|
-| 色彩／背景轉場 | `200ms ease-out` |
-| 進入編輯態 | 列高 `40 → 56px`、底色 fade-in，`180ms ease-out` |
-| 離開編輯態 | 反向，`180ms ease-in` |
-| 確認成功 | 列底色閃綠 `rgba(46,160,67,.16) → 透明`，`600ms` |
-| 驗證錯誤 | 錯誤欄 shake（`±4px`，3 次，`280ms`） |
-| 焦點還原列閃爍 | `.row-flash`，`1.2s ease-out` |
-| Checkbox 狀態 | `.15s ease` |
+| 色彩／背景轉場 | ease-out 過場 |
+| 進入編輯態 | 列高展開、底色 fade-in |
+| 離開編輯態 | 反向 |
+| 確認成功 | 列底色閃綠後漸退 |
+| 驗證錯誤 | 錯誤欄 shake |
+| 焦點還原列閃爍 | `.row-flash` |
+| Checkbox 狀態 | 短過場 |
 
 > 一律遵守 `prefers-reduced-motion`（無彈跳、無視差；reduce 時改 `0ms`）。
 

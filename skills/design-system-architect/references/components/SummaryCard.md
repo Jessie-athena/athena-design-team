@@ -3,13 +3,13 @@ name: SummaryCard（作業檔摘要卡）
 category: 佈局與導覽
 tier: full           # 複合容器：兩種 layout、內含 stepper、sticky 行為、跨斷點重排 → Full
 status: ✅ 已採用（ERP 客製複合元件；落地以 .summary-card / .summary-card-wrap class）
-authority: prototyper SummaryCard.md（layout / token / 4 步動態 stepper 落地權威）；Layout A 規格 erp-transaction.md §Summary Bar 結構
+authority: 契約＝本檔；視覺值落地＝prototyper/assets/app.css（值權威）；layout class / 4 步動態 stepper 行為＝prototyper/profiles/erp-components/SummaryCard.md（用法權威）；Layout A 規格 erp-transaction.md §Summary Bar 結構
 figma-node: —        # 🎨 Figma 補入時填 <FILE_KEY>/<NODE_ID>
 version: v0.1
 last-synced: —
 ---
 
-> 依 `../component-doc-schema.md`（Full 層）產出。**layout / token / 4 步動態 stepper 的落地權威是 `prototyper/profiles/erp-components/SummaryCard.md`**（Layout A 另見 `erp-transaction.md §Summary Bar 結構`）；本檔做 what/why/token/state/a11y 整理與 token-reference，重疊處引用、不重寫決策（schema §8）。內含的 Stepper 一切視覺 / 判定以 `Stepper.md` 為準。
+> 依 `../component-doc-schema.md`（Full 層）產出。三權威分工：**視覺值（padding / sticky / 金額字級）權威＝`prototyper/assets/app.css`（canonical CSS，複製不重寫）**；**layout class 套用 / 4 步動態 stepper 行為權威＝`prototyper/profiles/erp-components/SummaryCard.md`**（Layout A 另見 `erp-transaction.md §Summary Bar 結構`）；**本檔＝契約**（what/why/token-reference/state/a11y）。內含的 Stepper 一切視覺 / 判定以 `Stepper.md` 為準。
 
 ## 1. 概述　📋
 
@@ -150,7 +150,8 @@ App ≠ 縮小 Web：
 - Tokens：`../athena-tokens.md` §Surface / §Shadow（`--ds-shadow-none`）/ §Space / §Primary / §Typography
 - 語意對照：`../athena-design.md` §中性·背景 / §字級（金額用 h5、label 用 text-sm）/ §間距
 - 子元件：`Stepper.md`（內含狀態 stepper，終態步一律 primary 藍）、`st-chip.md`（voided-banner / 已產生傳票 chip）、`DataGrid.md`（合計列 Σ → 單指標金額來源）
-- **落地權威（layout / token / 4 步動態 stepper，勿在此重寫）**：`prototyper/profiles/erp-components/SummaryCard.md`
+- **值權威（padding / sticky / 金額字級，勿在此重寫）**：`prototyper/assets/app.css`（canonical CSS）
+- **用法權威（layout class / 4 步動態 stepper 行為）**：`prototyper/profiles/erp-components/SummaryCard.md`
 - Layout A 完整規格：`prototyper/profiles/erp-transaction.md §Summary Bar 結構`
 - 狀態機權威：`erp-transaction.md §進銷存擴充狀態機`
 - Code：ERP 客製複合元件（Form View header）
