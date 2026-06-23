@@ -21,7 +21,7 @@ allowed-tools: Read Write Edit Glob Grep
 | `profiles/Shared.md` | 跨專案共用 profile（**所有專案前置必讀**） | `raw.githubusercontent.com/Jessie-athena/athena-design-team/main/skills/prototyper/profiles/Shared.md` |
 | `profiles/erp-transaction.md` | ERP 作業檔規則（必讀） | `raw.githubusercontent.com/Jessie-athena/athena-design-team/main/skills/prototyper/profiles/erp-transaction.md` |
 | `profiles/erp-setup.md` | 模組類型為設定檔時加載 | `raw.githubusercontent.com/Jessie-athena/athena-design-team/main/skills/prototyper/profiles/erp-setup.md` |
-| `profiles/erp-components/*.md` | ListSearch / DataGrid / FormGroup / FormFooter（4 份必抓）+ Stepper / SummaryCard（作業檔必抓） | `raw.githubusercontent.com/Jessie-athena/athena-design-team/main/skills/prototyper/profiles/erp-components/<name>.md` |
+| `profiles/erp-components/*.md` | ListSearch / DataGrid / FormGroup / FormFooter（4 份必抓）+ Stepper / SummaryCard（作業檔必抓）+ Permissions / RelBanner / Skeleton（依單據需求） | `raw.githubusercontent.com/Jessie-athena/athena-design-team/main/skills/prototyper/profiles/erp-components/<name>.md` |
 | `templates/module-page.html` / `psi-transaction-page.html` / `setup-page.html` | starter template，依模組類型挑一份（財務 / 一般作業檔 → module-page；進銷存作業檔 → psi-transaction-page；設定檔 → setup-page） | `raw.githubusercontent.com/Jessie-athena/athena-design-team/main/skills/prototyper/templates/module-page.html` |
 | `REFERENCE.md` | token / 元件對照 / `app.js` 起手式（按需） | `raw.githubusercontent.com/Jessie-athena/athena-design-team/main/skills/prototyper/REFERENCE.md` |
 
@@ -42,14 +42,22 @@ allowed-tools: Read Write Edit Glob Grep
     - `${CLAUDE_SKILL_DIR}/profiles/erp-components/FormGroup.md`（form-grid 4 欄 / 跨欄 modifier / RWD）
     - `${CLAUDE_SKILL_DIR}/profiles/erp-components/FormFooter.md`（記錄分頁器 / 主 CTA / 狀態-按鈕矩陣 / dirty-guard）
   - **作業檔另載**（設定檔免載）：
-    - `${CLAUDE_SKILL_DIR}/profiles/erp-components/Stepper.md`（狀態 Stepper：步序判定 / 動態第 ④ 步 / 驗收七值 / voided-banner；設定檔無 Stepper）
+    - `${CLAUDE_SKILL_DIR}/profiles/erp-components/Stepper.md`（狀態 Stepper：步序判定 / 動態第 ④ 步 / 驗收七值 / 庫存單 5 步含過場步（唯讀＋可編輯）/ voided-banner；設定檔無 Stepper）
     - `${CLAUDE_SKILL_DIR}/profiles/erp-components/SummaryCard.md`（Summary Card 兩種 Layout；單指標 + 4 步動態 stepper、6 值結轉模型插槽）
+  - **依單據需求另載**（命中才載；對齊 `庫存模組` 標準）：
+    - `${CLAUDE_SKILL_DIR}/profiles/erp-components/Permissions.md`（角色分流 / 唯讀檢視 / `perm-block` 無權限全頁遮罩）
+    - `${CLAUDE_SKILL_DIR}/profiles/erp-components/RelBanner.md`（`rel-banner` 關係 / 沖銷情境橫幅）
+    - `${CLAUDE_SKILL_DIR}/profiles/erp-components/Skeleton.md`（`.sk` 載入骨架）
 - **反覆審查問題**：`${CLAUDE_SKILL_DIR}/pitfalls.md`（每次製作前掃一眼）
 - **詳細展開（工作流明細 / 權重規則明細 / 決策題 / 完整 Examples / token / 元件對照 / `app.js` 起手式）**：`${CLAUDE_SKILL_DIR}/REFERENCE.md`
 - **Starter templates**：
   - 財務 / 一般作業檔（含狀態流程，legacy `.erp-*`）：`${CLAUDE_SKILL_DIR}/templates/module-page.html`
   - 進銷存作業檔（DS 對齊 `.app-*`；交易明細 / 6 值擴充狀態機 / 單指標 Summary Card）：`${CLAUDE_SKILL_DIR}/templates/psi-transaction-page.html`
   - 設定檔（master data，僅 active true/false）：`${CLAUDE_SKILL_DIR}/templates/setup-page.html`
+- **Canonical 樣式資產（產出時複製、逐字勿改）**：
+  - `${CLAUDE_SKILL_DIR}/assets/app.css`——完整元件樣式（對齊 Figma `財務作業模組` 變數 + `庫存模組` 標準；icon 規則同時涵蓋 Iconify `<iconify-icon>` 與 `.material-symbols-outlined`）。複製到 bundle 的 `app.css`。
+  - `${CLAUDE_SKILL_DIR}/assets/ds/`（`colors_and_type.css` + `design-tokens-base.css` + `design-tokens-athena.css`；`colors_and_type.css` 已 `@import` 另兩支 + Google Fonts）。複製到 bundle 的 `ds/`。
+  - **產出流程**：複製上述資產 → 只新寫 `.html`（markup）與 `app.js`（互動）。**勿**依 `profiles/erp-components/*.md` 文字規格重寫 CSS（那些文字僅供解說 / 查 class 與行為）。
 
 > **工具白名單**：本 skill frontmatter 的 `allowed-tools` 鎖定只用 `Read` / `Write` / `Edit` / `Glob` / `Grep`。設計用意——prototype 製作只需檔案讀寫與搜尋，**刻意不開放** `Bash` / `WebFetch` / `NotebookEdit` 等，避免製作流程被工具失控擴張。詳見 `README.md §工具白名單`。
 
@@ -130,7 +138,7 @@ allowed-tools: Read Write Edit Glob Grep
 - **IMPORTANT:** 預設 `<html lang="zh-Hant-TW">`（多語環境由 profile 指定）。**Why**：lang 屬性決定瀏覽器字型回退、斷字規則、螢幕閱讀器發音；錯設 `en` 時中文常被誤套西文字型，行高與標點間距整批跑掉
 - **IMPORTANT:** CSS 載入順序：design tokens CSS → `app.css`；icon 改用 **Iconify web component**，在 `<head>` 以 `<script src="https://code.iconify.design/iconify-icon/2.1.0/iconify-icon.min.js"></script>` 載入（這是 JS web component，不是 CSS，見下方 icon 條），**不再載 Material Symbols 字型**。**Why**：tokens 必須先載入才能被後續 stylesheet 引用；`app.css` 寫應用層覆寫必須最後，否則 token 變數抓不到值、自訂樣式被 DS 預設蓋掉；Iconify script 早於 body 載入，custom element 才能在首次渲染前定義好
 - **IMPORTANT:** Vue 3 production CDN，**禁**引入其他 UI library。**Why**：prototype 用途是「reviewer 點一下開檔即試玩」，多加 library 增加下載 / 環境配置成本；視覺由 DS 已涵蓋，多餘 library 反成視覺噪音與整合阻力
-- **IMPORTANT:** 樣式寫到 `app.css`、互動寫到 `app.js`，**禁**在 `.html` 內嵌 `<style>` / `<script>`（CDN 與引用 `app.js` 的 `<script src>` 例外）。**Why**：prototype 後續會 port 到 production Vue SFC；三檔分離可直接貼進 `<template>` / `<script>` / `<style scoped>`，內嵌會逼下一手先 untangle
+- **IMPORTANT:** `app.css` 與 `ds/`（token）一律**從 skill 的 `${CLAUDE_SKILL_DIR}/assets/` 逐字複製，禁止自行重寫**——`assets/app.css` 是已對齊 Figma／標準的 canonical 元件樣式（完整、selector 覆蓋率 100%）。模組**專屬**樣式才在複製後的 `app.css` **末尾追加 override 區塊**（不得改動 canonical 規則）。互動寫到 `app.js`；**禁**在 `.html` 內嵌 `<style>` / `<script>`（CDN 與引用 `app.js` 的 `<script src>` 例外）。**Why**：實測「依文字規格重寫 app.css」selector 覆蓋率僅約標準一半、容器級數值（如 summary-card padding／漸層底）大量漂移——樣式準確對齊只能靠複製 canonical CSS，文字規格僅供解說。三檔分離仍利於後續 port 到 production Vue SFC
 - **IMPORTANT:** Icon 一律用 **Iconify web component**（`<iconify-icon>`），且**只用 `material-symbols:` 圖示集**——它渲染的就是 DS 指定的 Material Symbols 同一套字形，只是換成 web component 載入，**禁**另引 mdi / lucide / tabler 等其他 icon set。**Why**：DS 仍是「用哪個 glyph、實心還是線條」的唯一來源，Iconify 只是 prototype 的交付機制；限定 `material-symbols:` 前綴才不會讓 prototype 視覺偏離 DS、避免混搭。寫法：
   - **標記**：`<iconify-icon icon="material-symbols:edit-outline" width="24"></iconify-icon>`；icon-only 按鈕仍需 `aria-label`
   - **實心 vs 線條是 DS 的決定，不要自己反射選**：對應 DS 的 FILL 1 / 0 —— 實心 = 無後綴（`material-symbols:visibility`）、線條 = 加 `-outline`（`material-symbols:visibility-outline`）。

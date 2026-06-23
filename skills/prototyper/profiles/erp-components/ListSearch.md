@@ -4,7 +4,7 @@
 > 載入時機：隨 ERP profile **自動載入**（無論作業檔 / 設定檔；由 `SKILL.md §支援檔案` 規定——該處為載入規則的**單一來源**）。
 >
 > 上層 profile：`profiles/erp-transaction.md`
-> 同層元件：`ListSearch.md` / `DataGrid.md` / `FormGroup.md` / `FormFooter.md` / `SummaryCard.md` / `Stepper.md`
+> 同層元件：`ListSearch.md` / `DataGrid.md` / `FormGroup.md` / `FormFooter.md` / `SummaryCard.md` / `Stepper.md` / `Permissions.md` / `RelBanner.md` / `Skeleton.md`
 
 ---
 
@@ -255,3 +255,87 @@
 - 高 32px、border-top 1px `#D7DAE0`
 - 含 Plus icon 16×16 色 `#2877EE` + label `#2877EE` Roboto Medium 14px
 - 點擊觸發「新增此選項」流程
+
+---
+
+## 批次選取 chip（`chip--selected`）
+
+> 對齊基準：`design-prototype/web-erp/庫存模組`。List 進入批次模式（`selectedIds.length > 0`）時，toolbar 主操作切換為批次操作，並以 `chip--selected` 顯示「已選取 N 筆」+ 清除入口。`psi-transaction-page.html` 已採此結構，本節為其權威規格。
+
+### Anatomy
+
+```html
+<span class="chip--selected">
+  <span class="chip--selected__label">已選取 {{ selectedIds.length }} 筆</span>
+  <button class="chip--selected__close" @click="clearSelection" aria-label="取消選取">
+    <iconify-icon icon="material-symbols:close"></iconify-icon>
+  </button>
+</span>
+```
+
+### 視覺規格
+
+| 元素 | 規格 |
+|---|---|
+| `.chip--selected` | `display: inline-flex; align-items: center; gap: 6px; height: 40px; padding: 8px 16px; background: transparent; border: 1px solid rgb(var(--color-sf-info))`（#2E90FA）`; border-radius: var(--radius-sm)`（4px）`; color: rgb(var(--color-sf-info)); font: Roboto Medium 14px / line-height 150% / letter-spacing .24px; white-space: nowrap` |
+| `.chip--selected__close` | `16×16; display: inline-flex; align-items: center; justify-content: center; background: transparent; border: none; cursor: pointer; color: rgb(var(--color-sf-info)); padding: 0` |
+| close icon | `material-symbols:close`，font-size 16px |
+| close hover | `background: rgba(var(--color-sf-info), .10); border-radius: var(--radius-xs)`（2px） |
+
+### 互動
+
+- 出現條件：`v-if="selectedIds.length > 0"`（且 `canSelect`，詳 `Permissions.md`）。
+- 與 toolbar 主操作互斥：未選取顯示主 CTA（新增 / 匯入…）；選取 > 0 顯示批次操作群 + `chip--selected`。
+- 點 close → `clearSelection` 清空 `selectedIds` 並退出批次模式（toolbar 切回主操作）。
+- 高度 `40px` 與 toolbar 其他按鈕齊高，視覺對齊同一列。
+
+> 用 info 藍（#2E90FA）而非 primary 藍（#2877EE）：批次選取是「當前選取範圍」的中性提示，與主操作 CTA 的 primary 色刻意區隔。
+
+---
+
+## 日期區間欄（`date-range`）
+
+> 對齊基準：`design-prototype/web-erp/庫存模組`（領料單 / 出庫單搜尋區的「領料日期 / 出庫日期」）。搜尋區的「起訖日期」**標準採自訂雙月曆 `date-range`**，取代 `REFERENCE.md` 對照表中「兩個 `<input type="date">`」的最小實作。簡易 prototype 仍可退回兩個原生日期欄，但對齊庫存標準時用本元件。
+
+### Anatomy
+
+```html
+<div class="field field--range">
+  <label>領料日期</label>
+  <div class="date-range">
+    <button type="button" class="input filled date-range__trigger" :class="{ 'is-placeholder': !range.from && !range.to }" @click="rangeOpen = !rangeOpen">
+      <span class="date-range__text">{{ rangeLabel }}</span>
+      <span class="date-range__icon"><iconify-icon icon="material-symbols:calendar-today-outline"></iconify-icon></span>
+    </button>
+    <div v-if="rangeOpen" class="date-range__backdrop" @click="rangeOpen = false"></div>
+    <div v-if="rangeOpen" class="date-range__pop">
+      <div class="cal"><!-- 雙月：.cal__month × 2，每月 .cal__head + .cal__grid（.cal__dow / .cal__day / .cal__daynum） --></div>
+      <div class="date-range__actions">
+        <button class="cal__btn" @click="clearRange">清除</button>
+        <button class="cal__btn cal__btn--primary" @click="applyRange">確定</button>
+      </div>
+    </div>
+  </div>
+</div>
+```
+
+### 視覺規格（重點）
+
+| 元素 | 規格 |
+|---|---|
+| `.date-range__trigger` | 沿用 `.input.filled`（filled 底 + 上圓角 + 底線；詳 `erp-transaction.md §輸入欄樣式`）；`display: flex; align-items: center; justify-content: space-between; gap: 8px; width: 100%; text-align: left; cursor: pointer` |
+| placeholder 態 | `.is-placeholder .date-range__text { color: var(--text-placeholder)`（#67717E）`}` |
+| `.date-range__icon` | `material-symbols:calendar-today-outline`，18px，色 `var(--text-secondary)` |
+| `.date-range__pop` | `position: absolute; top: calc(100% + 6px); left: 0; z-index: 41; background: #FFFFFF; border: 1px solid var(--border-default)`（#D7DAE0）`; border-radius: var(--radius-lg)`（8px）`; box-shadow: var(--shadow-e4)`（menu 層） |
+| `.cal__month` | `width: 252px`；雙月以 `border-left: 1px solid #EEF0F3` 分隔 |
+| `.cal__daynum` | `32×32; border-radius: var(--radius-full); font-size: 12px`；hover `background: rgba(var(--color-sf-primary), .10)` |
+| 選取端點（`.is-start` / `.is-end`） | `background: rgb(var(--color-sf-primary))`（#2877EE）`; color: #FFFFFF` |
+| 區間中段（`.in-range`） | `background: rgba(var(--color-sf-primary), .12)`（淡藍帶，端點半寬） |
+| `.cal__btn` | `height: 32px; padding: 7px 12px; border: none; background: transparent; border-radius: var(--radius-sm); font: Medium 14px; color: rgb(var(--color-sf-primary))`；hover `background: rgba(var(--color-sf-primary), .08)` |
+
+### 互動
+
+- 點 trigger 開 popup；點 backdrop / 再點 trigger / `Esc` 關閉。
+- 選第一天為 start、第二天為 end；反序自動對調；區間中段顯示 `.in-range` 淡藍帶。
+- 「確定」寫回 `range.from / range.to` 並更新 trigger 文字（格式 `YYYY-MM-DD ～ YYYY-MM-DD`）；「清除」清空兩端並回 placeholder。
+- 與搜尋區其他欄位同高（trigger = 40px filled），佔一個 `.field` 槽位（換行 / 收合行為比照 §RWD）。

@@ -4,7 +4,7 @@
 > 載入時機：**作業檔**（transaction documents）必載；設定檔無 Stepper（`erp-setup.md` 已明定），免載（由 `SKILL.md §支援檔案` 規定——該處為載入規則的**單一來源**）。
 >
 > 上層 profile：`profiles/erp-transaction.md`
-> 同層元件：`ListSearch.md` / `DataGrid.md` / `FormGroup.md` / `FormFooter.md` / `SummaryCard.md` / `Stepper.md`
+> 同層元件：`ListSearch.md` / `DataGrid.md` / `FormGroup.md` / `FormFooter.md` / `SummaryCard.md` / `Stepper.md` / `Permissions.md` / `RelBanner.md` / `Skeleton.md`
 >
 > **上游設計文件**：`../../../design-system-architect/references/components/Stepper.md`（格式見 `component-doc-schema.md`）。分工——**設計文件**是 what/why/token/state/a11y 的權威；**本 profile** 是「如何用單檔 HTML/CSS class 落地」的實作層。本檔的語意色 / 步序狀態決策待收編進設計文件後改為引用，避免兩處漂移。
 
@@ -23,8 +23,11 @@
 | 基本型 | 3 步 | canonical 4 值（`draft` / `submitted` / `approved` + `voided` 分支） | 本檔 |
 | 動態第 ④ 步・**驗收模型** | 4 步 | 七值（+ `partial` / `received` / `settled`），由下游驗收單回寫；首見於採購單 | 本檔 + `erp-transaction.md §進銷存擴充狀態機（七值驗收模型）` |
 | 動態第 ④ 步・**結轉模型** | 4 步 | 6 值（+ `partial` / `done` / `cancelled`），由本單結轉進度驅動；首見於請購單 | 第 ④ 步插槽與 Layout 見 `SummaryCard.md`；狀態機見 `erp-transaction.md §進銷存擴充狀態機` |
+| **庫存單・含過場步** | 5 步 | Odoo 原生 5 階，5 標籤固定（草稿 / 等待前置作業 / 已提交 / 就緒 / 已核准），含 2 個過場顯示步；唯讀型恆停終態、可編輯型另有 voided 分支 | 本檔 §庫存單 5 步（含過場步）+ `erp-transaction.md §進銷存庫存異動單狀態機` |
 
-> 兩個動態變體共用本檔的結構命名、判定邏輯與樣式 token；差異只在第 ④ 步插槽的狀態集 / 標籤 / 配色。**不可混用**於同一模組。
+> 前三個變體共用本檔的結構命名、判定邏輯與樣式 token；差異只在第 ④ 步插槽的狀態集 / 標籤 / 配色。**不可混用**於同一模組。庫存單 5 步另立規則（見專節），其過場步橘色與前三者不同。
+>
+> **庫存模組內部仍分流，勿一律套 5 步**：5 步**只**用於 **stock.picking 實體異動單**（入庫 / 出庫 / 領料 / 調撥——有 waiting/assigned 過場態）；**差異調整單**（盤點 / 耗用，`psi.stock.count` 類，無實體 picking 流程）走**基本型 3 步 + voided**（`草稿 / 已提交 / 已核准` + 已作廢分支），**不套過場步**。判斷依據：單據 PRD 的狀態機是否含 `waiting` / `assigned`——有才用 5 步。以 PRD / 既有 prototype 的狀態流程為準（資料來源權重最高）。
 
 ## 七狀態總表（驗收模型）
 
@@ -141,7 +144,63 @@
 | 容器 | `.stepper { display: flex; align-items: flex-start; gap: 16px; }` |
 | 轉場 | `background / color 200ms ease-out` |
 
-> **語意色僅四種**：綠（已完成的中間步）、藍（當前步 + 所有終態步，含 partial / received / settled / done）、紅（作廢 / 取消，走 voided-banner 不進 stepper）、中性灰（未達 / placeholder）。**禁**為個別狀態另造新色（已於 2026-06-21 取消「靛」「結轉已結案灰」兩種變體色）。
+> **語意色（基本型 / 結轉 / 驗收模型）僅四種**：綠（已完成的中間步）、藍（當前步 + 所有終態步，含 partial / received / settled / done）、紅（作廢 / 取消，走 voided-banner 不進 stepper）、中性灰（未達 / placeholder）。**禁**為個別狀態另造新色（已於 2026-06-21 取消「靛」「結轉已結案灰」兩種變體色）。
+> **唯一例外**：**庫存單 5 步**的**過場步**（`waiting` 等待前置作業 / `assigned` 就緒）當前態用**橘**（`rgb(var(--color-sf-warning))` #F79009 + 內白環），對應 Odoo stock.picking 過場態的既有設計，**僅限該變體**（見 §庫存單 5 步）；其餘步序仍走上述四色。
+
+## 庫存單 5 步（含過場步）
+
+> 對齊基準：`design-prototype/web-erp/庫存模組`（入庫 / 出庫 / 領料 / 調撥）。**stock.picking 實體異動單**——不論唯讀或可編輯——採 Odoo 原生 stock.picking 的 5 階生命週期，5 個顯示標籤固定為 **草稿 / 等待前置作業 / 已提交 / 就緒 / 已核准**；其中第 2、4 階是**過場顯示步**（單據不停留、僅反映系統流程位置，橘色）。狀態機本體見 `erp-transaction.md §進銷存庫存異動單狀態機`。
+
+> **適用範圍（重要，勿一律套用）**：本 5 步**只**用於庫存模組的 **stock.picking 實體異動單**（入庫 / 出庫 / 領料 / 調撥，狀態含 `waiting` / `assigned` 過場態）。**判斷依據＝該單 PRD 的狀態機是否含 `waiting` / `assigned`**。
+> - **庫存模組的差異調整單**（盤點 / 耗用，`psi.stock.count` 類，狀態為 `草稿 / 已提交 / 已核准 / 已作廢`、無過場態）→ 走**基本型 3 步 + voided**（見本檔頂部基本型），**不套**本 5 步。
+> - **非庫存模組**（財務、請購、採購、銷貨折讓等）→ 各依其狀態機（基本型 / 結轉 / 驗收），**禁用**本 5 步過場步模型。
+> - 衝突時以 PRD / 既有 prototype 的狀態流程為準（資料來源權重最高，見 `SKILL.md §資料來源權重`）。
+
+### 兩種庫存單變體（共用 5 標籤、共用過場橘色）
+
+| 變體 | 典型單據 | state keys | 使用者動作 | voided 分支 |
+|---|---|---|---|---|
+| **唯讀（系統產生）** | 入庫單 / 出庫單 | `draft` / `waiting` / `confirmed` / `assigned` / `done` | 無（上游核准後系統產生、恆停 `done`） | 無（沖銷改產生沖銷單，非作廢） |
+| **可編輯** | 領料單 / 耗用單 | `draft` / `waiting` / `submitted` / `assigned` / `approved` | 有（`submit` / `approve` / `void`，過場態為核准流程中的瞬時態） | **有**：`voided` 時整段改 `.voided-banner`（見 §voided-banner） |
+
+> 兩變體**標籤相同、過場步配色相同**，差別只在：state key 命名（confirmed↔submitted、done↔approved）、有無使用者動作、有無 voided 分支。List 狀態 chip 對應見 `DataGrid.md §狀態 Chip`（含 `st-chip--waiting` / `st-chip--assigned` 橘色過場 chip）。
+
+**5 步標籤與性質**
+
+| n | label | 唯讀 state | 可編輯 state | 性質 |
+|---|---|---|---|---|
+| 1 | 草稿 | `draft` | `draft` | 一般步 |
+| 2 | 等待前置作業 | `waiting` | `waiting` | **過場步**（transitional，橘） |
+| 3 | 已提交 | `confirmed` | `submitted` | 一般步 |
+| 4 | 就緒 | `assigned` | `assigned` | **過場步**（transitional，橘） |
+| 5 | 已核准 | `done` | `approved` | 一般步（終態 / 可編輯型再分 voided 分支） |
+
+- **唯讀型恆停終態**：系統產生即為終態（唯讀 `done` / 可編輯歷史單 `approved`），stepper 顯示前 4 步 `--done` 綠、第 5 步 `--current`。可編輯型在 draft / submitted 等中間態時照下方判定逐步呈現。
+- **過場步配色**：過場步（waiting / assigned）**當其為當前步**時，bubble 與 label 用**橘色** `rgb(var(--color-sf-warning))`（#F79009）+ 內白環，標示「系統處理中、非使用者待辦」；一旦越過則照常規 `--done` 綠。這是與前三變體最大的差異——前三者沒有橘色過場步。
+- **判定邏輯**：沿用通用規則（`n < stepCur` → `--done` 綠 / `n === stepCur` → current / `n > stepCur` → 灰），唯「current 且該步是過場步」時 current 色由藍改橘。
+- **可編輯型 voided**：`form.state === 'voided'` 時整段 Stepper 改 `.voided-banner`（紅色「已作廢」徽章），不顯示 5 步（見 §voided-banner）。
+
+```js
+// state keys 依變體選一組；標籤與過場判定共用
+const STK_STEPS = [
+  { n:1, label:'草稿' },
+  { n:2, label:'等待前置作業', transitional:true },
+  { n:3, label:'已提交' },
+  { n:4, label:'就緒',         transitional:true },
+  { n:5, label:'已核准' },
+];
+// 唯讀：{draft:1,waiting:2,confirmed:3,assigned:4,done:5}；可編輯：{draft:1,waiting:2,submitted:3,assigned:4,approved:5}
+function stkStepCur(s, map){ return map[s] || 1; }
+// current 且該步 transitional → 額外掛 .stepper__step--waiting（橘）；其餘同通用 stepClass
+function stkStepClass(n,s,map){
+  const c = stkStepCur(s,map);
+  if (n < c) return 'stepper__step--done';
+  if (n === c) return STK_STEPS[n-1].transitional ? 'stepper__step--current stepper__step--waiting' : 'stepper__step--current';
+  return '';
+}
+```
+
+> 對應樣式：`.stepper__step--waiting .stepper__bubble { background: rgb(var(--color-sf-warning)); box-shadow: inset 0 0 0 1px #fff; }` 與 `.stepper__step--waiting .stepper__label { color: var(--text-primary); font-weight: 500; }`。橘色**只**用於過場步的 current 態，不擴及連接線（連接線仍依 is-done / is-current 綠 / 藍）。
 
 ## voided-banner
 

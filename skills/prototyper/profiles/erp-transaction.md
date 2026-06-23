@@ -44,7 +44,7 @@
   - **進銷存作業檔** → `templates/psi-transaction-page.html`（DS 對齊 `.app-*` 命名；含單指標 Summary Card + 4 步動態 stepper / 交易明細 DataGrid / 結轉精靈占位 / 狀態-按鈕矩陣 footer；適用 6 值擴充狀態機，詳 §進銷存擴充狀態機）
   - 設定檔 → `templates/setup-page.html`（含設定檔側欄 / 批次刪除 / active chip / 儲存變更 footer）
 - **輸出**: `prototype/project/<模組中文名>.html`
-- **配套資源**: `prototype/app.js`、`prototype/app.css`、`prototype/ds/colors_and_type.css`
+- **配套資源**: `prototype/app.css` + `prototype/ds/`（**從 skill `${CLAUDE_SKILL_DIR}/assets/` 逐字複製的 canonical 樣式，勿重寫**，見 `SKILL.md §支援檔案`）、`prototype/app.js`（互動，新寫）
 - **規格來源**: `docs/notion/*.md`（檔名同模組中文名）
 
 ---
@@ -58,7 +58,7 @@ ERP prototype 的視覺語言來自 **Claude Design 內部 design system bundle*
 - 必讀：`athena-design-system/README.md`（品牌語氣、色彩、字型、icon、layout、states、elevation 全規範）
 - 元件 CSS：`athena-design-system/project/components.css`（`.input.filled`、`.dg`、`.shell .rail-nav` 等所有 class 規格）
 
-prototype 的 `prototype/ds/colors_and_type.css` 與 `prototype/app.css` 已預先把 DS 的 token / 元件樣式 wire 好。**AI 容易反射地走 Bootstrap / generic web app 樣式（outlined input、所有按鈕帶 icon、hover-only action 等），請每次製作前掃一次 `pitfalls.md` 的「DS 反射對照表」。**
+`prototype/ds/` 與 `prototype/app.css` 是**從 skill `${CLAUDE_SKILL_DIR}/assets/` 複製**的 canonical CSS，已把 DS 的 token / 元件樣式完整 wire 好——**直接複製、勿依文字規格重寫**（重寫會失真）。**AI 容易反射地走 Bootstrap / generic web app 樣式（outlined input、所有按鈕帶 icon、hover-only action 等），請每次製作前掃一次 `pitfalls.md` 的「DS 反射對照表」。**
 
 ---
 
@@ -205,6 +205,53 @@ prototype 頁面層級**不可**出現第二條捲軸。reviewer 反覆遇到的
 - **與 6 值模型的差異**：終態用語（已驗收/已結清 vs 已結案）、終止動作（`action_void` vs `action_cancel`）。第 ④ 步配色兩模型**一律 primary 藍**（2026-06-21 統一，取消結轉模型 partial 靛 / done 灰）。兩變體**不可混用**於同一模組。
 - **再次核准警示**：`action_unapprove` 會設 `was_unapproved = true`；回到 `submitted` 時於 Summary Card 下方顯示 `form-banner.is-warning`「此單曾被取消核准，請重新確認明細後再次提交核准。」
 - 步序映射、判定邏輯、樣式 token、引用程式碼 → 詳 `profiles/erp-components/Stepper.md`。
+
+### 進銷存庫存異動單狀態機（documented variant）
+
+> 對齊基準：`design-prototype/web-erp/庫存模組`（入庫 / 出庫 / 領料 / 調撥）。庫存模組的 **stock.picking 實體異動單**採 Odoo 原生 `stock.picking` 5 階生命週期，5 標籤固定（草稿 / 等待前置作業 / 已提交 / 就緒 / 已核准），其中第 2、4 階為**過場步**（單據不停留、stepper 橘色）。依「是否可編輯」分**唯讀**與**可編輯**兩子變體（同模組只取一套）。採此變體 chat handoff 須點名「採進銷存庫存異動單狀態機（唯讀 / 可編輯）」。Stepper 步序映射、過場橘色判定、引用程式碼 → `profiles/erp-components/Stepper.md §庫存單 5 步（含過場步）`；List 狀態 chip（含 `st-chip--waiting` / `st-chip--assigned` 橘）→ `DataGrid.md §狀態 Chip`。
+>
+> **適用邊界（重要）**：本 5 階狀態機**只**適用 stock.picking 實體異動單（入庫 / 出庫 / 領料 / 調撥）。庫存模組內的**差異調整單**（盤點 / 耗用，`psi.stock.count` 類）走 canonical `草稿 → 已提交 → 已核准` + `已作廢` 分支（基本型 3 步 stepper，**無過場態**、動作 `提交 / 核准 / 取消核准 / 作廢`、草稿以「刪除」物理移除）——即上方 §State Machine 主表，**不套**本 5 階。判斷依據：該單 PRD 狀態機是否含 `waiting` / `assigned`。
+
+**子變體 A — 唯讀（系統產生）**：入庫單 / 出庫單。由上游單據（驗收單 / 退貨單 / 銷貨退回等）核准後**系統自動產生**，單身不可編。
+
+| State | label | 性質 | 動作 |
+|---|---|---|---|
+| `draft` | 草稿 | 一般步 | （系統） |
+| `waiting` | 等待前置作業 | **過場步**（橘） | （系統） |
+| `confirmed` | 已提交 | 一般步 | （系統） |
+| `assigned` | 就緒 | **過場步**（橘） | （系統） |
+| `done` | 已核准 | 終態 | — |
+
+- **無使用者狀態動作**：不提供 submit / approve / void；系統產生時通常即為 `done`（恆停終態）。
+- **沖銷不走作廢**：需取消時由上游沖銷並**產生對應沖銷單**（`doc_type === 'reverse'`，數量負值），而非把本單改 `voided`。沖銷情境以 `rel-banner--reverse` 說明（詳 `RelBanner.md`）。
+
+**子變體 B — 可編輯**：領料單 / 耗用單。有使用者動作；過場步是核准流程中的瞬時態（單據不停留、僅顯示）。
+
+| State | label | 性質 | 動作 |
+|---|---|---|---|
+| `draft` | 草稿 | 一般步 | `action_submit` → `submitted`；可 `unlink`（草稿物理刪除） |
+| `waiting` | 等待前置作業 | **過場步**（橘） | （系統瞬時態，如等待前置調撥就緒） |
+| `submitted` | 已提交 | 一般步 | `action_approve` → `approved`；`action_void` → `voided` |
+| `assigned` | 就緒 | **過場步**（橘） | （核准內瞬過） |
+| `approved` | 已核准 | 終態（核准即扣帳） | 更正走「退回 / 退料」產生新單，**非**狀態回退 |
+| `voided` | 已作廢 | 終態（獨立分支） | 整段改 `.voided-banner`（不顯示 stepper） |
+
+- **動作命名**：`action_submit / action_approve / action_void`（沿用 canonical；無 `action_unapprove`——已核准的更正走「退料 / 退回」產生新單，比照唯讀型沖銷的精神）。
+- **退料 / 退回**：由已核准單衍生 `doc_type === 'return'` 的新單（沿用原單號關係，以 `dg__rtag`「（退料單）」標示，詳 `DataGrid.md`）。
+- **鎖定**：`isLocked = !['draft','submitted'].includes(state)`——`approved` / `voided` 鎖 header 欄位（詳 §角色權限與無權限遮罩 / `Permissions.md`）。
+
+**兩子變體共通**：`doc_type` = `forward`（正向）/ `reverse`（沖銷）/ `return`（退料）；入庫另有 `source_type` = `receipt` / `return`，影響「對象」角色標籤（供應商 / 客戶）。關聯導引以 Smart Bar `card-btn` 跳上游 / 沖銷 / 前版單（詳 §Smart Bar `card-btn` 結構）。
+
+---
+
+## 角色權限與無權限遮罩
+
+> 對齊基準：`design-prototype/web-erp/庫存模組`。進銷存作業檔常依**角色**分流可視 / 可編 / 可核；權限**正交於狀態機**（狀態決定「這張單能做什麼」、角色決定「這個人能不能做」）。完整角色階層、computed 可視性、各區套用、`perm-block` 無權限全頁遮罩 → **`profiles/erp-components/Permissions.md`**（依需求載入）。重點速記：
+
+- prototype 以 `<div class="app-shell" :data-role="role">` 承載角色；所有可視性走 computed（`canView` / `canEdit` / `canApprove` / `canDeleteDraft` / `canSelect` / `isReadOnly`），template 只讀 boolean。
+- **狀態鎖 vs 角色鎖**：欄位可改需 `!isLocked && !isReadOnly` 同時成立（`isLocked = !['draft','submitted'].includes(state)`）。
+- **無權限不渲染入口**：`v-if="canEdit"` 隱藏主操作 / 列編輯鈕（唯讀切 chevron，**禁直接隱藏入口**）；**禁**用 `disabled` 把欄位鎖死當權限表達。
+- **無檢視權限 → perm-block**：`blocked`（無 `canView` 進 List / Detail）時 main-panel 整段改 `perm-block`（lock icon + 返回首頁），與 `empty-state`（inbox，有權限查無資料）、Skeleton（loading）三者互斥。
 
 ---
 
@@ -511,8 +558,12 @@ App Shell 與多公司情境下的「公司別」過濾 dropdown **預設為空�
 | Form Group / form-grid RWD | `profiles/erp-components/FormGroup.md` |
 | Form Footer（記錄分頁器 / 主 CTA / 狀態-按鈕矩陣） | `profiles/erp-components/FormFooter.md` |
 | Summary Card（單指標 + 4 步動態 stepper；作業檔 Form View） | `profiles/erp-components/SummaryCard.md` |
+| 角色權限 + perm-block 無權限遮罩（依需求載入） | `profiles/erp-components/Permissions.md` |
+| rel-banner 關係 / 沖銷情境橫幅（依需求載入） | `profiles/erp-components/RelBanner.md` |
+| Skeleton 載入骨架（依需求載入） | `profiles/erp-components/Skeleton.md` |
 
 > 撰寫 chat handoff 時若 prototype 命中其中任一元件，請在「對齊方向」段附上對應子檔路徑，方便 reviewer 直接跳到規格。
+> List 搜尋區的 `chip--selected`（批次選取）與 `date-range`（日期區間）規格併入 `ListSearch.md`；明細 `gift-tag` / `link-cell--static` 併入 `DataGrid.md`。
 
 ---
 

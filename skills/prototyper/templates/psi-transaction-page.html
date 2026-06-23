@@ -24,7 +24,8 @@
      - List View 欄位、搜尋 filter、preset 選項
      - Form View sections、明細 DataGrid 欄位、狀態-按鈕矩陣
   3. 對應 reactive state 與 handlers 寫到 ../app.js（禁止內嵌）
-  4. 模組專屬樣式寫到 ../app.css（禁止 <style>、禁止 @apply）
+  4. ../app.css 與 ../ds/ 從 skill assets/ 逐字複製（canonical，勿重寫）；
+     模組專屬樣式才在 ../app.css 末尾追加 override（禁止 <style>、禁止 @apply）
 
   Icon：一律 Iconify web component（<iconify-icon>），只用 material-symbols: 集。
     - App shell chrome（Header home/通知/設定、Nav-rail、breadcrumb ★啟用態）= 實心(無後綴)
@@ -113,9 +114,22 @@
           <div class="main-panel__content">
 
             <!-- ============================================== -->
+            <!-- ===== 無權限遮罩（詳 profiles/erp-components/Permissions.md）===== -->
+            <!-- canView=false 角色進 List / Detail → 整段改 perm-block；list / form 互斥不渲染 -->
+            <!-- ============================================== -->
+            <div v-if="blocked" class="perm-block">
+              <div class="perm-state">
+                <span class="perm-state__icon"><iconify-icon icon="material-symbols:lock-outline"></iconify-icon></span>
+                <h2 class="perm-state__title">無檢視權限</h2>
+                <p class="perm-state__msg">您目前的角色沒有檢視此單據的權限，請洽系統管理者。</p>
+                <button class="btn btn--outline-primary" @click="goHome">返回首頁</button>
+              </div>
+            </div>
+
+            <!-- ============================================== -->
             <!-- ===== List View ============================== -->
             <!-- ============================================== -->
-            <section v-if="view === 'list'" class="list-view">
+            <section v-if="!blocked && view === 'list'" class="list-view">
               <!-- Toolbar：未選 → 主操作 + 匯入；有選 → 批次操作 + 已選 chip；右側 preset + 設定 -->
               <div class="toolbar">
                 <div class="toolbar__left" v-if="selectedIds.length === 0">
@@ -311,7 +325,7 @@
             <!-- ============================================== -->
             <!-- ===== Form View ============================== -->
             <!-- ============================================== -->
-            <section v-else class="form-view" :class="{ 'is-locked-view': isLocked, 'is-readonly-view': isReadOnly }">
+            <section v-else-if="!blocked" class="form-view" :class="{ 'is-locked-view': isLocked, 'is-readonly-view': isReadOnly }">
               <div class="form-view__body">
 
                 <!--

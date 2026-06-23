@@ -4,7 +4,7 @@
 > 載入時機：隨 ERP profile **自動載入**（無論作業檔 / 設定檔；由 `SKILL.md §支援檔案` 規定——該處為載入規則的**單一來源**）。
 >
 > 上層 profile：`profiles/erp-transaction.md`
-> 同層元件：`ListSearch.md` / `DataGrid.md` / `FormGroup.md` / `FormFooter.md` / `SummaryCard.md` / `Stepper.md`
+> 同層元件：`ListSearch.md` / `DataGrid.md` / `FormGroup.md` / `FormFooter.md` / `SummaryCard.md` / `Stepper.md` / `Permissions.md` / `RelBanner.md` / `Skeleton.md`
 >
 > **上游設計文件**：`../../../design-system-architect/references/components/DataGrid.md`（格式見 `component-doc-schema.md`）。分工——**設計文件**是 what/why/token/state/a11y 的權威（Lite/Full、token-reference、跨平台 adaptive）；**本 profile** 是「如何用單檔 HTML/CSS class 落地」的實作層。本檔的 token / 狀態決策待收編進設計文件後改為引用，避免兩處漂移。
 
@@ -144,6 +144,8 @@ DS 對齊命名以 `.dg` / `.dg-lines` 為**權威**。早期財務範本（`mod
 
 - **主鍵 / 代碼欄** `.code-cell`：`font-family: var(--font-family-mono); font-feature-settings: 'tnum'; font-weight: 500`
 - **可點擊連結** `.dg__link`：藍字 `var(--color-sf-primary)`、`font-weight: 500`；hover 加底線
+  - **唯讀變體** `.link-cell--static`：外觀同 `.dg__link` 但 `cursor: default`、hover **不**加底線——用於「看起來像連結但當前無權限 / 無目標可跳」的情境（如唯讀角色）
+  - **關聯標籤** `.dg__rtag`：連結文字後綴的灰字註記（如「（退料單）」），`margin-left: 6px; font-size: 12px; color: var(--text-secondary)`；標示該列是衍生 / 沖銷單
 - **次要灰字** `.dg__muted` / `.text-secondary`（如電話）：`color: var(--text-secondary)`（電話另加 `font-family: var(--font-family-mono)`）
 - **空值顯示**：一律 `—`（em dash），**禁**用「無」「N/A」
 - **關聯欄位顯示**：只顯示**名稱**，**不顯示代碼前綴**（如「北區」而非「N · 北區」）
@@ -165,7 +167,9 @@ DS 對齊命名以 `.dg` / `.dg-lines` 為**權威**。早期財務範本（`mod
 | class | 標籤 | 狀態色 |
 |---|---|---|
 | `.st-chip--draft` | 草稿 | 中性灰：背景 `var(--bg-surface-variant)`、邊框 `var(--border-strong)`、文字 `var(--text-secondary)` |
+| `.st-chip--waiting` | 等待前置作業 | `rgb(var(--color-sf-warning))` 橘（庫存單過場態；詳 `Stepper.md §庫存單 5 步`） |
 | `.st-chip--submitted` | 已提交 | `rgb(var(--color-sf-primary))` 藍 |
+| `.st-chip--assigned` | 就緒 | `rgb(var(--color-sf-warning))` 橘（庫存單過場態） |
 | `.st-chip--approved` | 已核准 | `rgb(var(--color-sf-success))` 綠 |
 | `.st-chip--partial` | 部分驗收 / 部分採購 | `rgb(var(--color-sf-primary))` 藍 |
 | `.st-chip--received` | 已驗收 | `rgb(var(--color-sf-primary))` 藍 |
@@ -243,7 +247,8 @@ DS 對齊命名以 `.dg` / `.dg-lines` 為**權威**。早期財務範本（`mod
 ### 採購單專屬
 
 - `.col-center`：序號／贈品欄置中
-- `.gift-yes`：贈品標記橘字 `#C2630A`、字重 `500`
+- `.gift-yes`：贈品標記橘字 `#C2630A`、字重 `500`（採購明細「是否贈品」欄的**文字式**標記）
+- `.gift-tag`：贈品**徽章式**標記（緊貼商品名後），對齊基準 `庫存模組`（出庫 / 領料明細）——`display: inline-flex; align-items: center; height: 20px; margin-left: 8px; padding: 0 8px; border-radius: 10px; font: Medium 11px / line-height 1; background: rgba(113,7,220,.10); color: #7107DC; border: 1px solid rgba(113,7,220,.35)`（紫，與狀態語意色不衝突）。文字式 `.gift-yes` 用於獨立「贈品」欄；徽章式 `.gift-tag` 用於商品名行內標註，**依版面擇一**
 - 金額欄唯讀值靠右、`tabular-nums`；總金額 `.is-amount-total` 字重 `700`、色 `#0F172A`
 
 ### 必填標記
