@@ -41,6 +41,10 @@
 | DropDownButton | [`components/DropDownButton.md`](components/DropDownButton.md) | ✅ 已產出（Full；5 軸 variant；overlay menu shadow-md；caret icon 16px） |
 | SplitButton | [`components/SplitButton.md`](components/SplitButton.md) | ✅ 已產出（Full；左段 4px/0/0/4px × 右段 0/4px/4px/0；divider 用 border-right） |
 | IconButton | [`components/IconButton.md`](components/IconButton.md) | ✅ 已產出（Lite；5 軸 variant；Rounded 4px / Full Rounded 1000px；無 token gap） |
+| TextArea | [`components/TextArea.md`](components/TextArea.md) | ✅ 已產出（Lite；resizer + character-counter；padding_left 12px；line-height 1.3 vs TextBox 1.5） |
+| MaskedTextBox | [`components/MaskedTextBox.md`](components/MaskedTextBox.md) | ✅ 已產出（Lite；template 軸 Date/Card/Phone；label=12px；含 Info + Warning state） |
+| OTP Input | [`components/OTPInput.md`](components/OTPInput.md) | ✅ 已產出（Full；3 shape × 4 size × 4 count = 48 variant；Filled/Outlined/Line 三種單格樣式） |
+| PasswordTextBox | [`components/PasswordTextBox.md`](components/PasswordTextBox.md) | ✅ 已產出（Lite；獨立元件；eye-toggle-btn 32×32；含 Info state；token gap 同 TextBox） |
 
 > 收編原則：`prototyper` 既有的深度元件規格（DataGrid / Stepper / SummaryCard…）為「prototype 單檔 HTML/CSS 落地層」；設計文件是「what/why/token/state 的權威」。補設計文件時**引用** profile，不重寫 token 決策（見 `component-doc-schema.md §8`）。
 
@@ -88,9 +92,10 @@
 |------|--------------|---------|
 | TextBox | 文字輸入 | ✅ 已採用 |
 | NumericTextBox | 數值 / 金額輸入 | ✅ 已採用 |
-| TextArea | 多行文字 | ⬜ 待分類 |
-| MaskedTextBox | 格式遮罩輸入（電話 / 統編） | ⬜ 待分類 |
-| OTP Input | 一次性驗證碼輸入 | ⬜ 待分類 |
+| TextArea | 多行文字（備註、說明欄） | ✅ 已採用 |
+| MaskedTextBox | 格式遮罩輸入（電話 / 統編 / 日期） | ✅ 已採用 |
+| OTP Input | 一次性驗證碼輸入 | ✅ 已採用 |
+| PasswordTextBox | 密碼輸入（含 eye toggle） | ✅ 已採用 |
 | In-place Editor | 行內就地編輯 | ⬜ 待分類 |
 | Signature | 手寫簽名 | ⬜ 待分類 |
 | Mention | @ 提及輸入 | ⬜ 待分類 |
