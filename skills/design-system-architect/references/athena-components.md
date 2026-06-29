@@ -98,10 +98,6 @@
 | PasswordTextBox | 密碼輸入（含 eye toggle） | ✅ 已採用 |
 | In-place Editor | 行內就地編輯 | ⬜ 待分類 |
 | Signature | 手寫簽名 | ⬜ 待分類 |
-| Mention | @ 提及輸入 | ⬜ 待分類 |
-| Smart Paste | AI 智慧貼上解析 | ⬜ 待分類 |
-| Smart TextArea | AI 輔助文字輸入 | ⬜ 待分類 |
-| Speech to Text | 語音轉文字輸入 | ⬜ 待分類 |
 
 ## 4. 輸入 — 選擇（Selection Inputs）
 
