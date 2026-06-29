@@ -2,7 +2,7 @@
 
 A multi-role AI product design team skill for B2B cross-platform (Web / App) product design workflows.
 
-> 專為 Athena 產品設計團隊打造的 Claude AI 虛擬夥伴，14 個專業角色分工協作，涵蓋從需求解析、使用者研究、市場洞察、產品策略、互動與視覺設計、文案、原型、設計系統、可用性測試、無障礙審查到 Dev Handoff 的完整產品設計流程。
+> 專為 Athena 產品設計團隊打造的 Claude AI 虛擬夥伴，15 個專業角色分工協作，涵蓋從需求解析、使用者研究、市場洞察、產品策略、互動與視覺設計、文案、原型、設計系統、可用性測試、無障礙審查到 Dev Handoff 的完整產品設計流程。
 
 ---
 
@@ -17,11 +17,12 @@ A multi-role AI product design team skill for B2B cross-platform (Web / App) pro
 
 ---
 
-## 團隊成員（14 角色）
+## 團隊成員（15 角色）
 
 ### Discovery Cluster（前期調研群）
 | 角色 | Skill 名稱 | 核心職責 | 何時呼叫 |
 |------|-----------|---------|---------|
+| PRD 撰寫師 | `prd-writer` | 從 brief 起草完整 ERP 模組 PRD；補全缺漏章節；反向從 prototype 補寫 | 有新模組需求、現有 PRD 缺 §6 / §9、或只有 prototype 沒有規格文件時 |
 | 需求分析師 | `requirement-analyst` | PRD / ticket 解析、gap 識別、風險提醒 | 收到 PM 需求或 Jira / Linear / GitHub issue 時 |
 | UX 研究員 | `ux-researcher` | 使用者訪談、persona、JTBD、journey map | 需要質性洞察、使用者動機時 |
 | 市場洞察分析師 | `market-insight-analyst` | 競品分析、產業 benchmark、趨勢 | 定位或差異化決策前 |
@@ -51,6 +52,7 @@ A multi-role AI product design team skill for B2B cross-platform (Web / App) pro
 
 ### 新功能完整設計流程
 ```
+⓪ prd-writer                → 起草完整 PRD（11 章節格式）[若已有 PM PRD 可跳過]
 ① requirement-analyst       → 解析 PRD，識別 gap 與風險
 ② ux-researcher + market-insight-analyst + data-analyst (平行)
                             → 質性／市場／量化三路調研
@@ -94,7 +96,7 @@ data-analyst → ux-researcher → usability-tester → interaction-designer
 | 工具 | 用途 | 對應角色 |
 |------|------|---------|
 | **Figma** | 讀 design file、token、component、prototype | `ui-designer`, `interaction-designer`, `prototyper`, `design-system-architect`, `design-ops` |
-| **Notion** | 需求文件、研究筆記、handoff doc | `requirement-analyst`, `ux-researcher`, `market-insight-analyst`, `design-ops` |
+| **Notion** | 需求文件、研究筆記、handoff doc | `prd-writer`, `requirement-analyst`, `ux-researcher`, `market-insight-analyst`, `design-ops` |
 | **GitHub** | 讀 issue / PR、Handoff 對接 | `requirement-analyst`, `design-ops` |
 | **Claude.ai（本身）** | 生成 UI mock、component 代碼示意、內容產出 | `ui-designer`, `prototyper`, `ux-writer` |
 
@@ -134,6 +136,7 @@ data-analyst → ux-researcher → usability-tester → interaction-designer
 三種模式的交付物完全一致（`design-run/` 編號檔案）— 模式只改變協作方式。
 
 範例指令：
+- 「幫我起草 XXX 模組的 PRD」→ 自動觸發 `prd-writer`
 - 「幫我解析這份 PRD」→ 自動觸發 `requirement-analyst`
 - 「這個功能該不該做？」→ 自動觸發 `product-strategist`
 - 「幫我寫 error message」→ 自動觸發 `ux-writer`
