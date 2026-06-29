@@ -37,6 +37,10 @@
 | FAB | [`components/FAB.md`](components/FAB.md) | ✅ 已產出（Lite；4 尺寸 × 6 色 × Icon/Extended；圓角 16px 非全圓；shadow-lg） |
 | Toast | [`components/Toast.md`](components/Toast.md) | ✅ 已產出（Full；5 kind：default/success/info/warning/error；3 秒自動消失；ERP 目前用 success/warning/error 三種） |
 | Skeleton | [`components/Skeleton.md`](components/Skeleton.md) | ✅ 已產出（Lite；6 個複合佈局 preset；shimmer 靜態疊層，動效由 Syncfusion 實作） |
+| ButtonGroup | [`components/ButtonGroup.md`](components/ButtonGroup.md) | ✅ 已產出（Lite；4 尺寸 × 4 色；純 CSS 組合；首尾項各自圓角，中間項 0） |
+| DropDownButton | [`components/DropDownButton.md`](components/DropDownButton.md) | ✅ 已產出（Full；5 軸 variant；overlay menu shadow-md；caret icon 16px） |
+| SplitButton | [`components/SplitButton.md`](components/SplitButton.md) | ✅ 已產出（Full；左段 4px/0/0/4px × 右段 0/4px/4px/0；divider 用 border-right） |
+| IconButton | [`components/IconButton.md`](components/IconButton.md) | ✅ 已產出（Lite；5 軸 variant；Rounded 4px / Full Rounded 1000px；無 token gap） |
 
 > 收編原則：`prototyper` 既有的深度元件規格（DataGrid / Stepper / SummaryCard…）為「prototype 單檔 HTML/CSS 落地層」；設計文件是「what/why/token/state 的權威」。補設計文件時**引用** profile，不重寫 token 決策（見 `component-doc-schema.md §8`）。
 
@@ -70,10 +74,11 @@
 |------|--------------|---------|
 | Button | 各類操作 CTA | ✅ 已採用 |
 | FAB / SpeedDial | 浮動主操作 | ✅ 已採用 |
-| ButtonGroup | 一組相關切換 / 分段按鈕 | ⬜ 待分類 |
-| DropDownButton | 帶下拉選單的按鈕 | ⬜ 待分類 |
-| SplitButton | 主動作 + 下拉次動作 | ⬜ 待分類 |
-| ProgressButton | 帶進度狀態的按鈕（提交中） | ⬜ 待分類 |
+| ButtonGroup | 一組互斥切換（List/Form 模式切換、週期選擇） | ✅ 已採用 |
+| DropDownButton | 收納多個次要操作（更多操作選單） | ✅ 已採用 |
+| SplitButton | 主動作 + 下拉次動作（核准 + 核准並產傳票） | ✅ 已採用 |
+| IconButton | icon-only 嵌入式操作點（Grid actions 欄、工具列） | ✅ 已採用 |
+| ProgressButton | 帶進度狀態的按鈕 | ⬜ 待分類 |
 
 ## 3. 輸入 — 文字（Text Inputs）
 
