@@ -16,6 +16,9 @@ last-synced: 2026-06-29   # 🎨 get_variable_defs + get_screenshot + get_design
 
 頁面操作 CTA。每個畫面語意上的主動作至多一個（用 `primary`）；次要動作用 `secondary` / `ghost`；破壞性動作（刪除、作廢）用 `danger`，**不**用 primary 做 cancel。
 
+**何時使用**：觸發頁面動作（送出、核准、作廢、新增、儲存、列印）；Modal footer 確認 / 取消；批次操作列的主要操作。  
+**何時不用**：頁面跳轉 → `<a>` / router-link（語意不同）；純狀態顯示 → `st-chip` / Badge；一組互斥切換 → `ButtonGroup`；帶下拉子選單 → `DropDownButton` / `SplitButton`。
+
 ## 2. Anatomy　🎨
 
 `[leading icon?]` + `label` + `[trailing icon?]`；icon-only 時 label 走 `sr-only`，並需 `aria-label`。
