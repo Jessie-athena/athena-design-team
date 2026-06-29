@@ -11,8 +11,6 @@ A multi-role AI product design team skill for B2B cross-platform (Web / App) pro
 這套 Skill Pack 把 Claude 變成一個完整的**產品設計團隊**。每個 Skill 是一個有專業角色定位、工作流程和輸出格式的 AI 成員。你可以根據任務需要呼叫對應的角色，或讓 `design-lead` 幫你分派。
 
 設計理念：
-- **前期調研寫得最深**
-- **Dev Handoff 寫得最深**
 - **B2B Web / App 跨平台**為預設情境
 - **Double Diamond + Lean UX** 混合方法論
 - **繁中輸出**、技術術語保留英文
