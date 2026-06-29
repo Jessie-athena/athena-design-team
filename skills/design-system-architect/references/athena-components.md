@@ -45,6 +45,14 @@
 | MaskedTextBox | [`components/MaskedTextBox.md`](components/MaskedTextBox.md) | ✅ 已產出（Lite；template 軸 Date/Card/Phone；label=12px；含 Info + Warning state） |
 | OTP Input | [`components/OTPInput.md`](components/OTPInput.md) | ✅ 已產出（Full；3 shape × 4 size × 4 count = 48 variant；Filled/Outlined/Line 三種單格樣式） |
 | PasswordTextBox | [`components/PasswordTextBox.md`](components/PasswordTextBox.md) | ✅ 已產出（Lite；獨立元件；eye-toggle-btn 32×32；含 Info state；token gap 同 TextBox） |
+| AutoComplete | [`components/AutoComplete.md`](components/AutoComplete.md) | ✅ 已產出（Lite；48 variant；overlay embedded-input + Add 按鈕；arrow-down 可隱） |
+| ComboBox | [`components/ComboBox.md`](components/ComboBox.md) | ✅ 已產出（Lite；132 variant；overlay embedded-search TextBox；含 clearIcon） |
+| MultiColumnComboBox | [`components/MultiColumnComboBox.md`](components/MultiColumnComboBox.md) | ✅ 已產出（Full；overlay multi-column grid with header；overlay panel 節點待補） |
+| MultiSelect | [`components/MultiSelect.md`](components/MultiSelect.md) | ✅ 已產出（Full；chip flex-wrap 撐高 trigger；39 var 零漂移） |
+| DropDownTree | [`components/DropDownTree.md`](components/DropDownTree.md) | ✅ 已產出（Full；tree indent 38px token gap；inline search；50 var 零漂移） |
+| ListBox | [`components/ListBox.md`](components/ListBox.md) | ✅ 已產出（Full；Dual ListBox = toolbarSettings 組合；3 item padding token gap） |
+| Checkbox | [`components/Checkbox.md`](components/Checkbox.md) | ✅ 已產出（Lite；indeterminate = Type=Intermediate；disabled opacity-38；1 label_gap token gap） |
+| RadioButton | [`components/RadioButton.md`](components/RadioButton.md) | ✅ 已產出（Lite；1.5px border token gap；inner-dot selected style） |
 
 > 收編原則：`prototyper` 既有的深度元件規格（DataGrid / Stepper / SummaryCard…）為「prototype 單檔 HTML/CSS 落地層」；設計文件是「what/why/token/state 的權威」。補設計文件時**引用** profile，不重寫 token 決策（見 `component-doc-schema.md §8`）。
 
@@ -106,14 +114,14 @@
 | 元件 | 用途（用在哪） | 採用狀態 |
 |------|--------------|---------|
 | DropDownList | 單選下拉 | ✅ 已採用 |
-| AutoComplete | 輸入即時建議 | ⬜ 待分類 |
-| ComboBox | 可輸入可選的下拉 | ⬜ 待分類 |
-| MultiColumn ComboBox | 多欄下拉（顯示多欄資訊） | ⬜ 待分類 |
-| MultiSelect | 多選下拉 / 標籤選擇 | ⬜ 待分類 |
-| DropDownTree | 樹狀下拉選擇 | ⬜ 待分類 |
-| ListBox | 清單選擇 / 雙清單搬移 | ⬜ 待分類 |
-| Checkbox | 多選框 | ⬜ 待分類 |
-| RadioButton | 單選鈕 | ⬜ 待分類 |
+| AutoComplete | 輸入即時建議 | ✅ 已採用 |
+| ComboBox | 可輸入可選的下拉 | ✅ 已採用 |
+| MultiColumn ComboBox | 多欄下拉（顯示多欄資訊） | ✅ 已採用 |
+| MultiSelect | 多選下拉 / 標籤選擇 | ✅ 已採用 |
+| DropDownTree | 樹狀下拉選擇 | ✅ 已採用 |
+| ListBox | 清單選擇 / 雙清單搬移 | ✅ 已採用 |
+| Checkbox | 多選框 | ✅ 已採用 |
+| RadioButton | 單選鈕 | ✅ 已採用 |
 | Switch | 開關切換 | ⬜ 待分類 |
 | Slider | 數值滑桿 | ⬜ 待分類 |
 | Rating | 星等評分 | ⬜ 待分類 |
