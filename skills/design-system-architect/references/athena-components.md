@@ -23,20 +23,20 @@
 
 | 元件 | 設計文件 | 狀態 |
 |------|---------|------|
-| Button | [`components/Button.md`](../components/Button.md) | ✅ 已產出（Lite；v0.3 所有 ⚠️ 項已解，含 disabled bg token、Comfortable 密度 padding） |
-| st-chip（狀態徽章 / `DsStatusBadge`） | [`components/st-chip.md`](../components/st-chip.md) | ✅ 已產出（Full；色 / class 落地引用 prototyper DataGrid.md / Stepper.md） |
-| Grid（DataGrid） | [`components/DataGrid.md`](../components/DataGrid.md) | ✅ 已產出（Full；class / 尺寸 / 互動色 / 凍結欄 / 行內編輯落地引用 prototyper DataGrid.md） |
-| Stepper | [`components/Stepper.md`](../components/Stepper.md) | ✅ 已產出（Full；步序狀態 / 語意色 / 判定邏輯 / voided-banner 落地引用 prototyper Stepper.md） |
-| SummaryCard | [`components/SummaryCard.md`](../components/SummaryCard.md) | ✅ 已產出（Full；Layout A/B、sticky 無 shadow、4 步動態 stepper 落地引用 prototyper SummaryCard.md） |
-| TextBox | [`components/TextBox.md`](../components/TextBox.md) | ✅ 已產出（Lite；Filled Small Default；Layer 1–4 Figma 校準，含 token gap 標注） |
-| NumericTextBox | [`components/NumericTextBox.md`](../components/NumericTextBox.md) | ✅ 已產出（Lite；Filled Small Default；label=12px、無 warning 態、spinner 控制區） |
-| DropDownList | [`components/DropDownList.md`](../components/DropDownList.md) | ✅ 已產出（Lite；固定 arrow-down btn；clearIcon 為 Syncfusion runtime prop） |
-| DatePicker | [`components/DatePicker.md`](../components/DatePicker.md) | ✅ 已產出（Lite；DsDatePicker 客製包裝；固定 calendar-icon-btn） |
-| Tab | [`components/Tab.md`](../components/Tab.md) | ✅ 已產出（Full；Size×Alignment×Count×scroll 四軸；indicator 3px 無 token） |
-| Dialog | [`components/Dialog.md`](../components/Dialog.md) | ✅ 已產出（Full；Size Small/Large；confirm/deeplink 為 ERP 應用層規範） |
-| FAB | [`components/FAB.md`](../components/FAB.md) | ✅ 已產出（Lite；4 尺寸 × 6 色 × Icon/Extended；圓角 16px 非全圓；shadow-lg） |
-| Toast | [`components/Toast.md`](../components/Toast.md) | ✅ 已產出（Full；5 kind：default/success/info/warning/error；3 秒自動消失；ERP 目前用 success/warning/error 三種） |
-| Skeleton | [`components/Skeleton.md`](../components/Skeleton.md) | ✅ 已產出（Lite；6 個複合佈局 preset；shimmer 靜態疊層，動效由 Syncfusion 實作） |
+| Button | [`components/Button.md`](components/Button.md) | ✅ 已產出（Lite；v0.3 所有 ⚠️ 項已解，含 disabled bg token、Comfortable 密度 padding） |
+| st-chip（狀態徽章 / `DsStatusBadge`） | [`components/st-chip.md`](components/st-chip.md) | ✅ 已產出（Full；色 / class 落地引用 prototyper DataGrid.md / Stepper.md） |
+| Grid（DataGrid） | [`components/DataGrid.md`](components/DataGrid.md) | ✅ 已產出（Full；class / 尺寸 / 互動色 / 凍結欄 / 行內編輯落地引用 prototyper DataGrid.md） |
+| Stepper | [`components/Stepper.md`](components/Stepper.md) | ✅ 已產出（Full；步序狀態 / 語意色 / 判定邏輯 / voided-banner 落地引用 prototyper Stepper.md） |
+| SummaryCard | [`components/SummaryCard.md`](components/SummaryCard.md) | ✅ 已產出（Full；Layout A/B、sticky 無 shadow、4 步動態 stepper 落地引用 prototyper SummaryCard.md） |
+| TextBox | [`components/TextBox.md`](components/TextBox.md) | ✅ 已產出（Lite；Filled Small Default；Layer 1–4 Figma 校準，含 token gap 標注） |
+| NumericTextBox | [`components/NumericTextBox.md`](components/NumericTextBox.md) | ✅ 已產出（Lite；Filled Small Default；label=12px、無 warning 態、spinner 控制區） |
+| DropDownList | [`components/DropDownList.md`](components/DropDownList.md) | ✅ 已產出（Lite；固定 arrow-down btn；clearIcon 為 Syncfusion runtime prop） |
+| DatePicker | [`components/DatePicker.md`](components/DatePicker.md) | ✅ 已產出（Lite；DsDatePicker 客製包裝；固定 calendar-icon-btn） |
+| Tab | [`components/Tab.md`](components/Tab.md) | ✅ 已產出（Full；Size×Alignment×Count×scroll 四軸；indicator 3px 無 token） |
+| Dialog | [`components/Dialog.md`](components/Dialog.md) | ✅ 已產出（Full；Size Small/Large；confirm/deeplink 為 ERP 應用層規範） |
+| FAB | [`components/FAB.md`](components/FAB.md) | ✅ 已產出（Lite；4 尺寸 × 6 色 × Icon/Extended；圓角 16px 非全圓；shadow-lg） |
+| Toast | [`components/Toast.md`](components/Toast.md) | ✅ 已產出（Full；5 kind：default/success/info/warning/error；3 秒自動消失；ERP 目前用 success/warning/error 三種） |
+| Skeleton | [`components/Skeleton.md`](components/Skeleton.md) | ✅ 已產出（Lite；6 個複合佈局 preset；shimmer 靜態疊層，動效由 Syncfusion 實作） |
 
 > 收編原則：`prototyper` 既有的深度元件規格（DataGrid / Stepper / SummaryCard…）為「prototype 單檔 HTML/CSS 落地層」；設計文件是「what/why/token/state 的權威」。補設計文件時**引用** profile，不重寫 token 決策（見 `component-doc-schema.md §8`）。
 
