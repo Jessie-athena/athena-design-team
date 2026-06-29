@@ -52,6 +52,61 @@
       ]
     },
     {
+      "id": 4,
+      "eval_name": "prd-writer-new-config-module",
+      "prompt": "我想做一個銷貨退回原因的設定檔模組（模組分類：進銷存設定檔，Odoo model: psi.sale_return_reason），幫我起草這個模組的完整 PRD。",
+      "expected_output": "應觸發 prd-writer 角色（先讀取其角色檔），起草完整 11 章節 PRD：§1 文件目的含命名說明 blockquote、§4 詞彙表至少 12 術語（三欄格式）、§5 五個 Story（含 8 條以上 Edge Cases）、§6 完整介面規格（設定檔模式：無 Summary Card / Stepper / Smart Bar，有 List View + Form View Drawer）、§8 角色矩陣、§9 欄位規則（含狀態轉換：啟用 / 停用二態）、§10 錯誤訊息三欄表、§11 版本紀錄。全文不出現欄位代號、model 名、設定參數鍵。",
+      "files": [],
+      "assertions": [
+        "acts-as-prd-writer: 產出展現 prd-writer 角色的工作模式 A（全新 PRD）— 輸出為完整 11 章節格式，包含 §1 命名說明 blockquote；僅有角色標籤不算通過",
+        "has-11-sections: §1 至 §11 全部存在，每節有實質內容（非佔位符或空章節）",
+        "glossary-format-correct: §4 詞彙表為三欄（名詞 / 說明 / 備註）table，術語數 ≥ 12",
+        "has-5-stories-with-edge-cases: §5 有 5 個 Story（格式 `### Story N — 描述 — **角色**`）以及 Edge Cases 清單（≥ 8 條）",
+        "section6-no-code-names: §6 全文不出現欄位代號（如 `_id`、`sale_return_reason_id`）或 model 名（如 `psi.sale_return_reason`）；中文業務名稱取代之",
+        "config-module-correct-structure: §6 設定檔結構正確 — 無 Summary Card、無 Stepper、無 Smart Bar、無 voided-banner；List View 有工具列（匯入/匯出/批次停用/批次刪除）和搜尋區（狀態預設「啟用」）",
+        "section9-state-table: §9 包含狀態轉換允許表，且對設定檔模組顯示啟用/停用二態轉換（非 draft/submitted/approved 業務單據四態）",
+        "section10-error-table: §10 為三欄 table（繁體中文 / English / 觸發情境），≥ 5 條，無錯誤碼 key",
+        "zh-tw-with-english-terms: 繁體中文為主；shared UI 元件名（TextBox、Dropdown 等）保留英文"
+      ]
+    },
+    {
+      "id": 5,
+      "eval_name": "prd-writer-supplement-section6",
+      "prompt": "這份採購扣補單 PRD（路徑 evals/fixtures/prd-purchase-deduction-partial.md）目前有 §1-§5、§7-§8，缺少 §6 介面與流程。請幫我補寫 §6 全部子節（6.1 到 6.6）。",
+      "expected_output": "應觸發 prd-writer 角色模式 B（補全章節），讀取現有 PRD 後補寫 §6 全部子節：6.1 選單與進入點、6.2 List View（工具列 / 搜尋區 / 欄位順序 / 列表行為 / 分頁器）、6.3 Form View（表單總覽 / Summary Card 含等式 + Stepper / 表頭三區模型 / 明細 / Footer 動作按鈕 / Smart Bar）、6.4 互動流程（含狀態轉換表）、6.5 Modal/Toast 場景、6.6 mermaid 流程圖。全文不出現欄位代號。",
+      "files": ["evals/fixtures/prd-purchase-deduction-partial.md"],
+      "assertions": [
+        "acts-as-prd-writer-mode-b: 輸出是「補全 §6」而非重寫完整 PRD — 應只補 §6 各子節（6.1-6.6），不更動其他章節",
+        "section6-complete-subsections: §6 的 6.1 到 6.6 全部存在，且每個子節有實質內容",
+        "summary-card-equation: §6.3.2 Summary Card 包含金額等式橫向排列（未稅金額 ＋ 稅額 ＝ 總金額）、傳票 chip、3 步 Stepper（草稿/已提交/已核准）以及 voided-banner 說明",
+        "header-three-zones: §6.3.3 表頭欄位依照三區模型排序：識別區（單號首）→ 決策區（對象→類型→經辦人→日期，**經辦人在日期前**）→ 隔離區（公司別末）",
+        "toolbar-no-batch-void: §6.2.1 工具列無「批次作廢」選項；有「刪除所選草稿」（草稿物理刪除）和「匯出選取項」",
+        "search-area-required-filters: §6.2.2 搜尋區至少包含 5 個必備 filter（單號 / 對象（供應商/客戶） / 經辦人 / 日期區間 / 狀態），狀態 Dropdown 第一選項為「全部」（空值）",
+        "search-area-filter-count: §6.2.2 搜尋區 filter 總數預設 5 個；有強關聯鍵時允許 6 個，超過 6 個或少於 5 個均不通過",
+        "footer-conditional-buttons: §6.3.5 Footer 按鈕有條件顯示邏輯（草稿→提交；已提交→核准；已核准→取消核准；全狀態→更多操作下拉含作廢）",
+        "section6-no-code-names: §6 全文不出現欄位代號（如 `deduction_id`）或 model 名",
+        "zh-tw-with-english-terms: 繁體中文為主；shared UI 元件名保留英文"
+      ]
+    },
+    {
+      "id": 6,
+      "eval_name": "prd-writer-supplement-sections9-10",
+      "prompt": "這份採購扣補單 PRD（路徑 evals/fixtures/prd-purchase-deduction-partial.md）已有 §1-§8，請幫我補寫 §9 資料欄位規則（9.1 單頭：框架欄位 + 本模型欄位 + 狀態轉換允許表；9.2 明細；9.4 結轉帶入機制；9.5 建立傳票）以及 §10 錯誤訊息文案（三欄格式）和 §11 版本紀錄。",
+      "expected_output": "應觸發 prd-writer 角色模式 B（補全章節），讀取 §1-§8 後補寫 §9-§11。§9 包含：9.1 框架原生欄位 table（mail.thread / 稽核四欄位）、9.1.2 本模型欄位（唯一約束 + 行為規則 + 狀態轉換允許表 4 欄）、9.2 明細欄位 table、9.4 結轉帶入機制（wizard-less）、9.5 建立傳票。§10 三欄 table ≥ 8 條，無錯誤碼 key。§11 四欄版本紀錄。",
+      "files": ["evals/fixtures/prd-purchase-deduction-partial.md"],
+      "assertions": [
+        "acts-as-prd-writer-mode-b: 輸出只補 §9-§11，不更動 §1-§8；應有明確說明是補寫而非重寫全文",
+        "section9-framework-fields: §9.1.1 包含框架原生欄位 table（至少含訊息追蹤、建立者/建立時間/異動者/異動時間），欄位名使用中文業務名",
+        "section9-state-transition-table: §9.1.2 包含狀態轉換允許表，4 欄（由→到 / 允許條件 / 觸發者群組 / 副作用），且涵蓋：草稿→已提交（取號）、已提交→已核准（核准連動）、已核准→已提交（未產傳票時）、已提交或核准→已作廢",
+        "section9-line-fields: §9.2 明細欄位有欄位 table（含型態、必填、說明），欄位名使用中文業務名",
+        "section9-wizardless-carryover: §9.4 結轉帶入機制說明為 wizard-less 模式（選定來源單 onchange 帶入，數量預設 0，儲存時移除 0 行），無「結轉精靈」或預覽步驟",
+        "section9-voucher-direct: §9.5 建立傳票說明為 Footer 直接按鈕觸發，無傳票精靈或分錄預覽",
+        "section10-format-correct: §10 為三欄 table（繁體中文 / English / 觸發情境），≥ 8 條，欄位不含錯誤碼 key",
+        "section11-version-table: §11 為四欄版本紀錄 table（版本 / 日期 / 修訂者 / 說明），至少有 v1.0 一行",
+        "no-code-names-in-9-10: §9、§10 全文不出現程式代號；欄位名使用中文業務名稱"
+      ]
+    },
+    {
       "id": 3,
       "eval_name": "oneliner-cs-request-triage",
       "prompt": "業務在 Slack 丟了一句話需求（內容見 evals/fixtures/oneliner-cs-request.md），沒有 PRD。幫我分析這個需求，下週要回他。",

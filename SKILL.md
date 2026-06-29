@@ -62,6 +62,7 @@ Mode 3「可用」不等於「該用」。**能力具備時，命中下列任一
 
 | 角色 | 何時使用 |
 |------|---------|
+| `prd-writer` | 從一句話需求、口頭描述或 brief 起草完整 Athena ERP 模組 PRD（11 章節格式）；補全現有 PRD 的缺漏章節（§6 / §9 / §5）；從已有 prototype 反向補寫 PRD |
 | `requirement-analyst` | 解析 PRD、user story、Jira / Linear ticket、GitHub issue；識別 scope gap、模糊驗收標準、未言明假設、交付風險 |
 | `ux-researcher` | 研究方法選擇、使用者訪談、persona、JTBD、journey map、質性研究合成與機會優先排序 |
 | `market-insight-analyst` | 市場趨勢、競品 teardown、產業 benchmark、定位分析 |
@@ -91,7 +92,8 @@ Mode 3「可用」不等於「該用」。**能力具備時，命中下列任一
 
 ## Routing 規則
 
-- **輸入是 PRD / ticket / issue** → 直接從 `requirement-analyst` 開始。
+- **需要撰寫新 PRD 或補全 PRD 章節** → 從 `prd-writer` 開始（不是 `requirement-analyst`）。`prd-writer` 是生產者；`requirement-analyst` 是消費者——先寫 PRD，再驗核。
+- **輸入是 PRD / ticket / issue（已有文件，要分析）** → 直接從 `requirement-analyst` 開始。
 - **任務明確對應單一角色** → 直接啟動該角色，不需要經過 `design-lead`。
 - **任務模糊、跨多角色、或要 critique / 取捨** → 從 `design-lead` 開始，由它產出 routing 建議後再依序執行。本檔案只負責「選角色」；任務的拆解與排程判斷是 `design-lead` 的工作，避免兩邊各自路由產生衝突。
 - **多階段任務** → 依下方標準流程串接角色，而不是用單一視角一次回答。
@@ -99,8 +101,11 @@ Mode 3「可用」不等於「該用」。**能力具備時，命中下列任一
 ## 標準流程
 
 ```
+PRD 撰寫流程：
+prd-writer → requirement-analyst（gap 驗核）→ interaction-designer / prototyper
+
 新功能完整設計：
-requirement-analyst
+prd-writer → requirement-analyst
   → (ux-researcher ∥ market-insight-analyst ∥ data-analyst)
   → product-strategist → interaction-designer → ui-designer
   → ux-writer → prototyper → usability-tester
