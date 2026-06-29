@@ -2,7 +2,7 @@
 name: IconButton
 category: 按鈕與動作
 tier: lite
-status: ⬜ 待分類（ERP prototype 已使用 `.btn.btn--icon` 樣式，尚未正式採用為 Ds 元件）
+status: ✅ 已採用
 authority: ERP prototype app.css（`.btn--icon` / `.btn-icon-sq`）；Code 端 `@syncfusion/ej2-vue-buttons`（`e-icon-btn` / `e-round`）
 figma-node: JhcpyIEEzSChcEXMRJUiIm/16782-533652
 version: v0.1
