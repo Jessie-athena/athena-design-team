@@ -2,7 +2,7 @@
 name: SplitButton
 category: 按鈕與動作
 tier: full
-status: ⬜ 待分類（Syncfusion ej2-vue-buttons SplitButton；ERP 尚未大量使用）
+status: ✅ 已採用
 authority: ERP CLAUDE.md（Syncfusion SplitButton, @syncfusion/ej2-vue-buttons）
 figma-node: JhcpyIEEzSChcEXMRJUiIm/16783-674766
 version: v0.1

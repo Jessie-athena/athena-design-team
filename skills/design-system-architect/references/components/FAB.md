@@ -2,7 +2,7 @@
 name: FAB（Floating Action Button）
 category: 按鈕與動作
 tier: lite
-status: ⬜ 待分類（ERP 使用中，尚未正式採用為 Ds 元件）
+status: ✅ 已採用
 authority: ERP CLAUDE.md（Syncfusion FAB, @syncfusion/ej2-vue-buttons）
 figma-node: JhcpyIEEzSChcEXMRJUiIm/12736-73932
 version: v0.1
