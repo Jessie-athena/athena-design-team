@@ -3,7 +3,7 @@ name: IconButton
 category: 按鈕與動作
 tier: lite
 status: ✅ 已採用
-authority: ERP prototype app.css（`.btn--icon` / `.btn-icon-sq`）；Code 端 `@syncfusion/ej2-vue-buttons`（`e-icon-btn` / `e-round`）
+authority: ERP CLAUDE.md（Syncfusion Button e-icon-btn / e-round, @syncfusion/ej2-vue-buttons）
 figma-node: JhcpyIEEzSChcEXMRJUiIm/16782-533652
 version: v0.1
 last-synced: 2026-06-29   # 🎨 get_variable_defs + get_screenshot + get_metadata + get_design_context（節點 16782:533697 Rounded、16782:533688 Full Rounded）；紀錄見文末「Figma 補入紀錄」
