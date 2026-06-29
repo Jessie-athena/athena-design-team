@@ -1,0 +1,48 @@
+{
+  "expectations": [
+    {
+      "text": "has-reaction-section: 大綱含獨立的 Reaction / 概念展示段（任務明確提到有 wireframe，屬 Evaluative 模式），不是只有背景與痛點訪談",
+      "passed": true,
+      "evidence": "雖無名為「Reaction」的段落，但主題深入段以 wireframe 展示為核心：「主題 A：Wireframe 整體流程走查（約 12 分鐘）」明示「操作：逐步展示 wireframe（上傳 → 欄位對應 → 驗證 → 執行 → 結果）」，主題 B–D 亦圍繞 wireframe 提問；文件開頭並標明「研究模式：Evaluative（驗證型）— 以 wireframe 為刺激物的概念驗證訪談」，實質具備概念展示段。"
+    },
+    {
+      "text": "reaction-free-response-first: Reaction 段指示先讓受訪者自由反應（如「你覺得這是做什麼用的」），且提醒不要急著解釋設計意圖",
+      "passed": true,
+      "evidence": "主題 A 指示「每一步先讓受訪者**自己說**看到什麼，再追問」並以「（每個畫面先問）你覺得這個畫面在做什麼？接下來你會做什麼？」開場；Moderator Notes 另有「不要教學：受訪者看不懂畫面時，先記錄『哪裡看不懂』，再視情況解釋」與「沉默 5 秒：展示畫面後先讓受訪者自己開口」，兩個要件皆有實質證據。"
+    },
+    {
+      "text": "stated-intent-caveat: 對受訪者「我會用」類的正面表態有追問具體情境/取捨的設計（口頭意願不等於實際行為）",
+      "passed": false,
+      "evidence": "找不到針對「我會用／我喜歡」類正面表態的追問設計。最接近的是 Moderator Notes「追例子不追意見：聽到『我覺得應該要有 X』時，追問『上次需要 X 是什麼時候？』」，但這是針對功能要求的追問，非針對採用意願；收尾的「如果這個功能明天上線，它最先幫到你的是什麼？最讓你擔心的是什麼？」也未對「會用」的回答設計具體情境/取捨追問，未處理口頭意願不等於實際行為。"
+    },
+    {
+      "text": "probing-questions: 主題深入段含探測與追問問題（舉例、為什麼、其他選項），不是只有主問題",
+      "passed": true,
+      "evidence": "主題 A–D 均有標記「探測」「追問」的子問題，如主題 A「能舉一個這流程會處理不了的實際例子嗎？」、主題 B「格式錯誤、重複資料、與系統既有資料衝突——哪個最重要？為什麼？」「檢查出 500 筆裡有 30 筆錯，你希望接下來發生什麼事？（全部停？跳過錯的？讓你修？）」——含舉例、為什麼與選項式探測。"
+    },
+    {
+      "text": "consent-opening: 開場段含研究目的說明、錄音同意、可隨時中止",
+      "passed": true,
+      "evidence": "§0 開場含：研究目的（「我們正在設計批次資料匯入功能，今天想了解你實際的工作方式…」）、「徵求錄音／錄影同意；說明資料去識別化、可隨時中止或跳過任何問題」，三要件齊備。"
+    },
+    {
+      "text": "zh-tw-with-english-terms: 繁體中文為主，技術術語保留英文",
+      "passed": true,
+      "evidence": "全文以繁體中文撰寫，術語保留英文：wireframe、Evaluative、baseline、yes/no、snowball、Moderator Notes、debrief note、affinity mapping、insight card、prototype 等均以英文呈現。"
+    }
+  ],
+  "summary": {"passed": 5, "failed": 1, "total": 6, "pass_rate": 0.8333},
+  "eval_feedback": {
+    "suggestions": [
+      {
+        "assertion": "has-reaction-section",
+        "reason": "本 run 的概念展示段嵌在「主題深入」內而非獨立命名段落，仍判 PASS（實質符合）；若 assertion 意圖要求「與現況訪談分離的獨立段落＋獨立時間盒」，建議在文字中寫明，否則此條鑑別力偏低。"
+      },
+      {
+        "assertion": "（漏測建議）reaction-uses-real-task",
+        "reason": "走查是否錨定受訪者真實任務情境是兩個 run 的另一實質差異（with_skill 有、old_skill 無明示），目前無 assertion 覆蓋。"
+      }
+    ],
+    "overall": "evals look solid — stated-intent-caveat 是唯一鑑別條目；建議補測「走查錨定真實任務」並明確化 has-reaction-section 的「獨立段落」定義以提高鑑別力。"
+  }
+}

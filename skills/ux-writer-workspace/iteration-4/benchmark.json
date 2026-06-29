@@ -1,0 +1,437 @@
+{
+  "metadata": {
+    "skill_name": "ux-writer",
+    "skill_path": "<path/to/skill>",
+    "executor_model": "<model-name>",
+    "analyzer_model": "<model-name>",
+    "timestamp": "2026-06-08T10:18:02Z",
+    "evals_run": [
+      0,
+      1,
+      2,
+      3,
+      4
+    ],
+    "runs_per_configuration": 3
+  },
+  "runs": [
+    {
+      "eval_id": 0,
+      "configuration": "old_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 1.0,
+        "passed": 4,
+        "failed": 0,
+        "total": 4,
+        "time_seconds": 64.5,
+        "tokens": 54337,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "\u55ae\u865f\u5728\u516c\u53f8\u5225\u4e4b\u524d(\u55ae\u865f\u9996/\u516c\u53f8\u5225\u672b)",
+          "passed": true,
+          "evidence": "matched"
+        },
+        {
+          "text": "\u7d93\u8fa6(\u8abf\u6574\u4eba\u54e1)\u6392\u5728\u65e5\u671f\u524d",
+          "passed": true,
+          "evidence": "matched"
+        },
+        {
+          "text": "\u516c\u53f8\u5225\u7f6e\u672b\u6b04",
+          "passed": true,
+          "evidence": "matched"
+        },
+        {
+          "text": "\u8b58\u5225\u70ba\u9032\u92b7\u5b58/\u4e09\u5340\u6a21\u578b",
+          "passed": true,
+          "evidence": "matched"
+        }
+      ],
+      "notes": []
+    },
+    {
+      "eval_id": 1,
+      "configuration": "old_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 0.25,
+        "passed": 1,
+        "failed": 3,
+        "total": 4,
+        "time_seconds": 53.2,
+        "tokens": 53868,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "\u8b58\u5225\u70ba\u62c6\u5169\u6bb5(\u57fa\u672c\u8cc7\u8a0a+\u5730\u9ede\u8cc7\u8a0a)",
+          "passed": false,
+          "evidence": "not found"
+        },
+        {
+          "text": "\u516c\u53f8\u5225\u9818\u929c\u5730\u9ede\u8cc7\u8a0a(\u975e\u672b\u6b04/\u975e\u6c7a\u7b56\u5340)",
+          "passed": false,
+          "evidence": "not found"
+        },
+        {
+          "text": "\u8acb\u8cfc\u4eba\u54e1\u6392\u5728\u65e5\u671f\u524d",
+          "passed": false,
+          "evidence": "not found"
+        },
+        {
+          "text": "\u516c\u53f8\u5225\u672a\u88ab\u7576\u6c7a\u7b56\u6b04\u585e\u4e2d\u6bb5",
+          "passed": true,
+          "evidence": "matched"
+        }
+      ],
+      "notes": []
+    },
+    {
+      "eval_id": 2,
+      "configuration": "old_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 0.25,
+        "passed": 1,
+        "failed": 3,
+        "total": 4,
+        "time_seconds": 64.6,
+        "tokens": 53915,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "\u8b58\u5225\u70ba\u8ca1\u52d9\u96d9\u5217\u6a21\u578b",
+          "passed": false,
+          "evidence": "not found"
+        },
+        {
+          "text": "\u6307\u51fa\u8ca1\u52d9\u7121\u7d93\u8fa6\u6b04",
+          "passed": false,
+          "evidence": "not found"
+        },
+        {
+          "text": "\u516c\u53f8\u5225\u5728\u5f8c\u53f0/\u7b2c\u4e8c\u5217(\u975e\u672b\u6b04)",
+          "passed": false,
+          "evidence": "not found"
+        },
+        {
+          "text": "\u55ae\u865f\u5728\u7b2c\u4e00\u683c",
+          "passed": true,
+          "evidence": "matched"
+        }
+      ],
+      "notes": []
+    },
+    {
+      "eval_id": 3,
+      "configuration": "old_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 0.6667,
+        "passed": 2,
+        "failed": 1,
+        "total": 3,
+        "time_seconds": 50.4,
+        "tokens": 53101,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "\u56de\u7b54\u516c\u53f8\u5225\u4e0d\u653e\u6700\u672b\u6b04(NO)",
+          "passed": true,
+          "evidence": "matched"
+        },
+        {
+          "text": "\u8aaa\u660e\u516c\u53f8\u5225\u5728\u5f8c\u53f0\u5217(\u9760\u524d/\u79d1\u76ee\u4e4b\u5f8c/\u5217\u9996)",
+          "passed": false,
+          "evidence": "not found"
+        },
+        {
+          "text": "\u9ede\u51faPSI vs \u8ca1\u52d9\u6df7\u6dc6/\u53cd\u4f8b",
+          "passed": true,
+          "evidence": "matched"
+        }
+      ],
+      "notes": []
+    },
+    {
+      "eval_id": 4,
+      "configuration": "old_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 0.75,
+        "passed": 3,
+        "failed": 1,
+        "total": 4,
+        "time_seconds": 47.4,
+        "tokens": 53776,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "\u6307\u51fa\u55ae\u865f\u61c9\u7b2c\u4e00\u683c",
+          "passed": true,
+          "evidence": "matched"
+        },
+        {
+          "text": "\u6307\u51fa\u516c\u53f8\u5225\u4e0d\u61c9\u9996\u683c/\u61c9\u672b",
+          "passed": true,
+          "evidence": "matched"
+        },
+        {
+          "text": "\u6307\u51fa\u7d93\u8fa6\u61c9\u5728\u65e5\u671f\u524d\u6216\u65e5\u671f\u4f4d\u7f6e\u932f",
+          "passed": true,
+          "evidence": "matched"
+        },
+        {
+          "text": "\u4fee\u6b63\u5f8c\u9806\u5e8f\uff1a\u63a1\u8cfc\u55ae\u865f\u2192\u4f9b\u61c9\u5546\u2192\u63a1\u8cfc\u4eba\u54e1\u2192\u63a1\u8cfc\u65e5\u671f\u2192\u516c\u53f8\u5225",
+          "passed": false,
+          "evidence": "not found"
+        }
+      ],
+      "notes": []
+    },
+    {
+      "eval_id": 0,
+      "configuration": "with_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 1.0,
+        "passed": 4,
+        "failed": 0,
+        "total": 4,
+        "time_seconds": 52.0,
+        "tokens": 54672,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "\u55ae\u865f\u5728\u516c\u53f8\u5225\u4e4b\u524d(\u55ae\u865f\u9996/\u516c\u53f8\u5225\u672b)",
+          "passed": true,
+          "evidence": "matched"
+        },
+        {
+          "text": "\u7d93\u8fa6(\u8abf\u6574\u4eba\u54e1)\u6392\u5728\u65e5\u671f\u524d",
+          "passed": true,
+          "evidence": "matched"
+        },
+        {
+          "text": "\u516c\u53f8\u5225\u7f6e\u672b\u6b04",
+          "passed": true,
+          "evidence": "matched"
+        },
+        {
+          "text": "\u8b58\u5225\u70ba\u9032\u92b7\u5b58/\u4e09\u5340\u6a21\u578b",
+          "passed": true,
+          "evidence": "matched"
+        }
+      ],
+      "notes": []
+    },
+    {
+      "eval_id": 1,
+      "configuration": "with_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 0.75,
+        "passed": 3,
+        "failed": 1,
+        "total": 4,
+        "time_seconds": 48.0,
+        "tokens": 54552,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "\u8b58\u5225\u70ba\u62c6\u5169\u6bb5(\u57fa\u672c\u8cc7\u8a0a+\u5730\u9ede\u8cc7\u8a0a)",
+          "passed": true,
+          "evidence": "matched"
+        },
+        {
+          "text": "\u516c\u53f8\u5225\u9818\u929c\u5730\u9ede\u8cc7\u8a0a(\u975e\u672b\u6b04/\u975e\u6c7a\u7b56\u5340)",
+          "passed": false,
+          "evidence": "not found"
+        },
+        {
+          "text": "\u8acb\u8cfc\u4eba\u54e1\u6392\u5728\u65e5\u671f\u524d",
+          "passed": true,
+          "evidence": "matched"
+        },
+        {
+          "text": "\u516c\u53f8\u5225\u672a\u88ab\u7576\u6c7a\u7b56\u6b04\u585e\u4e2d\u6bb5",
+          "passed": true,
+          "evidence": "matched"
+        }
+      ],
+      "notes": []
+    },
+    {
+      "eval_id": 2,
+      "configuration": "with_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 0.75,
+        "passed": 3,
+        "failed": 1,
+        "total": 4,
+        "time_seconds": 51.6,
+        "tokens": 54504,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "\u8b58\u5225\u70ba\u8ca1\u52d9\u96d9\u5217\u6a21\u578b",
+          "passed": true,
+          "evidence": "matched"
+        },
+        {
+          "text": "\u6307\u51fa\u8ca1\u52d9\u7121\u7d93\u8fa6\u6b04",
+          "passed": true,
+          "evidence": "matched"
+        },
+        {
+          "text": "\u516c\u53f8\u5225\u5728\u5f8c\u53f0/\u7b2c\u4e8c\u5217(\u975e\u672b\u6b04)",
+          "passed": true,
+          "evidence": "matched"
+        },
+        {
+          "text": "\u55ae\u865f\u5728\u7b2c\u4e00\u683c",
+          "passed": false,
+          "evidence": "not found"
+        }
+      ],
+      "notes": []
+    },
+    {
+      "eval_id": 3,
+      "configuration": "with_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 1.0,
+        "passed": 3,
+        "failed": 0,
+        "total": 3,
+        "time_seconds": 42.3,
+        "tokens": 51478,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "\u56de\u7b54\u516c\u53f8\u5225\u4e0d\u653e\u6700\u672b\u6b04(NO)",
+          "passed": true,
+          "evidence": "matched"
+        },
+        {
+          "text": "\u8aaa\u660e\u516c\u53f8\u5225\u5728\u5f8c\u53f0\u5217(\u9760\u524d/\u79d1\u76ee\u4e4b\u5f8c/\u5217\u9996)",
+          "passed": true,
+          "evidence": "matched"
+        },
+        {
+          "text": "\u9ede\u51faPSI vs \u8ca1\u52d9\u6df7\u6dc6/\u53cd\u4f8b",
+          "passed": true,
+          "evidence": "matched"
+        }
+      ],
+      "notes": []
+    },
+    {
+      "eval_id": 4,
+      "configuration": "with_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 0.75,
+        "passed": 3,
+        "failed": 1,
+        "total": 4,
+        "time_seconds": 45.0,
+        "tokens": 51753,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "\u6307\u51fa\u55ae\u865f\u61c9\u7b2c\u4e00\u683c",
+          "passed": true,
+          "evidence": "matched"
+        },
+        {
+          "text": "\u6307\u51fa\u516c\u53f8\u5225\u4e0d\u61c9\u9996\u683c/\u61c9\u672b",
+          "passed": true,
+          "evidence": "matched"
+        },
+        {
+          "text": "\u6307\u51fa\u7d93\u8fa6\u61c9\u5728\u65e5\u671f\u524d\u6216\u65e5\u671f\u4f4d\u7f6e\u932f",
+          "passed": true,
+          "evidence": "matched"
+        },
+        {
+          "text": "\u4fee\u6b63\u5f8c\u9806\u5e8f\uff1a\u63a1\u8cfc\u55ae\u865f\u2192\u4f9b\u61c9\u5546\u2192\u63a1\u8cfc\u4eba\u54e1\u2192\u63a1\u8cfc\u65e5\u671f\u2192\u516c\u53f8\u5225",
+          "passed": false,
+          "evidence": "not found"
+        }
+      ],
+      "notes": []
+    }
+  ],
+  "run_summary": {
+    "old_skill": {
+      "pass_rate": {
+        "mean": 0.5833,
+        "stddev": 0.3281,
+        "min": 0.25,
+        "max": 1.0
+      },
+      "time_seconds": {
+        "mean": 56.02,
+        "stddev": 8.0525,
+        "min": 47.4,
+        "max": 64.6
+      },
+      "tokens": {
+        "mean": 53799.4,
+        "stddev": 445.9241,
+        "min": 53101,
+        "max": 54337
+      }
+    },
+    "with_skill": {
+      "pass_rate": {
+        "mean": 0.85,
+        "stddev": 0.1369,
+        "min": 0.75,
+        "max": 1.0
+      },
+      "time_seconds": {
+        "mean": 47.78,
+        "stddev": 4.1895,
+        "min": 42.3,
+        "max": 52.0
+      },
+      "tokens": {
+        "mean": 53391.8,
+        "stddev": 1625.5969,
+        "min": 51478,
+        "max": 54672
+      }
+    },
+    "delta": {
+      "pass_rate": "-0.27",
+      "time_seconds": "+8.2",
+      "tokens": "+408"
+    }
+  },
+  "notes": []
+}

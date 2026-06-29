@@ -1,0 +1,34 @@
+{
+  "eval_id": 1,
+  "config": "with_skill",
+  "expectations": [
+    {
+      "text": "識別為拆兩段(基本資訊+地點資訊)",
+      "passed": true,
+      "evidence": "matched"
+    },
+    {
+      "text": "公司別領銜地點資訊(非末欄/非決策區)",
+      "passed": false,
+      "evidence": "not found"
+    },
+    {
+      "text": "請購人員排在日期前",
+      "passed": true,
+      "evidence": "matched"
+    },
+    {
+      "text": "公司別未被當決策欄塞中段",
+      "passed": true,
+      "evidence": "matched"
+    }
+  ],
+  "pass_count": 3,
+  "total": 4,
+  "summary": {
+    "pass_rate": 0.75,
+    "passed": 3,
+    "failed": 1,
+    "total": 4
+  }
+}

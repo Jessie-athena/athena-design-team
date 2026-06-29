@@ -1,0 +1,48 @@
+{
+  "expectations": [
+    {
+      "text": "method-matches-question-type: 方法選擇依問題類型——「為什麼不用」對應質性方法（深度訪談/情境觀察），且有說明為什麼這個方法能回答該問題；不是無差別列一堆方法",
+      "passed": true,
+      "evidence": "research-plan §1 先區分「前者是針對既有功能的診斷型問題，後者是針對工作流程的探索型問題」；§3.1 方法決策表逐一附理由：Contextual Inquiry 對 G1「報表流程是『做出來』而非『說出來』的——使用者口述常遺漏 Excel 拼接、手動複製等繞道行為」；深度訪談對 G2「診斷『為什麼不用』需要探測動機、認知與過往經驗」；且明確拒絕問卷「還不知道『不用的原因選項』有哪些，先問卷會把假設塞給受訪者」，非無差別羅列。"
+    },
+    {
+      "text": "sample-size-and-timeline: 每個建議方法附具體樣本數與時程估計（如訪談 5-8 人、2-4 週）",
+      "passed": true,
+      "evidence": "§4 「目標人數：8-10 人」並分層給數字（Segment A 4-5 人、B 3-4 人、C 1-2 人）；§3.2 場次設計「每場 90 分鐘」二合一（脈絡訪查 45-50 分＋深度訪談 30-35 分），故兩主方法皆為 8-10 場；§5 時程表 5 週：「W2-W3 執行 8-10 場（每週 4-5 場）」；備選 diary study 也有規模「對 2-3 位加開一週」。"
+    },
+    {
+      "text": "research-plan-structure: 產出完整 research plan——含研究目標、方法、招募標準、時程、倫理/同意，五段俱全",
+      "passed": true,
+      "evidence": "章節齊備：「## 2. 研究目標」「## 3. 研究方法選擇」「## 4. 招募標準」「## 5. 時程」「## 7. 倫理與同意」，另有 §6 產出物、§8 上下游銜接、§9 風險與備案；倫理段內容實質（錄音／螢幕錄影同意書、可隨時中止、P1-P10 代號去識別化、揭露樣本限制）。"
+    },
+    {
+      "text": "recruiting-bias-guard: 招募標準含反偏誤設計（如納入非重度使用者、排除自家員工），不是只招活躍使用者",
+      "passed": true,
+      "evidence": "§4 排除條件「本公司員工、合作代理商員工、研究團隊朋友圈」；分層以非使用者為主體（Segment A 從未用過 4-5 人、B 試過但流失 3-4 人，C 持續使用者僅 1-2 人作對照）；並有明確的「反偏誤提醒：勿只招『願意回客服信的熱心客戶』；請 CSM 名單與 in-app 邀請各佔一半來源」。"
+    },
+    {
+      "text": "cross-role-routing: 若建議問卷或 A/B 等量化方法，明確指出統計分析交給 data-analyst（或同等的角色分工聲明）",
+      "passed": true,
+      "evidence": "§3.1 將「量化數據前置分析（funnel / 事件追蹤）」列為前置輸入並明確指派：「訪談前先請 data-analyst 拉：進入頁面率、建立報表完成率、重複使用率」；§8 上下游銜接再列「上游：`data-analyst` 提供自訂報表 funnel 與使用分布」，並含 usability-tester / product-strategist / interaction-designer 的完整角色分工。問卷列為後續驗證手段時雖未再點名 data-analyst，但量化分析的角色分工聲明已明確存在。"
+    },
+    {
+      "text": "zh-tw-with-english-terms: 繁體中文為主，技術術語保留英文",
+      "passed": true,
+      "evidence": "兩份文件全文繁體中文，技術術語保留英文，如「Contextual Inquiry」「workaround」「funnel」「diary study」「retrospective walkthrough」「Master/Apprentice」「HMW」「Insight cards」「think-aloud」「snowball」，無簡體字或全英文段落。"
+    }
+  ],
+  "summary": {"passed": 6, "failed": 0, "total": 6, "pass_rate": 1.0},
+  "eval_feedback": {
+    "suggestions": [
+      {
+        "assertion": "method-matches-question-type",
+        "reason": "baseline（old_skill）也完整通過，顯示此 assertion 測的是模型既有能力而非 skill 增益；需改測 skill 文件中獨有的決策規則。"
+      },
+      {
+        "assertion": "cross-role-routing",
+        "reason": "old_skill 對「問卷後續驗證」未點名執行角色，僅靠 funnel 前置的 data-analyst 指派過關；若意圖是測「所有量化工作都有角色歸屬」，assertion 應寫得更嚴格（每個量化項目皆須指派）。"
+      }
+    ],
+    "overall": "old_skill baseline 即拿到 6/6，與 with_skill 同分，本組 assertions 無法區分 skill 前後差異。漏測的重要結果：with_skill 版多了「出場前自檢清單（對照 SKILL 輸出品質清單）」與 reaction 段「說會用 ≠ 真的會用」防偏誤紀律，old_skill 版皆無；若這些是 skill 的目標行為，應各加一條 assertion 直接檢查，否則 eval 會持續顯示假性無增益。"
+  }
+}

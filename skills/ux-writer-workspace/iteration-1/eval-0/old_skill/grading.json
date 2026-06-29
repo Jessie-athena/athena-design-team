@@ -1,0 +1,33 @@
+{
+  "eval_id": 0,
+  "config": "old_skill",
+  "expectations": [
+    {
+      "text": "錯誤訊息使用「無法作廢：」冒號句型",
+      "passed": false,
+      "evidence": "not found in output"
+    },
+    {
+      "text": "破壞性確認含「是否繼續？」",
+      "passed": false,
+      "evidence": "not found in output"
+    },
+    {
+      "text": "確認 CTA 用明確動詞「作廢」(非僅「確定」)",
+      "passed": true,
+      "evidence": "pattern matched"
+    },
+    {
+      "text": "使用標準術語「傳票」",
+      "passed": true,
+      "evidence": "pattern matched"
+    },
+    {
+      "text": "全文無 emoji",
+      "passed": true,
+      "evidence": "pattern matched"
+    }
+  ],
+  "pass_count": 3,
+  "total": 5
+}

@@ -1,0 +1,554 @@
+{
+  "metadata": {
+    "skill_name": "ux-writer",
+    "skill_path": "<path/to/skill>",
+    "executor_model": "<model-name>",
+    "analyzer_model": "<model-name>",
+    "timestamp": "2026-06-08T09:49:15Z",
+    "evals_run": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5
+    ],
+    "runs_per_configuration": 3
+  },
+  "runs": [
+    {
+      "eval_id": 0,
+      "configuration": "old_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 1.0,
+        "passed": 5,
+        "failed": 0,
+        "total": 5,
+        "time_seconds": 22.8,
+        "tokens": 46668,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "\u932f\u8aa4\u7528\u300c\u7121\u6cd5\u4f5c\u5ee2\uff1a\u300d\u5192\u865f\u53e5\u578b",
+          "passed": true,
+          "evidence": "matched"
+        },
+        {
+          "text": "\u7834\u58de\u6027\u78ba\u8a8d\u542b\u300c\u662f\u5426\u7e7c\u7e8c\uff1f\u300d",
+          "passed": true,
+          "evidence": "matched"
+        },
+        {
+          "text": "\u78ba\u8a8d CTA \u7528\u660e\u78ba\u52d5\u8a5e\u300c\u4f5c\u5ee2\u300d",
+          "passed": true,
+          "evidence": "matched"
+        },
+        {
+          "text": "\u4f7f\u7528\u6a19\u6e96\u8853\u8a9e\u300c\u50b3\u7968\u300d",
+          "passed": true,
+          "evidence": "matched"
+        },
+        {
+          "text": "\u5168\u6587\u7121 emoji",
+          "passed": true,
+          "evidence": "matched"
+        }
+      ],
+      "notes": []
+    },
+    {
+      "eval_id": 1,
+      "configuration": "old_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 1.0,
+        "passed": 4,
+        "failed": 0,
+        "total": 4,
+        "time_seconds": 22.7,
+        "tokens": 46647,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "\u7a7a\u72c0\u614b\u7528\u3014\u3015inline CTA",
+          "passed": true,
+          "evidence": "matched"
+        },
+        {
+          "text": "\u6210\u529f Toast \u7528\u300c\u5df2\u522a\u9664 \u2026 \u7b46\u8349\u7a3f\u300d",
+          "passed": true,
+          "evidence": "matched"
+        },
+        {
+          "text": "\u5f15\u7528\u963b\u64cb\u7528\u300c\u7121\u6cd5\u522a\u9664\uff1a\u2026\u5f15\u7528\u300d",
+          "passed": true,
+          "evidence": "matched"
+        },
+        {
+          "text": "\u5168\u6587\u7121 emoji",
+          "passed": true,
+          "evidence": "matched"
+        }
+      ],
+      "notes": []
+    },
+    {
+      "eval_id": 2,
+      "configuration": "old_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 1.0,
+        "passed": 5,
+        "failed": 0,
+        "total": 5,
+        "time_seconds": 29.8,
+        "tokens": 47167,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "\u6307\u51fa \ud83c\udf89 emoji \u61c9\u79fb\u9664",
+          "passed": true,
+          "evidence": "matched"
+        },
+        {
+          "text": "CTA \u4fee\u6b63\u70ba\u3014\u6e05\u9664\u7be9\u9078\u3015",
+          "passed": true,
+          "evidence": "matched"
+        },
+        {
+          "text": "\u300c\u9001\u5be9\u300d\u6b63\u540d\u70ba\u300c\u63d0\u4ea4\u300d",
+          "passed": true,
+          "evidence": "matched"
+        },
+        {
+          "text": "Loading \u5efa\u8b70\u5177\u540d\u5316",
+          "passed": true,
+          "evidence": "matched"
+        },
+        {
+          "text": "\u5be9\u67e5\u672a\u4fdd\u7559/\u63a8\u85a6 emoji \u7528\u6cd5",
+          "passed": true,
+          "evidence": "matched"
+        }
+      ],
+      "notes": []
+    },
+    {
+      "eval_id": 3,
+      "configuration": "old_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 1.0,
+        "passed": 5,
+        "failed": 0,
+        "total": 5,
+        "time_seconds": 52.3,
+        "tokens": 47987,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "\u6307\u51fa\u53e5\u4e2d\u591a\u8b8a\u6578\u9020\u6210\u7ffb\u8b6f\u7834\u7248",
+          "passed": true,
+          "evidence": "matched"
+        },
+        {
+          "text": "\u5efa\u8b70 Label:Value / \u8b8a\u6578\u62bd\u96e2\u53e5\u4e2d",
+          "passed": true,
+          "evidence": "matched"
+        },
+        {
+          "text": "\u53bb\u9664\u9a5a\u5606\u865f / \u6d88\u8cbb\u7d1a\u8a9e\u6c23",
+          "passed": true,
+          "evidence": "matched"
+        },
+        {
+          "text": "\u540c\u6642\u63d0\u4f9b\u7e41\u4e2d\u8207\u82f1\u6587\u7248\u672c",
+          "passed": true,
+          "evidence": "matched"
+        },
+        {
+          "text": "\u5fc5\u586b\u7528\u300c\u8acb\u8f38\u5165\u300d/\u300cPlease enter\u300d\u6a21\u677f",
+          "passed": true,
+          "evidence": "matched"
+        }
+      ],
+      "notes": []
+    },
+    {
+      "eval_id": 4,
+      "configuration": "old_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 1.0,
+        "passed": 4,
+        "failed": 0,
+        "total": 4,
+        "time_seconds": 33.6,
+        "tokens": 46831,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "\u554f\u53e5\u7528\u300c\u662f\u5426\u2026\uff1f\u300d\u7d50\u69cb",
+          "passed": true,
+          "evidence": "matched"
+        },
+        {
+          "text": "\u6309\u9215\u65b9\u5411\uff1a\u6b63\u5411\u5728\u53f3\u3001\u53d6\u6d88\u5728\u5de6",
+          "passed": true,
+          "evidence": "matched"
+        },
+        {
+          "text": "\u6309\u9215\u7528\u52d5\u8a5e\u300c\u91cd\u5370\u300d(\u975e\u50c5\u78ba\u5b9a/OK)",
+          "passed": true,
+          "evidence": "matched"
+        },
+        {
+          "text": "\u5168\u6587\u7121 emoji",
+          "passed": true,
+          "evidence": "matched"
+        }
+      ],
+      "notes": []
+    },
+    {
+      "eval_id": 5,
+      "configuration": "old_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 0.75,
+        "passed": 3,
+        "failed": 1,
+        "total": 4,
+        "time_seconds": 34.5,
+        "tokens": 47089,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "\u544a\u77e5\u6027\u5f48\u7a97\u6309\u9215\u7528\u300c\u77e5\u9053\u4e86\u300d",
+          "passed": true,
+          "evidence": "matched"
+        },
+        {
+          "text": "\u6c7a\u7b56\u6027\u5f48\u7a97\u7528\u52d5\u4f5c\u8a5e\u300c\u522a\u9664\u300d",
+          "passed": true,
+          "evidence": "matched"
+        },
+        {
+          "text": "\u7981\u7528\u78ba\u8a8d/\u78ba\u5b9a/\u95dc\u9589/OK \u4e2d\u6027\u8a5e(\u672a\u628a\u95dc\u9589\u7576\u53ef\u63a5\u53d7)",
+          "passed": false,
+          "evidence": "not found"
+        },
+        {
+          "text": "\u8aaa\u660e\u544a\u77e5\u6027 vs \u6c7a\u7b56\u6027\u5dee\u7570",
+          "passed": true,
+          "evidence": "matched"
+        }
+      ],
+      "notes": []
+    },
+    {
+      "eval_id": 0,
+      "configuration": "with_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 1.0,
+        "passed": 5,
+        "failed": 0,
+        "total": 5,
+        "time_seconds": 31.1,
+        "tokens": 48411,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "\u932f\u8aa4\u7528\u300c\u7121\u6cd5\u4f5c\u5ee2\uff1a\u300d\u5192\u865f\u53e5\u578b",
+          "passed": true,
+          "evidence": "matched"
+        },
+        {
+          "text": "\u7834\u58de\u6027\u78ba\u8a8d\u542b\u300c\u662f\u5426\u7e7c\u7e8c\uff1f\u300d",
+          "passed": true,
+          "evidence": "matched"
+        },
+        {
+          "text": "\u78ba\u8a8d CTA \u7528\u660e\u78ba\u52d5\u8a5e\u300c\u4f5c\u5ee2\u300d",
+          "passed": true,
+          "evidence": "matched"
+        },
+        {
+          "text": "\u4f7f\u7528\u6a19\u6e96\u8853\u8a9e\u300c\u50b3\u7968\u300d",
+          "passed": true,
+          "evidence": "matched"
+        },
+        {
+          "text": "\u5168\u6587\u7121 emoji",
+          "passed": true,
+          "evidence": "matched"
+        }
+      ],
+      "notes": []
+    },
+    {
+      "eval_id": 1,
+      "configuration": "with_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 1.0,
+        "passed": 4,
+        "failed": 0,
+        "total": 4,
+        "time_seconds": 41.7,
+        "tokens": 48688,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "\u7a7a\u72c0\u614b\u7528\u3014\u3015inline CTA",
+          "passed": true,
+          "evidence": "matched"
+        },
+        {
+          "text": "\u6210\u529f Toast \u7528\u300c\u5df2\u522a\u9664 \u2026 \u7b46\u8349\u7a3f\u300d",
+          "passed": true,
+          "evidence": "matched"
+        },
+        {
+          "text": "\u5f15\u7528\u963b\u64cb\u7528\u300c\u7121\u6cd5\u522a\u9664\uff1a\u2026\u5f15\u7528\u300d",
+          "passed": true,
+          "evidence": "matched"
+        },
+        {
+          "text": "\u5168\u6587\u7121 emoji",
+          "passed": true,
+          "evidence": "matched"
+        }
+      ],
+      "notes": []
+    },
+    {
+      "eval_id": 2,
+      "configuration": "with_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 1.0,
+        "passed": 5,
+        "failed": 0,
+        "total": 5,
+        "time_seconds": 43.9,
+        "tokens": 49382,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "\u6307\u51fa \ud83c\udf89 emoji \u61c9\u79fb\u9664",
+          "passed": true,
+          "evidence": "matched"
+        },
+        {
+          "text": "CTA \u4fee\u6b63\u70ba\u3014\u6e05\u9664\u7be9\u9078\u3015",
+          "passed": true,
+          "evidence": "matched"
+        },
+        {
+          "text": "\u300c\u9001\u5be9\u300d\u6b63\u540d\u70ba\u300c\u63d0\u4ea4\u300d",
+          "passed": true,
+          "evidence": "matched"
+        },
+        {
+          "text": "Loading \u5efa\u8b70\u5177\u540d\u5316",
+          "passed": true,
+          "evidence": "matched"
+        },
+        {
+          "text": "\u5be9\u67e5\u672a\u4fdd\u7559/\u63a8\u85a6 emoji \u7528\u6cd5",
+          "passed": true,
+          "evidence": "matched"
+        }
+      ],
+      "notes": []
+    },
+    {
+      "eval_id": 3,
+      "configuration": "with_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 1.0,
+        "passed": 5,
+        "failed": 0,
+        "total": 5,
+        "time_seconds": 57.8,
+        "tokens": 50293,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "\u6307\u51fa\u53e5\u4e2d\u591a\u8b8a\u6578\u9020\u6210\u7ffb\u8b6f\u7834\u7248",
+          "passed": true,
+          "evidence": "matched"
+        },
+        {
+          "text": "\u5efa\u8b70 Label:Value / \u8b8a\u6578\u62bd\u96e2\u53e5\u4e2d",
+          "passed": true,
+          "evidence": "matched"
+        },
+        {
+          "text": "\u53bb\u9664\u9a5a\u5606\u865f / \u6d88\u8cbb\u7d1a\u8a9e\u6c23",
+          "passed": true,
+          "evidence": "matched"
+        },
+        {
+          "text": "\u540c\u6642\u63d0\u4f9b\u7e41\u4e2d\u8207\u82f1\u6587\u7248\u672c",
+          "passed": true,
+          "evidence": "matched"
+        },
+        {
+          "text": "\u5fc5\u586b\u7528\u300c\u8acb\u8f38\u5165\u300d/\u300cPlease enter\u300d\u6a21\u677f",
+          "passed": true,
+          "evidence": "matched"
+        }
+      ],
+      "notes": []
+    },
+    {
+      "eval_id": 4,
+      "configuration": "with_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 1.0,
+        "passed": 4,
+        "failed": 0,
+        "total": 4,
+        "time_seconds": 38.8,
+        "tokens": 47823,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "\u554f\u53e5\u7528\u300c\u662f\u5426\u2026\uff1f\u300d\u7d50\u69cb",
+          "passed": true,
+          "evidence": "matched"
+        },
+        {
+          "text": "\u6309\u9215\u65b9\u5411\uff1a\u6b63\u5411\u5728\u53f3\u3001\u53d6\u6d88\u5728\u5de6",
+          "passed": true,
+          "evidence": "matched"
+        },
+        {
+          "text": "\u6309\u9215\u7528\u52d5\u8a5e\u300c\u91cd\u5370\u300d(\u975e\u50c5\u78ba\u5b9a/OK)",
+          "passed": true,
+          "evidence": "matched"
+        },
+        {
+          "text": "\u5168\u6587\u7121 emoji",
+          "passed": true,
+          "evidence": "matched"
+        }
+      ],
+      "notes": []
+    },
+    {
+      "eval_id": 5,
+      "configuration": "with_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 1.0,
+        "passed": 4,
+        "failed": 0,
+        "total": 4,
+        "time_seconds": 42.5,
+        "tokens": 48912,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "\u544a\u77e5\u6027\u5f48\u7a97\u6309\u9215\u7528\u300c\u77e5\u9053\u4e86\u300d",
+          "passed": true,
+          "evidence": "matched"
+        },
+        {
+          "text": "\u6c7a\u7b56\u6027\u5f48\u7a97\u7528\u52d5\u4f5c\u8a5e\u300c\u522a\u9664\u300d",
+          "passed": true,
+          "evidence": "matched"
+        },
+        {
+          "text": "\u7981\u7528\u78ba\u8a8d/\u78ba\u5b9a/\u95dc\u9589/OK \u4e2d\u6027\u8a5e(\u672a\u628a\u95dc\u9589\u7576\u53ef\u63a5\u53d7)",
+          "passed": true,
+          "evidence": "matched"
+        },
+        {
+          "text": "\u8aaa\u660e\u544a\u77e5\u6027 vs \u6c7a\u7b56\u6027\u5dee\u7570",
+          "passed": true,
+          "evidence": "matched"
+        }
+      ],
+      "notes": []
+    }
+  ],
+  "run_summary": {
+    "old_skill": {
+      "pass_rate": {
+        "mean": 0.9583,
+        "stddev": 0.1021,
+        "min": 0.75,
+        "max": 1.0
+      },
+      "time_seconds": {
+        "mean": 32.6167,
+        "stddev": 10.9049,
+        "min": 22.7,
+        "max": 52.3
+      },
+      "tokens": {
+        "mean": 47064.8333,
+        "stddev": 499.6304,
+        "min": 46647,
+        "max": 47987
+      }
+    },
+    "with_skill": {
+      "pass_rate": {
+        "mean": 1.0,
+        "stddev": 0.0,
+        "min": 1.0,
+        "max": 1.0
+      },
+      "time_seconds": {
+        "mean": 42.6333,
+        "stddev": 8.7205,
+        "min": 31.1,
+        "max": 57.8
+      },
+      "tokens": {
+        "mean": 48918.1667,
+        "stddev": 850.2859,
+        "min": 47823,
+        "max": 50293
+      }
+    },
+    "delta": {
+      "pass_rate": "-0.04",
+      "time_seconds": "-10.0",
+      "tokens": "-1853"
+    }
+  },
+  "notes": []
+}

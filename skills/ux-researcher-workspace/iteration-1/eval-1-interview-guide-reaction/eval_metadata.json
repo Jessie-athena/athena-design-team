@@ -1,0 +1,13 @@
+{
+  "eval_id": 1,
+  "eval_name": "interview-guide-reaction",
+  "prompt": "我們做了一個批次資料匯入功能的 wireframe，下週要訪談 6 位客戶端的系統管理員，幫我寫訪談大綱。",
+  "assertions": [
+    "has-reaction-section: 大綱含獨立的 Reaction / 概念展示段（任務明確提到有 wireframe，屬 Evaluative 模式），不是只有背景與痛點訪談",
+    "reaction-free-response-first: Reaction 段指示先讓受訪者自由反應（如「你覺得這是做什麼用的」），且提醒不要急著解釋設計意圖",
+    "stated-intent-caveat: 對受訪者「我會用」類的正面表態有追問具體情境/取捨的設計（口頭意願不等於實際行為）",
+    "probing-questions: 主題深入段含探測與追問問題（舉例、為什麼、其他選項），不是只有主問題",
+    "consent-opening: 開場段含研究目的說明、錄音同意、可隨時中止",
+    "zh-tw-with-english-terms: 繁體中文為主，技術術語保留英文"
+  ]
+}

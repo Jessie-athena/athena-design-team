@@ -1,0 +1,34 @@
+{
+  "eval_id": 6,
+  "config": "with_skill",
+  "expectations": [
+    {
+      "text": "依角色用不同慣用動詞(出貨/出庫)",
+      "passed": true,
+      "evidence": "matched"
+    },
+    {
+      "text": "兩則皆用「無法[動作]：」事務句型",
+      "passed": true,
+      "evidence": "matched"
+    },
+    {
+      "text": "說明差異對應角色心智/在意/職權",
+      "passed": true,
+      "evidence": "matched"
+    },
+    {
+      "text": "全文無 emoji",
+      "passed": true,
+      "evidence": "matched"
+    }
+  ],
+  "pass_count": 4,
+  "total": 4,
+  "summary": {
+    "pass_rate": 1.0,
+    "passed": 4,
+    "failed": 0,
+    "total": 4
+  }
+}

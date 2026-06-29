@@ -1,0 +1,39 @@
+{
+  "eval_id": 2,
+  "config": "with_skill",
+  "expectations": [
+    {
+      "text": "指出 🎉 emoji 應移除/不該用",
+      "passed": true,
+      "evidence": "pattern matched"
+    },
+    {
+      "text": "inline CTA 修正為〔清除篩選〕",
+      "passed": true,
+      "evidence": "pattern matched"
+    },
+    {
+      "text": "將「送審」正名為標準動作「提交」",
+      "passed": true,
+      "evidence": "pattern matched"
+    },
+    {
+      "text": "Loading 建議具名化(正在…傳票/查詢/匯出)",
+      "passed": true,
+      "evidence": "pattern matched"
+    },
+    {
+      "text": "審查未保留/未推薦 emoji 用法(未建議空狀態保留 emoji)",
+      "passed": true,
+      "evidence": "no emoji endorsement"
+    }
+  ],
+  "pass_count": 5,
+  "total": 5,
+  "summary": {
+    "pass_rate": 1.0,
+    "passed": 5,
+    "failed": 0,
+    "total": 5
+  }
+}

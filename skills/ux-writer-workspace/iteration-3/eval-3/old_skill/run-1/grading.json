@@ -1,0 +1,34 @@
+{
+  "eval_id": 3,
+  "config": "old_skill",
+  "expectations": [
+    {
+      "text": "指出句中多變數造成翻譯破版",
+      "passed": true,
+      "evidence": "matched"
+    },
+    {
+      "text": "建議 Label:Value / 變數抽離",
+      "passed": true,
+      "evidence": "matched"
+    },
+    {
+      "text": "同時提供繁中與英文版本",
+      "passed": true,
+      "evidence": "matched"
+    },
+    {
+      "text": "必填用「請輸入/請選擇」+ Please 模板",
+      "passed": true,
+      "evidence": "matched"
+    }
+  ],
+  "pass_count": 4,
+  "total": 4,
+  "summary": {
+    "pass_rate": 1.0,
+    "passed": 4,
+    "failed": 0,
+    "total": 4
+  }
+}

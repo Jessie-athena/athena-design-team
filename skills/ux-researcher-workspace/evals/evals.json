@@ -1,0 +1,52 @@
+{
+  "skill_name": "ux-researcher",
+  "evals": [
+    {
+      "id": 0,
+      "eval_name": "method-selection",
+      "prompt": "我們 B2B 後台的自訂報表功能使用率很低，想知道原因；同時也想了解使用者實際上是怎麼完成他們每週的營運報表流程的。該用什麼研究方法？幫我規劃這個研究。",
+      "expected_output": "依問題類型選擇方法（為什麼→質性訪談/觀察；使用率量化面→可結合量化），附樣本數與時程，產出完整 research plan，量化分析正確指派給 data-analyst。",
+      "files": [],
+      "assertions": [
+        "method-matches-question-type: 方法選擇依問題類型——「為什麼不用」對應質性方法（深度訪談/情境觀察），且有說明為什麼這個方法能回答該問題；不是無差別列一堆方法",
+        "sample-size-and-timeline: 每個建議方法附具體樣本數與時程估計（如訪談 5-8 人、2-4 週）",
+        "research-plan-structure: 產出完整 research plan——含研究目標、方法、招募標準、時程、倫理/同意，五段俱全",
+        "recruiting-bias-guard: 招募標準含反偏誤設計（如納入非重度使用者、排除自家員工），不是只招活躍使用者",
+        "cross-role-routing: 若建議問卷或 A/B 等量化方法，明確指出統計分析交給 data-analyst（或同等的角色分工聲明）",
+        "zh-tw-with-english-terms: 繁體中文為主，技術術語保留英文"
+      ]
+    },
+    {
+      "id": 1,
+      "eval_name": "interview-guide-reaction",
+      "prompt": "我們做了一個批次資料匯入功能的 wireframe，下週要訪談 6 位客戶端的系統管理員，幫我寫訪談大綱。",
+      "expected_output": "半結構化訪談大綱，因有 wireframe（Evaluative 模式）須含 Reaction 段：先讓受訪者自由反應、不急著解釋設計意圖、追問具體情境。",
+      "files": [],
+      "assertions": [
+        "has-reaction-section: 大綱含獨立的 Reaction / 概念展示段（任務明確提到有 wireframe，屬 Evaluative 模式），不是只有背景與痛點訪談",
+        "reaction-free-response-first: Reaction 段指示先讓受訪者自由反應（如「你覺得這是做什麼用的」），且提醒不要急著解釋設計意圖",
+        "stated-intent-caveat: 對受訪者「我會用」類的正面表態有追問具體情境/取捨的設計（口頭意願不等於實際行為）",
+        "probing-questions: 主題深入段含探測與追問問題（舉例、為什麼、其他選項），不是只有主問題",
+        "consent-opening: 開場段含研究目的說明、錄音同意、可隨時中止",
+        "zh-tw-with-english-terms: 繁體中文為主，技術術語保留英文"
+      ]
+    },
+    {
+      "id": 2,
+      "eval_name": "synthesis-quantified",
+      "prompt": "這是我們 8 場訪談的筆記（fixtures/interview-notes-custom-reports.md），幫我合成洞察，並告訴我們接下來該優先做什麼。",
+      "expected_output": "Insight cards 標明普及度 X of 8、觀察與詮釋分離、報告含 Insights→Opportunities impact/effort 矩陣、揭露方法論限制（CS 推薦偏誤、同公司 2 人、高階主管缺席）。",
+      "files": ["fixtures/interview-notes-custom-reports.md"],
+      "assertions": [
+        "prevalence-quantified: 每個 insight 標明普及度「X of 8」格式（或 X/8），不使用「多數」「很多使用者」等模糊量詞",
+        "observation-interpretation-separated: 觀察（受訪者原話/行為）與詮釋（推論）在結構上分離呈現，不混在同一段",
+        "insights-to-opportunities-matrix: 含 Insights → Opportunities 對照（機會 + impact/effort 評級），洞察不是止於 HMW",
+        "methodology-limitations: 揭露至少 2 項方法論限制（CS 推薦招募偏誤、P1/P5 同公司、高階主管場次取消、自行報名者特性等）",
+        "evidence-min-two-participants: insight 至少 2 位受訪者證據；僅 1 位來源的（如 P7 的 API 路線）標為低信心或單獨註記",
+        "catches-trust-consistency-theme: 抓到「數字信任/一致性」主題（P1 核數習慣、P5 數字要對得起來、P6 定義不統一）",
+        "catches-discoverability-theme: 抓到「功能能見度/入口」主題（P2、P8 沒聽過功能，P4 卡在資料來源選擇）",
+        "zh-tw-with-english-terms: 繁體中文為主，技術術語保留英文"
+      ]
+    }
+  ]
+}

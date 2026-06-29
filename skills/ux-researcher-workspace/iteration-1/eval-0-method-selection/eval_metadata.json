@@ -1,0 +1,13 @@
+{
+  "eval_id": 0,
+  "eval_name": "method-selection",
+  "prompt": "我們 B2B 後台的自訂報表功能使用率很低，想知道原因；同時也想了解使用者實際上是怎麼完成他們每週的營運報表流程的。該用什麼研究方法？幫我規劃這個研究。",
+  "assertions": [
+    "method-matches-question-type: 方法選擇依問題類型——「為什麼不用」對應質性方法（深度訪談/情境觀察），且有說明為什麼這個方法能回答該問題；不是無差別列一堆方法",
+    "sample-size-and-timeline: 每個建議方法附具體樣本數與時程估計（如訪談 5-8 人、2-4 週）",
+    "research-plan-structure: 產出完整 research plan——含研究目標、方法、招募標準、時程、倫理/同意，五段俱全",
+    "recruiting-bias-guard: 招募標準含反偏誤設計（如納入非重度使用者、排除自家員工），不是只招活躍使用者",
+    "cross-role-routing: 若建議問卷或 A/B 等量化方法，明確指出統計分析交給 data-analyst（或同等的角色分工聲明）",
+    "zh-tw-with-english-terms: 繁體中文為主，技術術語保留英文"
+  ]
+}
