@@ -128,7 +128,7 @@ Component Tokens（元件層）
 > 流程：
 > 1. **判層**：原子控制元件（Button / TextBox / Checkbox…）→ **Lite**；資料密集・複合元件（DataGrid / Stepper / Dialog…）→ **Full**。判層心法見 schema §3。
 > 2. **填結構化區塊（§3–5）**：視覺值一律 `{token}` reference（對映 `athena-tokens.md` 真值），**禁** raw hex/px；對不上既有 token 時停下回報，勿臆造。
-> 3. **Figma 補入**：可由 `get_variable_defs`（token）/ `get_design_context`（結構·量測）/ `get_screenshot`（狀態驗證）回填 §3–5，其餘 §6–12 人工/PRD。對應表見 schema §5。
+> 3. **Figma 補入**：可由 `get_variable_defs`（token）/ `get_design_context`（結構·量測）/ `get_screenshot`（狀態驗證）回填 §3–5，其餘 §6–12 人工/PRD。對應表見 schema §5。**步驟化 workflow（Token Matching 五層）詳見 `references/figma-to-component-doc.md`**。
 > 4. **收編而非另定**：與 `prototyper/profiles/erp-components/*.md`（DataGrid / Stepper…）重疊處用**引用**，不重寫 token 決策（避免漂移）。
 >
 > 下方為 spec **格式雛形的跨專案通用示意**（`color.blue.500` 等為佔位）；**Athena 實際產出**請改套 schema 並用真實 `--color-sf-*` / `--ds-*` token，完整對照見 `references/components/Button.md`。

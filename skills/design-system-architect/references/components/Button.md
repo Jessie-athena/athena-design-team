@@ -116,6 +116,6 @@ loading:  { spinner: "{color-sf-on-primary}", label: dim }   # 📋 Figma 未含
 - **按鈕圓角**：採 Figma `RadiusSm` **4px**（變數 + 渲染 CSS 雙重佐證）；`athena-design.md §圓角搭配` 散文已從 8px 改 4px。pill 變體 = 1000px。
 
 **⚠️ 仍待確認（次要）**：
-1. **輸入框圓角**：散文原與按鈕同列 8px，現按鈕改 4px；輸入框實際值待另以 Figma 確認（暫標待同步）。
+1. **輸入框圓角**：✅ 已確認（2026-06-29 TextBox Figma 補入）：TextBox 頂部圓角 = `{ds-radius-small}` 4px，底部 = 0（Filled 底線式）。見 `components/TextBox.md §Figma 補入紀錄`。
 2. **disabled bg 表示法**：Figma 以 two-stop（如 `#2877EE,#FFFFFF`）表示 base + 疊層，非單一色；落地以 state-layer 疊加實作。
 3. **Comfortable 密度 padding**：Figma variant 未編碼密度，Comfortable 值待確認。

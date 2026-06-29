@@ -13,7 +13,7 @@ description: Visual design for product screens — visual hierarchy, layout, typ
 2. **Layout**：Grid、spacing、breakpoint 應用
 3. **Typography**：字體選擇、尺寸階、行高、對比
 4. **Color application**：正確套用 semantic token
-5. **Component 應用**：挑選 / 組合現有 component。挑用前到 `design-system-architect/references/components/<元件>.md`（格式見 `component-doc-schema.md`）取該元件的 variants / states / usage rules，**不自行臆測**；若該元件在 `athena-components.md` 標 **⬜ 待分類**，需 flag「採用狀態未定，待 `design-system-architect` 治理確認」，不逕自採用
+5. **Component 應用**：挑選 / 組合現有 component。挑用前到 `design-system-architect/references/components/<元件>.md`（格式見 `component-doc-schema.md`；由 `design-system-architect` 依 `references/figma-to-component-doc.md` Token Matching workflow 產出）取該元件的 variants / states / usage rules，**不自行臆測**；若該元件在 `athena-components.md` 標 **⬜ 待分類**，需 flag「採用狀態未定，待 `design-system-architect` 治理確認」，不逕自採用
    - **設計文件未產出時的 fallback**：`references/components/` 目前僅收編部分 ✅ 元件（其餘待補，見 `component-doc-schema.md §9.3`）。找不到該檔時**不要臆測**，改依序退查：① `prototyper/profiles/erp-components/<元件>.md`（用法層：class / 行為）＋ `prototyper/assets/app.css`（值權威：實際尺寸 / 色）；② `athena-components.md` 確認採用狀態。並 flag「上游設計文件待補，暫引 prototyper profile / app.css」，供 `design-system-architect` 後續收編
 6. **跨平台視覺一致性**：Web / App 視覺氣質統一
 
