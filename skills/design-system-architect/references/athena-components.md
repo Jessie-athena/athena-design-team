@@ -30,7 +30,11 @@
 | SummaryCard | [`components/SummaryCard.md`](../components/SummaryCard.md) | ✅ 已產出（Full；Layout A/B、sticky 無 shadow、4 步動態 stepper 落地引用 prototyper SummaryCard.md） |
 | TextBox | [`components/TextBox.md`](../components/TextBox.md) | ✅ 已產出（Lite；Filled Small Default；Layer 1–4 Figma 校準，含 token gap 標注） |
 | NumericTextBox | [`components/NumericTextBox.md`](../components/NumericTextBox.md) | ✅ 已產出（Lite；Filled Small Default；label=12px、無 warning 態、spinner 控制區） |
-| Tab / Dialog / FAB / DropDownList / DatePicker / Toast / Skeleton | — | ⬜ 待補 |
+| DropDownList | [`components/DropDownList.md`](../components/DropDownList.md) | ✅ 已產出（Lite；固定 arrow-down btn；clearIcon 為 Syncfusion runtime prop） |
+| DatePicker | [`components/DatePicker.md`](../components/DatePicker.md) | ✅ 已產出（Lite；DsDatePicker 客製包裝；固定 calendar-icon-btn） |
+| Tab | [`components/Tab.md`](../components/Tab.md) | ✅ 已產出（Full；Size×Alignment×Count×scroll 四軸；indicator 3px 無 token） |
+| Dialog | [`components/Dialog.md`](../components/Dialog.md) | ✅ 已產出（Full；Size Small/Large；confirm/deeplink 為 ERP 應用層規範） |
+| FAB / Toast / Skeleton | — | ⬜ 待補 |
 
 > 收編原則：`prototyper` 既有的深度元件規格（DataGrid / Stepper / SummaryCard…）為「prototype 單檔 HTML/CSS 落地層」；設計文件是「what/why/token/state 的權威」。補設計文件時**引用** profile，不重寫 token 決策（見 `component-doc-schema.md §8`）。
 
