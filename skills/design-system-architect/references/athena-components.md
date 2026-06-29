@@ -53,6 +53,14 @@
 | ListBox | [`components/ListBox.md`](components/ListBox.md) | ✅ 已產出（Full；Dual ListBox = toolbarSettings 組合；3 item padding token gap） |
 | Checkbox | [`components/Checkbox.md`](components/Checkbox.md) | ✅ 已產出（Lite；indeterminate = Type=Intermediate；disabled opacity-38；1 label_gap token gap） |
 | RadioButton | [`components/RadioButton.md`](components/RadioButton.md) | ✅ 已產出（Lite；1.5px border token gap；inner-dot selected style） |
+| Switch | [`components/Switch.md`](components/Switch.md) | ✅ 已產出（Lite；4 軸 ~160 variant；track/thumb token；2 token gap） |
+| Rating | [`components/Rating.md`](components/Rating.md) | ✅ 已產出（Lite；3 軸 88 variant；Star / Heart shape；2 token gap） |
+| ColorPicker | [`components/ColorPicker.md`](components/ColorPicker.md) | ✅ 已產出（Full；Size × Template；Color Range / Swatches；3 token gap） |
+| DsColorPicker | [`components/DsColorPicker.md`](components/DsColorPicker.md) | ✅ 已產出（Lite；客製固定色盤；light/dark 2 variant；18 var 零漂移） |
+| Calendar | [`components/Calendar.md`](components/Calendar.md) | ✅ 已產出（Full；24 variant；今日格 outline ring；32 var 零漂移） |
+| DateRangePicker | [`components/DateRangePicker.md`](components/DateRangePicker.md) | ✅ 已產出（Full；88 variant；overlay 雙月曆 252px 並排；43 var 零漂移） |
+| DateTimePicker | [`components/DateTimePicker.md`](components/DateTimePicker.md) | ✅ 已產出（Lite；132 variant；雙 icon action-container；50 var 零漂移） |
+| TimePicker | [`components/TimePicker.md`](components/TimePicker.md) | ✅ 已產出（Lite；3 軸；clock icon；dropdown list 型；3 token gap） |
 
 > 收編原則：`prototyper` 既有的深度元件規格（DataGrid / Stepper / SummaryCard…）為「prototype 單檔 HTML/CSS 落地層」；設計文件是「what/why/token/state 的權威」。補設計文件時**引用** profile，不重寫 token 決策（見 `component-doc-schema.md §8`）。
 
@@ -122,10 +130,11 @@
 | ListBox | 清單選擇 / 雙清單搬移 | ✅ 已採用 |
 | Checkbox | 多選框 | ✅ 已採用 |
 | RadioButton | 單選鈕 | ✅ 已採用 |
-| Switch | 開關切換 | ⬜ 待分類 |
+| Switch | 開關切換 | ✅ 已採用 |
 | Slider | 數值滑桿 | ⬜ 待分類 |
-| Rating | 星等評分 | ⬜ 待分類 |
-| ColorPicker | 色彩選擇 | ⬜ 待分類 |
+| Rating | 星等評分 | ✅ 已採用 |
+| ColorPicker | 色彩選擇 | ✅ 已採用 |
+| DsColorPicker | 客製固定色盤選擇器（Ds 元件） | ✅ 已採用 |
 
 ## 5. 日期與時間（Date & Time）
 
@@ -134,10 +143,10 @@
 | 元件 | 用途（用在哪） | 採用狀態 |
 |------|--------------|---------|
 | DatePicker | 日期選擇 | ✅ 已採用（另有客製 `DsDatePicker` 含多語系格式） |
-| Calendar | 月曆面板 | ⬜ 待分類 |
-| DateRangePicker | 日期區間選擇 | ⬜ 待分類 |
-| DateTimePicker | 日期＋時間選擇 | ⬜ 待分類 |
-| TimePicker | 時間選擇 | ⬜ 待分類 |
+| Calendar | 月曆面板 | ✅ 已採用 |
+| DateRangePicker | 日期區間選擇 | ✅ 已採用 |
+| DateTimePicker | 日期＋時間選擇 | ✅ 已採用 |
+| TimePicker | 時間選擇 | ✅ 已採用 |
 
 ## 6. 資料展示與表格（Data Display）
 
