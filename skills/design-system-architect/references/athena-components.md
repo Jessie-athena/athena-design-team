@@ -29,7 +29,8 @@
 | Stepper | [`components/Stepper.md`](../components/Stepper.md) | ✅ 已產出（Full；步序狀態 / 語意色 / 判定邏輯 / voided-banner 落地引用 prototyper Stepper.md） |
 | SummaryCard | [`components/SummaryCard.md`](../components/SummaryCard.md) | ✅ 已產出（Full；Layout A/B、sticky 無 shadow、4 步動態 stepper 落地引用 prototyper SummaryCard.md） |
 | TextBox | [`components/TextBox.md`](../components/TextBox.md) | ✅ 已產出（Lite；Filled Small Default；Layer 1–4 Figma 校準，含 token gap 標注） |
-| Tab / Dialog / FAB / NumericTextBox / DropDownList / DatePicker / Toast / Skeleton | — | ⬜ 待補 |
+| NumericTextBox | [`components/NumericTextBox.md`](../components/NumericTextBox.md) | ✅ 已產出（Lite；Filled Small Default；label=12px、無 warning 態、spinner 控制區） |
+| Tab / Dialog / FAB / DropDownList / DatePicker / Toast / Skeleton | — | ⬜ 待補 |
 
 > 收編原則：`prototyper` 既有的深度元件規格（DataGrid / Stepper / SummaryCard…）為「prototype 單檔 HTML/CSS 落地層」；設計文件是「what/why/token/state 的權威」。補設計文件時**引用** profile，不重寫 token 決策（見 `component-doc-schema.md §8`）。
 
