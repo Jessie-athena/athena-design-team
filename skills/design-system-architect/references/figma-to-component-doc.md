@@ -5,7 +5,7 @@ description: 將 Figma 元件系統性轉換為 Component 元件設計文件的�
 
 # Figma 元件 → Component 設計文件（Token Matching 工作流程）
 
-> **核心理念**（來源：ai_minadesign Design System Automation）
+> **核心理念**
 >
 > Design System 的核心不是生一堆 Token，而是維護這條鏈：
 >
