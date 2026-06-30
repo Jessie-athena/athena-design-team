@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=1280">
+  <title>Kanban — Athena DS</title>
+  <link rel="stylesheet" href="ds/design-tokens-base.css">
+  <link rel="stylesheet" href="ds/design-tokens-athena.css">
+  <link rel="stylesheet" href="ds/colors_and_type.css">
+  <link rel="stylesheet" href="app.css">
+  <link rel="stylesheet" href="showcase.css">
+  <script src="https://code.iconify.design/iconify-icon/2.1.0/iconify-icon.min.js"></script>
+  <style>
+    /* Kanban component */
+    .kb {
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+    }
+    .kb__col {
+      width: 260px;
+      flex-shrink: 0;
+      border-radius: var(--radius-lg);
+      background: var(--bg-surface-variant);
+      display: flex;
+      flex-direction: column;
+    }
+    .kb__col.is-overflow {
+      background: rgba(244,73,62,.07);
+    }
+    .kb__col.is-collapsed {
+      width: 48px;
+    }
+    .kb__col-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 12px 10px;
+    }
+    .kb__col-title {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-primary);
+      flex: 1;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .kb__col-count {
+      font-size: 11px;
+      font-weight: 600;
+      padding: 1px 7px;
+      border-radius: 100px;
+      background: var(--bg-surface-default);
+      color: var(--text-secondary);
+      border: 1px solid var(--border-default);
+    }
+    .kb__col-count.is-overflow {
+      color: #F4493E;
+      border-color: #F4493E;
+      background: rgba(244,73,62,.08);
+    }
+    .kb__toggle {
+      width: 24px; height: 24px;
+      display: inline-flex; align-items: center; justify-content: center;
+      border: none; background: transparent;
+      border-radius: 4px;
+      cursor: pointer;
+      color: var(--text-secondary);
+      transition: all 0.12s;
+      flex-shrink: 0;
+    }
+    .kb__toggle:hover { background: rgba(0,0,0,.08); }
+    .kb__toggle iconify-icon { font-size: 16px; }
+    .kb__col-body {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      padding: 0 8px 12px;
+      min-height: 80px;
+    }
+    /* Cards */
+    .kb__card {
+      background: var(--bg-surface-default);
+      border-radius: var(--radius-md);
+      padding: 12px;
+      box-shadow: 0 1px 3px rgba(0,0,0,.08);
+      cursor: grab;
+      transition: box-shadow 0.15s, transform 0.12s;
+      border: 1px solid transparent;
+    }
+    .kb__card:hover {
+      box-shadow: 0 4px 12px rgba(0,0,0,.12);
+      transform: translateY(-1px);
+    }
+    .kb__card.is-dragging {
+      opacity: 0.6;
+      border: 2px solid #2877EE;
+      transform: rotate(2deg);
+    }
+    .kb__card-header {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      margin-bottom: 8px;
+    }
+    .kb__card-title {
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text-primary);
+      flex: 1;
+      line-height: 1.4;
+    }
+    .kb__priority {
+      display: inline-flex;
+      align-items: center;
+      gap: 3px;
+      font-size: 11px;
+      font-weight: 600;
+      padding: 2px 6px;
+      border-radius: 100px;
+      flex-shrink: 0;
+    }
+    .kb__priority--high   { color: #F4493E; background: rgba(244,73,62,.1); }
+    .kb__priority--medium { color: #F79009; background: rgba(247,144,9,.1); }
+    .kb__priority--low    { color: #12B76A; background: rgba(18,183,106,.1); }
+    .kb__card-meta {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .kb__due {
+      font-size: 11px;
+      color: var(--text-secondary);
+      display: inline-flex; align-items: center; gap: 3px;
+    }
+    .kb__due.is-overdue { color: #F4493E; }
+    .kb__due iconify-icon { font-size: 13px; }
+    .kb__avatar {
+      width: 22px; height: 22px;
+      border-radius: 50%;
+      background: rgba(40,119,238,.15);
+      color: #2877EE;
+      font-size: 11px; font-weight: 700;
+      display: inline-flex; align-items: center; justify-content: center;
+    }
+    .kb__tags {
+      display: flex;
+      gap: 4px;
+      flex-wrap: wrap;
+      margin-top: 8px;
+    }
+    .kb__tag {
+      font-size: 10px;
+      font-weight: 500;
+      padding: 1px 6px;
+      border-radius: 3px;
+      background: var(--bg-surface-variant);
+      color: var(--text-secondary);
+      border: 1px solid var(--border-default);
+    }
+    /* WIP limit warning bar */
+    .kb__wip-warning {
+      font-size: 11px;
+      color: #F4493E;
+      padding: 4px 12px;
+      background: rgba(244,73,62,.06);
+      border-top: 1px solid rgba(244,73,62,.2);
+      display: flex; align-items: center; gap: 4px;
+    }
+    .kb__wip-warning iconify-icon { font-size: 14px; }
+    /* Add card ghost */
+    .kb__add-card {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 12px;
+      font-size: 13px;
+      color: var(--text-secondary);
+      border: 1px dashed var(--border-default);
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      background: transparent;
+      width: 100%;
+      transition: all 0.12s;
+    }
+    .kb__add-card:hover {
+      border-color: #2877EE;
+      color: #2877EE;
+      background: rgba(40,119,238,.04);
+    }
+    /* Swimlane */
+    .kb__swimlane-header {
+      padding: 6px 12px;
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--text-secondary);
+      background: rgba(40,119,238,.04);
+      border-top: 1px solid var(--border-default);
+      border-bottom: 1px solid var(--border-default);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    /* Collapsed col */
+    .kb__col-collapsed-body {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 12px 0;
+      gap: 8px;
+    }
+    .kb__col-name-vertical {
+      writing-mode: vertical-rl;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-secondary);
+      white-space: nowrap;
+      user-select: none;
+    }
+  </style>
+</head>
+<body>
+<div id="app" class="showcase-page">
+
+  <header class="showcase-header">
+    <div class="showcase-header__left">
+      <span class="showcase-badge">Data Display</span>
+      <h1 class="showcase-title">Kanban</h1>
+      <span class="showcase-version">v0.2</span>
+    </div>
+    <div class="showcase-header__right">
+      <a href="../../skills/design-system-architect/references/components/Kanban.md" class="showcase-doc-link">
+        <iconify-icon icon="material-symbols:article-outline"></iconify-icon> 設計文件
+      </a>
+    </div>
+  </header>
+
+  <div class="showcase-layout">
+
+    <!-- Controls -->
+    <aside class="showcase-controls">
+      <div class="ctrl-group">
+        <div class="ctrl-label">Variant</div>
+        <div class="ctrl-options">
+          <button v-for="v in variants" :key="v.key"
+                  :class="['ctrl-btn', { 'is-active': activeVariant === v.key }]"
+                  @click="activeVariant = v.key">{{ v.label }}</button>
+        </div>
+      </div>
+      <div class="ctrl-group">
+        <div class="ctrl-label">State</div>
+        <div class="ctrl-options">
+          <button v-for="s in states" :key="s.key"
+                  :class="['ctrl-btn', { 'is-active': activeState === s.key }]"
+                  @click="activeState = s.key">{{ s.label }}</button>
+        </div>
+      </div>
+      <hr class="ctrl-divider">
+      <div class="ctrl-group">
+        <div class="ctrl-label">WIP maxCount</div>
+        <input type="number" class="ctrl-input" v-model.number="wipMax" min="1" max="10">
+      </div>
+      <div class="ctrl-group">
+        <div class="ctrl-label">第2欄 allowToggle</div>
+        <div class="ctrl-options">
+          <button :class="['ctrl-btn', { 'is-active': allowToggle }]" @click="allowToggle=true">true</button>
+          <button :class="['ctrl-btn', { 'is-active': !allowToggle }]" @click="allowToggle=false">false</button>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main -->
+    <main class="showcase-main">
+
+      <section>
+        <p class="section-heading">Interactive Demo</p>
+        <div class="demo-canvas" style="align-items:flex-start;padding:28px;overflow-x:auto">
+          <div class="kb">
+            <template v-if="activeVariant === 'standard'">
+              <!-- Col 1: 待辦 -->
+              <div class="kb__col">
+                <div class="kb__col-header">
+                  <span class="kb__col-title">待辦</span>
+                  <span class="kb__col-count">{{ todoCards.length }}</span>
+                </div>
+                <div v-if="activeVariant === 'standard'" class="kb__col-body">
+                  <div v-for="c in todoCards" :key="c.id" class="kb__card"
+                       :class="{ 'is-dragging': dragging === c.id }"
+                       @mousedown="dragging = c.id" @mouseup="dragging = null">
+                    <div class="kb__card-header">
+                      <div class="kb__card-title">{{ c.title }}</div>
+                      <span :class="['kb__priority', 'kb__priority--' + c.priority]">{{ c.priority }}</span>
+                    </div>
+                    <div class="kb__card-meta">
+                      <span :class="['kb__due', { 'is-overdue': c.overdue }]">
+                        <iconify-icon icon="material-symbols:calendar-today-outline"></iconify-icon>
+                        {{ c.due }}
+                      </span>
+                      <div class="kb__avatar">{{ c.assignee[0] }}</div>
+                    </div>
+                    <div class="kb__tags"><span v-for="t in c.tags" :key="t" class="kb__tag">{{ t }}</span></div>
+                  </div>
+                  <button class="kb__add-card">
+                    <iconify-icon icon="material-symbols:add"></iconify-icon> 新增項目
+                  </button>
+                </div>
+              </div>
+
+              <!-- Col 2: 進行中（with WIP and allowToggle） -->
+              <div :class="['kb__col', { 'is-overflow': wipExceeded }]">
+                <div class="kb__col-header">
+                  <span class="kb__col-title">進行中</span>
+                  <span :class="['kb__col-count', { 'is-overflow': wipExceeded }]">
+                    {{ inProgressCards.length }}{{ wipMax ? ' / ' + wipMax : '' }}
+                  </span>
+                  <button v-if="allowToggle" class="kb__toggle" @click="col2Collapsed = !col2Collapsed">
+                    <iconify-icon :icon="col2Collapsed ? 'material-symbols:chevron-right' : 'material-symbols:expand-more'"></iconify-icon>
+                  </button>
+                </div>
+                <div v-if="!col2Collapsed" class="kb__col-body">
+                  <div v-for="c in inProgressCards" :key="c.id" class="kb__card"
+                       :class="{ 'is-dragging': dragging === c.id }"
+                       @mousedown="dragging = c.id" @mouseup="dragging = null">
+                    <div class="kb__card-header">
+                      <div class="kb__card-title">{{ c.title }}</div>
+                      <span :class="['kb__priority', 'kb__priority--' + c.priority]">{{ c.priority }}</span>
+                    </div>
+                    <div class="kb__card-meta">
+                      <span :class="['kb__due', { 'is-overdue': c.overdue }]">
+                        <iconify-icon icon="material-symbols:calendar-today-outline"></iconify-icon>
+                        {{ c.due }}
+                      </span>
+                      <div class="kb__avatar">{{ c.assignee[0] }}</div>
+                    </div>
+                  </div>
+                  <button class="kb__add-card"><iconify-icon icon="material-symbols:add"></iconify-icon> 新增項目</button>
+                </div>
+                <div v-if="wipExceeded && !col2Collapsed" class="kb__wip-warning">
+                  <iconify-icon icon="material-symbols:warning-outline"></iconify-icon>
+                  進行中 已達上限（{{ wipMax }} 筆）
+                </div>
+              </div>
+
+              <!-- Col 3: 完成 -->
+              <div class="kb__col">
+                <div class="kb__col-header">
+                  <span class="kb__col-title">已完成</span>
+                  <span class="kb__col-count">{{ doneCards.length }}</span>
+                </div>
+                <div class="kb__col-body">
+                  <div v-for="c in doneCards" :key="c.id" class="kb__card">
+                    <div class="kb__card-header">
+                      <div class="kb__card-title">{{ c.title }}</div>
+                      <span :class="['kb__priority', 'kb__priority--' + c.priority]">{{ c.priority }}</span>
+                    </div>
+                    <div class="kb__card-meta">
+                      <span class="kb__due"><iconify-icon icon="material-symbols:calendar-today-outline"></iconify-icon>{{ c.due }}</span>
+                      <div class="kb__avatar">{{ c.assignee[0] }}</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </template>
+
+            <!-- Swimlane variant -->
+            <template v-else>
+              <div v-for="col in swimlaneCols" :key="col.key" class="kb__col">
+                <div class="kb__col-header">
+                  <span class="kb__col-title">{{ col.title }}</span>
+                  <span class="kb__col-count">{{ swimlaneCards(col.key).length }}</span>
+                </div>
+                <template v-for="lane in lanes" :key="lane.key">
+                  <div class="kb__swimlane-header">{{ lane.label }}</div>
+                  <div class="kb__col-body" style="padding-top:6px">
+                    <div v-for="c in swimlaneCards(col.key).filter(x=>x.lane===lane.key)" :key="c.id" class="kb__card">
+                      <div class="kb__card-title">{{ c.title }}</div>
+                    </div>
+                    <button class="kb__add-card" style="margin-top:4px"><iconify-icon icon="material-symbols:add"></iconify-icon> 新增</button>
+                  </div>
+                </template>
+              </div>
+            </template>
+          </div>
+        </div>
+      </section>
+
+      <!-- States Gallery -->
+      <section>
+        <p class="section-heading">States Gallery</p>
+        <div class="gallery-grid">
+
+          <div class="gallery-card">
+            <div class="gallery-card__label">Card Default + Card Hover（shadow↑）</div>
+            <div class="gallery-card__content" style="gap:8px;flex-direction:column;align-items:stretch;padding:16px">
+              <div class="kb__card">
+                <div class="kb__card-header"><div class="kb__card-title">採購請款審核</div><span class="kb__priority kb__priority--high">high</span></div>
+                <div class="kb__card-meta"><span class="kb__due"><iconify-icon icon="material-symbols:calendar-today-outline"></iconify-icon>06/28</span><div class="kb__avatar">陳</div></div>
+              </div>
+              <div class="kb__card" style="box-shadow:0 4px 12px rgba(0,0,0,.12);transform:translateY(-1px)">
+                <div class="kb__card-header"><div class="kb__card-title">費用報銷（Hover）</div><span class="kb__priority kb__priority--medium">medium</span></div>
+                <div class="kb__card-meta"><span class="kb__due"><iconify-icon icon="material-symbols:calendar-today-outline"></iconify-icon>07/02</span><div class="kb__avatar">王</div></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="gallery-card">
+            <div class="gallery-card__label">WIP Exceeded（danger tint + red count）</div>
+            <div class="gallery-card__content" style="align-items:flex-start;padding:16px">
+              <div class="kb__col is-overflow" style="width:100%">
+                <div class="kb__col-header">
+                  <span class="kb__col-title">進行中</span>
+                  <span class="kb__col-count is-overflow">3 / 2</span>
+                </div>
+                <div class="kb__col-body">
+                  <div class="kb__card"><div class="kb__card-title">供應商對帳</div></div>
+                  <div class="kb__card"><div class="kb__card-title">月結請款</div></div>
+                  <div class="kb__card"><div class="kb__card-title">預算審查 ←超出</div></div>
+                </div>
+                <div class="kb__wip-warning">
+                  <iconify-icon icon="material-symbols:warning-outline"></iconify-icon>
+                  進行中 已達上限（2 筆）
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="gallery-card">
+            <div class="gallery-card__label">Empty Column（+ 新增 ghost btn）</div>
+            <div class="gallery-card__content" style="align-items:flex-start;padding:16px">
+              <div class="kb__col" style="width:100%">
+                <div class="kb__col-header"><span class="kb__col-title">已完成</span><span class="kb__col-count">0</span></div>
+                <div class="kb__col-body">
+                  <button class="kb__add-card"><iconify-icon icon="material-symbols:add"></iconify-icon> 新增項目</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="gallery-card">
+            <div class="gallery-card__label">Collapsed Column（allowToggle=true）</div>
+            <div class="gallery-card__content" style="gap:8px">
+              <div class="kb__col is-collapsed">
+                <div class="kb__col-header" style="padding:8px 12px">
+                  <button class="kb__toggle"><iconify-icon icon="material-symbols:chevron-right"></iconify-icon></button>
+                </div>
+                <div class="kb__col-collapsed-body">
+                  <span class="kb__col-count">4</span>
+                  <span class="kb__col-name-vertical">進行中</span>
+                </div>
+              </div>
+              <div class="kb__col" style="flex:1">
+                <div class="kb__col-header"><span class="kb__col-title">待辦</span><span class="kb__col-count">2</span></div>
+                <div class="kb__col-body">
+                  <div class="kb__card"><div class="kb__card-title">採購請款</div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="gallery-card">
+            <div class="gallery-card__label">Overdue Card（to-do date 紅色）</div>
+            <div class="gallery-card__content" style="padding:16px;align-items:flex-start">
+              <div class="kb__card" style="width:100%">
+                <div class="kb__card-header"><div class="kb__card-title">逾期帳款催收</div><span class="kb__priority kb__priority--high">high</span></div>
+                <div class="kb__card-meta">
+                  <span class="kb__due is-overdue"><iconify-icon icon="material-symbols:calendar-today-outline"></iconify-icon>06/15（逾期 15 天）</span>
+                  <div class="kb__avatar">林</div>
+                </div>
+                <div class="kb__tags"><span class="kb__tag">應收帳款</span><span class="kb__tag">催收</span></div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- API -->
+      <section>
+        <p class="section-heading">API / Props</p>
+        <table class="api-table">
+          <thead><tr><th>Prop</th><th>Type</th><th>Default</th><th>說明</th></tr></thead>
+          <tbody>
+            <tr><td><code>dataSource</code></td><td class="type">Object[]</td><td class="default">[]</td><td>卡片資料</td></tr>
+            <tr><td><code>keyField</code></td><td class="type">string</td><td class="default">—</td><td>卡片所屬欄的欄位名（對應 column keyField）</td></tr>
+            <tr><td><code>cardSettings</code></td><td class="type">CardSettings</td><td class="default">—</td><td><code>{ contentField, headerField, tagsField? }</code></td></tr>
+            <tr><td><code>columns</code></td><td class="type">— (directive)</td><td class="default">—</td><td><code>&lt;e-columns&gt;&lt;e-column headerText keyField minCount? maxCount? allowToggle?&gt;</code></td></tr>
+            <tr><td><code>swimlaneSettings</code></td><td class="type">SwimlaneSettings</td><td class="default">—</td><td><code>{ keyField }</code> 啟用游泳道分組</td></tr>
+            <tr><td><code>dialogSettings</code></td><td class="type">object</td><td class="default">—</td><td>雙擊卡片彈出的 dialog 欄位設定</td></tr>
+          </tbody>
+        </table>
+        <p class="api-note">事件：<code>@dragStop({ data, dropIndex })</code> / <code>@cardClick({ data })</code> / <code>@cardDoubleClick({ data })</code>。
+          <code>maxCount</code>（WIP 上限）與 <code>allowToggle</code>（欄收合）為 <strong>per-column</strong> 屬性，不是頂層 prop。</p>
+      </section>
+    </main>
+  </div>
+</div>
+
+<script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
+<script>
+const { createApp, ref, computed } = Vue
+createApp({
+  setup() {
+    const activeVariant = ref('standard')
+    const activeState   = ref('default')
+    const wipMax        = ref(2)
+    const allowToggle   = ref(true)
+    const col2Collapsed = ref(false)
+    const dragging      = ref(null)
+
+    const variants = [
+      { key: 'standard',  label: 'Standard' },
+      { key: 'swimlane',  label: 'Swimlane' },
+    ]
+    const states = [
+      { key: 'default',   label: 'Default' },
+      { key: 'wip',       label: 'WIP exceeded' },
+      { key: 'empty-col', label: 'Empty col' },
+    ]
+
+    const todoCards = [
+      { id: 1, title: '採購請款審核', priority: 'high',   due: '06/28', assignee: '陳威廷', overdue: false, tags: ['採購', '財務'], lane: 'finance' },
+      { id: 2, title: '廠商資料更新', priority: 'low',    due: '07/05', assignee: '王小明', overdue: false, tags: [],              lane: 'hr' },
+    ]
+    const inProgressCards = ref([
+      { id: 3, title: '月結對帳',     priority: 'medium', due: '06/30', assignee: '林美麗', overdue: false, tags: ['帳務'],        lane: 'finance' },
+      { id: 4, title: '費用報銷審核', priority: 'high',   due: '06/15', assignee: '張小華', overdue: true,  tags: ['費用'],        lane: 'finance' },
+    ])
+    const doneCards = [
+      { id: 5, title: '差旅申請核准', priority: 'low',    due: '06/20', assignee: '陳威廷', overdue: false, tags: [], lane: 'hr' },
+    ]
+
+    const wipExceeded = computed(() => wipMax.value > 0 && inProgressCards.value.length > wipMax.value)
+
+    // Swimlane data
+    const swimlaneCols = [
+      { key: 'todo',        title: '待辦' },
+      { key: 'in-progress', title: '進行中' },
+      { key: 'done',        title: '已完成' },
+    ]
+    const lanes = [
+      { key: 'finance', label: '財務部' },
+      { key: 'hr',      label: '人事部' },
+    ]
+    const allCards = [
+      ...todoCards.map(c => ({ ...c, col: 'todo' })),
+      ...inProgressCards.value.map(c => ({ ...c, col: 'in-progress' })),
+      ...doneCards.map(c => ({ ...c, col: 'done' })),
+    ]
+    const swimlaneCards = (colKey) => allCards.filter(c => c.col === colKey)
+
+    return {
+      activeVariant, activeState, wipMax, allowToggle, col2Collapsed, dragging,
+      variants, states, todoCards, inProgressCards, doneCards, wipExceeded,
+      swimlaneCols, lanes, swimlaneCards,
+    }
+  }
+}).mount('#app')
+</script>
+</body>
+</html>

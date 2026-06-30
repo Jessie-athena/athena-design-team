@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=1280">
+  <title>PivotView — Athena DS</title>
+  <link rel="stylesheet" href="ds/design-tokens-base.css">
+  <link rel="stylesheet" href="ds/design-tokens-athena.css">
+  <link rel="stylesheet" href="ds/colors_and_type.css">
+  <link rel="stylesheet" href="app.css">
+  <link rel="stylesheet" href="showcase.css">
+  <script src="https://code.iconify.design/iconify-icon/2.1.0/iconify-icon.min.js"></script>
+  <style>
+    /* PivotView layout */
+    .pv-wrap {
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+    }
+    /* Field List Panel */
+    .pv-field-list {
+      width: 220px;
+      flex-shrink: 0;
+      border: 1px solid var(--border-default);
+      border-radius: var(--radius-md);
+      background: var(--bg-surface-default);
+      font-size: 12px;
+      overflow: hidden;
+    }
+    .pv-field-list__head {
+      padding: 10px 12px;
+      font-weight: 600;
+      font-size: 12px;
+      background: var(--bg-surface-variant);
+      border-bottom: 1px solid var(--border-default);
+      display: flex; align-items: center; gap: 6px;
+    }
+    .pv-field-list__search {
+      padding: 8px;
+      border-bottom: 1px solid var(--border-default);
+    }
+    .pv-field-list__search input {
+      width: 100%;
+      box-sizing: border-box;
+      padding: 5px 8px;
+      border: 1px solid var(--border-default);
+      border-radius: var(--radius-sm);
+      font-size: 12px;
+      background: var(--bg-surface-variant);
+      outline: none;
+    }
+    .pv-field-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 12px;
+      cursor: pointer;
+      user-select: none;
+    }
+    .pv-field-item:hover { background: rgba(40,119,238,.05); }
+    .pv-field-item__cb {
+      width: 13px; height: 13px;
+      border: 2px solid var(--border-strong);
+      border-radius: 2px;
+      display: inline-flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+    .pv-field-item__cb.is-checked { background: #2877EE; border-color: #2877EE; }
+    .pv-field-item__cb.is-checked::after {
+      content: '';
+      width: 6px; height: 4px;
+      border-left: 1.5px solid #fff;
+      border-bottom: 1.5px solid #fff;
+      transform: rotate(-45deg) translate(0.5px, -0.5px);
+    }
+    .pv-field-item__name { flex: 1; color: var(--text-primary); }
+    .pv-field-item__drag {
+      color: var(--text-secondary);
+      font-size: 14px;
+    }
+    .pv-zones {
+      border-top: 1px solid var(--border-default);
+    }
+    .pv-zone {
+      border-bottom: 1px solid var(--border-default);
+    }
+    .pv-zone:last-child { border-bottom: none; }
+    .pv-zone__head {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 6px 12px;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.4px;
+      color: var(--text-secondary);
+      background: rgba(0,0,0,.02);
+    }
+    .pv-zone__head iconify-icon { font-size: 13px; }
+    .pv-zone__items {
+      padding: 4px 8px;
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+    .pv-zone__chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 3px 8px;
+      background: rgba(40,119,238,.1);
+      color: #1558C0;
+      border-radius: 3px;
+      font-size: 11px;
+      font-weight: 500;
+      cursor: default;
+    }
+    .pv-zone__chip--gray { background: var(--bg-surface-variant); color: var(--text-secondary); }
+    .pv-zone__chip iconify-icon { font-size: 12px; cursor: pointer; }
+    .pv-zone__chip iconify-icon:hover { color: #F4493E; }
+    .pv-zone__empty {
+      padding: 4px 8px 8px;
+      font-size: 11px;
+      color: var(--text-secondary);
+      font-style: italic;
+    }
+    /* Pivot Table */
+    .pv-table-wrap {
+      flex: 1;
+      border: 1px solid var(--border-default);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      background: var(--bg-surface-default);
+    }
+    .pv-table-toolbar {
+      display: flex; align-items: center; gap: 8px;
+      padding: 8px 12px;
+      border-bottom: 1px solid var(--border-default);
+      background: var(--bg-surface-default);
+      font-size: 12px;
+    }
+    .pv-toolbar-label { color: var(--text-secondary); font-size: 12px; }
+    .pv-table {
+      overflow-x: auto;
+    }
+    .pv-table table {
+      border-collapse: collapse;
+      width: 100%;
+      font-size: 12px;
+    }
+    .pv-table th {
+      background: var(--bg-surface-variant);
+      padding: 8px 14px;
+      text-align: left;
+      font-weight: 600;
+      border-bottom: 2px solid var(--border-default);
+      border-right: 1px solid var(--border-default);
+      white-space: nowrap;
+    }
+    .pv-table th.text-right { text-align: right; }
+    .pv-table th:last-child { border-right: none; }
+    .pv-table td {
+      padding: 8px 14px;
+      border-bottom: 1px solid var(--border-default);
+      border-right: 1px solid rgba(0,0,0,.04);
+      white-space: nowrap;
+    }
+    .pv-table td:last-child { border-right: none; }
+    .pv-table td.text-right { text-align: right; }
+    /* Grand total row */
+    .pv-table tr.pv-total td {
+      font-weight: 700;
+      background: rgba(40,119,238,.04);
+      border-top: 2px solid var(--border-default);
+    }
+    /* Expand cell */
+    .pv-expand-cell {
+      display: inline-flex; align-items: center; gap: 4px;
+    }
+    .pv-expand-btn {
+      width: 16px; height: 16px;
+      display: inline-flex; align-items: center; justify-content: center;
+      border: none; background: transparent;
+      cursor: pointer; color: var(--text-secondary);
+      border-radius: 2px;
+    }
+    .pv-expand-btn:hover { background: rgba(0,0,0,.08); }
+    .pv-expand-btn iconify-icon { font-size: 14px; }
+    /* Cell highlight */
+    .pv-table td.is-highlight { background: rgba(40,119,238,.06); }
+    .pv-table td.is-max { background: rgba(40,119,238,.14); font-weight: 700; color: #1558C0; }
+    /* Empty state */
+    .pv-empty {
+      padding: 48px 24px;
+      text-align: center;
+      color: var(--text-secondary);
+    }
+    .pv-empty iconify-icon { font-size: 40px; margin-bottom: 8px; display: block; opacity: 0.4; }
+    .pv-empty p { font-size: 13px; }
+  </style>
+</head>
+<body>
+<div id="app" class="showcase-page">
+
+  <header class="showcase-header">
+    <div class="showcase-header__left">
+      <span class="showcase-badge">Data Display</span>
+      <h1 class="showcase-title">PivotView</h1>
+      <span class="showcase-version">v0.2</span>
+    </div>
+    <div class="showcase-header__right">
+      <a href="../../skills/design-system-architect/references/components/PivotView.md" class="showcase-doc-link">
+        <iconify-icon icon="material-symbols:article-outline"></iconify-icon> 設計文件
+      </a>
+    </div>
+  </header>
+
+  <div class="showcase-layout">
+
+    <!-- Controls -->
+    <aside class="showcase-controls">
+      <div class="ctrl-group">
+        <div class="ctrl-label">State</div>
+        <div class="ctrl-options">
+          <button v-for="s in states" :key="s.key"
+                  :class="['ctrl-btn', { 'is-active': activeState === s.key }]"
+                  @click="activeState = s.key">{{ s.label }}</button>
+        </div>
+      </div>
+      <hr class="ctrl-divider">
+      <div class="ctrl-group">
+        <div class="ctrl-label">showFieldList</div>
+        <div class="ctrl-options">
+          <button :class="['ctrl-btn', { 'is-active': showFieldList }]" @click="showFieldList=true">開</button>
+          <button :class="['ctrl-btn', { 'is-active': !showFieldList }]" @click="showFieldList=false">關</button>
+        </div>
+      </div>
+      <div class="ctrl-group">
+        <div class="ctrl-label">expandAll</div>
+        <div class="ctrl-options">
+          <button :class="['ctrl-btn', { 'is-active': expandAll }]" @click="expandAll=true">true</button>
+          <button :class="['ctrl-btn', { 'is-active': !expandAll }]" @click="expandAll=false">false</button>
+        </div>
+      </div>
+      <div class="ctrl-group">
+        <div class="ctrl-label">enableValueSorting</div>
+        <div class="ctrl-options">
+          <button :class="['ctrl-btn', { 'is-active': valueSorting }]" @click="valueSorting=true">true</button>
+          <button :class="['ctrl-btn', { 'is-active': !valueSorting }]" @click="valueSorting=false">false</button>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main -->
+    <main class="showcase-main">
+
+      <section>
+        <p class="section-heading">Interactive Demo</p>
+        <div class="demo-canvas" style="align-items:flex-start;padding:20px">
+          <div class="pv-wrap" style="width:100%">
+
+            <!-- Field List Panel -->
+            <div v-if="showFieldList" class="pv-field-list">
+              <div class="pv-field-list__head">
+                <iconify-icon icon="material-symbols:view-list-outline"></iconify-icon>
+                欄位清單
+              </div>
+              <div class="pv-field-list__search">
+                <input type="text" placeholder="搜尋欄位…">
+              </div>
+              <div style="padding:4px 0 4px">
+                <div v-for="f in availableFields" :key="f.key" class="pv-field-item"
+                     @click="toggleField(f)">
+                  <div :class="['pv-field-item__cb', { 'is-checked': f.used }]"></div>
+                  <span class="pv-field-item__name">{{ f.label }}</span>
+                  <iconify-icon class="pv-field-item__drag" icon="material-symbols:drag-indicator"></iconify-icon>
+                </div>
+              </div>
+              <div class="pv-zones">
+                <div class="pv-zone">
+                  <div class="pv-zone__head">
+                    <span><iconify-icon icon="material-symbols:table-rows-outline"></iconify-icon> 列</span>
+                  </div>
+                  <div class="pv-zone__items">
+                    <div v-for="f in rowFields" :key="f" class="pv-zone__chip">
+                      {{ fieldLabel(f) }}
+                      <iconify-icon icon="material-symbols:close" @click="removeField('row', f)"></iconify-icon>
+                    </div>
+                    <div v-if="!rowFields.length" class="pv-zone__empty">拖曳欄位至此</div>
+                  </div>
+                </div>
+                <div class="pv-zone">
+                  <div class="pv-zone__head">
+                    <span><iconify-icon icon="material-symbols:view-column-outline"></iconify-icon> 欄</span>
+                  </div>
+                  <div class="pv-zone__items">
+                    <div v-for="f in colFields" :key="f" class="pv-zone__chip pv-zone__chip--gray">
+                      {{ fieldLabel(f) }}
+                      <iconify-icon icon="material-symbols:close" @click="removeField('col', f)"></iconify-icon>
+                    </div>
+                    <div v-if="!colFields.length" class="pv-zone__empty">拖曳欄位至此</div>
+                  </div>
+                </div>
+                <div class="pv-zone">
+                  <div class="pv-zone__head">
+                    <span><iconify-icon icon="material-symbols:functions"></iconify-icon> 值</span>
+                  </div>
+                  <div class="pv-zone__items">
+                    <div v-for="f in valFields" :key="f" class="pv-zone__chip">
+                      {{ fieldLabel(f) }}
+                      <iconify-icon icon="material-symbols:close" @click="removeField('val', f)"></iconify-icon>
+                    </div>
+                    <div v-if="!valFields.length" class="pv-zone__empty">拖曳欄位至此</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Pivot Table -->
+            <div class="pv-table-wrap">
+              <!-- Empty state if no fields -->
+              <div v-if="activeState === 'empty'" class="pv-empty">
+                <iconify-icon icon="material-symbols:table-chart-outline"></iconify-icon>
+                <p>請將欄位拖曳至「列 / 欄 / 值」區域，以產生交叉分析表</p>
+              </div>
+              <template v-else>
+                <div class="pv-table-toolbar">
+                  <span class="pv-toolbar-label">{{ valueSorting ? '已啟用：值排序' : '值排序：關閉' }}</span>
+                  <button class="btn btn--sm" @click="valueSorting = !valueSorting">
+                    <iconify-icon :icon="valueSorting ? 'material-symbols:sort' : 'material-symbols:sort-outline'"></iconify-icon>
+                    值排序
+                  </button>
+                </div>
+                <div class="pv-table">
+                  <table>
+                    <thead>
+                      <tr>
+                        <th style="min-width:140px">部門 / 月份</th>
+                        <th class="text-right">Q1 合計</th>
+                        <th class="text-right">Q2 合計</th>
+                        <th class="text-right" v-if="activeState === 'drilldown'">4月</th>
+                        <th class="text-right" v-if="activeState === 'drilldown'">5月</th>
+                        <th class="text-right" v-if="activeState === 'drilldown'">6月</th>
+                        <th class="text-right">年度合計</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <template v-for="dept in tableData" :key="dept.name">
+                        <tr>
+                          <td>
+                            <div class="pv-expand-cell">
+                              <button class="pv-expand-btn" @click="toggleDept(dept.name)">
+                                <iconify-icon :icon="(expandAll || expandedDepts.includes(dept.name)) ? 'material-symbols:keyboard-arrow-down' : 'material-symbols:chevron-right'"></iconify-icon>
+                              </button>
+                              <strong>{{ dept.name }}</strong>
+                            </div>
+                          </td>
+                          <td class="text-right" :class="{ 'is-max': isMax('q1', dept.q1) }">{{ fmt(dept.q1) }}</td>
+                          <td class="text-right" :class="{ 'is-highlight': activeState === 'drilldown' }">{{ fmt(dept.q2) }}</td>
+                          <template v-if="activeState === 'drilldown'">
+                            <td class="text-right">{{ fmt(dept.m4) }}</td>
+                            <td class="text-right">{{ fmt(dept.m5) }}</td>
+                            <td class="text-right">{{ fmt(dept.m6) }}</td>
+                          </template>
+                          <td class="text-right">{{ fmt(dept.q1 + dept.q2) }}</td>
+                        </tr>
+                        <!-- Sub-rows when expanded -->
+                        <template v-if="expandAll || expandedDepts.includes(dept.name)">
+                          <tr v-for="sub in dept.subs" :key="sub.name">
+                            <td style="padding-left:28px; color:var(--text-secondary)">{{ sub.name }}</td>
+                            <td class="text-right" style="color:var(--text-secondary)">{{ fmt(sub.q1) }}</td>
+                            <td class="text-right" style="color:var(--text-secondary)">{{ fmt(sub.q2) }}</td>
+                            <template v-if="activeState === 'drilldown'">
+                              <td class="text-right" style="color:var(--text-secondary)">{{ fmt(sub.m4) }}</td>
+                              <td class="text-right" style="color:var(--text-secondary)">{{ fmt(sub.m5) }}</td>
+                              <td class="text-right" style="color:var(--text-secondary)">{{ fmt(sub.m6) }}</td>
+                            </template>
+                            <td class="text-right" style="color:var(--text-secondary)">{{ fmt(sub.q1 + sub.q2) }}</td>
+                          </tr>
+                        </template>
+                      </template>
+                    </tbody>
+                    <tfoot>
+                      <tr class="pv-total">
+                        <td>Grand Total</td>
+                        <td class="text-right">{{ fmt(grandQ1) }}</td>
+                        <td class="text-right">{{ fmt(grandQ2) }}</td>
+                        <template v-if="activeState === 'drilldown'">
+                          <td class="text-right">{{ fmt(grandM4) }}</td>
+                          <td class="text-right">{{ fmt(grandM5) }}</td>
+                          <td class="text-right">{{ fmt(grandM6) }}</td>
+                        </template>
+                        <td class="text-right">{{ fmt(grandQ1 + grandQ2) }}</td>
+                      </tr>
+                    </tfoot>
+                  </table>
+                </div>
+              </template>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- States Gallery -->
+      <section>
+        <p class="section-heading">States Gallery</p>
+        <div class="gallery-grid" style="grid-template-columns:repeat(auto-fill,minmax(360px,1fr))">
+
+          <div class="gallery-card">
+            <div class="gallery-card__label">Default（2 rows × 2 columns 基本表格）</div>
+            <div class="gallery-card__content gallery-card__content--top" style="padding:12px;overflow-x:auto">
+              <table style="border-collapse:collapse;font-size:12px;width:100%">
+                <thead><tr>
+                  <th style="background:var(--bg-surface-variant);padding:7px 12px;border-bottom:2px solid var(--border-default)">部門</th>
+                  <th style="background:var(--bg-surface-variant);padding:7px 12px;border-bottom:2px solid var(--border-default);text-align:right">Q1</th>
+                  <th style="background:var(--bg-surface-variant);padding:7px 12px;border-bottom:2px solid var(--border-default);text-align:right">Q2</th>
+                  <th style="background:var(--bg-surface-variant);padding:7px 12px;border-bottom:2px solid var(--border-default);text-align:right">合計</th>
+                </tr></thead>
+                <tbody>
+                  <tr><td style="padding:7px 12px;border-bottom:1px solid var(--border-default)">財務部</td><td style="padding:7px 12px;border-bottom:1px solid var(--border-default);text-align:right">$1,240,000</td><td style="padding:7px 12px;border-bottom:1px solid var(--border-default);text-align:right">$1,180,000</td><td style="padding:7px 12px;border-bottom:1px solid var(--border-default);text-align:right">$2,420,000</td></tr>
+                  <tr><td style="padding:7px 12px">業務部</td><td style="padding:7px 12px;text-align:right">$980,000</td><td style="padding:7px 12px;text-align:right">$1,360,000</td><td style="padding:7px 12px;text-align:right">$2,340,000</td></tr>
+                </tbody>
+                <tfoot><tr style="background:rgba(40,119,238,.04);font-weight:700;border-top:2px solid var(--border-default)">
+                  <td style="padding:7px 12px">Grand Total</td><td style="padding:7px 12px;text-align:right">$2,220,000</td><td style="padding:7px 12px;text-align:right">$2,540,000</td><td style="padding:7px 12px;text-align:right">$4,760,000</td>
+                </tr></tfoot>
+              </table>
+            </div>
+          </div>
+
+          <div class="gallery-card">
+            <div class="gallery-card__label">Drill-down（Q2 展開 → 月份）</div>
+            <div class="gallery-card__content gallery-card__content--top" style="padding:12px;overflow-x:auto">
+              <table style="border-collapse:collapse;font-size:12px;width:100%">
+                <thead><tr>
+                  <th style="background:var(--bg-surface-variant);padding:7px 10px;border-bottom:2px solid var(--border-default)">部門</th>
+                  <th style="background:var(--bg-surface-variant);padding:7px 10px;border-bottom:2px solid var(--border-default);text-align:right">Q1</th>
+                  <th style="background:rgba(40,119,238,.12);padding:7px 10px;border-bottom:2px solid #2877EE;text-align:right">Q2</th>
+                  <th style="background:rgba(40,119,238,.08);padding:7px 10px;border-bottom:2px solid #2877EE;text-align:right">4月</th>
+                  <th style="background:rgba(40,119,238,.08);padding:7px 10px;border-bottom:2px solid #2877EE;text-align:right">5月</th>
+                  <th style="background:rgba(40,119,238,.08);padding:7px 10px;border-bottom:2px solid #2877EE;text-align:right">6月</th>
+                </tr></thead>
+                <tbody>
+                  <tr><td style="padding:7px 10px;border-bottom:1px solid var(--border-default)">財務部</td><td style="padding:7px 10px;border-bottom:1px solid var(--border-default);text-align:right">$1,240,000</td><td style="padding:7px 10px;border-bottom:1px solid var(--border-default);text-align:right;background:rgba(40,119,238,.06)">$1,180,000</td><td style="padding:7px 10px;border-bottom:1px solid var(--border-default);text-align:right">$380,000</td><td style="padding:7px 10px;border-bottom:1px solid var(--border-default);text-align:right">$420,000</td><td style="padding:7px 10px;border-bottom:1px solid var(--border-default);text-align:right">$380,000</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <div class="gallery-card">
+            <div class="gallery-card__label">Empty（無欄位拖入）</div>
+            <div class="gallery-card__content">
+              <div class="pv-empty" style="padding:24px">
+                <iconify-icon icon="material-symbols:table-chart-outline"></iconify-icon>
+                <p>請將欄位拖曳至「列 / 欄 / 值」區域</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="gallery-card">
+            <div class="gallery-card__label">Field List Panel（欄位配置面板）</div>
+            <div class="gallery-card__content gallery-card__content--top" style="padding:12px">
+              <div class="pv-field-list" style="width:100%;max-width:200px">
+                <div class="pv-field-list__head"><iconify-icon icon="material-symbols:view-list-outline"></iconify-icon>欄位清單</div>
+                <div style="padding:4px 0">
+                  <div class="pv-field-item"><div class="pv-field-item__cb is-checked"></div><span class="pv-field-item__name">部門</span></div>
+                  <div class="pv-field-item"><div class="pv-field-item__cb is-checked"></div><span class="pv-field-item__name">銷售額</span></div>
+                  <div class="pv-field-item"><div class="pv-field-item__cb"></div><span class="pv-field-item__name">成本</span></div>
+                </div>
+                <div class="pv-zones">
+                  <div class="pv-zone">
+                    <div class="pv-zone__head"><span>列</span></div>
+                    <div class="pv-zone__items"><div class="pv-zone__chip">部門 <iconify-icon icon="material-symbols:close"></iconify-icon></div></div>
+                  </div>
+                  <div class="pv-zone">
+                    <div class="pv-zone__head"><span>值</span></div>
+                    <div class="pv-zone__items"><div class="pv-zone__chip">銷售額 <iconify-icon icon="material-symbols:close"></iconify-icon></div></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- API -->
+      <section>
+        <p class="section-heading">API / Props</p>
+        <table class="api-table">
+          <thead><tr><th>Prop</th><th>Type</th><th>Default</th><th>說明</th></tr></thead>
+          <tbody>
+            <tr><td><code>dataSourceSettings</code></td><td class="type">DataSourceSettings</td><td class="default">—</td><td>核心設定物件，包含 <code>dataSource</code>、<code>rows</code>、<code>columns</code>、<code>values</code>、<code>filters</code></td></tr>
+            <tr><td><code>dataSourceSettings.dataSource</code></td><td class="type">Object[] | DataManager</td><td class="default">—</td><td>原始資料</td></tr>
+            <tr><td><code>dataSourceSettings.rows</code></td><td class="type">FieldOptions[]</td><td class="default">[]</td><td>列維度欄位（每項含 <code>name</code>）</td></tr>
+            <tr><td><code>dataSourceSettings.columns</code></td><td class="type">FieldOptions[]</td><td class="default">[]</td><td>欄維度欄位</td></tr>
+            <tr><td><code>dataSourceSettings.values</code></td><td class="type">FieldOptions[]</td><td class="default">[]</td><td>值欄位（含 <code>type: 'Sum'</code> 等聚合）</td></tr>
+            <tr><td><code>showFieldList</code></td><td class="type">boolean</td><td class="default">false</td><td>顯示右側欄位清單面板</td></tr>
+            <tr><td><code>expandAll</code></td><td class="type">boolean</td><td class="default">false</td><td>預設展開所有維度節點</td></tr>
+            <tr><td><code>enableValueSorting</code></td><td class="type">boolean</td><td class="default">false</td><td>允許點擊值欄標頭排序</td></tr>
+          </tbody>
+        </table>
+        <p class="api-note">⚠️ 所有維度（rows / columns / values / filters）皆內嵌於 <code>dataSourceSettings</code> 物件，不是頂層 prop。</p>
+      </section>
+    </main>
+  </div>
+</div>
+
+<script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
+<script>
+const { createApp, ref, computed } = Vue
+createApp({
+  setup() {
+    const activeState   = ref('default')
+    const showFieldList = ref(true)
+    const expandAll     = ref(false)
+    const valueSorting  = ref(false)
+    const expandedDepts = ref([])
+
+    const states = [
+      { key: 'default',   label: 'Default' },
+      { key: 'drilldown', label: 'Drill-down' },
+      { key: 'empty',     label: 'Empty' },
+    ]
+
+    const fieldsMap = {
+      dept:  '部門',
+      month: '月份',
+      sales: '銷售額',
+      cost:  '成本',
+      qty:   '數量',
+    }
+    const availableFields = ref([
+      { key: 'dept',  label: '部門',  used: true },
+      { key: 'month', label: '月份',  used: true },
+      { key: 'sales', label: '銷售額', used: true },
+      { key: 'cost',  label: '成本',  used: false },
+      { key: 'qty',   label: '數量',  used: false },
+    ])
+    const rowFields = ref(['dept'])
+    const colFields = ref(['month'])
+    const valFields = ref(['sales'])
+
+    const fieldLabel = (key) => fieldsMap[key] || key
+    const toggleField = (f) => { f.used = !f.used }
+    const removeField = (zone, key) => {
+      if (zone === 'row') rowFields.value = rowFields.value.filter(k => k !== key)
+      if (zone === 'col') colFields.value = colFields.value.filter(k => k !== key)
+      if (zone === 'val') valFields.value = valFields.value.filter(k => k !== key)
+      const f = availableFields.value.find(x => x.key === key)
+      if (f) f.used = false
+    }
+
+    const tableData = [
+      { name: '財務部', q1: 1240000, q2: 1180000, m4: 380000, m5: 420000, m6: 380000,
+        subs: [
+          { name: '會計組', q1: 620000, q2: 590000, m4: 190000, m5: 200000, m6: 200000 },
+          { name: '出納組', q1: 620000, q2: 590000, m4: 190000, m5: 220000, m6: 180000 },
+        ] },
+      { name: '業務部', q1: 980000, q2: 1360000, m4: 420000, m5: 480000, m6: 460000,
+        subs: [
+          { name: '國內組', q1: 580000, q2: 760000, m4: 240000, m5: 260000, m6: 260000 },
+          { name: '海外組', q1: 400000, q2: 600000, m4: 180000, m5: 220000, m6: 200000 },
+        ] },
+      { name: '採購部', q1: 760000, q2: 840000, m4: 280000, m5: 280000, m6: 280000,
+        subs: [] },
+    ]
+    const grandQ1 = tableData.reduce((s, d) => s + d.q1, 0)
+    const grandQ2 = tableData.reduce((s, d) => s + d.q2, 0)
+    const grandM4 = tableData.reduce((s, d) => s + d.m4, 0)
+    const grandM5 = tableData.reduce((s, d) => s + d.m5, 0)
+    const grandM6 = tableData.reduce((s, d) => s + d.m6, 0)
+    const maxQ1   = Math.max(...tableData.map(d => d.q1))
+    const isMax   = (col, val) => valueSorting.value && col === 'q1' && val === maxQ1
+
+    const toggleDept = (name) => {
+      const idx = expandedDepts.value.indexOf(name)
+      if (idx === -1) expandedDepts.value.push(name)
+      else expandedDepts.value.splice(idx, 1)
+    }
+    const fmt = (n) => '$' + n.toLocaleString()
+
+    return {
+      activeState, showFieldList, expandAll, valueSorting, expandedDepts,
+      states, availableFields, rowFields, colFields, valFields,
+      fieldLabel, toggleField, removeField, tableData,
+      grandQ1, grandQ2, grandM4, grandM5, grandM6, isMax, toggleDept, fmt,
+    }
+  }
+}).mount('#app')
+</script>
+</body>
+</html>

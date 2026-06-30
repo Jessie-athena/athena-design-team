@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=1280">
+  <title>QueryBuilder — Athena DS</title>
+  <link rel="stylesheet" href="ds/design-tokens-base.css">
+  <link rel="stylesheet" href="ds/design-tokens-athena.css">
+  <link rel="stylesheet" href="ds/colors_and_type.css">
+  <link rel="stylesheet" href="app.css">
+  <link rel="stylesheet" href="showcase.css">
+  <script src="https://code.iconify.design/iconify-icon/2.1.0/iconify-icon.min.js"></script>
+  <style>
+    /* QueryBuilder component */
+    .qb {
+      font-size: 13px;
+      min-width: 520px;
+    }
+    .qb__group {
+      border: 1px solid var(--border-default);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      background: var(--bg-surface-default);
+    }
+    .qb__group-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 14px;
+      background: var(--bg-surface-variant);
+      border-bottom: 1px solid var(--border-default);
+    }
+    .qb__group-body {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+    .qb__toggle {
+      display: inline-flex;
+      border-radius: 100px;
+      border: 1px solid var(--border-default);
+      overflow: hidden;
+      background: var(--bg-surface-default);
+    }
+    .qb__toggle-btn {
+      padding: 3px 12px;
+      font-size: 12px;
+      font-weight: 600;
+      border: none;
+      background: transparent;
+      color: var(--text-secondary);
+      cursor: pointer;
+      transition: all 0.12s;
+    }
+    .qb__toggle-btn.is-active {
+      background: #2877EE;
+      color: #fff;
+      border-radius: 100px;
+    }
+    .qb__group-label {
+      font-size: 11px;
+      color: var(--text-secondary);
+    }
+    .qb__group-actions {
+      display: flex;
+      gap: 6px;
+      margin-left: auto;
+    }
+    .qb__add-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 4px 10px;
+      font-size: 12px;
+      border-radius: 100px;
+      border: 1px solid var(--border-default);
+      background: transparent;
+      color: var(--text-secondary);
+      cursor: pointer;
+      transition: all 0.12s;
+    }
+    .qb__add-btn:hover {
+      background: var(--bg-surface-variant);
+      color: var(--text-primary);
+      border-color: var(--border-strong);
+    }
+    .qb__add-btn iconify-icon { font-size: 14px; }
+    .qb__del-btn {
+      width: 24px; height: 24px;
+      display: inline-flex; align-items: center; justify-content: center;
+      border: none; background: transparent;
+      color: var(--text-secondary);
+      border-radius: 4px;
+      cursor: pointer;
+      transition: all 0.12s;
+      flex-shrink: 0;
+    }
+    .qb__del-btn:hover { color: #F4493E; background: rgba(244,73,62,.08); }
+    .qb__del-btn iconify-icon { font-size: 16px; }
+    /* Rule row */
+    .qb__rule {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 14px;
+      border-bottom: 1px solid var(--border-default);
+    }
+    .qb__rule:last-child { border-bottom: none; }
+    .qb__rule:hover { background: rgba(40,119,238,.03); }
+    .qb__rule-connector {
+      width: 32px;
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--text-secondary);
+      text-align: center;
+      flex-shrink: 0;
+    }
+    .qb__select, .qb__input {
+      padding: 5px 8px;
+      font-size: 13px;
+      border: 1px solid var(--border-default);
+      border-radius: 4px;
+      background: var(--bg-surface-default);
+      color: var(--text-primary);
+      cursor: pointer;
+      transition: border-color 0.12s;
+    }
+    .qb__select { min-width: 120px; }
+    .qb__input { flex: 1; min-width: 80px; }
+    .qb__select:focus, .qb__input:focus {
+      outline: none;
+      border-color: #2877EE;
+    }
+    /* Nested group */
+    .qb__nested {
+      margin: 8px 14px 10px;
+    }
+    .qb__nested .qb__group {
+      border-color: rgba(40,119,238,.3);
+    }
+    .qb__nested .qb__group-header {
+      background: rgba(40,119,238,.04);
+    }
+    /* SQL preview */
+    .qb__sql {
+      margin-top: 12px;
+      padding: 10px 12px;
+      background: #F8F9FB;
+      border: 1px solid var(--border-default);
+      border-radius: 6px;
+      font-family: "JetBrains Mono", "Roboto Mono", monospace;
+      font-size: 12px;
+      color: #3C4A5B;
+      word-break: break-all;
+      line-height: 1.6;
+    }
+    .qb__sql-label {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--text-secondary);
+      margin-bottom: 6px;
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+    }
+  </style>
+</head>
+<body>
+<div id="app" class="showcase-page">
+
+  <header class="showcase-header">
+    <div class="showcase-header__left">
+      <span class="showcase-badge">Data Display</span>
+      <h1 class="showcase-title">QueryBuilder</h1>
+      <span class="showcase-version">v0.2</span>
+    </div>
+    <div class="showcase-header__right">
+      <a href="../../skills/design-system-architect/references/components/QueryBuilder.md" class="showcase-doc-link">
+        <iconify-icon icon="material-symbols:article-outline"></iconify-icon> 設計文件
+      </a>
+    </div>
+  </header>
+
+  <div class="showcase-layout">
+
+    <!-- Controls -->
+    <aside class="showcase-controls">
+      <div class="ctrl-group">
+        <div class="ctrl-label">Variant</div>
+        <div class="ctrl-options">
+          <button v-for="v in variants" :key="v.key"
+                  :class="['ctrl-btn', { 'is-active': activeVariant === v.key }]"
+                  @click="activeVariant = v.key">{{ v.label }}</button>
+        </div>
+      </div>
+
+      <div class="ctrl-group">
+        <div class="ctrl-label">State</div>
+        <div class="ctrl-options">
+          <button v-for="s in states" :key="s.key"
+                  :class="['ctrl-btn', { 'is-active': activeState === s.key }]"
+                  @click="activeState = s.key">{{ s.label }}</button>
+        </div>
+      </div>
+
+      <hr class="ctrl-divider">
+
+      <div class="ctrl-group">
+        <div class="ctrl-label">allowDragAndDrop</div>
+        <div class="ctrl-options">
+          <button :class="['ctrl-btn', { 'is-active': allowDrag }]" @click="allowDrag=true">true</button>
+          <button :class="['ctrl-btn', { 'is-active': !allowDrag }]" @click="allowDrag=false">false</button>
+        </div>
+      </div>
+
+      <div class="ctrl-group">
+        <div class="ctrl-label">顯示 SQL 預覽</div>
+        <div class="ctrl-options">
+          <button :class="['ctrl-btn', { 'is-active': showSql }]" @click="showSql=true">開</button>
+          <button :class="['ctrl-btn', { 'is-active': !showSql }]" @click="showSql=false">關</button>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main content -->
+    <main class="showcase-main">
+
+      <!-- Primary Demo -->
+      <section>
+        <p class="section-heading">Interactive Demo</p>
+        <div class="demo-canvas" style="align-items:flex-start;padding:24px 32px">
+
+          <!-- Empty state -->
+          <div v-if="activeState === 'empty'" class="qb" style="min-width:400px">
+            <div class="qb__group">
+              <div class="qb__group-header">
+                <div class="qb__toggle">
+                  <button class="qb__toggle-btn is-active">AND</button>
+                  <button class="qb__toggle-btn">OR</button>
+                </div>
+                <div class="qb__group-actions">
+                  <button class="qb__add-btn" @click="addRule">
+                    <iconify-icon icon="material-symbols:add"></iconify-icon> 新增條件
+                  </button>
+                </div>
+              </div>
+              <div class="empty-state" style="padding:32px 20px">
+                <iconify-icon icon="material-symbols:filter-list-outline"></iconify-icon>
+                <span class="empty-state__text">尚未設定任何篩選條件</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Single / Grouped variant -->
+          <div v-else class="qb">
+            <div class="qb__group">
+              <div class="qb__group-header">
+                <div class="qb__toggle">
+                  <button :class="['qb__toggle-btn', { 'is-active': rootOp === 'AND' }]" @click="rootOp='AND'">AND</button>
+                  <button :class="['qb__toggle-btn', { 'is-active': rootOp === 'OR'  }]" @click="rootOp='OR'">OR</button>
+                </div>
+                <span class="qb__group-label">符合以下<strong>{{ rootOp === 'AND' ? '所有' : '任一' }}</strong>條件</span>
+                <div class="qb__group-actions">
+                  <button class="qb__add-btn" @click="addRule">
+                    <iconify-icon icon="material-symbols:add"></iconify-icon> 新增條件
+                  </button>
+                  <button v-if="activeVariant === 'grouped'" class="qb__add-btn" @click="addGroup">
+                    <iconify-icon icon="material-symbols:add-box-outline"></iconify-icon> 新增群組
+                  </button>
+                </div>
+              </div>
+              <div class="qb__group-body">
+                <div v-for="(rule, idx) in rules" :key="rule.id" class="qb__rule">
+                  <span class="qb__rule-connector">{{ idx === 0 ? 'WHERE' : rootOp }}</span>
+                  <select class="qb__select" v-model="rule.field">
+                    <option value="status">狀態</option>
+                    <option value="amount">金額</option>
+                    <option value="date">日期</option>
+                    <option value="dept">部門</option>
+                    <option value="creator">建立者</option>
+                  </select>
+                  <select class="qb__select" v-model="rule.operator">
+                    <option value="eq">等於</option>
+                    <option value="ne">不等於</option>
+                    <option value="gt">大於</option>
+                    <option value="lt">小於</option>
+                    <option value="contains">包含</option>
+                    <option value="in">在…之中</option>
+                  </select>
+                  <input class="qb__input" type="text" v-model="rule.value" :placeholder="rule.field === 'amount' ? '例：10000' : '輸入值'">
+                  <button class="qb__del-btn" @click="removeRule(rule.id)" aria-label="刪除條件">
+                    <iconify-icon icon="material-symbols:close"></iconify-icon>
+                  </button>
+                </div>
+
+                <!-- Nested group (grouped variant) -->
+                <div v-if="activeVariant === 'grouped'" class="qb__nested">
+                  <div class="qb__group">
+                    <div class="qb__group-header">
+                      <div class="qb__toggle">
+                        <button :class="['qb__toggle-btn', { 'is-active': subOp === 'AND' }]" @click="subOp='AND'">AND</button>
+                        <button :class="['qb__toggle-btn', { 'is-active': subOp === 'OR'  }]" @click="subOp='OR'">OR</button>
+                      </div>
+                      <div class="qb__group-actions">
+                        <button class="qb__add-btn">
+                          <iconify-icon icon="material-symbols:add"></iconify-icon> 新增條件
+                        </button>
+                        <button class="qb__del-btn">
+                          <iconify-icon icon="material-symbols:close"></iconify-icon>
+                        </button>
+                      </div>
+                    </div>
+                    <div class="qb__group-body">
+                      <div class="qb__rule">
+                        <span class="qb__rule-connector">WHERE</span>
+                        <select class="qb__select"><option>部門</option></select>
+                        <select class="qb__select"><option>等於</option></select>
+                        <input class="qb__input" type="text" value="財務部">
+                        <button class="qb__del-btn"><iconify-icon icon="material-symbols:close"></iconify-icon></button>
+                      </div>
+                      <div class="qb__rule">
+                        <span class="qb__rule-connector">{{ subOp }}</span>
+                        <select class="qb__select"><option>金額</option></select>
+                        <select class="qb__select"><option>大於</option></select>
+                        <input class="qb__input" type="text" value="50000">
+                        <button class="qb__del-btn"><iconify-icon icon="material-symbols:close"></iconify-icon></button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- SQL preview -->
+            <div v-if="showSql">
+              <div class="qb__sql-label" style="margin-top:16px">SQL（getRules / getSqlFromRules）</div>
+              <div class="qb__sql">{{ sqlPreview }}</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- States Gallery -->
+      <section>
+        <p class="section-heading">States Gallery</p>
+        <div class="gallery-grid">
+
+          <div class="gallery-card">
+            <div class="gallery-card__label">Single Rule（AND group）</div>
+            <div class="gallery-card__content gallery-card__content--top" style="padding:16px">
+              <div class="qb" style="min-width:0;width:100%">
+                <div class="qb__group">
+                  <div class="qb__group-header">
+                    <div class="qb__toggle"><button class="qb__toggle-btn is-active">AND</button><button class="qb__toggle-btn">OR</button></div>
+                    <div class="qb__group-actions"><button class="qb__add-btn"><iconify-icon icon="material-symbols:add"></iconify-icon> 新增條件</button></div>
+                  </div>
+                  <div class="qb__rule">
+                    <span class="qb__rule-connector" style="width:auto;font-size:10px;color:#67717E">WHERE</span>
+                    <select class="qb__select" style="min-width:80px"><option>狀態</option></select>
+                    <select class="qb__select" style="min-width:70px"><option>等於</option></select>
+                    <input class="qb__input" value="已核准">
+                    <button class="qb__del-btn"><iconify-icon icon="material-symbols:close"></iconify-icon></button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="gallery-card">
+            <div class="gallery-card__label">Multiple Rules（OR group）</div>
+            <div class="gallery-card__content gallery-card__content--top" style="padding:16px">
+              <div class="qb" style="min-width:0;width:100%">
+                <div class="qb__group">
+                  <div class="qb__group-header">
+                    <div class="qb__toggle"><button class="qb__toggle-btn">AND</button><button class="qb__toggle-btn is-active">OR</button></div>
+                    <div class="qb__group-actions"><button class="qb__add-btn"><iconify-icon icon="material-symbols:add"></iconify-icon> 新增</button></div>
+                  </div>
+                  <div class="qb__rule">
+                    <span class="qb__rule-connector" style="font-size:10px">WHERE</span>
+                    <select class="qb__select" style="min-width:72px"><option>金額</option></select>
+                    <select class="qb__select" style="min-width:60px"><option>大於</option></select>
+                    <input class="qb__input" value="10000">
+                    <button class="qb__del-btn"><iconify-icon icon="material-symbols:close"></iconify-icon></button>
+                  </div>
+                  <div class="qb__rule">
+                    <span class="qb__rule-connector" style="font-size:10px;font-weight:700;color:#2877EE">OR</span>
+                    <select class="qb__select" style="min-width:72px"><option>部門</option></select>
+                    <select class="qb__select" style="min-width:60px"><option>等於</option></select>
+                    <input class="qb__input" value="採購部">
+                    <button class="qb__del-btn"><iconify-icon icon="material-symbols:close"></iconify-icon></button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="gallery-card">
+            <div class="gallery-card__label">Empty（無條件）</div>
+            <div class="gallery-card__content">
+              <div class="qb" style="min-width:280px">
+                <div class="qb__group">
+                  <div class="qb__group-header">
+                    <div class="qb__toggle"><button class="qb__toggle-btn is-active">AND</button><button class="qb__toggle-btn">OR</button></div>
+                    <div class="qb__group-actions"><button class="qb__add-btn"><iconify-icon icon="material-symbols:add"></iconify-icon> 新增條件</button></div>
+                  </div>
+                  <div class="empty-state" style="padding:24px">
+                    <iconify-icon icon="material-symbols:filter-list-outline"></iconify-icon>
+                    <span class="empty-state__text">尚未設定條件</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- API Quick Ref -->
+      <section>
+        <p class="section-heading">API / Props</p>
+        <table class="api-table">
+          <thead>
+            <tr><th>Prop / Method</th><th>Type</th><th>Default</th><th>說明</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><code>dataSource</code></td><td class="type">Object[]</td><td class="default">—</td><td>資料樣本（用於值建議）</td></tr>
+            <tr><td><code>rule</code></td><td class="type">RuleModel</td><td class="default">—</td><td>初始規則（單數！非 <code>rules</code>）</td></tr>
+            <tr><td><code>columns</code></td><td class="type">— (directive)</td><td class="default">—</td><td><code>&lt;e-columns&gt;/&lt;e-column&gt;</code> 指令設定可選欄位</td></tr>
+            <tr><td><code>allowDragAndDrop</code></td><td class="type">boolean</td><td class="default">false</td><td>允許條件拖曳重排</td></tr>
+            <tr><td><code>getRules()</code></td><td class="type">Method</td><td class="default">—</td><td>取得目前規則物件（RuleModel）</td></tr>
+            <tr><td><code>getSqlFromRules()</code></td><td class="type">Method</td><td class="default">—</td><td>將規則轉換為 SQL WHERE 字串</td></tr>
+            <tr><td><code>setRulesFromSql()</code></td><td class="type">Method</td><td class="default">—</td><td>從 SQL 字串載入規則</td></tr>
+          </tbody>
+        </table>
+        <p class="api-note">事件：<code>@ruleChange({ rule })</code> — 規則變更時觸發（注意：非 <code>@change</code>）。<code>columns</code> 透過 Vue 指令 <code>&lt;e-columns&gt;&lt;e-column field operator type /&gt;&lt;/e-columns&gt;</code> 設定，不是頂層 prop。</p>
+      </section>
+
+    </main>
+  </div>
+</div>
+
+<script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
+<script>
+const { createApp, ref, computed } = Vue
+createApp({
+  setup() {
+    const activeVariant = ref('single')
+    const activeState   = ref('default')
+    const rootOp        = ref('AND')
+    const subOp         = ref('OR')
+    const allowDrag     = ref(false)
+    const showSql       = ref(true)
+    let nextId = 10
+
+    const variants = [
+      { key: 'single',  label: 'Single Rule' },
+      { key: 'grouped', label: 'Nested Group' },
+    ]
+    const states = [
+      { key: 'default', label: 'Default' },
+      { key: 'empty',   label: 'Empty' },
+    ]
+
+    const rules = ref([
+      { id: 1, field: 'status', operator: 'eq',       value: '已核准' },
+      { id: 2, field: 'amount', operator: 'gt',       value: '10000' },
+    ])
+
+    const addRule = () => {
+      rules.value.push({ id: nextId++, field: 'status', operator: 'eq', value: '' })
+    }
+    const removeRule = (id) => {
+      rules.value = rules.value.filter(r => r.id !== id)
+    }
+    const addGroup = () => {} // visual only
+
+    const opMap = { eq:'=', ne:'!=', gt:'>', lt:'<', contains:'LIKE', in:'IN' }
+    const sqlPreview = computed(() => {
+      if (!rules.value.length) return '(empty)'
+      const parts = rules.value.map(r => {
+        const val = r.operator === 'contains' ? `'%${r.value}%'` : `'${r.value}'`
+        return `${r.field} ${opMap[r.operator] || r.operator} ${val}`
+      })
+      return 'WHERE ' + parts.join(` ${rootOp.value} `)
+    })
+
+    return {
+      activeVariant, activeState, rootOp, subOp, allowDrag, showSql,
+      variants, states, rules, addRule, removeRule, addGroup, sqlPreview,
+    }
+  }
+}).mount('#app')
+</script>
+</body>
+</html>

@@ -1,0 +1,662 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=1280">
+  <title>Schedule — Athena DS</title>
+  <link rel="stylesheet" href="ds/design-tokens-base.css">
+  <link rel="stylesheet" href="ds/design-tokens-athena.css">
+  <link rel="stylesheet" href="ds/colors_and_type.css">
+  <link rel="stylesheet" href="app.css">
+  <link rel="stylesheet" href="showcase.css">
+  <script src="https://code.iconify.design/iconify-icon/2.1.0/iconify-icon.min.js"></script>
+  <style>
+    /* Schedule component */
+    .sch-wrap {
+      border: 1px solid var(--border-default);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      background: var(--bg-surface-default);
+      font-size: 12px;
+    }
+    /* Toolbar */
+    .sch-toolbar {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 14px;
+      border-bottom: 1px solid var(--border-default);
+      background: var(--bg-surface-default);
+    }
+    .sch-toolbar__nav {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .sch-nav-btn {
+      width: 28px; height: 28px;
+      display: inline-flex; align-items: center; justify-content: center;
+      border: none; background: transparent;
+      border-radius: var(--radius-sm);
+      cursor: pointer; color: var(--text-primary);
+    }
+    .sch-nav-btn:hover { background: var(--bg-surface-variant); }
+    .sch-nav-btn iconify-icon { font-size: 18px; }
+    .sch-toolbar__title {
+      font-weight: 600;
+      font-size: 14px;
+      color: var(--text-primary);
+      min-width: 120px;
+    }
+    .sch-view-tabs {
+      margin-left: auto;
+      display: flex;
+      gap: 2px;
+      background: var(--bg-surface-variant);
+      border-radius: var(--radius-sm);
+      padding: 3px;
+    }
+    .sch-view-tab {
+      padding: 4px 10px;
+      border-radius: 4px;
+      border: none;
+      background: transparent;
+      font-size: 12px; font-weight: 500;
+      color: var(--text-secondary);
+      cursor: pointer;
+      transition: all 0.12s;
+    }
+    .sch-view-tab.is-active {
+      background: var(--bg-surface-default);
+      color: var(--text-primary);
+      box-shadow: 0 1px 3px rgba(0,0,0,.1);
+    }
+    /* Week view */
+    .sch-week {
+      display: flex;
+      flex-direction: column;
+    }
+    .sch-week-header {
+      display: grid;
+      grid-template-columns: 48px repeat(7, 1fr);
+      border-bottom: 1px solid var(--border-default);
+      background: var(--bg-surface-variant);
+    }
+    .sch-week-header__time { /* spacer for time column */ }
+    .sch-day-header {
+      padding: 8px 6px;
+      text-align: center;
+      border-left: 1px solid var(--border-default);
+    }
+    .sch-day-header__label {
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.4px;
+      color: var(--text-secondary);
+    }
+    .sch-day-header__date {
+      font-size: 18px;
+      font-weight: 400;
+      color: var(--text-primary);
+      line-height: 1.3;
+    }
+    .sch-day-header.is-today .sch-day-header__date {
+      width: 32px; height: 32px;
+      background: #2877EE;
+      color: #fff;
+      border-radius: 50%;
+      display: inline-flex; align-items: center; justify-content: center;
+      font-size: 16px; font-weight: 600;
+    }
+    /* Time grid */
+    .sch-time-grid {
+      display: grid;
+      grid-template-columns: 48px repeat(7, 1fr);
+      max-height: 320px;
+      overflow-y: auto;
+    }
+    .sch-time-labels {
+      display: flex;
+      flex-direction: column;
+    }
+    .sch-time-slot {
+      height: 48px;
+      padding: 3px 6px 0 0;
+      text-align: right;
+      font-size: 10px;
+      color: var(--text-secondary);
+      border-top: 1px solid transparent;
+      flex-shrink: 0;
+    }
+    .sch-day-col {
+      border-left: 1px solid var(--border-default);
+      position: relative;
+    }
+    .sch-hour-line {
+      height: 48px;
+      border-top: 1px solid var(--border-default);
+      border-top-color: rgba(0,0,0,.06);
+      flex-shrink: 0;
+    }
+    /* Events */
+    .sch-event {
+      position: absolute;
+      left: 3px; right: 3px;
+      border-radius: 4px;
+      padding: 3px 6px;
+      font-size: 11px;
+      font-weight: 500;
+      overflow: hidden;
+      cursor: pointer;
+      transition: opacity 0.12s, box-shadow 0.12s;
+      line-height: 1.3;
+    }
+    .sch-event:hover { opacity: 0.85; box-shadow: 0 2px 8px rgba(0,0,0,.15); }
+    .sch-event--blue   { background: rgba(40,119,238,.15);  color: #1558C0; border-left: 3px solid #2877EE; }
+    .sch-event--green  { background: rgba(18,183,106,.12);  color: #0D7A49; border-left: 3px solid #12B76A; }
+    .sch-event--orange { background: rgba(247,144,9,.12);   color: #B45309; border-left: 3px solid #F79009; }
+    .sch-event--red    { background: rgba(244,73,62,.12);   color: #C41010; border-left: 3px solid #F4493E; }
+    .sch-event.is-hover { opacity: 0.85; box-shadow: 0 2px 8px rgba(0,0,0,.15); }
+    /* All-day row */
+    .sch-allday-row {
+      display: grid;
+      grid-template-columns: 48px repeat(7, 1fr);
+      border-bottom: 1px solid var(--border-default);
+      min-height: 28px;
+    }
+    .sch-allday-label {
+      padding: 4px 4px 4px 0;
+      text-align: right;
+      font-size: 10px;
+      color: var(--text-secondary);
+    }
+    .sch-allday-cell {
+      border-left: 1px solid var(--border-default);
+      padding: 2px;
+    }
+    .sch-allday-event {
+      background: rgba(40,119,238,.15);
+      color: #1558C0;
+      border-radius: 3px;
+      font-size: 10px;
+      font-weight: 500;
+      padding: 2px 5px;
+      overflow: hidden; white-space: nowrap; text-overflow: ellipsis;
+    }
+    /* Day view (simplified) */
+    .sch-day-view { display: flex; flex-direction: column; }
+    /* Month view */
+    .sch-month {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 0;
+    }
+    .sch-month-header {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      background: var(--bg-surface-variant);
+      border-bottom: 1px solid var(--border-default);
+    }
+    .sch-month-day-label {
+      padding: 8px 4px;
+      text-align: center;
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--text-secondary);
+      text-transform: uppercase;
+      letter-spacing: 0.4px;
+    }
+    .sch-month-cell {
+      border-right: 1px solid var(--border-default);
+      border-bottom: 1px solid var(--border-default);
+      min-height: 80px;
+      padding: 4px;
+    }
+    .sch-month-cell:nth-child(7n) { border-right: none; }
+    .sch-month-cell.is-today { background: rgba(40,119,238,.04); }
+    .sch-month-date {
+      font-size: 13px;
+      font-weight: 400;
+      color: var(--text-secondary);
+      width: 24px; height: 24px;
+      display: inline-flex; align-items: center; justify-content: center;
+      border-radius: 50%;
+    }
+    .sch-month-date.is-today {
+      background: #2877EE;
+      color: #fff;
+      font-weight: 600;
+    }
+    .sch-month-event {
+      font-size: 10px;
+      padding: 1px 5px;
+      border-radius: 2px;
+      margin-top: 2px;
+      overflow: hidden; white-space: nowrap; text-overflow: ellipsis;
+      cursor: pointer;
+    }
+    .sch-month-event--blue   { background: rgba(40,119,238,.15); color: #1558C0; }
+    .sch-month-event--green  { background: rgba(18,183,106,.12); color: #0D7A49; }
+    .sch-month-event--orange { background: rgba(247,144,9,.12);  color: #B45309; }
+    /* Agenda view */
+    .sch-agenda {
+      padding: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .sch-agenda-date {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--text-secondary);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      padding: 4px 0;
+      border-bottom: 1px solid var(--border-default);
+    }
+    .sch-agenda-event {
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+      padding: 8px;
+      border-radius: var(--radius-sm);
+      background: var(--bg-surface-variant);
+    }
+    .sch-agenda-time {
+      font-size: 11px;
+      color: var(--text-secondary);
+      white-space: nowrap;
+      min-width: 70px;
+    }
+    .sch-agenda-dot {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      margin-top: 3px; flex-shrink: 0;
+    }
+    .sch-agenda-title {
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text-primary);
+    }
+  </style>
+</head>
+<body>
+<div id="app" class="showcase-page">
+
+  <header class="showcase-header">
+    <div class="showcase-header__left">
+      <span class="showcase-badge">Data Display</span>
+      <h1 class="showcase-title">Schedule</h1>
+      <span class="showcase-version">v0.2</span>
+    </div>
+    <div class="showcase-header__right">
+      <a href="../../skills/design-system-architect/references/components/Schedule.md" class="showcase-doc-link">
+        <iconify-icon icon="material-symbols:article-outline"></iconify-icon> 設計文件
+      </a>
+    </div>
+  </header>
+
+  <div class="showcase-layout">
+
+    <!-- Controls -->
+    <aside class="showcase-controls">
+      <div class="ctrl-group">
+        <div class="ctrl-label">View</div>
+        <div class="ctrl-options">
+          <button v-for="v in views" :key="v.key"
+                  :class="['ctrl-btn', { 'is-active': activeView === v.key }]"
+                  @click="activeView = v.key">{{ v.label }}</button>
+        </div>
+      </div>
+      <div class="ctrl-group">
+        <div class="ctrl-label">State</div>
+        <div class="ctrl-options">
+          <button v-for="s in states" :key="s.key"
+                  :class="['ctrl-btn', { 'is-active': activeState === s.key }]"
+                  @click="activeState = s.key">{{ s.label }}</button>
+        </div>
+      </div>
+      <hr class="ctrl-divider">
+      <div class="ctrl-group">
+        <div class="ctrl-label">currentDate</div>
+        <input type="date" class="ctrl-input" v-model="currentDateStr">
+      </div>
+    </aside>
+
+    <!-- Main -->
+    <main class="showcase-main">
+
+      <section>
+        <p class="section-heading">Interactive Demo</p>
+        <div class="demo-canvas" style="align-items:flex-start;padding:20px">
+          <div class="sch-wrap" style="width:100%">
+            <!-- Toolbar -->
+            <div class="sch-toolbar">
+              <div class="sch-toolbar__nav">
+                <button class="sch-nav-btn" @click="navigate(-1)">
+                  <iconify-icon icon="material-symbols:chevron-left"></iconify-icon>
+                </button>
+                <button class="btn btn--sm" @click="goToday">今天</button>
+                <button class="sch-nav-btn" @click="navigate(1)">
+                  <iconify-icon icon="material-symbols:chevron-right"></iconify-icon>
+                </button>
+              </div>
+              <span class="sch-toolbar__title">{{ headerTitle }}</span>
+              <div class="sch-view-tabs">
+                <button v-for="v in views" :key="v.key"
+                        :class="['sch-view-tab', { 'is-active': activeView === v.key }]"
+                        @click="activeView = v.key">{{ v.label }}</button>
+              </div>
+            </div>
+
+            <!-- Week view -->
+            <div v-if="activeView === 'week'" class="sch-week">
+              <div class="sch-week-header">
+                <div class="sch-week-header__time"></div>
+                <div v-for="(day, i) in weekDays" :key="i"
+                     :class="['sch-day-header', { 'is-today': day.isToday }]">
+                  <div class="sch-day-header__label">{{ day.label }}</div>
+                  <div class="sch-day-header__date">{{ day.date }}</div>
+                </div>
+              </div>
+              <div class="sch-allday-row">
+                <div class="sch-allday-label" style="padding-top:6px">全天</div>
+                <div class="sch-allday-cell" v-for="i in 7" :key="i">
+                  <div v-if="i===2" class="sch-allday-event">財務部門月會</div>
+                </div>
+              </div>
+              <div class="sch-time-grid">
+                <div class="sch-time-labels">
+                  <div v-for="h in hours" :key="h" class="sch-time-slot">{{ h }}</div>
+                </div>
+                <div v-for="(day, i) in weekDays" :key="i" class="sch-day-col">
+                  <div v-for="h in hours" :key="h" class="sch-hour-line"></div>
+                  <!-- Events (sample, fixed positions for mock) -->
+                  <template v-if="i === 1 && activeState !== 'empty'">
+                    <div class="sch-event sch-event--blue" :style="{ top: eventTop(9), height: eventH(1) }">
+                      09:00 採購會議
+                    </div>
+                    <div :class="['sch-event', activeState === 'hover' ? 'sch-event--orange is-hover' : 'sch-event--orange']"
+                         :style="{ top: eventTop(14), height: eventH(2) }">
+                      14:00 系統評審
+                    </div>
+                  </template>
+                  <template v-if="i === 3 && activeState !== 'empty'">
+                    <div class="sch-event sch-event--green" :style="{ top: eventTop(10), height: eventH(1.5) }">
+                      10:00 UX Review
+                    </div>
+                  </template>
+                  <template v-if="i === 4 && activeState !== 'empty'">
+                    <div class="sch-event sch-event--red" :style="{ top: eventTop(11), height: eventH(1) }">
+                      11:00 KPI 報告
+                    </div>
+                  </template>
+                </div>
+              </div>
+            </div>
+
+            <!-- Day view -->
+            <div v-else-if="activeView === 'day'" class="sch-week">
+              <div class="sch-week-header">
+                <div class="sch-week-header__time"></div>
+                <div class="sch-day-header is-today">
+                  <div class="sch-day-header__label">{{ todayLabel }}</div>
+                  <div class="sch-day-header__date">{{ todayDate }}</div>
+                </div>
+              </div>
+              <div class="sch-time-grid" style="grid-template-columns:48px 1fr">
+                <div class="sch-time-labels">
+                  <div v-for="h in hours" :key="h" class="sch-time-slot">{{ h }}</div>
+                </div>
+                <div class="sch-day-col">
+                  <div v-for="h in hours" :key="h" class="sch-hour-line"></div>
+                  <template v-if="activeState !== 'empty'">
+                    <div class="sch-event sch-event--blue" :style="{ top: eventTop(9), height: eventH(1) }">09:00 採購會議</div>
+                    <div class="sch-event sch-event--orange" :style="{ top: eventTop(14), height: eventH(2) }">14:00 系統評審</div>
+                  </template>
+                </div>
+              </div>
+            </div>
+
+            <!-- Month view -->
+            <div v-else-if="activeView === 'month'">
+              <div class="sch-month-header">
+                <div v-for="d in ['日','一','二','三','四','五','六']" :key="d" class="sch-month-day-label">{{ d }}</div>
+              </div>
+              <div class="sch-month">
+                <div v-for="cell in monthCells" :key="cell.key"
+                     :class="['sch-month-cell', { 'is-today': cell.isToday }]">
+                  <div :class="['sch-month-date', { 'is-today': cell.isToday }]">{{ cell.day }}</div>
+                  <template v-if="activeState !== 'empty'">
+                    <div v-if="cell.day === 24" class="sch-month-event sch-month-event--blue">採購會議</div>
+                    <div v-if="cell.day === 26" class="sch-month-event sch-month-event--green">UX Review</div>
+                    <div v-if="cell.day === 26" class="sch-month-event sch-month-event--orange">系統評審</div>
+                    <div v-if="cell.day === 29" class="sch-month-event sch-month-event--blue">月結</div>
+                  </template>
+                </div>
+              </div>
+            </div>
+
+            <!-- Agenda view -->
+            <div v-else-if="activeView === 'agenda'" class="sch-agenda">
+              <template v-if="activeState === 'empty'">
+                <div class="empty-state">
+                  <iconify-icon icon="material-symbols:inbox-outline"></iconify-icon>
+                  <span class="empty-state__text">本週無排程</span>
+                </div>
+              </template>
+              <template v-else>
+                <div class="sch-agenda-date">2026年6月24日 （週二）</div>
+                <div class="sch-agenda-event">
+                  <div class="sch-agenda-time">09:00 – 10:00</div>
+                  <div class="sch-agenda-dot" style="background:#2877EE"></div>
+                  <div><div class="sch-agenda-title">採購會議</div><div style="font-size:11px;color:var(--text-secondary)">財務部</div></div>
+                </div>
+                <div class="sch-agenda-event">
+                  <div class="sch-agenda-time">14:00 – 16:00</div>
+                  <div class="sch-agenda-dot" style="background:#F79009"></div>
+                  <div><div class="sch-agenda-title">系統評審</div><div style="font-size:11px;color:var(--text-secondary)">IT 部門</div></div>
+                </div>
+                <div class="sch-agenda-date">2026年6月26日 （週四）</div>
+                <div class="sch-agenda-event">
+                  <div class="sch-agenda-time">10:00 – 11:30</div>
+                  <div class="sch-agenda-dot" style="background:#12B76A"></div>
+                  <div><div class="sch-agenda-title">UX Review</div></div>
+                </div>
+                <div class="sch-agenda-event">
+                  <div class="sch-agenda-time">11:00 – 12:00</div>
+                  <div class="sch-agenda-dot" style="background:#F4493E"></div>
+                  <div><div class="sch-agenda-title">KPI 報告</div></div>
+                </div>
+              </template>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- States Gallery -->
+      <section>
+        <p class="section-heading">States Gallery</p>
+        <div class="gallery-grid" style="grid-template-columns:repeat(auto-fill,minmax(320px,1fr))">
+
+          <div class="gallery-card">
+            <div class="gallery-card__label">Today highlight（藍圈日期）</div>
+            <div class="gallery-card__content">
+              <div class="sch-day-header is-today" style="width:64px;border:1px solid var(--border-default);border-radius:var(--radius-sm);padding:8px 6px">
+                <div class="sch-day-header__label">週一</div>
+                <div class="sch-day-header__date">29</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="gallery-card">
+            <div class="gallery-card__label">Event variants（Blue / Green / Orange / Red）</div>
+            <div class="gallery-card__content" style="flex-direction:column;gap:6px;align-items:stretch;padding:14px">
+              <div class="sch-event sch-event--blue" style="position:static;height:auto">09:00 採購會議</div>
+              <div class="sch-event sch-event--green" style="position:static;height:auto">10:00 UX Review</div>
+              <div class="sch-event sch-event--orange" style="position:static;height:auto">14:00 系統評審</div>
+              <div class="sch-event sch-event--red" style="position:static;height:auto">11:00 KPI 報告</div>
+            </div>
+          </div>
+
+          <div class="gallery-card">
+            <div class="gallery-card__label">Event Hover（shadow 增強）</div>
+            <div class="gallery-card__content" style="flex-direction:column;gap:6px;align-items:stretch;padding:14px">
+              <div class="sch-event sch-event--orange is-hover" style="position:static;height:auto">14:00 系統評審（Hover）</div>
+            </div>
+          </div>
+
+          <div class="gallery-card">
+            <div class="gallery-card__label">Month Cell — with events</div>
+            <div class="gallery-card__content" style="gap:8px;flex-direction:column;align-items:stretch;padding:12px">
+              <div class="sch-month-header" style="display:grid;grid-template-columns:repeat(3,1fr)">
+                <div class="sch-month-day-label">五</div>
+                <div class="sch-month-day-label">六</div>
+                <div class="sch-month-day-label">日</div>
+              </div>
+              <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:0">
+                <div class="sch-month-cell"><div class="sch-month-date">27</div></div>
+                <div class="sch-month-cell"><div class="sch-month-date">28</div></div>
+                <div class="sch-month-cell is-today"><div class="sch-month-date is-today">29</div><div class="sch-month-event sch-month-event--blue">月結</div><div class="sch-month-event sch-month-event--green">UX</div></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="gallery-card">
+            <div class="gallery-card__label">Empty（無排程）</div>
+            <div class="gallery-card__content">
+              <div class="empty-state">
+                <iconify-icon icon="material-symbols:inbox-outline"></iconify-icon>
+                <span class="empty-state__text">本週無排程</span>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- API -->
+      <section>
+        <p class="section-heading">API / Props</p>
+        <table class="api-table">
+          <thead><tr><th>Prop</th><th>Type</th><th>Default</th><th>說明</th></tr></thead>
+          <tbody>
+            <tr><td><code>dataSource</code></td><td class="type">Object[]</td><td class="default">[]</td><td>事件資料</td></tr>
+            <tr><td><code>eventSettings</code></td><td class="type">EventSettings</td><td class="default">—</td><td><code>{ dataSource, fields: { id, subject, startTime, endTime, location? } }</code></td></tr>
+            <tr><td><code>currentView</code></td><td class="type">string</td><td class="default">'Week'</td><td><code>'Day' | 'Week' | 'WorkWeek' | 'Month' | 'Agenda'</code></td></tr>
+            <tr><td><code>selectedDate</code></td><td class="type">Date</td><td class="default">today</td><td>當前選取日期（決定顯示範圍）</td></tr>
+            <tr><td><code>views</code></td><td class="type">string[]</td><td class="default">all</td><td>限制可切換的 view（<code>['Week','Month','Agenda']</code>）</td></tr>
+            <tr><td><code>firstDayOfWeek</code></td><td class="type">number</td><td class="default">0</td><td>週起始日（0=週日, 1=週一）</td></tr>
+          </tbody>
+        </table>
+        <p class="api-note">事件：<code>@popupOpen({ data })</code>（點擊事件 / 建立）/ <code>@eventRendered</code>（自訂 CSS class）/ <code>@navigating({ action, currentDate })</code>。</p>
+      </section>
+    </main>
+  </div>
+</div>
+
+<script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
+<script>
+const { createApp, ref, computed } = Vue
+createApp({
+  setup() {
+    const activeView    = ref('week')
+    const activeState   = ref('default')
+    const currentDateStr = ref('2026-06-29')
+
+    const views  = [
+      { key: 'day',    label: 'Day' },
+      { key: 'week',   label: 'Week' },
+      { key: 'month',  label: 'Month' },
+      { key: 'agenda', label: 'Agenda' },
+    ]
+    const states = [
+      { key: 'default', label: 'Default' },
+      { key: 'hover',   label: 'Event hover' },
+      { key: 'empty',   label: 'Empty' },
+    ]
+
+    // Navigation offsets
+    const weekOffset = ref(0)
+    const navigate = (dir) => { weekOffset.value += dir }
+    const goToday   = () => { weekOffset.value = 0 }
+
+    const dayLabels   = ['日','一','二','三','四','五','六']
+    const dayLabelsEn = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat']
+
+    const baseDate = computed(() => {
+      const d = new Date('2026-06-29')
+      if (activeView.value === 'week')  d.setDate(d.getDate() + weekOffset.value * 7)
+      if (activeView.value === 'day')   d.setDate(d.getDate() + weekOffset.value)
+      if (activeView.value === 'month') d.setMonth(d.getMonth() + weekOffset.value)
+      return d
+    })
+
+    const weekDays = computed(() => {
+      const base = new Date(baseDate.value)
+      const day  = base.getDay()
+      const monday = new Date(base)
+      monday.setDate(base.getDate() - day)
+      return Array.from({ length: 7 }, (_, i) => {
+        const d = new Date(monday)
+        d.setDate(monday.getDate() + i)
+        const isToday = d.toDateString() === new Date('2026-06-29').toDateString()
+        return { label: '週' + dayLabels[i], date: d.getDate(), isToday }
+      })
+    })
+
+    const todayLabel = computed(() => '週' + dayLabels[new Date('2026-06-29').getDay()])
+    const todayDate  = computed(() => new Date('2026-06-29').getDate())
+
+    const headerTitle = computed(() => {
+      const d = baseDate.value
+      const y = d.getFullYear()
+      const m = d.getMonth() + 1
+      if (activeView.value === 'week') {
+        const base = new Date(d)
+        const day = base.getDay()
+        const mon = new Date(base); mon.setDate(base.getDate() - day)
+        const sun = new Date(mon);  sun.setDate(mon.getDate() + 6)
+        return `${y} 年 ${m} 月 ${mon.getDate()} – ${sun.getDate()} 日`
+      }
+      if (activeView.value === 'month' || activeView.value === 'agenda') return `${y} 年 ${m} 月`
+      return `${y} 年 ${m} 月 ${d.getDate()} 日`
+    })
+
+    const hours = ['12 AM','1 AM','2 AM','3 AM','4 AM','5 AM','6 AM','7 AM','8 AM','9 AM','10 AM','11 AM','12 PM','1 PM','2 PM','3 PM','4 PM','5 PM','6 PM','7 PM']
+    const eventTop = (h) => (h * 48) + 'px'
+    const eventH   = (dur) => (dur * 48 - 4) + 'px'
+
+    // Month cells (June 2026)
+    const monthCells = computed(() => {
+      const cells = []
+      const firstDay = new Date(2026, 5, 1).getDay()
+      // Padding from prev month
+      for (let i = firstDay; i > 0; i--) {
+        const d = new Date(2026, 5, 1 - i)
+        cells.push({ key: 'prev-' + i, day: d.getDate(), isToday: false, faded: true })
+      }
+      // June days
+      for (let d = 1; d <= 30; d++) {
+        cells.push({ key: 'june-' + d, day: d, isToday: d === 29 })
+      }
+      // Padding at end
+      const remaining = (7 - (cells.length % 7)) % 7
+      for (let i = 1; i <= remaining; i++) {
+        cells.push({ key: 'next-' + i, day: i, isToday: false, faded: true })
+      }
+      return cells
+    })
+
+    return {
+      activeView, activeState, currentDateStr, views, states,
+      weekOffset, navigate, goToday,
+      weekDays, todayLabel, todayDate, headerTitle,
+      hours, eventTop, eventH, monthCells,
+    }
+  }
+}).mount('#app')
+</script>
+</body>
+</html>

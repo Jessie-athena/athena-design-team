@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=1280">
+  <title>ListView — Athena DS</title>
+  <link rel="stylesheet" href="ds/design-tokens-base.css">
+  <link rel="stylesheet" href="ds/design-tokens-athena.css">
+  <link rel="stylesheet" href="ds/colors_and_type.css">
+  <link rel="stylesheet" href="app.css">
+  <link rel="stylesheet" href="showcase.css">
+  <script src="https://code.iconify.design/iconify-icon/2.1.0/iconify-icon.min.js"></script>
+  <style>
+    /* ListView component */
+    .listview {
+      width: 320px;
+      border: 1px solid var(--border-default);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      background: var(--bg-surface-default);
+      font-size: 14px;
+    }
+    .listview__header {
+      padding: 10px 16px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-primary);
+      border-bottom: 1px solid var(--border-default);
+      background: var(--bg-surface-variant);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .listview__header-count {
+      font-size: 11px;
+      font-weight: 400;
+      color: var(--text-secondary);
+    }
+    .listview__item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--border-default);
+      cursor: pointer;
+      transition: background 0.12s;
+    }
+    .listview__item:last-child { border-bottom: none; }
+    .listview__item:hover { background: var(--bg-surface-variant); }
+    .listview__item.is-selected { background: rgba(40,119,238,.08); }
+    .listview__checkbox {
+      width: 16px; height: 16px;
+      border: 2px solid var(--border-strong);
+      border-radius: 2px;
+      flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+      background: var(--bg-surface-default);
+      transition: all 0.12s;
+    }
+    .listview__checkbox.is-checked {
+      background: #2877EE;
+      border-color: #2877EE;
+    }
+    .listview__checkbox.is-checked::after {
+      content: '';
+      width: 9px; height: 6px;
+      border-left: 2px solid #fff;
+      border-bottom: 2px solid #fff;
+      transform: rotate(-45deg) translate(1px, -1px);
+    }
+    .listview__content { flex: 1; min-width: 0; }
+    .listview__title {
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--text-primary);
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    }
+    .listview__meta {
+      font-size: 12px;
+      color: var(--text-secondary);
+      margin-top: 2px;
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    }
+    .listview__avatar {
+      width: 32px; height: 32px;
+      border-radius: 50%;
+      background: rgba(40,119,238,.15);
+      color: #2877EE;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 12px; font-weight: 600;
+      flex-shrink: 0;
+    }
+    /* Group header */
+    .listview__group-header {
+      padding: 6px 16px;
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--text-secondary);
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+      background: rgba(40,119,238,.04);
+      border-bottom: 1px solid var(--border-default);
+    }
+    /* Skeleton rows */
+    .listview__sk-item {
+      display: flex; align-items: center; gap: 12px;
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--border-default);
+    }
+    .listview__sk-item:last-child { border-bottom: none; }
+  </style>
+</head>
+<body>
+<div id="app" class="showcase-page">
+
+  <header class="showcase-header">
+    <div class="showcase-header__left">
+      <span class="showcase-badge">Data Display</span>
+      <h1 class="showcase-title">ListView</h1>
+      <span class="showcase-version">v0.2</span>
+    </div>
+    <div class="showcase-header__right">
+      <a href="../../skills/design-system-architect/references/components/ListView.md" class="showcase-doc-link">
+        <iconify-icon icon="material-symbols:article-outline"></iconify-icon> 設計文件
+      </a>
+    </div>
+  </header>
+
+  <div class="showcase-layout">
+
+    <!-- Controls -->
+    <aside class="showcase-controls">
+      <div class="ctrl-group">
+        <div class="ctrl-label">Variant</div>
+        <div class="ctrl-options">
+          <button v-for="v in variants" :key="v.key"
+                  :class="['ctrl-btn', { 'is-active': activeVariant === v.key }]"
+                  @click="activeVariant = v.key">{{ v.label }}</button>
+        </div>
+      </div>
+
+      <div class="ctrl-group">
+        <div class="ctrl-label">State</div>
+        <div class="ctrl-options">
+          <button v-for="s in states" :key="s.key"
+                  :class="['ctrl-btn', { 'is-active': activeState === s.key }]"
+                  @click="activeState = s.key">{{ s.label }}</button>
+        </div>
+      </div>
+
+      <hr class="ctrl-divider">
+
+      <div class="ctrl-group">
+        <div class="ctrl-label">showHeader</div>
+        <div class="ctrl-options">
+          <button :class="['ctrl-btn', { 'is-active': showHeader }]" @click="showHeader = true">true</button>
+          <button :class="['ctrl-btn', { 'is-active': !showHeader }]" @click="showHeader = false">false</button>
+        </div>
+      </div>
+      <div class="ctrl-group">
+        <div class="ctrl-label">showCheckBox</div>
+        <div class="ctrl-options">
+          <button :class="['ctrl-btn', { 'is-active': showCheckBox }]" @click="showCheckBox = true">true</button>
+          <button :class="['ctrl-btn', { 'is-active': !showCheckBox }]" @click="showCheckBox = false">false</button>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main content -->
+    <main class="showcase-main">
+
+      <!-- Primary Demo -->
+      <section>
+        <p class="section-heading">Interactive Demo</p>
+        <div class="demo-canvas">
+          <!-- Loading state -->
+          <div v-if="activeState === 'loading'" class="listview">
+            <div v-if="showHeader" class="listview__header">清單項目 <span class="listview__header-count">載入中…</span></div>
+            <div v-for="i in 4" :key="i" class="listview__sk-item">
+              <span class="sk" style="width:32px;height:32px;border-radius:50%;flex-shrink:0"></span>
+              <div style="flex:1;display:flex;flex-direction:column;gap:6px">
+                <span class="sk sk-line" style="height:14px;width:60%"></span>
+                <span class="sk sk-line" style="height:12px;width:40%"></span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Empty state -->
+          <div v-else-if="activeState === 'empty'" class="listview">
+            <div v-if="showHeader" class="listview__header">清單項目 <span class="listview__header-count">0 筆</span></div>
+            <div class="empty-state">
+              <iconify-icon icon="material-symbols:inbox-outline"></iconify-icon>
+              <span class="empty-state__text">無符合條件的資料</span>
+            </div>
+          </div>
+
+          <!-- Grouped variant -->
+          <div v-else-if="activeVariant === 'grouped'" class="listview">
+            <div v-if="showHeader" class="listview__header">採購項目 <span class="listview__header-count">{{ items.length }} 筆</span></div>
+            <template v-for="group in groups" :key="group.key">
+              <div class="listview__group-header">{{ group.label }}</div>
+              <div v-for="item in group.items" :key="item.id" class="listview__item"
+                   :class="{ 'is-selected': selectedIds.includes(item.id) }"
+                   @click="toggleSelect(item.id)">
+                <div v-if="showCheckBox" :class="['listview__checkbox', { 'is-checked': selectedIds.includes(item.id) }]"></div>
+                <div class="listview__avatar">{{ item.initials }}</div>
+                <div class="listview__content">
+                  <div class="listview__title">{{ item.title }}</div>
+                  <div class="listview__meta">{{ item.meta }}</div>
+                </div>
+              </div>
+            </template>
+          </div>
+
+          <!-- Default / with-header / with-checkbox -->
+          <div v-else class="listview">
+            <div v-if="showHeader || activeVariant === 'with-header'" class="listview__header">
+              採購申請單 <span class="listview__header-count">{{ items.length }} 筆</span>
+            </div>
+            <div v-for="item in items" :key="item.id" class="listview__item"
+                 :class="{ 'is-selected': selectedIds.includes(item.id) }"
+                 @click="toggleSelect(item.id)">
+              <div v-if="showCheckBox || activeVariant === 'with-checkbox'"
+                   :class="['listview__checkbox', { 'is-checked': selectedIds.includes(item.id) }]"></div>
+              <div class="listview__avatar">{{ item.initials }}</div>
+              <div class="listview__content">
+                <div class="listview__title">{{ item.title }}</div>
+                <div class="listview__meta">{{ item.meta }}</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- States Gallery -->
+      <section>
+        <p class="section-heading">States Gallery</p>
+        <div class="gallery-grid">
+
+          <div class="gallery-card">
+            <div class="gallery-card__label">Simple（無 header / 無 checkbox）</div>
+            <div class="gallery-card__content" style="align-items:flex-start">
+              <div class="listview" style="width:100%">
+                <div v-for="item in items.slice(0,3)" :key="item.id" class="listview__item">
+                  <div class="listview__avatar">{{ item.initials }}</div>
+                  <div class="listview__content">
+                    <div class="listview__title">{{ item.title }}</div>
+                    <div class="listview__meta">{{ item.meta }}</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="gallery-card">
+            <div class="gallery-card__label">With Header（showHeader=true）</div>
+            <div class="gallery-card__content" style="align-items:flex-start">
+              <div class="listview" style="width:100%">
+                <div class="listview__header">採購申請單 <span class="listview__header-count">4 筆</span></div>
+                <div v-for="item in items.slice(0,2)" :key="item.id" class="listview__item">
+                  <div class="listview__avatar">{{ item.initials }}</div>
+                  <div class="listview__content">
+                    <div class="listview__title">{{ item.title }}</div>
+                    <div class="listview__meta">{{ item.meta }}</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="gallery-card">
+            <div class="gallery-card__label">With Checkboxes（showCheckBox=true）</div>
+            <div class="gallery-card__content" style="align-items:flex-start">
+              <div class="listview" style="width:100%">
+                <div class="listview__item is-selected">
+                  <div class="listview__checkbox is-checked"></div>
+                  <div class="listview__avatar">陳</div>
+                  <div class="listview__content">
+                    <div class="listview__title">辦公室文具採購</div>
+                    <div class="listview__meta">陳威廷・$4,500</div>
+                  </div>
+                </div>
+                <div class="listview__item">
+                  <div class="listview__checkbox"></div>
+                  <div class="listview__avatar">王</div>
+                  <div class="listview__content">
+                    <div class="listview__title">印表機碳粉匣</div>
+                    <div class="listview__meta">王小明・$1,280</div>
+                  </div>
+                </div>
+                <div class="listview__item">
+                  <div class="listview__checkbox"></div>
+                  <div class="listview__avatar">林</div>
+                  <div class="listview__content">
+                    <div class="listview__title">會議室白板筆</div>
+                    <div class="listview__meta">林美麗・$320</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="gallery-card">
+            <div class="gallery-card__label">Loading（Skeleton）</div>
+            <div class="gallery-card__content" style="align-items:flex-start">
+              <div class="listview" style="width:100%">
+                <div v-for="i in 3" :key="i" class="listview__sk-item">
+                  <span class="sk" style="width:32px;height:32px;border-radius:50%;flex-shrink:0"></span>
+                  <div style="flex:1;display:flex;flex-direction:column;gap:6px">
+                    <span class="sk sk-line" style="height:13px;width:55%"></span>
+                    <span class="sk sk-line" style="height:11px;width:35%"></span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="gallery-card">
+            <div class="gallery-card__label">Empty（inbox icon）</div>
+            <div class="gallery-card__content">
+              <div class="listview" style="width:100%">
+                <div class="empty-state">
+                  <iconify-icon icon="material-symbols:inbox-outline"></iconify-icon>
+                  <span class="empty-state__text">無符合條件的資料</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="gallery-card">
+            <div class="gallery-card__label">Grouped（fields.groupBy）</div>
+            <div class="gallery-card__content" style="align-items:flex-start">
+              <div class="listview" style="width:100%">
+                <div class="listview__group-header">電子設備</div>
+                <div class="listview__item">
+                  <div class="listview__avatar">張</div>
+                  <div class="listview__content"><div class="listview__title">筆記型電腦</div><div class="listview__meta">張小華・$45,000</div></div>
+                </div>
+                <div class="listview__group-header">辦公用品</div>
+                <div class="listview__item">
+                  <div class="listview__avatar">陳</div>
+                  <div class="listview__content"><div class="listview__title">辦公室文具</div><div class="listview__meta">陳威廷・$4,500</div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- API Quick Ref -->
+      <section>
+        <p class="section-heading">API / Props</p>
+        <table class="api-table">
+          <thead>
+            <tr><th>Prop</th><th>Type</th><th>Default</th><th>說明</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><code>dataSource</code></td><td class="type">Object[]</td><td class="default">[]</td><td>清單資料</td></tr>
+            <tr><td><code>showHeader</code></td><td class="type">boolean</td><td class="default">false</td><td>顯示標題列</td></tr>
+            <tr><td><code>headerTitle</code></td><td class="type">string</td><td class="default">''</td><td>標題列文字</td></tr>
+            <tr><td><code>showCheckBox</code></td><td class="type">boolean</td><td class="default">false</td><td>顯示多選 checkbox</td></tr>
+            <tr><td><code>fields</code></td><td class="type">Object</td><td class="default">—</td><td><code>{ groupBy?, text?, child? }</code> 欄位對應與分組依據</td></tr>
+          </tbody>
+        </table>
+        <p class="api-note">事件：<code>@select({ data, isChecked? })</code> — 點選項目時觸發。<code>density</code>（compact/default）與 <code>enablePager</code> 為設計層抽象，對應 Syncfusion ListBox 的 cssClass 或外部 Pager 元件。</p>
+      </section>
+
+    </main>
+  </div>
+</div>
+
+<script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
+<script>
+const { createApp, ref, computed } = Vue
+createApp({
+  setup() {
+    const activeVariant = ref('simple')
+    const activeState   = ref('default')
+    const showHeader    = ref(false)
+    const showCheckBox  = ref(false)
+    const selectedIds   = ref([])
+
+    const variants = [
+      { key: 'simple',        label: 'Simple' },
+      { key: 'with-header',   label: 'With Header' },
+      { key: 'with-checkbox', label: 'Checkbox' },
+      { key: 'grouped',       label: 'Grouped' },
+    ]
+    const states = [
+      { key: 'default', label: 'Default' },
+      { key: 'loading', label: 'Loading' },
+      { key: 'empty',   label: 'Empty' },
+    ]
+
+    const items = [
+      { id: 1, title: '辦公室文具採購', meta: '陳威廷・財務部・$4,500',  initials: '陳' },
+      { id: 2, title: '印表機碳粉匣',   meta: '王小明・IT 部・$1,280',   initials: '王' },
+      { id: 3, title: '人體工學椅',     meta: '林美麗・管理部・$8,900',  initials: '林' },
+      { id: 4, title: '筆記型電腦',     meta: '張小華・研發部・$45,000', initials: '張' },
+    ]
+    const groups = [
+      { key: 'electronics', label: '電子設備', items: [items[3], items[1]] },
+      { key: 'office',      label: '辦公用品', items: [items[0], items[2]] },
+    ]
+
+    const toggleSelect = (id) => {
+      const idx = selectedIds.value.indexOf(id)
+      if (idx === -1) selectedIds.value.push(id)
+      else selectedIds.value.splice(idx, 1)
+    }
+
+    return {
+      activeVariant, activeState, showHeader, showCheckBox, selectedIds,
+      variants, states, items, groups, toggleSelect,
+    }
+  }
+}).mount('#app')
+</script>
+</body>
+</html>
