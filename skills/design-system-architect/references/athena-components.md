@@ -1,25 +1,23 @@
 # Athena 元件清單（完整目錄）
 
-> 本檔是 Athena 可用元件的**完整共用目錄**：有哪些元件、各用在哪、目前採用狀態。
+> 本檔是 Athena 可用元件的**完整共用目錄**：有哪些元件、設計文件建立情況。
 > 來源：Syncfusion Vue（Material 3 主題）元件庫，對應 `syncfusion-playground/app/pages/playground/*.vue`（94 個，轉設計/實作前先查對應 `.vue` 確認最新 API）；客製元件前綴 `Ds`，路徑 `components/ds/`。
 > 用色 / 字級 / 間距語意 → 見同目錄 `athena-design.md`；token 值 → `athena-tokens.md`。
 
-## 採用狀態圖例
+## 文件狀態圖例
 
 | 標記 | 意義 |
 |------|------|
-| ✅ 已採用 | ERP `CLAUDE.md` 已定版採用、有明確 import 對照 |
-| ⬜ 待分類 | 元件存在於庫中、尚未由 DS owner 明訂可用 / 不可用 |
-| 🚫 不可用 | DS owner 明訂不採用（**待你圈選** — 目前無權威來源，未擅自標記） |
-
-> ⚠️ **「可用 / 不可用」是治理決策**。本檔僅能據 ERP `CLAUDE.md` 標出「✅ 已採用」者；其餘一律「⬜ 待分類」，不臆造為不可用。請於審閱時把要禁用的改標 🚫，並補禁用理由 / 替代元件。
+| ✅ 已產出 | 設計文件（`.md`）已建立，見下方設計文件索引 |
+| ⬜ 待建立 | 尚未建立設計文件 |
+| 🚫 不可用 | DS owner 明訂不採用（目前無，未擅自標記） |
 
 ---
 
-## 設計文件索引（✅ 已採用元件）
+## 設計文件索引
 
-> 每個 ✅ 已採用元件的**逐元件設計文件**落點。格式見 `component-doc-schema.md`；產出由 `SKILL.md §Step 2` 負責。
-> 為避免每張表格塞入大量空欄（多數元件仍 ⬜ 待分類無設計文件），設計文件連結集中於此單一索引，不分散到下方各分類表。
+> 已建立設計文件的元件快速索引，格式見 `component-doc-schema.md`；產出由 `SKILL.md §Step 2` 負責。
+> 設計文件連結集中於此索引，不分散到下方各分類表。
 
 | 元件 | 設計文件 | 狀態 |
 |------|---------|------|
@@ -70,172 +68,173 @@
 
 > Import 多來自 `@syncfusion/ej2-vue-navigations` / `-layouts`。
 
-| 元件 | 用途（用在哪） | 採用狀態 |
-|------|--------------|---------|
-| Tab | 同一畫面切換多組內容（單據明細分頁） | ✅ 已採用 |
-| Accordion | 可摺疊區塊、FAQ、設定分組 | ⬜ 待分類 |
-| AppBar | 頂部應用列 / header chrome | ⬜ 待分類 |
-| Toolbar | 工具列、批次操作列 | ⬜ 待分類 |
-| Menu | 主選單、多層導覽 | ⬜ 待分類 |
-| ContextMenu | 右鍵 / 長按情境選單 | ⬜ 待分類 |
-| Breadcrumb | 階層路徑導覽 | ⬜ 待分類 |
-| Sidebar | 側邊抽屜 / 導覽面板 | ⬜ 待分類 |
-| Splitter | 可調整比例的分割版面 | ⬜ 待分類 |
-| Card | 卡片容器 | ⬜ 待分類（另有客製 `DsCard`） |
-| Dashboard Layout | 可拖拉的儀表板網格 | ⬜ 待分類 |
-| Ribbon | Office 風格功能區 | ⬜ 待分類 |
-| TreeView | 樹狀導覽 / 階層清單 | ⬜ 待分類 |
+| 元件 | 用途 | 文件狀態 |
+|------|------|---------|
+| Tab | 同一畫面切換多組內容 | ✅ 已產出 |
+| Accordion | 可摺疊區塊、FAQ、設定分組 | ⬜ 待建立 |
+| AppBar | 頂部應用列 / header chrome | ⬜ 待建立 |
+| Toolbar | 工具列、批次操作列 | ⬜ 待建立 |
+| Menu | 主選單、多層導覽 | ⬜ 待建立 |
+| ContextMenu | 右鍵 / 長按情境選單 | ⬜ 待建立 |
+| Breadcrumb | 階層路徑導覽 | ⬜ 待建立 |
+| Sidebar | 側邊抽屜 / 導覽面板 | ⬜ 待建立 |
+| Splitter | 可調整比例的分割版面 | ⬜ 待建立 |
+| Card | 卡片容器 | ⬜ 待建立（另有客製 `DsCard`） |
+| Dashboard Layout | 可拖拉的儀表板網格 | ⬜ 待建立 |
+| Ribbon | Office 風格功能區 | ⬜ 待建立 |
+| TreeView | 樹狀導覽 / 階層清單 | ⬜ 待建立 |
 
 ## 2. 按鈕與動作（Buttons & Actions）
 
 > Import：`@syncfusion/ej2-vue-buttons`。
 
-| 元件 | 用途（用在哪） | 採用狀態 |
-|------|--------------|---------|
-| Button | 各類操作 CTA | ✅ 已採用 |
-| FAB / SpeedDial | 浮動主操作 | ✅ 已採用 |
-| ButtonGroup | 一組互斥切換（List/Form 模式切換、週期選擇） | ✅ 已採用 |
-| DropDownButton | 收納多個次要操作（更多操作選單） | ✅ 已採用 |
-| SplitButton | 主動作 + 下拉次動作（核准 + 核准並產傳票） | ✅ 已採用 |
-| IconButton | icon-only 嵌入式操作點（Grid actions 欄、工具列） | ✅ 已採用 |
-| ProgressButton | 帶進度狀態的按鈕 | ⬜ 待分類 |
+| 元件 | 用途 | 文件狀態 |
+|------|------|---------|
+| Button | 各類操作 CTA | ✅ 已產出 |
+| FAB / SpeedDial | 浮動主操作 | ✅ 已產出 |
+| ButtonGroup | 一組互斥切換（List/Form 模式切換、週期選擇） | ✅ 已產出 |
+| DropDownButton | 收納多個次要操作（更多操作選單） | ✅ 已產出 |
+| SplitButton | 主動作 + 下拉次動作（核准 + 核准並產傳票） | ✅ 已產出 |
+| IconButton | icon-only 嵌入式操作點（Grid actions 欄、工具列） | ✅ 已產出 |
+| ProgressButton | 帶進度狀態的按鈕 | ⬜ 待建立 |
 
 ## 3. 輸入 — 文字（Text Inputs）
 
 > Import 多來自 `@syncfusion/ej2-vue-inputs`。
 
-| 元件 | 用途（用在哪） | 採用狀態 |
-|------|--------------|---------|
-| TextBox | 文字輸入 | ✅ 已採用 |
-| NumericTextBox | 數值 / 金額輸入 | ✅ 已採用 |
-| TextArea | 多行文字（備註、說明欄） | ✅ 已採用 |
-| MaskedTextBox | 格式遮罩輸入（電話 / 統編 / 日期） | ✅ 已採用 |
-| OTP Input | 一次性驗證碼輸入 | ✅ 已採用 |
-| PasswordTextBox | 密碼輸入（含 eye toggle） | ✅ 已採用 |
-| In-place Editor | 行內就地編輯 | ⬜ 待分類 |
-| Signature | 手寫簽名 | ⬜ 待分類 |
+| 元件 | 用途 | 文件狀態 |
+|------|------|---------|
+| TextBox | 文字輸入 | ✅ 已產出 |
+| NumericTextBox | 數值 / 金額輸入 | ✅ 已產出 |
+| TextArea | 多行文字（備註、說明欄） | ✅ 已產出 |
+| MaskedTextBox | 格式遮罩輸入（電話 / 統編 / 日期） | ✅ 已產出 |
+| OTP Input | 一次性驗證碼輸入 | ✅ 已產出 |
+| PasswordTextBox | 密碼輸入（含 eye toggle） | ✅ 已產出 |
+| In-place Editor | 行內就地編輯 | ⬜ 待建立 |
+| Signature | 手寫簽名 | ⬜ 待建立 |
 
 ## 4. 輸入 — 選擇（Selection Inputs）
 
 > Import 多來自 `@syncfusion/ej2-vue-dropdowns` / `-buttons` / `-inputs`。
 
-| 元件 | 用途（用在哪） | 採用狀態 |
-|------|--------------|---------|
-| DropDownList | 單選下拉 | ✅ 已採用 |
-| AutoComplete | 輸入即時建議 | ✅ 已採用 |
-| ComboBox | 可輸入可選的下拉 | ✅ 已採用 |
-| MultiColumn ComboBox | 多欄下拉（顯示多欄資訊） | ✅ 已採用 |
-| MultiSelect | 多選下拉 / 標籤選擇 | ✅ 已採用 |
-| DropDownTree | 樹狀下拉選擇 | ✅ 已採用 |
-| ListBox | 清單選擇 / 雙清單搬移 | ✅ 已採用 |
-| Checkbox | 多選框 | ✅ 已採用 |
-| RadioButton | 單選鈕 | ✅ 已採用 |
-| Switch | 開關切換 | ⬜ 待分類 |
-| Slider | 數值滑桿 | ⬜ 待分類 |
-| Rating | 星等評分 | ⬜ 待分類 |
-| ColorPicker | 色彩選擇 | ⬜ 待分類 |
-| DsColorPicker | 客製固定色盤選擇器（Ds 元件） | ⬜ 待分類 |
+| 元件 | 用途 | 文件狀態 |
+|------|------|---------|
+| DropDownList | 單選下拉 | ✅ 已產出 |
+| AutoComplete | 輸入即時建議 | ✅ 已產出 |
+| ComboBox | 可輸入可選的下拉 | ✅ 已產出 |
+| MultiColumn ComboBox | 多欄下拉（顯示多欄資訊） | ✅ 已產出 |
+| MultiSelect | 多選下拉 / 標籤選擇 | ✅ 已產出 |
+| DropDownTree | 樹狀下拉選擇 | ✅ 已產出 |
+| ListBox | 清單選擇 / 雙清單搬移 | ✅ 已產出 |
+| Checkbox | 多選框 | ✅ 已產出 |
+| RadioButton | 單選鈕 | ✅ 已產出 |
+| Switch | 開關切換 | ✅ 已產出 |
+| Slider | 數值滑桿 | ⬜ 待建立 |
+| Rating | 星等評分 | ✅ 已產出 |
+| ColorPicker | 色彩選擇 | ✅ 已產出 |
+| DsColorPicker | 客製固定色盤選擇器（Ds 元件） | ✅ 已產出 |
 
 ## 5. 日期與時間（Date & Time）
 
 > Import：`@syncfusion/ej2-vue-calendars`。
 
-| 元件 | 用途（用在哪） | 採用狀態 |
-|------|--------------|---------|
-| DatePicker | 日期選擇 | ✅ 已採用（另有客製 `DsDatePicker` 含多語系格式） |
-| Calendar | 月曆面板 | ✅ 已採用 |
-| DateRangePicker | 日期區間選擇 | ✅ 已採用 |
-| DateTimePicker | 日期＋時間選擇 | ✅ 已採用 |
-| TimePicker | 時間選擇 | ✅ 已採用 |
+| 元件 | 用途 | 文件狀態 |
+|------|------|---------|
+| DatePicker | 日期選擇（另有客製 `DsDatePicker` 含多語系格式） | ✅ 已產出 |
+| Calendar | 月曆面板 | ✅ 已產出 |
+| DateRangePicker | 日期區間選擇 | ✅ 已產出 |
+| DateTimePicker | 日期＋時間選擇 | ✅ 已產出 |
+| TimePicker | 時間選擇 | ✅ 已產出 |
 
 ## 6. 資料展示與表格（Data Display）
 
 > Import 多來自 `@syncfusion/ej2-vue-grids` / `-navigations` / `-layouts`。
 
-| 元件 | 用途（用在哪） | 採用狀態 |
-|------|--------------|---------|
-| Grid | 資料列表、報表、可排序/篩選表格 | ✅ 已採用 |
-| TreeGrid | 階層式表格 | ⬜ 待分類 |
-| Pivot View | 樞紐分析表 | ⬜ 待分類 |
-| Spreadsheet | 試算表 | ⬜ 待分類 |
-| ListView | 清單檢視 | ⬜ 待分類 |
-| Kanban | 看板（拖拉卡片） | ⬜ 待分類 |
-| Gantt | 甘特圖 / 專案排程 | ⬜ 待分類 |
-| Schedule | 行事曆 / 排程檢視 | ⬜ 待分類 |
-| QueryBuilder | 視覺化條件查詢建構 | ⬜ 待分類 |
-| Pager | 分頁器 | ⬜ 待分類 |
+| 元件 | 用途 | 文件狀態 |
+|------|------|---------|
+| Grid | 資料列表、報表、可排序/篩選表格 | ✅ 已產出 |
+| TreeGrid | 階層式表格 | ⬜ 待建立 |
+| Pivot View | 樞紐分析表 | ⬜ 待建立 |
+| Spreadsheet | 試算表 | ⬜ 待建立 |
+| ListView | 清單檢視 | ⬜ 待建立 |
+| Kanban | 看板（拖拉卡片） | ⬜ 待建立 |
+| Gantt | 甘特圖 / 專案排程 | ⬜ 待建立 |
+| Schedule | 行事曆 / 排程檢視 | ⬜ 待建立 |
+| QueryBuilder | 視覺化條件查詢建構 | ⬜ 待建立 |
+| Pager | 分頁器 | ⬜ 待建立 |
 
 ## 7. 圖表與視覺化（Charts & Visualization）
 
 > Import 多來自 `@syncfusion/ej2-vue-charts` / `-gauges` / `-maps` / `-diagrams` / `-barcode-generator`。
 
-| 元件 | 用途（用在哪） | 採用狀態 |
-|------|--------------|---------|
-| Chart | 2D 直角座標圖（折線 / 長條 / 區域…） | ⬜ 待分類 |
-| Chart3D | 3D 圖表 | ⬜ 待分類 |
-| Accumulation Chart | 圓餅 / 環圈圖 | ⬜ 待分類 |
-| Bullet Chart | 子彈圖（KPI 對標） | ⬜ 待分類 |
-| Stock Chart | 股價 / 財務 K 線圖 | ⬜ 待分類 |
-| Smith Chart | 史密斯圓圖（工程用） | ⬜ 待分類 |
-| Sparkline | 行內微型趨勢圖 | ⬜ 待分類 |
-| Range Navigator | 圖表時間區間導覽 | ⬜ 待分類 |
-| Circular Gauge | 圓形儀表 | ⬜ 待分類 |
-| Linear Gauge | 線性儀表 | ⬜ 待分類 |
-| Heatmap | 熱力圖 | ⬜ 待分類 |
-| TreeMap | 矩形樹狀圖 | ⬜ 待分類 |
-| Maps | 地圖 | ⬜ 待分類 |
-| Diagram | 流程圖 / 節點圖 | ⬜ 待分類 |
-| Barcode | 條碼 / QR 產生 | ⬜ 待分類 |
+| 元件 | 用途 | 文件狀態 |
+|------|------|---------|
+| Chart | 2D 直角座標圖（折線 / 長條 / 區域…） | ⬜ 待建立 |
+| Chart3D | 3D 圖表 | ⬜ 待建立 |
+| Accumulation Chart | 圓餅 / 環圈圖 | ⬜ 待建立 |
+| Bullet Chart | 子彈圖（KPI 對標） | ⬜ 待建立 |
+| Stock Chart | 股價 / 財務 K 線圖 | ⬜ 待建立 |
+| Smith Chart | 史密斯圓圖（工程用） | ⬜ 待建立 |
+| Sparkline | 行內微型趨勢圖 | ⬜ 待建立 |
+| Range Navigator | 圖表時間區間導覽 | ⬜ 待建立 |
+| Circular Gauge | 圓形儀表 | ⬜ 待建立 |
+| Linear Gauge | 線性儀表 | ⬜ 待建立 |
+| Heatmap | 熱力圖 | ⬜ 待建立 |
+| TreeMap | 矩形樹狀圖 | ⬜ 待建立 |
+| Maps | 地圖 | ⬜ 待建立 |
+| Diagram | 流程圖 / 節點圖 | ⬜ 待建立 |
+| Barcode | 條碼 / QR 產生 | ⬜ 待建立 |
 
 ## 8. 回饋與狀態（Feedback & Status）
 
 > Import 多來自 `@syncfusion/ej2-vue-notifications` / `-popups`。
 
-| 元件 | 用途（用在哪） | 採用狀態 |
-|------|--------------|---------|
-| Toast | 操作結果提示（success / warning / error） | ✅ 已採用 |
-| Skeleton | 載入佔位 | ✅ 已採用 |
-| Dialog | 確認操作、deeplink 跳轉、表單 modal | ✅ 已採用 |
-| Predefined Dialogs | Alert / Confirm / Prompt 預設對話框 | ⬜ 待分類 |
-| Message | 行內訊息條 | ⬜ 待分類 |
-| Tooltip | 提示氣泡 | ⬜ 待分類 |
-| Spinner | 載入轉圈 | ⬜ 待分類 |
-| ProgressBar | 進度條 | ⬜ 待分類 |
-| Badge | 數字 / 狀態角標 | ⬜ 待分類（狀態徽章另有客製 `DsStatusBadge`） |
-| Chips | 標籤 / 篩選 chip | ⬜ 待分類 |
-| Avatar | 使用者頭像 | ⬜ 待分類 |
+| 元件 | 用途 | 文件狀態 |
+|------|------|---------|
+| Toast | 操作結果提示（success / warning / error） | ✅ 已產出 |
+| Skeleton | 載入佔位 | ✅ 已產出 |
+| Dialog | 確認操作、deeplink 跳轉、表單 modal | ✅ 已產出 |
+| Predefined Dialogs | Alert / Confirm / Prompt 預設對話框 | ⬜ 待建立 |
+| Message | 行內訊息條 | ⬜ 待建立 |
+| Tooltip | 提示氣泡 | ⬜ 待建立 |
+| Spinner | 載入轉圈 | ⬜ 待建立 |
+| ProgressBar | 進度條 | ⬜ 待建立 |
+| Badge | 數字 / 狀態角標 | ⬜ 待建立（狀態徽章另有客製 `DsStatusBadge`） |
+| Chips | 標籤 / 篩選 chip | ⬜ 待建立 |
+| Avatar | 使用者頭像 | ⬜ 待建立 |
 
 ## 9. 編輯器與富內容（Editors & Rich Content）
 
 > Import 多來自 `@syncfusion/ej2-vue-richtexteditor` / `-documenteditor` / `-image-editor` / `-pdfviewer` / `-filemanager` / `-inputs`。
 
-| 元件 | 用途（用在哪） | 採用狀態 |
-|------|--------------|---------|
-| RichTextEditor | 富文本編輯 | ⬜ 待分類 |
-| Document Editor | Word 文件編輯 | ⬜ 待分類 |
-| Image Editor | 圖片編輯 | ⬜ 待分類 |
-| PDF Viewer | PDF 檢視 | ⬜ 待分類 |
-| File Manager | 檔案總管 | ⬜ 待分類 |
-| File Upload | 檔案上傳 | ⬜ 待分類 |
+| 元件 | 用途 | 文件狀態 |
+|------|------|---------|
+| RichTextEditor | 富文本編輯 | ⬜ 待建立 |
+| Document Editor | Word 文件編輯 | ⬜ 待建立 |
+| Image Editor | 圖片編輯 | ⬜ 待建立 |
+| PDF Viewer | PDF 檢視 | ⬜ 待建立 |
+| File Manager | 檔案總管 | ⬜ 待建立 |
+| File Upload | 檔案上傳 | ⬜ 待建立 |
 
 ## 10. 流程與其他（Flow & Misc）
 
-| 元件 | 用途（用在哪） | 採用狀態 |
-|------|--------------|---------|
-| Stepper | 單據狀態流程、多步驟精靈 | ✅ 已採用 |
-| Carousel | 輪播 | ⬜ 待分類 |
-| AI AssistView | AI 對話輔助面板 | ⬜ 待分類 |
-| Chat UI | 聊天介面 | ⬜ 待分類 |
+| 元件 | 用途 | 文件狀態 |
+|------|------|---------|
+| Stepper | 單據狀態流程、多步驟精靈 | ✅ 已產出 |
+| Carousel | 輪播 | ⬜ 待建立 |
+| AI AssistView | AI 對話輔助面板 | ⬜ 待建立 |
+| Chat UI | 聊天介面 | ⬜ 待建立 |
 
 ---
 
 ## 客製 `Ds` 元件（前綴 `Ds`，路徑 `components/ds/`）
 
-| 元件 | 用途（用在哪） | 採用狀態 |
-|------|--------------|---------|
-| `DsDatePicker` | 含多語系格式的日期選擇 | ✅ 已採用 |
-| `DsStatusBadge` | 單據狀態徽章 | ✅ 已採用 |
-| `DsCard` | 卡片容器 | ✅ 已採用 |
-| `DsSideNavMenu` | 側邊導覽選單 | ✅ 已採用 |
+| 元件 | 用途 | 文件狀態 |
+|------|------|---------|
+| `DsDatePicker` | 含多語系格式的日期選擇（Syncfusion DatePicker 客製包裝） | ✅ 已產出 |
+| `DsStatusBadge` | 單據狀態徽章 | ✅ 已產出 |
+| `DsColorPicker` | 固定色盤選擇器 | ✅ 已產出 |
+| `DsCard` | 卡片容器 | ⬜ 待建立 |
+| `DsSideNavMenu` | 側邊導覽選單 | ⬜ 待建立 |
 
 > 優先順序：Syncfusion 既有元件 → 客製 `Ds` 元件 → 行內組合。需新增客製元件前，先 audit 上表是否已有可用者（見 SKILL.md §Governance）。
