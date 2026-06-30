@@ -2,7 +2,7 @@
 name: Dialog
 category: 覆疊與回饋
 tier: full
-status: ✅ 已採用
+status: ✅ 已產出
 authority: ERP CLAUDE.md（Syncfusion Dialog, @syncfusion/ej2-vue-popups, <ejs-dialog>）
 figma-node: JhcpyIEEzSChcEXMRJUiIm/16570-1110   # 🎨 FAI2 Library · Dialog 元件集（含 Small/Large 兩 variant）
 version: v0.1

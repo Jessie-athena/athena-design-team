@@ -2,7 +2,7 @@
 name: DatePicker
 category: 輸入 — 日期
 tier: lite
-status: ✅ 已採用
+status: ✅ 已產出
 authority: ERP CLAUDE.md（客製 DsDatePicker, components/ds/DsDatePicker.vue；底層 @syncfusion/ej2-vue-calendars）
 figma-node: JhcpyIEEzSChcEXMRJUiIm/16986-236059   # 🎨 FAI2 Library · DatePicker 元件集
 version: v0.1

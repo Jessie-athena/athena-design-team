@@ -2,7 +2,7 @@
 name: OTPInput
 category: 輸入 — 驗證碼
 tier: full
-status: ✅ 已採用
+status: ✅ 已產出
 authority: ERP CLAUDE.md（Syncfusion OtpInput, @syncfusion/ej2-vue-inputs）
 figma-node: JhcpyIEEzSChcEXMRJUiIm/15568-220
 version: v0.1

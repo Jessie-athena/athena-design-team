@@ -167,7 +167,7 @@ get_screenshot(node_id)
 
 **驗證**：
 
-- §0 `status` 對應 `athena-components.md` 的採用狀態（✅ 已採用 / ⬜ 待分類）
+- §0 `status` 對應 `athena-components.md` 的文件狀態（✅ 已產出 / ⬜ 待建立）
 - §13 三向連結可達（tokens / prototyper profile / code）
 - 確認無 raw hex / px 散落文件中（全部 `{token}` reference 或 🎨 量測標記）
 

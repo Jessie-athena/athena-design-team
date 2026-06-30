@@ -2,7 +2,7 @@
 
 > 本檔定義 Athena 每個元件的**設計文件格式**：章節結構、來源標記制、token-reference 規則、Figma 補入 SOP。
 > 由 `design-system-architect` 擁有；`ui-designer` 消費（挑用元件時取此規格）、`prototyper` 引用（profile 標上游）。
-> 逐元件設計文件落點：`references/components/<Component>.md`。Token 真值解析對象：同目錄 `athena-tokens.md`；語意對照：`athena-design.md`；元件目錄與採用狀態：`athena-components.md`。
+> 逐元件設計文件落點：`references/components/<Component>.md`。Token 真值解析對象：同目錄 `athena-tokens.md`；語意對照：`athena-design.md`；元件目錄與文件狀態：`athena-components.md`。
 
 ---
 
@@ -114,7 +114,7 @@ Athena 是 **B2B Web/App 產品**（資料密集、單據交易、跨平台、Sy
 name: Button
 category: 按鈕與動作
 tier: lite
-status: ✅ 已採用
+status: ✅ 已產出
 authority: ERP CLAUDE.md（Syncfusion Button, @syncfusion/ej2-vue-buttons）
 figma-node: —          # 🎨 Figma 補入時填 <FILE_KEY>/<NODE_ID>
 version: v0.1
@@ -189,7 +189,7 @@ focus ring `{ds-borderwidth-medium}` / `{color-sf-primary}` / offset 2px；Enter
 name: st-chip（狀態徽章）
 category: 回饋與狀態
 tier: full        # variant 生命週期密集；視覺雖簡單但狀態語意重
-status: ✅ 已採用（含客製 DsStatusBadge）
+status: ✅ 已產出（含客製 DsStatusBadge）
 authority: prototyper DataGrid.md / Stepper.md（狀態色推導，待 DS 正式定義各態）
 figma-node: —
 version: v0.1
@@ -277,7 +277,7 @@ Chip 本身唯讀無互動態；其「狀態值」即 §4 variant。表格列承
 - ✅ 輸出品質清單補「依 schema 產出」「跨平台採 adaptive」兩項。
 
 **`ui-designer`（消費者）**
-- ✅ 「Component 應用」職責補：挑用前到設計文件取 variants/states/usage，不臆測；選 ⬜ 待分類 元件須 flag 治理。
+- ✅ 「Component 應用」職責補：挑用前到設計文件取 variants/states/usage，不臆測；選 ⬜ 待建立 元件須 flag 治理。
 - ✅ Step 2 UI Spec 範例 token 標為跨專案佔位，指向 `athena-design.md` / `athena-tokens.md` 真值。
 
 **`prototyper`（引用者）**
@@ -287,7 +287,7 @@ Chip 本身唯讀無互動態；其「狀態值」即 §4 variant。表格列承
 
 ### 9.3 後續（非本批）
 
-- `references/components/` 已收編：`Button` / `DataGrid` / `Stepper` / `SummaryCard` / `st-chip`（5 件）。其餘 ✅ 已採用元件設計文件待逐步補。
+- `references/components/` 已收編：`Button` / `DataGrid` / `Stepper` / `SummaryCard` / `st-chip`（5 件）。其餘 ✅ 已產出元件設計文件待逐步補。
 - 首個真實元件做一次「Figma 補入」演練（`get_variable_defs` 填 §3–5），驗證對不上 token 會停下回報。
 - 其餘 prototyper 複合 profile（ListSearch / FormGroup / FormFooter）是否各自對應設計文件，待 DS owner 決定（多為佈局 pattern 而非單一 Syncfusion 元件）。
 - **已知 class-name 漂移待對齊**（瘦身 profile 時發現，非本批）：`prototyper/profiles/erp-components/*.md` 部分 class 名與 `assets/app.css` 不一致——`.btn-icon.is-primary` vs `.btn-icon-sq--primary`、`.form-field`/`.help`/`h2` vs `.field`/`.field__helper`/`h3`、`.form-footer__actions`/`.btn-more__menu` vs `.form-footer__right`/`.popover`。屬「用法權威」內部一致性，待另案以 app.css 為準收斂。

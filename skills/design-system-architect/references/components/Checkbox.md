@@ -2,7 +2,7 @@
 name: Checkbox
 category: 表單與輸入
 tier: lite
-status: ✅ 已採用
+status: ✅ 已產出
 authority: ERP CLAUDE.md（Syncfusion Checkbox, @syncfusion/ej2-vue-buttons）
 figma-node: JhcpyIEEzSChcEXMRJUiIm/12775-28409
 version: v0.1

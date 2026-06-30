@@ -2,7 +2,7 @@
 name: Skeleton
 category: 回饋與狀態
 tier: lite
-status: ✅ 已採用
+status: ✅ 已產出
 authority: ERP CLAUDE.md（Syncfusion Skeleton, @syncfusion/ej2-vue-notifications）
 figma-node: JhcpyIEEzSChcEXMRJUiIm/16535-5838
 version: v0.1

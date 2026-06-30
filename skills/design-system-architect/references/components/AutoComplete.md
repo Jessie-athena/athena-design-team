@@ -2,7 +2,7 @@
 name: AutoComplete
 category: 輸入 — 選擇
 tier: lite
-status: ✅ 已採用
+status: ✅ 已產出
 authority: ERP CLAUDE.md（Syncfusion AutoComplete, @syncfusion/ej2-vue-dropdowns）
 figma-node: JhcpyIEEzSChcEXMRJUiIm/16951-1340   # 🎨 FAI2 Library · AutoComplete 元件集
 version: v0.1

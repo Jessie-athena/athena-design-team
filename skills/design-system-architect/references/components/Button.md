@@ -2,7 +2,7 @@
 name: Button
 category: 按鈕與動作
 tier: lite
-status: ✅ 已採用
+status: ✅ 已產出
 authority: ERP CLAUDE.md（Syncfusion Button, @syncfusion/ej2-vue-buttons）
 figma-node: JhcpyIEEzSChcEXMRJUiIm/16773-15148   # 🎨 FAI2 Library · Button 元件集
 version: v0.3

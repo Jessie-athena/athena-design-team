@@ -2,7 +2,7 @@
 name: DateRangePicker
 category: 輸入 — 日期
 tier: full
-status: ✅ 已採用
+status: ✅ 已產出
 authority: ERP CLAUDE.md（Syncfusion DateRangePicker, @syncfusion/ej2-vue-calendars）
 figma-node: JhcpyIEEzSChcEXMRJUiIm/16988-272294
 version: v0.1

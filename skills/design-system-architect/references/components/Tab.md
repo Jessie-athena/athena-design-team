@@ -2,7 +2,7 @@
 name: Tab
 category: 導覽與佈局
 tier: full
-status: ✅ 已採用
+status: ✅ 已產出
 authority: ERP CLAUDE.md（Syncfusion Tab, @syncfusion/ej2-vue-navigations）
 figma-node: JhcpyIEEzSChcEXMRJUiIm/16545-8623   # 🎨 FAI2 Library · Tabs 元件集
 version: v0.1

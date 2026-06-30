@@ -2,7 +2,7 @@
 name: Switch（Toggle Switch）
 category: 表單與輸入
 tier: lite
-status: ✅ 已採用
+status: ✅ 已產出
 authority: ERP CLAUDE.md（Syncfusion Switch, @syncfusion/ej2-vue-buttons）
 figma-node: JhcpyIEEzSChcEXMRJUiIm/11932-33202
 version: v0.1

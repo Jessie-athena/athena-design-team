@@ -2,7 +2,7 @@
 name: Toast（Toaster）
 category: 回饋與狀態
 tier: full
-status: ✅ 已採用
+status: ✅ 已產出
 authority: ERP prototype（app.js `showToast` / `.toast-stack` / `.toast--*`）；Syncfusion `@syncfusion/ej2-vue-notifications`（`<ejs-toast>`）
 figma-node: JhcpyIEEzSChcEXMRJUiIm/11767-1691
 version: v0.1

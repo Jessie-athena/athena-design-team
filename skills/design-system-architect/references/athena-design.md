@@ -140,14 +140,14 @@ Material 3 的色彩是**成對使用**的：每個「容器/底色」都有對�
 
 | 元件 | 何時用 | 採用狀態 |
 |------|--------|---------|
-| Grid | 資料列表、報表、可排序/篩選表格 | ✅ 已採用 |
-| Tab | 同一畫面切換多組內容 | ✅ 已採用 |
-| Stepper | 單據狀態流程、多步驟精靈 | ✅ 已採用 |
-| Dialog | 確認操作、deeplink 跳轉、表單 modal | ✅ 已採用 |
-| Button / FAB | 操作 CTA / 浮動主操作 | ✅ 已採用 |
-| TextBox / NumericTextBox | 文字 / 數值・金額輸入 | ✅ 已採用 |
-| DropDownList | 單選下拉 | ✅ 已採用 |
-| DatePicker | 日期選擇（另有客製 `DsDatePicker`） | ✅ 已採用 |
-| Toast / Skeleton | 結果提示 / 載入佔位 | ✅ 已採用 |
+| Grid | 資料列表、報表、可排序/篩選表格 | ✅ 已產出 |
+| Tab | 同一畫面切換多組內容 | ✅ 已產出 |
+| Stepper | 單據狀態流程、多步驟精靈 | ✅ 已產出 |
+| Dialog | 確認操作、deeplink 跳轉、表單 modal | ✅ 已產出 |
+| Button / FAB | 操作 CTA / 浮動主操作 | ✅ 已產出 |
+| TextBox / NumericTextBox | 文字 / 數值・金額輸入 | ✅ 已產出 |
+| DropDownList | 單選下拉 | ✅ 已產出 |
+| DatePicker | 日期選擇（另有客製 `DsDatePicker`） | ✅ 已產出 |
+| Toast / Skeleton | 結果提示 / 載入佔位 | ✅ 已產出 |
 
 > 選元件原則：Syncfusion 既有 → 客製 `Ds`（`DsDatePicker` / `DsStatusBadge` / `DsCard` / `DsSideNavMenu`）→ 行內組合。新增客製前先 audit `athena-components.md` 是否已有可用者。

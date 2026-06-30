@@ -2,7 +2,7 @@
 name: Calendar
 category: 輸入 — 日期與時間
 tier: full
-status: ✅ 已採用
+status: ✅ 已產出
 authority: ERP CLAUDE.md（Syncfusion Calendar, @syncfusion/ej2-vue-calendars）
 figma-node: JhcpyIEEzSChcEXMRJUiIm/16642-4421
 version: v0.1

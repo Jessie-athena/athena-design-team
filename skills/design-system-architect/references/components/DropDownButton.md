@@ -2,7 +2,7 @@
 name: DropDownButton
 category: 按鈕與動作
 tier: full
-status: ✅ 已採用
+status: ✅ 已產出
 authority: ERP CLAUDE.md（Syncfusion DropDownButton, @syncfusion/ej2-vue-splitbuttons）
 figma-node: JhcpyIEEzSChcEXMRJUiIm/12736-47804
 version: v0.1

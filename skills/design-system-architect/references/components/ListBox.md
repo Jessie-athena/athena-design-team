@@ -2,7 +2,7 @@
 name: ListBox（清單選取框）
 category: 選取與輸入
 tier: full
-status: ✅ 已採用（Syncfusion ListBox；`@syncfusion/ej2-vue-dropdowns`）
+status: ✅ 已產出（Syncfusion ListBox；`@syncfusion/ej2-vue-dropdowns`）
 authority: 契約＝本檔；視覺值落地＝prototyper/assets/app.css（canonical CSS，值權威）；class·行為＝prototyper/profiles（用法權威）
 figma-node: JhcpyIEEzSChcEXMRJUiIm/16967-52258
 last-synced: 2026-06-29

@@ -2,7 +2,7 @@
 name: TimePicker
 category: 輸入 — 時間
 tier: lite
-status: ✅ 已採用
+status: ✅ 已產出
 authority: ERP CLAUDE.md（Syncfusion TimePicker, @syncfusion/ej2-vue-calendars）
 figma-node: JhcpyIEEzSChcEXMRJUiIm/16992-358875   # 🎨 FAI2 Library · TimePicker 元件集
 version: v0.1

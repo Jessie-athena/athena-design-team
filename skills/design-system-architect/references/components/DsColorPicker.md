@@ -2,7 +2,7 @@
 name: DsColorPicker（客製色票選擇器）
 category: 資料輸入 — 色彩選擇
 tier: lite
-status: ✅ 已採用
+status: ✅ 已產出
 authority: ERP CLAUDE.md（客製 Ds 元件，components/ds/DsColorPicker.vue）
 figma-node: JhcpyIEEzSChcEXMRJUiIm/27007-37364
 version: v0.1

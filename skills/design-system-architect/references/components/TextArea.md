@@ -2,7 +2,7 @@
 name: TextArea
 category: 輸入 — 文字
 tier: lite
-status: ✅ 已採用
+status: ✅ 已產出
 authority: ERP CLAUDE.md（Syncfusion TextArea, @syncfusion/ej2-vue-inputs）
 figma-node: JhcpyIEEzSChcEXMRJUiIm/16806-1291   # 🎨 FAI2 Library · TextArea 元件集
 version: v0.1

@@ -2,7 +2,7 @@
 name: IconButton
 category: 按鈕與動作
 tier: lite
-status: ✅ 已採用
+status: ✅ 已產出
 authority: ERP CLAUDE.md（Syncfusion Button e-icon-btn / e-round, @syncfusion/ej2-vue-buttons）
 figma-node: JhcpyIEEzSChcEXMRJUiIm/16782-533652
 version: v0.1

@@ -2,7 +2,7 @@
 name: st-chip（狀態徽章）
 category: 回饋與狀態
 tier: full           # 視覺簡單，但承載單據狀態生命週期、多態、作業檔/設定檔兩套 → 走 Full §4
-status: ✅ 已採用（客製 DsStatusBadge；表格內為 .st-chip class）
+status: ✅ 已產出（客製 DsStatusBadge；表格內為 .st-chip class）
 authority: 契約＝本檔；色相 / 尺寸值落地＝prototyper/assets/app.css（值權威）；class 套用導引＝prototyper DataGrid.md §狀態 Chip / Stepper.md §voided-banner（各態色相為語意推導，DS 尚未逐態正式定義）
 figma-node: —        # 🎨 Figma 補入時填 <FILE_KEY>/<NODE_ID>
 version: v0.1

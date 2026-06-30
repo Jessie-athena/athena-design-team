@@ -2,7 +2,7 @@
 name: MultiColumnComboBox
 category: 輸入 — 選擇
 tier: full
-status: ✅ 已採用
+status: ✅ 已產出
 authority: ERP CLAUDE.md（Syncfusion MultiColumnComboBox, @syncfusion/ej2-vue-dropdowns）
 figma-node: JhcpyIEEzSChcEXMRJUiIm/22855-801537
 version: v0.1

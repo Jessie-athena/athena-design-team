@@ -2,7 +2,7 @@
 name: DropDownList
 category: 輸入 — 選擇
 tier: lite
-status: ✅ 已採用
+status: ✅ 已產出
 authority: ERP CLAUDE.md（Syncfusion DropDownList, @syncfusion/ej2-vue-dropdowns）
 figma-node: JhcpyIEEzSChcEXMRJUiIm/16953-165772   # 🎨 FAI2 Library · DropDownList 元件集
 version: v0.1

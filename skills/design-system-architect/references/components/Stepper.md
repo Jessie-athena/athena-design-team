@@ -2,7 +2,7 @@
 name: Stepper（狀態流程指示器）
 category: 流程與其他
 tier: full           # 承載單據狀態生命週期、多 pattern（基本/驗收/結轉）、多步序狀態與終止分支 → Full
-status: ✅ 已採用（Syncfusion Stepper；ERP 落地以 .stepper class）
+status: ✅ 已產出（Syncfusion Stepper；ERP 落地以 .stepper class）
 authority: 契約＝本檔；視覺值落地（語意色 / bubble·line 尺寸）＝prototyper/assets/app.css（值權威）；判定邏輯 / JS helper / voided-banner 行為＝prototyper/profiles/erp-components/Stepper.md（用法權威）；狀態機 erp-transaction.md
 figma-node: —        # 🎨 Figma 補入時填 <FILE_KEY>/<NODE_ID>
 version: v0.1

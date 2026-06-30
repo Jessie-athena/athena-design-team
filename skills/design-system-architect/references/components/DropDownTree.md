@@ -2,7 +2,7 @@
 name: DropDownTree
 category: 輸入 — 選擇
 tier: full
-status: ✅ 已採用
+status: ✅ 已產出
 authority: ERP CLAUDE.md（Syncfusion DropDownTree, @syncfusion/ej2-vue-dropdowns）
 figma-node: JhcpyIEEzSChcEXMRJUiIm/16953-250920   # 🎨 FAI2 Library · DropDownTree 元件集
 version: v0.1

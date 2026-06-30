@@ -2,7 +2,7 @@
 name: DataGrid（資料表格 / Grid）
 category: 資料展示與表格
 tier: full           # 承載資料列、多層 states、跨斷點欄位優先級、行內編輯生命週期 → Full
-status: ✅ 已採用（Syncfusion Grid；ERP 落地以 .dg / .dg-lines class）
+status: ✅ 已產出（Syncfusion Grid；ERP 落地以 .dg / .dg-lines class）
 authority: 契約＝本檔；視覺值落地＝prototyper/assets/app.css（canonical CSS，值權威）；class·凍結欄·行內編輯行為＝prototyper/profiles/erp-components/DataGrid.md（用法權威）；行為層 DataGrid.vue
 figma-node: —        # 🎨 Figma 補入時填 <FILE_KEY>/<NODE_ID>
 version: v0.1

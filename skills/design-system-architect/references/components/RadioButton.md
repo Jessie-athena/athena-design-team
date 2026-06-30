@@ -2,7 +2,7 @@
 name: RadioButton
 category: 表單輸入 — 選擇控制元件
 tier: lite
-status: ✅ 已採用
+status: ✅ 已產出
 authority: ERP CLAUDE.md（Syncfusion RadioButton, @syncfusion/ej2-vue-buttons）
 figma-node: JhcpyIEEzSChcEXMRJUiIm/13185-104862
 version: v0.1

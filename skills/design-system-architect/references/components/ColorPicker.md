@@ -2,7 +2,7 @@
 name: ColorPicker
 category: 輸入與選擇
 tier: full
-status: ✅ 已採用
+status: ✅ 已產出
 authority: ERP CLAUDE.md（Syncfusion ColorPicker, @syncfusion/ej2-vue-inputs）
 figma-node: JhcpyIEEzSChcEXMRJUiIm/11932-30084
 version: v0.1

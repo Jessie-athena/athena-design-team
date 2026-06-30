@@ -2,7 +2,7 @@
 name: NumericTextBox
 category: 輸入 — 文字
 tier: lite
-status: ✅ 已採用
+status: ✅ 已產出
 authority: ERP CLAUDE.md（Syncfusion NumericTextBox, @syncfusion/ej2-vue-inputs）
 figma-node: JhcpyIEEzSChcEXMRJUiIm/16812-4625   # 🎨 FAI2 Library · Numeric TextBox 元件集
 version: v0.1

@@ -2,7 +2,7 @@
 name: PasswordTextBox
 category: 輸入 — 密碼
 tier: lite
-status: ✅ 已採用
+status: ✅ 已產出
 authority: ERP CLAUDE.md（Syncfusion TextBox type="password", @syncfusion/ej2-vue-inputs）
 figma-node: JhcpyIEEzSChcEXMRJUiIm/16812-17033
 version: v0.1

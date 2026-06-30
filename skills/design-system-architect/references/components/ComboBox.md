@@ -2,7 +2,7 @@
 name: ComboBox
 category: 輸入 — 選擇與輸入
 tier: lite
-status: ✅ 已採用
+status: ✅ 已產出
 authority: ERP CLAUDE.md（Syncfusion ComboBox, @syncfusion/ej2-vue-dropdowns）
 figma-node: JhcpyIEEzSChcEXMRJUiIm/16953-47911
 version: v0.1

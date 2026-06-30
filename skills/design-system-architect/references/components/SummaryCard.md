@@ -2,7 +2,7 @@
 name: SummaryCard（作業檔摘要卡）
 category: 佈局與導覽
 tier: full           # 複合容器：兩種 layout、內含 stepper、sticky 行為、跨斷點重排 → Full
-status: ✅ 已採用（ERP 客製複合元件；落地以 .summary-card / .summary-card-wrap class）
+status: ✅ 已產出（ERP 客製複合元件；落地以 .summary-card / .summary-card-wrap class）
 authority: 契約＝本檔；視覺值落地＝prototyper/assets/app.css（值權威）；layout class / 4 步動態 stepper 行為＝prototyper/profiles/erp-components/SummaryCard.md（用法權威）；Layout A 規格 erp-transaction.md §Summary Bar 結構
 figma-node: —        # 🎨 Figma 補入時填 <FILE_KEY>/<NODE_ID>
 version: v0.1

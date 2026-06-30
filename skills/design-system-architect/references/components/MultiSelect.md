@@ -2,7 +2,7 @@
 name: MultiSelect
 category: 輸入 — 選擇
 tier: full
-status: ✅ 已採用
+status: ✅ 已產出
 authority: ERP CLAUDE.md（Syncfusion MultiSelect, @syncfusion/ej2-vue-dropdowns）
 figma-node: JhcpyIEEzSChcEXMRJUiIm/22831-939764
 version: v0.1
