@@ -215,14 +215,14 @@
 | Toast | 操作結果提示（success / warning / error） | ✅ 已產出 |
 | Skeleton | 載入佔位 | ✅ 已產出 |
 | Dialog | 確認操作、deeplink 跳轉、表單 modal | ✅ 已產出 |
-| Predefined Dialogs | Alert / Confirm / Prompt 預設對話框 | ⬜ 待建立 |
-| Message | 行內訊息條 | ⬜ 待建立 |
-| Tooltip | 提示氣泡 | ⬜ 待建立 |
-| Spinner | 載入轉圈 | ⬜ 待建立 |
-| ProgressBar | 進度條 | ⬜ 待建立 |
-| Badge | 數字 / 狀態角標 | ⬜ 待建立（狀態徽章另有客製 `DsStatusBadge`） |
-| Chips | 標籤 / 篩選 chip | ⬜ 待建立 |
-| Avatar | 使用者頭像 | ⬜ 待建立 |
+| Predefined Dialogs | Alert / Confirm / Prompt 預設對話框 | ✅ 已產出（Full；[`components/PredefinedDialog.md`](components/PredefinedDialog.md)） |
+| Message | 行內訊息條 | ✅ 已產出（Full；[`components/Message.md`](components/Message.md)） |
+| Tooltip | 提示氣泡 | ✅ 已產出（Lite；[`components/Tooltip.md`](components/Tooltip.md)） |
+| Spinner | 載入轉圈 | ✅ 已產出（Lite；[`components/Spinner.md`](components/Spinner.md)） |
+| ProgressBar | 進度條 | ✅ 已產出（Lite；[`components/ProgressBar.md`](components/ProgressBar.md)） |
+| Badge | 數字 / 狀態角標 | ✅ 已產出（Lite；[`components/Badge.md`](components/Badge.md)；狀態徽章另有客製 `DsStatusBadge`） |
+| Chips | 標籤 / 篩選 chip | ✅ 已產出（Lite；[`components/Chips.md`](components/Chips.md)） |
+| Avatar | 使用者頭像 | ✅ 已產出（Lite；[`components/Avatar.md`](components/Avatar.md)） |
 
 ## 9. 編輯器與富內容（Editors & Rich Content）
 
