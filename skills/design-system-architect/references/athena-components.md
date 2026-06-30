@@ -133,8 +133,8 @@
 | Switch | 開關切換 | ✅ 已採用 |
 | Slider | 數值滑桿 | ⬜ 待分類 |
 | Rating | 星等評分 | ✅ 已採用 |
-| ColorPicker | 色彩選擇 | ✅ 已採用 |
-| DsColorPicker | 客製固定色盤選擇器（Ds 元件） | ✅ 已採用 |
+| ColorPicker | 色彩選擇 | ⬜ 待分類 |
+| DsColorPicker | 客製固定色盤選擇器（Ds 元件） | ⬜ 待分類 |
 
 ## 5. 日期與時間（Date & Time）
 
