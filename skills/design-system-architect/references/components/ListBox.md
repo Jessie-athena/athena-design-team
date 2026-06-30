@@ -350,7 +350,7 @@ Dual transfer 的 toolbar 鈕（▶ ◀ ▲ ▼）需可 Tab 到並以 Enter / S
   - §Typography（text-md / text-lg / text-sm / weight-normal / weight-medium）
   - §Shadow（focus-ring1）
 - 語意對照：`../athena-design.md`
-- 子元件：`.st-chip`（選取 chip 如需在清單外展示已選項目，見 prototyper DataGrid.md §狀態 Chip）
+- 子元件：`.st-chip`（選取 chip 如需在清單外展示已選項目，見 Chips.md）
 - **值權威（尺寸 / 互動色，勿在此重寫）**：`prototyper/assets/app.css`（canonical CSS）
 - Code：`@syncfusion/ej2-vue-dropdowns`（`<ejs-listbox>`）
   - [Syncfusion ListBox Vue 文件](https://ej2.syncfusion.com/vue/documentation/listbox/getting-started)

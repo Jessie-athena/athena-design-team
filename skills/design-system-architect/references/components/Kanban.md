@@ -170,5 +170,5 @@ swimlane:         "欄內以 swimlane（如「負責人」）再分組；每 lan
 
 - Tokens：`../athena-tokens.md` §Primary / §Surface / §On-* / §Danger / §Space / §Radius / §Shadow
 - 值權威：`prototyper/assets/app.css`（canonical CSS）
-- 同層：`DataGrid.md`（大量資料改用）；`.st-chip`（優先級 / 狀態 chip，見 prototyper DataGrid.md §狀態 Chip）；`Schedule.md`（時程視覺）
+- 同層：`DataGrid.md`（大量資料改用）；`.st-chip`（優先級 / 狀態 chip，見 Chips.md）；`Schedule.md`（時程視覺）
 - Code：`@syncfusion/ej2-vue-kanban`

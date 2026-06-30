@@ -30,7 +30,7 @@ last-synced: 2026-06-30
   └─ .pager            ← 與 grid 相連，無額外上下邊框
 ```
 
-子元素：表頭 `th` / 資料列 `tr > td` / 凍結欄（`.sticky-l` `.sticky-l-2` `.sticky-r`）/ 選取欄 `.col-check` / 操作欄 `.col-actions` / 狀態欄（`.st-chip`，見 prototyper DataGrid.md §狀態 Chip）。行內編輯型另含 `.dg-lines__header`（標題列 + 新增鈕）與列內輸入控制元件 `.input--inline` / `.select--inline`。
+子元素：表頭 `th` / 資料列 `tr > td` / 凍結欄（`.sticky-l` `.sticky-l-2` `.sticky-r`）/ 選取欄 `.col-check` / 操作欄 `.col-actions` / 狀態欄（`.st-chip`，見 Chips.md）。行內編輯型另含 `.dg-lines__header`（標題列 + 新增鈕）與列內輸入控制元件 `.input--inline` / `.select--inline`。
 
 > 完整 DOM 與 class 命名（含 legacy → 現行收斂表）以 profile 為權威，勿在此重列。
 
@@ -248,7 +248,7 @@ App ≠ 縮小的 Web。資料表在窄螢幕的替代佈局：
 
 - Tokens：`../athena-tokens.md` §Primary / §Surface / §On-* / §Outline / §Space / §Radius / §Typography
 - 語意對照：`../athena-design.md` §中性·背景·文字·邊框 / §間距（雙密度）
-- 子元件：`.st-chip`（狀態欄徽章，規格見 prototyper DataGrid.md §狀態 Chip）
+- 子元件：`.st-chip`（狀態欄徽章，規格見 Chips.md）
 - **值權威（尺寸 / 互動色 / 疊白實色，勿在此重寫）**：`prototyper/assets/app.css`（canonical CSS）
 - **用法權威（class 套用 / 凍結欄 / 行內編輯行為）**：`prototyper/profiles/erp-components/DataGrid.md`
 - 上層 profile：`prototyper/profiles/erp-transaction.md`；同層 `SummaryCard.md` / `Stepper.md` / `FormGroup.md` / `FormFooter.md` / `ListSearch.md`

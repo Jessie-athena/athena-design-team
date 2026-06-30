@@ -98,7 +98,7 @@ is-current: "{color-sf-primary}"           # 🔗 藍；區段正連向當前步
 `voided`（驗收 / canonical）或 `cancelled`（結轉）時整個 Stepper 隱藏，原位改 `.voided-banner`，內含一顆 danger `st-chip`（standalone 36px 版）：
 
 ```yaml
-banner-chip:    # = st-chip standalone（danger variant），見 prototyper DataGrid.md §狀態 Chip
+banner-chip:    # = st-chip standalone（danger variant），見 Chips.md
   height:  36px                              # 🎨
   radius:  "{ds-radius-9extra-large}"        # 🔗 48px
   padding: "{ds-space-padding-medium} {ds-space-padding-extra-large}"  # 🔗 8px / 16px
@@ -141,7 +141,7 @@ Read-only 元件，**不在 Tab 順序內**（無互動焦點）。狀態變更�
 
 ## 11. Content　📋
 
-- 步驟 label 用既定狀態詞彙（草稿 / 已提交 / 已核准 / 部分驗收 / 已驗收 / 已結清 / 已結案），**不自創**同義詞，對齊 prototyper DataGrid.md §狀態 Chip 詞彙表。
+- 步驟 label 用既定狀態詞彙（草稿 / 已提交 / 已核准 / 部分驗收 / 已驗收 / 已結清 / 已結案），**不自創**同義詞，對齊 Chips.md 詞彙表。
 - voided-banner 文案「已作廢」/「已取消」固定。
 - 再次核准警示文案見 §6。一般 microcopy 詳 `ux-writer`。
 
@@ -159,7 +159,7 @@ Read-only 元件，**不在 Tab 順序內**（無互動焦點）。狀態變更�
 
 - Tokens：`../athena-tokens.md` §Primary / §Status — Success·Danger / §Outline / §Radius / §Typography / §Space
 - 語意對照：`../athena-design.md` §狀態色（綠=完成 / 藍=進行中 / 紅=作廢）
-- 子元件：`.st-chip`（voided-banner 內 danger 徽章 = standalone 36px 版，見 prototyper DataGrid.md §狀態 Chip）
+- 子元件：`.st-chip`（voided-banner 內 danger 徽章 = standalone 36px 版，見 Chips.md）
 - **值權威（語意色實色 / bubble·line·label 尺寸，勿在此重寫）**：`prototyper/assets/app.css`（canonical CSS）
 - **用法權威（判定邏輯 / voided-banner 行為 / JS helper）**：`prototyper/profiles/erp-components/Stepper.md`
 - 狀態機權威：`prototyper/profiles/erp-transaction.md §State Machine` / §進銷存擴充狀態機
