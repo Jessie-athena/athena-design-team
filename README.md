@@ -149,3 +149,10 @@ data-analyst → ux-researcher → usability-tester → interaction-designer
 - **產品類型**：預設是 B2B Web / App 跨平台。若轉 B2C 或單一平台，請調整 `product-strategist` 與 `interaction-designer` 的預設假設。
 - **方法論偏好**：預設 Double Diamond + Lean UX 混用。可在 `product-strategist` 內指定特定方法論。
 - **平台優先序**：預設 Web / App 並重。若有明確主力平台，於 `design-lead` 的預設偏好中指定。
+---
+
+## 創建者與維護者
+
+| 角色 | 姓名 |
+|------|------|
+| 專案創建者 & 維護者 | Jessie Chen |
