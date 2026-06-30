@@ -22,7 +22,7 @@
 | 元件 | 設計文件 | 狀態 |
 |------|---------|------|
 | Button | [`components/Button.md`](components/Button.md) | ✅ 已產出（Lite；v0.3 所有 ⚠️ 項已解，含 disabled bg token、Comfortable 密度 padding） |
-| st-chip（狀態徽章 / `DsStatusBadge`） | [`components/st-chip.md`](components/st-chip.md) | ✅ 已產出（Full；色 / class 落地引用 prototyper DataGrid.md / Stepper.md） |
+| `DsStatusBadge`（狀態徽章） | — | ⬜ 待建立（CSS / 原型規格見 prototyper DataGrid.md §狀態 Chip） |
 | Grid（DataGrid） | [`components/DataGrid.md`](components/DataGrid.md) | ✅ 已產出（Full；v0.3 FAI2 對齊；row-h 36px(S)/48px(L)；凍結欄 / 行內編輯 / 斑馬 / 多選） |
 | TreeGrid | [`components/TreeGrid.md`](components/TreeGrid.md) | ✅ 已產出（Full；v0.3 FAI2 對齊；indent 32px（非 20px）、expander 16px(S)/18px(L)；繼承 DataGrid；checkable / lazy-load） |
 | PivotView | [`components/PivotView.md`](components/PivotView.md) | ✅ 已產出（Full；v0.3 FAI2 對齊；header primary-5%、border-l+border-t outline-variant、header-fg on-surface-variant；欄位拖放 / drill-down；⚠️ DS AA token 待補） |
@@ -261,7 +261,7 @@
 | 元件 | 用途 | 文件狀態 |
 |------|------|---------|
 | `DsDatePicker` | 含多語系格式的日期選擇（Syncfusion DatePicker 客製包裝） | ✅ 已產出 |
-| `DsStatusBadge` | 單據狀態徽章 | ✅ 已產出 |
+| `DsStatusBadge` | 單據狀態徽章 | ⬜ 待建立（CSS / 原型規格見 prototyper DataGrid.md §狀態 Chip） |
 | `DsColorPicker` | 固定色盤選擇器 | ✅ 已產出 |
 | `DsCard` | 卡片容器 | ⬜ 待建立 |
 | `DsSideNavMenu` | 側邊導覽選單 | ⬜ 待建立 |

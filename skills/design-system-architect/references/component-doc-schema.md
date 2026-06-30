@@ -287,7 +287,7 @@ Chip 本身唯讀無互動態；其「狀態值」即 §4 variant。表格列承
 
 ### 9.3 後續（非本批）
 
-- `references/components/` 已收編：`Button` / `DataGrid` / `Stepper` / `SummaryCard` / `st-chip`（5 件）。其餘 ✅ 已產出元件設計文件待逐步補。
+- `references/components/` 已收編元件設計文件詳見 `athena-components.md §設計文件索引`。
 - 首個真實元件做一次「Figma 補入」演練（`get_variable_defs` 填 §3–5），驗證對不上 token 會停下回報。
 - 其餘 prototyper 複合 profile（ListSearch / FormGroup / FormFooter）是否各自對應設計文件，待 DS owner 決定（多為佈局 pattern 而非單一 Syncfusion 元件）。
 - **已知 class-name 漂移待對齊**（瘦身 profile 時發現，非本批）：`prototyper/profiles/erp-components/*.md` 部分 class 名與 `assets/app.css` 不一致——`.btn-icon.is-primary` vs `.btn-icon-sq--primary`、`.form-field`/`.help`/`h2` vs `.field`/`.field__helper`/`h3`、`.form-footer__actions`/`.btn-more__menu` vs `.form-footer__right`/`.popover`。屬「用法權威」內部一致性，待另案以 app.css 為準收斂。
