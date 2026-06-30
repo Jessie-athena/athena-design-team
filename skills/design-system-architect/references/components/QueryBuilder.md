@@ -5,8 +5,8 @@ tier: full           # 複合 UI：巢狀條件群組 + 多層 rule 行 + 動態
 status: ✅ 已產出
 authority: 契約＝本檔；視覺值落地＝prototyper/assets/app.css（canonical CSS，值權威）
 figma-node: —        # 🎨 Figma 補入時填 <FILE_KEY>/<NODE_ID>（FAI2 componentKey: a301840918c4f16747617cfa74db812c71a471e9）
-version: v0.1
-last-synced: —
+version: v0.2
+last-synced: 2026-06-30
 ---
 
 > 依 `../component-doc-schema.md`（Full 層）產出。視覺字面值（尺寸 / 色）權威＝`prototyper/assets/app.css`；本檔＝契約（what/why/token-reference/state/a11y）。
@@ -144,13 +144,17 @@ display-only:
 
 | Prop | Type | Default | 說明 |
 |---|---|---|---|
-| fields | Field[] | [] | `{ name, label, type: 'string'|'number'|'date'|'boolean'|'select', values? }` |
-| rules | RuleGroup | `{condition:'AND',rules:[]}` | 受控 / 非受控 query model |
-| maxGroupDepth | number | 2 | 最大巢狀層數 |
-| showGroupAdd | boolean | true | 是否顯示「新增群組」按鈕 |
-| readonly | boolean | false | 唯讀顯示模式 |
+| dataSource | Object[] | — | 用於推斷欄位型別的資料來源（可選） |
+| columns | ColumnDirective[] | [] | 欄位定義，透過 `<e-columns>/<e-column field label type operators? values?>` 指令設定 |
+| rule | RuleGroup | `{condition:'and',rules:[]}` | 初始規則（注意：Syncfusion 使用 `rule`（單數），非 `rules`） |
+| allowDragAndDrop | boolean | false | 允許拖曳排序條件列 |
+| maxGroupDepth | number | 2 | 最大巢狀群組層數（設計規範） |
+| showGroupAdd | boolean | true | 是否顯示「新增群組」按鈕（設計規範） |
+| readonly | boolean | false | 唯讀展示模式 |
 
-事件：`@change(RuleGroup)` / `@reset`
+事件：`@ruleChange(RuleGroup)` — 任意條件改變時觸發
+
+方法（實例方法）：`getRules()` 取得 JSON rules；`getSqlFromRules()` 轉 SQL WHERE；`setRulesFromSql()` 從 SQL 載入
 
 ## 13. 關聯　🔗
 

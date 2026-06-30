@@ -5,8 +5,8 @@ tier: full           # 類 Excel 全功能：儲存格 / 公式 / 多 sheet / �
 status: ✅ 已產出
 authority: 契約＝本檔；視覺值落地＝prototyper/assets/app.css（canonical CSS，值權威）
 figma-node: —        # 🎨 Figma 補入時填 <FILE_KEY>/<NODE_ID>（FAI2 componentKey: 9d61b6b28f3d0dba10e7c16534c3a8fc35207bb2）
-version: v0.1
-last-synced: —
+version: v0.2
+last-synced: 2026-06-30
 ---
 
 > 依 `../component-doc-schema.md`（Full 層）產出。視覺字面值（ribbon 高度 / 儲存格尺寸 / 選取色）權威＝`prototyper/assets/app.css`；本檔＝契約（what/why/token-reference/state/a11y）。
@@ -152,13 +152,17 @@ embedded-lite:     "無 Ribbon；公式列可選；適合嵌入 Form View 作為
 
 | Prop | Type | Default | 說明 |
 |---|---|---|---|
-| sheets | SheetModel[] | [] | `{ name, rows: RowModel[], columns: ColumnModel[] }` |
-| allowEditing | boolean | true | 全域可否編輯 |
-| showRibbon | boolean | true | 是否顯示 Ribbon |
-| showFormulaBar | boolean | true | 是否顯示公式列 |
-| scrollSettings | ScrollSettings | — | `{ enableVirtualization }` 虛擬捲動（大資料） |
+| sheets | SheetModel[] | [] | `{ name, rows: RowModel[], columns: ColumnModel[] }` 工作表設定 |
+| showRibbon | boolean | true | 顯示 Ribbon 工具列 |
+| showFormulaBar | boolean | true | 顯示公式列（地址框 + 公式輸入） |
+| showSheetTabs | boolean | true | 顯示工作表頁籤列（Sheet1 / + 新增） |
+| height | string \| number | 'auto' | 元件高度 |
+| allowEditing | boolean | true | 全域可否編輯（`false` 為完整唯讀） |
+| allowOpen | boolean | true | 允許開啟 xlsx / csv 檔（Ribbon 開啟按鈕） |
+| allowSave | boolean | true | 允許儲存 / 匯出（Ribbon 儲存按鈕） |
+| scrollSettings | ScrollSettings | — | `{ enableVirtualization }` 虛擬捲動（大資料量） |
 | cellStyle | CellStyleModel | — | 預設格式（字型 / 對齊 / 框線） |
-| beforeCellUpdate | Function | — | 儲存前攔截驗證 |
+| beforeCellUpdate | Function | — | 儲存前攔截驗證（回傳 `false` 阻止更新） |
 
 事件：`@cellEdit` / `@cellSave` / `@cellChange` / `@beforeSave`
 

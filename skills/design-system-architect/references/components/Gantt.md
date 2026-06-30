@@ -5,8 +5,8 @@ tier: full           # 雙面板（樹狀 Grid + Timeline）+ 任務依賴連線
 status: ✅ 已產出
 authority: 契約＝本檔；視覺值落地＝prototyper/assets/app.css（canonical CSS，值權威）
 figma-node: —        # 🎨 Figma 補入時填 <FILE_KEY>/<NODE_ID>（FAI2 componentKey: c8d75f4b195b55adf22999ed51d24baacaa7baf4）
-version: v0.1
-last-synced: —
+version: v0.2
+last-synced: 2026-06-30
 ---
 
 > 依 `../component-doc-schema.md`（Full 層）產出。視覺字面值（任務條高度 / 進度色 / 依賴線色）權威＝`prototyper/assets/app.css`；本檔＝契約。
@@ -152,14 +152,22 @@ read-only:        "隱藏 resize handle / drag cursor；不可修改"
 
 | Prop | Type | Default | 說明 |
 |---|---|---|---|
-| dataSource | Object[] | [] | 含 `id, name, startDate, endDate, progress, parentId?, dependency?` |
-| taskFields | TaskFields | — | 欄位名對應設定 |
-| treeColumnIndex | number | 0 | 左側 Grid 展開欄位索引 |
-| viewType | 'ProjectView' / 'ResourceView' | 'ProjectView' | 顯示模式 |
-| timelineSettings | TimelineSettings | — | 刻度設定（topTier/bottomTier）|
-| allowTaskbarDragAndDrop | boolean | true | 任務條拖曳 |
-| allowTaskbarEditing | boolean | true | resize / progress 拖曳 |
-| enableCriticalPath | boolean | false | 顯示關鍵路徑 |
+| dataSource | Object[] | [] | 任務資料（巢狀或扁平 parentID 模式） |
+| taskFields | TaskFieldsModel | — | 欄位名對應：`{ id, name, startDate, endDate, duration, progress, parentID?, child?, dependency?, resourceInfo? }` |
+| treeColumnIndex | number | 1 | 左側 Grid 展開欄位索引（0-based） |
+| viewType | 'ProjectView' \| 'ResourceView' | 'ProjectView' | 顯示模式 |
+| timelineSettings | TimelineSettingsModel | — | 刻度設定：`{ topTier: { unit, format }, bottomTier: { unit, format } }` |
+| editSettings | EditSettingsModel | — | `{ allowAdding, allowEditing, allowDeleting, allowTaskbarEditing, showDeleteConfirmDialog }` |
+| highlightWeekends | boolean | false | 標記週末底色 |
+| projectStartDate | Date | — | 時間軸顯示起始日 |
+| projectEndDate | Date | — | 時間軸顯示結束日 |
+| splitterSettings | `{ position }` | — | 左右面板分割比例（如 `'40%'`） |
+| enableCriticalPath | boolean | false | 顯示關鍵路徑（需注入 `CriticalPath` 模組） |
+| renderBaseline | boolean | false | 顯示基線比較 |
+| resources | Object[] | — | 資源集合（ResourceView 時使用） |
+| resourceFields | `{ id, name }` | — | 資源欄位對應 |
+
+> **注意**：任務條拖曳 (`allowTaskbarEditing`) 在 `editSettings` 內，**不是**頂層 prop。需 `provide('gantt', [Edit, Selection, CriticalPath, ...])` 注入模組。
 
 ## 13. 關聯　🔗
 

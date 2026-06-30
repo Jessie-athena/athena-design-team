@@ -5,8 +5,8 @@ tier: full           # 資料密集：多維交叉分析 + drill-down + 欄列�
 status: ✅ 已產出
 authority: 契約＝本檔；視覺值落地＝prototyper/assets/app.css（canonical CSS，值權威）
 figma-node: —        # 🎨 Figma 補入時填 <FILE_KEY>/<NODE_ID>（FAI2 componentKey: 3bae2bd5b322767b45757e00cafbf11a849155cd）
-version: v0.1
-last-synced: —
+version: v0.2
+last-synced: 2026-06-30
 ---
 
 > 依 `../component-doc-schema.md`（Full 層）產出。視覺字面值權威＝`prototyper/assets/app.css`；本檔＝契約（what/why/token-reference/state/a11y）。
@@ -130,17 +130,27 @@ compact:         "欄位清單收起（側邊面板 slide-in 呼叫）；只顯�
 
 ## 12. API / Props　📋
 
+> ⚠️ **重要**：PivotView 的維度設定全部集中在 `dataSourceSettings` 單一物件中，**不是**頂層分離 prop。
+
 | Prop | Type | Default | 說明 |
 |---|---|---|---|
-| dataSource | Object[] / DataManager | [] | 原始資料或遠端資料管理器 |
-| rows | FieldOptions[] | [] | 列維度欄位設定 |
-| columns | FieldOptions[] | [] | 欄維度欄位設定 |
-| values | FieldOptions[] | [] | 值欄位 + 聚合函式 |
-| filters | FieldOptions[] | [] | 篩選維度 |
-| showRowSubTotals | boolean | true | 顯示列小計 |
-| showColumnSubTotals | boolean | true | 顯示欄小計 |
-| showGrandTotals | boolean | true | 顯示總計 |
-| displayOption | 'Table' / 'Chart' / 'Both' | 'Table' | 顯示模式 |
+| dataSourceSettings | DataSourceSettings | — | **主設定物件**，包含以下所有子屬性 |
+| ↳ dataSource | Object[] \| DataManager | [] | 原始資料 |
+| ↳ rows | FieldOptions[] | [] | 列維度欄位（左側維度） |
+| ↳ columns | FieldOptions[] | [] | 欄維度欄位（上方維度） |
+| ↳ values | FieldOptions[] | [] | 值欄位 + 聚合函式 |
+| ↳ filters | FieldOptions[] | [] | 篩選維度 |
+| ↳ expandAll | boolean | false | 預設展開所有群組 |
+| ↳ formatSettings | FormatSettings[] | [] | 數值格式（貨幣 / 百分比等） |
+| showFieldList | boolean | false | 顯示欄位清單面板（拖放調整維度，需注入 `FieldList` 模組） |
+| showGroupingBar | boolean | false | 顯示分組列（需注入 `GroupingBar` 模組） |
+| enableVirtualization | boolean | false | 虛擬捲動（大資料量優化） |
+| height | string \| number | 'auto' | 元件高度 |
+| displayOption | 'Table' \| 'Chart' \| 'Both' | 'Table' | 顯示模式 |
+
+> **注意**：`showRowSubTotals`、`showColumnSubTotals`、`showGrandTotals` 是 `dataSourceSettings` 的子屬性，非頂層 prop。模組需 `provide('pivotview', [FieldList, CalculatedField, GroupingBar])` 注入。
+
+事件：`@dataBound` / `@drillThrough({ columnHeaders, rowHeaders, value })`
 
 ## 13. 關聯　🔗
 

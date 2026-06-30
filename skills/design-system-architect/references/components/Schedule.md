@@ -5,8 +5,8 @@ tier: full           # 多視圖日曆（日/週/月/議程）+ 事件拖曳 / r
 status: ✅ 已產出
 authority: 契約＝本檔；視覺值落地＝prototyper/assets/app.css（canonical CSS，值權威）
 figma-node: —        # 🎨 Figma 補入時填 <FILE_KEY>/<NODE_ID>（FAI2 componentKey: 628c9273754b9ff4fd6baf6f6c95d988024cef4c）
-version: v0.1
-last-synced: —
+version: v0.2
+last-synced: 2026-06-30
 ---
 
 > 依 `../component-doc-schema.md`（Full 層）產出。視覺字面值（事件條高度 / 時間格寬 / 多色事件）權威＝`prototyper/assets/app.css`；本檔＝契約（what/why/token-reference/state/a11y）。
@@ -159,14 +159,17 @@ timeline-view: "橫向時間軸 + 資源（負責人 / 房間）swimlane（企�
 
 | Prop | Type | Default | 說明 |
 |---|---|---|---|
-| eventSettings | EventSettings | — | `{ dataSource: Event[], fields: {...} }` |
+| eventSettings | EventSettings | — | `{ dataSource: Event[], fields?: {...} }` 事件資料設定 |
 | selectedDate | Date | new Date() | 目前顯示日期 |
-| currentView | 'Day' / 'Week' / 'Month' / 'Agenda' / 'TimelineMonth' | 'Week' | 預設視圖 |
-| views | string[] | ['Day','Week','Month'] | 可切換視圖列表 |
-| startHour / endHour | string | '00:00' / '24:00' | time-grid 起迄時間 |
+| currentView | 'Day' \| 'Week' \| 'WorkWeek' \| 'Month' \| 'Agenda' | 'Week' | 預設視圖 |
+| height | string \| number | 'auto' | 元件高度 |
+| readonly | boolean | false | 唯讀模式（禁止新增 / 編輯 / 刪除） |
+| startHour \| endHour | string | '00:00' / '24:00' | time-grid 起迄時間 |
 | allowDragAndDrop | boolean | true | 事件拖曳 |
 | allowResizing | boolean | true | 事件 resize |
-| group | GroupModel | — | swimlane 分組（負責人 / 房間） |
+| group | GroupModel | — | 泳道分組（負責人 / 房間） |
+
+**視圖設定**：透過 `<e-views>/<e-view option="Day|Week|WorkWeek|Month|Agenda|TimelineDay">` 指令指定；模組需 `provide('schedule', [Day, Week, Month, Agenda, ...])` 注入。`views: string[]` 頂層 prop **不適用**此元件。
 
 事件：`@eventClick` / `@cellClick` / `@dragStop` / `@resizeStop`
 

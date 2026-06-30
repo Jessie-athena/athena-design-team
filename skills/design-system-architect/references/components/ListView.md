@@ -5,8 +5,8 @@ tier: lite           # 單欄列表，無多欄排序 / 凍結 / 行內編輯生
 status: ✅ 已產出
 authority: 契約＝本檔；視覺值落地＝prototyper/assets/app.css（canonical CSS，值權威）
 figma-node: —        # 🎨 Figma 補入時填 <FILE_KEY>/<NODE_ID>（FAI2 componentKey: 42acc2c4563da884de6cb532acef0417a30d701c）
-version: v0.1
-last-synced: —
+version: v0.2
+last-synced: 2026-06-30
 ---
 
 > 依 `../component-doc-schema.md`（Lite 層）產出。視覺字面值權威＝`prototyper/assets/app.css`；本檔＝契約。
@@ -92,12 +92,15 @@ empty:       ".empty-state：inbox-outline icon + 訊息；**禁**保留空 ul"
 
 | Prop | Type | Default | 說明 |
 |---|---|---|---|
-| items | Item[] | [] | `{ id, primaryText, secondaryText?, leading?, trailing?, disabled? }` |
-| selectionMode | none / single / multiple | none | 選取模式 |
-| density | default / dense | default | 列高密度 |
-| enablePager | boolean | false | 顯示分頁（見 Pager.md） |
+| dataSource | Object[] | [] | 清單資料來源（每筆至少含 `id` / `text` 欄位） |
+| showHeader | boolean | false | 顯示清單標題列 |
+| headerTitle | string | '' | 標題文字（需搭配 `showHeader: true`） |
+| showCheckBox | boolean | false | 顯示核取方塊（多選模式） |
+| fields | `{ text?, groupBy?, child? }` | — | 欄位對應：`text`=顯示欄、`groupBy`=分組欄、`child`=子清單欄 |
 
-事件：`@itemClick(item)` / `@selectionChange(selectedIds)`
+事件：`@select({ data, isChecked? })` — 項目點擊 / 選取時觸發
+
+> **Code**：`@syncfusion/ej2-vue-lists`（`ListViewComponent`）。`density` / `enablePager` 為設計層抽象概念，實作時分別以 Tailwind spacing 調整與外掛 Pager.md 元件完成。
 
 ## 13. 關聯　🔗
 

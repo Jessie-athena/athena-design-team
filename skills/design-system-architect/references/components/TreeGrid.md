@@ -5,8 +5,8 @@ tier: full           # DataGrid 超集：帶 parent-child 展開 / 收合 + 層�
 status: ✅ 已產出
 authority: 契約＝本檔；視覺值落地＝prototyper/assets/app.css（canonical CSS，值權威）；行為層上游＝DataGrid.md
 figma-node: —        # 🎨 Figma 補入時填 <FILE_KEY>/<NODE_ID>（FAI2 componentKey: 3e633b7a5170a16f42dd7f0e8036aaae2f77b1b0）
-version: v0.1
-last-synced: —
+version: v0.2
+last-synced: 2026-06-30
 ---
 
 > 依 `../component-doc-schema.md`（Full 層）產出。**繼承 `DataGrid.md` 全部規格**，本檔只補 tree-specific 差異。視覺字面值（尺寸 / 層級縮排 / 展開鈕色）權威＝`prototyper/assets/app.css`；本檔＝契約。
@@ -127,14 +127,15 @@ checkable:      "每節點帶 checkbox；父節點 indeterminate（部分子選�
 
 | Prop | Type | Default | 說明 |
 |---|---|---|---|
-| dataSource | Object[] | [] | 扁平化陣列（含 `parentId` 欄位）或 nested 樹狀 |
-| idMapping | string | 'id' | 主鍵欄位名 |
-| parentIdMapping | string | 'parentId' | 父鍵欄位名 |
-| hasChildMapping | string | 'hasChildren' | 是否有子節點（lazy load 判斷） |
-| expandedKeys | string[] | [] | 預設展開節點 ID |
+| dataSource | Object[] | [] | 巢狀樹狀資料（含 children 陣列）或扁平陣列（含 parentId） |
+| childMapping | string | — | 子資料欄位名稱（巢狀模式，如 `'subtasks'`） |
+| idMapping | string | 'taskID' | 主鍵欄位名（扁平 parentID 模式） |
+| parentIdMapping | string | 'parentID' | 父鍵欄位名（扁平 parentID 模式） |
+| treeColumnIndex | number | 0 | 顯示展開 / 收合 icon 的欄索引（0-based） |
+| hasChildMapping | string | 'isParent' | 是否有子節點的判斷欄（lazy load 用） |
 | enableLazyLoading | boolean | false | 展開時 demand load 子節點 |
-| checkboxMode | boolean | false | 啟用 checkable 樹（父子 indeterminate 聯動） |
-| 繼承 DataGrid props | — | — | `columns` / `selectionType` / `allowSorting` 等 |
+| autoCheckHierarchy | boolean | false | 啟用 checkbox 父子聯動選取（父→全選子；部分子→父 indeterminate） |
+| 繼承 DataGrid props | — | — | `columns` / `allowSorting` / `allowFiltering` / `allowPaging` / `pageSettings` / `editSettings` / `toolbar` 等 |
 
 ## 13. 關聯　🔗
 

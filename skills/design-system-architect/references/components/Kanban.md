@@ -5,8 +5,8 @@ tier: full           # 多欄卡片板 + 拖曳狀態流轉 + 游泳道生命週
 status: ✅ 已產出
 authority: 契約＝本檔；視覺值落地＝prototyper/assets/app.css（canonical CSS，值權威）
 figma-node: —        # 🎨 Figma 補入時填 <FILE_KEY>/<NODE_ID>（FAI2 componentKey: a875a18b0a6746470418c15aec20d117868691d1）
-version: v0.1
-last-synced: —
+version: v0.2
+last-synced: 2026-06-30
 ---
 
 > 依 `../component-doc-schema.md`（Full 層）產出。視覺字面值（尺寸 / 欄寬 / 卡片陰影）權威＝`prototyper/assets/app.css`；本檔＝契約（what/why/token-reference/state/a11y）。
@@ -135,14 +135,23 @@ swimlane:         "欄內以 swimlane（如「負責人」）再分組；每 lan
 | Prop | Type | Default | 說明 |
 |---|---|---|---|
 | dataSource | Object[] | [] | 卡片資料 |
-| columns | KanbanColumn[] | [] | `{ key, headerText, maxCards? }` |
-| keyField | string | 'status' | 卡片所屬欄的欄位名 |
-| cardSettings | CardSettings | — | `{ contentField, headerField }` |
-| allowDragAndDrop | boolean | true | 是否允許拖曳 |
-| swimlaneSettings | SwimlaneSettings | — | `{ keyField }` 啟用游泳道 |
-| enableCollapse | boolean | false | 允許欄收合 |
+| keyField | string | — | 卡片所屬欄位的欄位名（對應 columns 的 keyField） |
+| cardSettings | CardSettings | — | `{ contentField, headerField, tagsField?, grabberField? }` 卡片顯示設定 |
+| swimlaneSettings | SwimlaneSettings | — | `{ keyField }` 啟用游泳道分組 |
+| columns | KanbanColumn[] | [] | 透過 `<e-columns>/<e-column headerText keyField minCount? maxCount? allowToggle?>` 指令設定 |
+| dialogSettings | object | — | `{ fields }` 雙擊卡片後的編輯 dialog 欄位設定 |
 
-事件：`@cardDragStop({ data, dropIndex, columnKey })`
+**欄 Column 設定**（per-column，非頂層 prop）：
+
+| 欄屬性 | Type | 說明 |
+|---|---|---|
+| keyField | string | 對應資料欄位值（可逗號分隔多值） |
+| headerText | string | 欄顯示標題 |
+| minCount | number | WIP 最小數量警示 |
+| maxCount | number | WIP 上限（超過警示紅底） |
+| allowToggle | boolean | 允許點擊欄標題收合/展開（`false` 為預設） |
+
+事件：`@dragStop({ data, dropIndex })` / `@cardClick({ data })` / `@cardDoubleClick({ data })`
 
 ## 13. 關聯　🔗
 

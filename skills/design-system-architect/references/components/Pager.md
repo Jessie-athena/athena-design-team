@@ -5,8 +5,8 @@ tier: lite           # 單一導航控制，無資料列生命週期
 status: ✅ 已產出
 authority: 契約＝本檔；視覺值落地＝prototyper/assets/app.css（canonical CSS，值權威）；用法＝prototype 各 List View 頁尾
 figma-node: —        # 🎨 Figma 補入時填 <FILE_KEY>/<NODE_ID>
-version: v0.1
-last-synced: —
+version: v0.2
+last-synced: 2026-06-30
 ---
 
 > 依 `../component-doc-schema.md`（Lite 層）產出。視覺字面值（高度 / 間距）權威＝`prototyper/assets/app.css`；本檔＝契約（what/why/token-reference）。
@@ -81,13 +81,15 @@ size-select:
 
 | Prop | Type | Default | 說明 |
 |---|---|---|---|
-| page | number | 1 | 目前頁碼（1-based） |
-| pageSize | number | 20 | 每頁筆數 |
-| pageSizeOptions | number[] | [20, 50, 100] | 可選筆數 |
-| total | number | — | 總筆數，用於計算 totalPages 與 range 文字 |
-| compact | boolean | false | 隱藏 range 文字的緊湊模式 |
+| currentPage | number | 1 | 目前頁碼（1-based） |
+| pageSize | number | 10 | 每頁筆數 |
+| pageSizes | number[] \| boolean | false | 頁數下拉選項；`true` 使用預設選項；`[20,50,100]` 自訂選項 |
+| totalRecordsCount | number | — | 總筆數（計算 totalPages 與 range 文字） |
+| pageCount | number | 10 | 頁碼按鈕數量（可見的頁碼 link 個數） |
 
-事件：`@pageChange(page)` / `@pageSizeChange(size)`
+事件：`@click({ currentPage, pageSize })` — 頁碼或每頁筆數改變時觸發
+
+> **注意**：元件為 Syncfusion EjsPager（`@syncfusion/ej2-vue-grids` 的 `PagerComponent`）；需額外 `Pager.Inject(PagerDropDown)` 才能啟用 `pageSizes` 下拉功能。獨立自訂 `.pager` markup 可依此介面命名 prop，但須自行實作分頁邏輯。
 
 ## 13. 關聯　🔗
 
