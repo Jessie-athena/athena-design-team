@@ -24,6 +24,15 @@
 | Button | [`components/Button.md`](components/Button.md) | ✅ 已產出（Lite；v0.3 所有 ⚠️ 項已解，含 disabled bg token、Comfortable 密度 padding） |
 | st-chip（狀態徽章 / `DsStatusBadge`） | [`components/st-chip.md`](components/st-chip.md) | ✅ 已產出（Full；色 / class 落地引用 prototyper DataGrid.md / Stepper.md） |
 | Grid（DataGrid） | [`components/DataGrid.md`](components/DataGrid.md) | ✅ 已產出（Full；class / 尺寸 / 互動色 / 凍結欄 / 行內編輯落地引用 prototyper DataGrid.md） |
+| TreeGrid | [`components/TreeGrid.md`](components/TreeGrid.md) | ✅ 已產出（Full；繼承 DataGrid；tree expander / indent / lazy-load / checkable；keyboard ←→ 展開/收合） |
+| PivotView | [`components/PivotView.md`](components/PivotView.md) | ✅ 已產出（Full；欄位拖放 / drill-down / pivot-chart mode / swimlane；⚠️ DS AA token 待補） |
+| Spreadsheet | [`components/Spreadsheet.md`](components/Spreadsheet.md) | ✅ 已產出（Full；4 variant；Ribbon / 公式列 / cellLock；ERP 場景需限制可編輯範圍） |
+| ListView | [`components/ListView.md`](components/ListView.md) | ✅ 已產出（Lite；4 variant：default / with-avatar / with-checkbox / action-item / dense） |
+| Kanban | [`components/Kanban.md`](components/Kanban.md) | ✅ 已產出（Full；WIP limit / swimlane / collapsible-col；行動端降為 ListView 堆疊） |
+| Gantt | [`components/Gantt.md`](components/Gantt.md) | ✅ 已產出（Full；雙面板 TreeGrid+Timeline；critical-path / resource-view / resize / 依賴連線） |
+| Schedule | [`components/Schedule.md`](components/Schedule.md) | ✅ 已產出（Full；5 視圖 Day/Week/Month/Agenda/TimelineMonth；拖曳 / resize / 重複事件） |
+| QueryBuilder | [`components/QueryBuilder.md`](components/QueryBuilder.md) | ✅ 已產出（Full；巢狀群組 max-depth 2；field type 動態切換 value input；keyboard 替代拖曳） |
+| Pager | [`components/Pager.md`](components/Pager.md) | ✅ 已產出（Lite；20/50/100 / range / prev-next；禁單獨存在，固定配置於 DataGrid/ListView 下方） |
 | Stepper | [`components/Stepper.md`](components/Stepper.md) | ✅ 已產出（Full；步序狀態 / 語意色 / 判定邏輯 / voided-banner 落地引用 prototyper Stepper.md） |
 | SummaryCard | [`components/SummaryCard.md`](components/SummaryCard.md) | ✅ 已產出（Full；Layout A/B、sticky 無 shadow、4 步動態 stepper 落地引用 prototyper SummaryCard.md） |
 | TextBox | [`components/TextBox.md`](components/TextBox.md) | ✅ 已產出（Lite；Filled Small Default；Layer 1–4 Figma 校準，含 token gap 標注） |
@@ -153,15 +162,15 @@
 | 元件 | 用途 | 文件狀態 |
 |------|------|---------|
 | Grid | 資料列表、報表、可排序/篩選表格 | ✅ 已產出 |
-| TreeGrid | 階層式表格 | ⬜ 待建立 |
-| Pivot View | 樞紐分析表 | ⬜ 待建立 |
-| Spreadsheet | 試算表 | ⬜ 待建立 |
-| ListView | 清單檢視 | ⬜ 待建立 |
-| Kanban | 看板（拖拉卡片） | ⬜ 待建立 |
-| Gantt | 甘特圖 / 專案排程 | ⬜ 待建立 |
-| Schedule | 行事曆 / 排程檢視 | ⬜ 待建立 |
-| QueryBuilder | 視覺化條件查詢建構 | ⬜ 待建立 |
-| Pager | 分頁器 | ⬜ 待建立 |
+| TreeGrid | 階層式表格 | ✅ 已產出（Full；繼承 DataGrid；tree expander / indent / lazy-load / checkable） |
+| Pivot View | 樞紐分析表 | ✅ 已產出（Full；欄位拖放 / drill-down / pivot-chart / swimlane） |
+| Spreadsheet | 試算表 | ✅ 已產出（Full；4 variant；Ribbon / 公式列 / cellLock；⚠️ ERP 建議限定可編輯範圍） |
+| ListView | 清單檢視 | ✅ 已產出（Lite；4 variant；leading-avatar / checkbox / dense）|
+| Kanban | 看板（拖拉卡片） | ✅ 已產出（Full；WIP limit / swimlane / collapsible-col；行動端降為 ListView）|
+| Gantt | 甘特圖 / 專案排程 | ✅ 已產出（Full；雙面板 TreeGrid+Timeline；critical-path / resource-view）|
+| Schedule | 行事曆 / 排程檢視 | ✅ 已產出（Full；5 視圖；拖曳 / resize；timeline-month swimlane）|
+| QueryBuilder | 視覺化條件查詢建構 | ✅ 已產出（Full；巢狀群組 max-depth 2；field type 動態切換 value input）|
+| Pager | 分頁器 | ✅ 已產出（Lite；20/50/100 / range / prev-next；禁單獨存在）|
 
 ## 7. 圖表與視覺化（Charts & Visualization）
 
