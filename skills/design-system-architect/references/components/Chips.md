@@ -132,4 +132,5 @@ selected:  "Filled 且選中：通常加 check icon 於 left side"
 - Tokens：`../athena-tokens.md` §Primary / §On-* / §Radius / §Typography
 - 值權威：`prototyper/assets/app.css`（canonical CSS）
 - 同層：`Badge.md`（純顯示不可互動）；`Avatar.md`（Chip 內嵌 avatar）
+- ERP 衍生：`.st-chip`（靜態狀態標籤，非互動；CSS 見 `prototyper/assets/app.css`）
 - Code：`@syncfusion/ej2-vue-buttons`（ChipListComponent）
