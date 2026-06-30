@@ -308,18 +308,17 @@ ERP 的 Smart Bar **不是** 一排有 link icon 的文字連結。是一組以�
 <nav v-if="visibleRelations.length > 0" class="smart-bar">
   <a v-for="rel in visibleRelations" :key="rel.type"
      class="card-btn" @click.prevent="openRelated(rel)">
-    <div class="card-btn__main">
-      <span v-if="rel.count != null" class="card-btn__count">{{ rel.count }}</span>
-      <span class="card-btn__title">
-        <span v-if="rel.unit" class="card-btn__unit">{{ rel.unit }}</span>{{ rel.title }}
-      </span>
+    <div v-if="rel.count != null" class="card-btn__number">
+      <span class="card-btn__count">{{ rel.count }}</span>
+      <span class="card-btn__unit">{{ rel.unit }}</span>
     </div>
+    <span class="card-btn__title">{{ rel.title }}</span>
     <iconify-icon class="card-btn__arrow" icon="material-symbols:arrow-outward"></iconify-icon>
   </a>
 </nav>
 ```
 
-`count == null` 的條目（如「會計傳票」）省略 `.card-btn__count` 與 `.card-btn__unit`。
+`count == null` 的條目（如「會計傳票」）省略整個 `.card-btn__number`（count + unit），僅顯示 title + arrow。
 
 ### 視覺規格
 
@@ -329,7 +328,8 @@ ERP 的 Smart Bar **不是** 一排有 link icon 的文字連結。是一組以�
 | `.card-btn` | `display: inline-flex; align-items: center; gap: 8px; padding: 0 12px 0 0; border-right: 1px solid rgb(var(--color-sf-primary))`；`:last-child { border-right: none; padding-right: 0; }` |
 | Hover | `opacity: 0.75; transition: 200ms;` |
 | `.card-btn__count` | `font-size: 18px; font-weight: 700; color: rgb(var(--color-sf-primary))` |
-| `.card-btn__unit` | `font-size: 11px; margin: 0 8px;` |
+| `.card-btn__number` | `display: flex; align-items: flex-end; gap: 2px;`（count + unit 容器） |
+| `.card-btn__unit` | `font-size: 16px; font-weight: 400; color: rgb(var(--primary-btn-primary-bg-color-pressed));` |
 | `.card-btn__title` | `font-size: 16px; font-weight: 400; color: rgb(var(--color-sf-primary))` |
 | `.card-btn__arrow` | 18×18px、`material-symbols:arrow-outward`、`color: rgb(var(--color-sf-primary))`（尺寸用 `width/height` 或 font-size） |
 
@@ -337,7 +337,7 @@ ERP 的 Smart Bar **不是** 一排有 link icon 的文字連結。是一組以�
 
 - 所有 link `@click.prevent`（SPA 行為），點擊呼叫 `openRelated(rel)` 跳轉到對應列表 / 單據（handler 內依 `rel.type` 路由）
 - **禁加 link icon**（如 `<iconify-icon icon="material-symbols:link"></iconify-icon>`）
-- 整段 Smart Bar 內所有顏色統一 `rgb(var(--color-sf-primary))`，視覺動線左到右串連一致
+- 整段 Smart Bar 主色 `rgb(var(--color-sf-primary))`；unit 採 pressed 變體 `rgb(var(--primary-btn-primary-bg-color-pressed))`（≈ #4287f0，primary + white 12% overlay）
 
 ---
 

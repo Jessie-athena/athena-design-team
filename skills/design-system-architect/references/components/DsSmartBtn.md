@@ -182,6 +182,6 @@ number=8:  8 個 card-btn
 - Tokens：`../athena-tokens.md` §Primary / §Surface / §Border / §Space / §Typography
 - 值權威：`prototyper/assets/app.css`（`.smart-bar` / `.card-btn` 選擇器）
 - 同層：`DsAmountSummaryCard.md`（直接上方的摘要卡；DsSmartBtn 緊接其後）
-- Prototyper usage：`prototyper/profiles/erp-components/SummaryCard.md`（Smart Bar 用法規範）；starter template `PRODUCE.md §Step 5 Modal / Toast / Empty State`（含 Smart Bar 結構）；`app.js` `visibleRelations` computed
+- Prototyper usage：`prototyper/profiles/erp-transaction.md §Smart Bar card-btn 結構`（用法規範；HTML 結構 / visibleRelations 邏輯）；starter template `templates/module-page.html`；`REFERENCE.md §11 visibleRelations computed`
 - Figma：ERP 財務作業模組 `myT6eqCVioMvVMf4PXnSlS` node `1029:79839`
 - Code：ERP 客製元件，選擇器 `.smart-bar`（容器）/ `.card-btn`（各項目）

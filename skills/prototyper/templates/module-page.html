@@ -246,12 +246,11 @@
           -->
           <nav v-if="visibleRelations.length > 0" class="smart-bar">
             <a v-for="rel in visibleRelations" :key="rel.type" class="card-btn" @click.prevent="openRelated(rel)">
-              <div class="card-btn__main">
-                <span v-if="rel.count != null" class="card-btn__count">{{ rel.count }}</span>
-                <span class="card-btn__title">
-                  <span v-if="rel.unit" class="card-btn__unit">{{ rel.unit }}</span>{{ rel.title }}
-                </span>
+              <div v-if="rel.count != null" class="card-btn__number">
+                <span class="card-btn__count">{{ rel.count }}</span>
+                <span class="card-btn__unit">{{ rel.unit }}</span>
               </div>
+              <span class="card-btn__title">{{ rel.title }}</span>
               <iconify-icon class="card-btn__arrow" icon="material-symbols:arrow-outward"></iconify-icon>
             </a>
           </nav>
