@@ -130,9 +130,9 @@
 | ListBox | 清單選擇 / 雙清單搬移 | ✅ 已採用 |
 | Checkbox | 多選框 | ✅ 已採用 |
 | RadioButton | 單選鈕 | ✅ 已採用 |
-| Switch | 開關切換 | ✅ 已採用 |
+| Switch | 開關切換 | ⬜ 待分類 |
 | Slider | 數值滑桿 | ⬜ 待分類 |
-| Rating | 星等評分 | ✅ 已採用 |
+| Rating | 星等評分 | ⬜ 待分類 |
 | ColorPicker | 色彩選擇 | ⬜ 待分類 |
 | DsColorPicker | 客製固定色盤選擇器（Ds 元件） | ⬜ 待分類 |
 
