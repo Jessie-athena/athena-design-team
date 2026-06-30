@@ -78,6 +78,8 @@
 | Avatar | [`components/Avatar.md`](components/Avatar.md) | ✅ 已產出（Lite；5 尺寸 24-56px；Letter bg=#D5E4FF；Status + Notification badge；6 Mode） |
 | DsHeader | [`components/DsHeader.md`](components/DsHeader.md) | ✅ 已產出（Full；ERP 客製 App Shell 頂部列；三版本 A7/A8_V1/A8_V2 × 三狀態 Breadcrumb/Title/BookTable；含 DsHeaderHome / DsUtilityNavigation） |
 | DsNavigationA8 | [`components/DsNavigationA8.md`](components/DsNavigationA8.md) | ✅ 已產出（Full；Code 名 DsSideNavMenu；close=72px rail / open=72+260px rail+sidebar；L1/L2/L3 三層導覽） |
+| DsDialogHeader | [`components/DsDialogHeader.md`](components/DsDialogHeader.md) | ✅ 已產出（Lite；Dialog 頂部列；三配置 A7 title / A7_CRS 含來源編號 / A8 title+縮放；h=46px） |
+| DsSectionHeader | [`components/DsSectionHeader.md`](components/DsSectionHeader.md) | ✅ 已產出（Lite；左側 5px accent 藍條 + 14px/700/primary 標題文字；用於 Form / Card 區段分組） |
 | AppBar | — | ⬜ 待建立（Syncfusion AppBar；ERP 以 DsHeader 取代） |
 | Toolbar | — | ⬜ 待建立（FAI2 無對應元件） |
 | Menu | — | ⬜ 待建立（Syncfusion Menu；ERP 導覽以 DsNavigationA8 取代） |
@@ -102,6 +104,7 @@
 |------|------|---------|
 | Tab | 同一畫面切換多組內容 | ✅ 已產出 |
 | Accordion | 可摺疊區塊、FAQ、設定分組 | ✅ 已產出 |
+| DsSectionHeader | Form / Card 區段分組標題（左側藍條 + 粗體標題） | ✅ 已產出 |
 | AppBar | 頂部應用列 / header chrome | ⬜ 待建立（Syncfusion AppBar；ERP 以 DsHeader 取代） |
 | Toolbar | 工具列、批次操作列 | ⬜ 待建立 |
 | Menu | 主選單、多層導覽 | ⬜ 待建立（Syncfusion Menu；ERP 導覽以 DsNavigationA8 取代） |
@@ -232,6 +235,7 @@
 | Badge | 數字 / 狀態角標 | ✅ 已產出（Lite） |
 | Chips | 標籤 / 篩選 chip | ✅ 已產出（Lite） |
 | Avatar | 使用者頭像 | ✅ 已產出（Lite） |
+| DsDialogHeader | Dialog 頂部列（三配置：title / 含來源編號 / title+縮放） | ✅ 已產出（Lite） |
 
 ## 9. 編輯器與富內容（Editors & Rich Content）
 
@@ -265,6 +269,8 @@
 | `DsColorPicker` | 固定色盤選擇器 | ✅ 已產出 |
 | `DsHeader` | App Shell 頂部列（三版本 A7/A8_V1/A8_V2 × 三狀態 Breadcrumb/Title/BookTable） | ✅ 已產出 |
 | `DsSideNavMenu` | 側邊導覽選單（Figma 名 DsNavigationA8；設計文件見 [`DsNavigationA8.md`](components/DsNavigationA8.md)） | ✅ 已產出 |
+| `DsDialogHeader` | Dialog 頂部列（三配置 A7/A7_CRS/A8；h=46px；含來源單號 / 人員操作 / 縮放歷程 btn） | ✅ 已產出 |
+| `DsSectionHeader` | 區段標題（左側 5px 藍條 + 14px/700/primary 標題；Form / Card 分組用） | ✅ 已產出 |
 | `DsCard` | 卡片容器 | ⬜ 待建立 |
 
 > 優先順序：Syncfusion 既有元件 → 客製 `Ds` 元件 → 行內組合。需新增客製元件前，先 audit 上表是否已有可用者（見 SKILL.md §Governance）。
