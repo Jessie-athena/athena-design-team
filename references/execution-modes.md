@@ -145,6 +145,8 @@ teammate 的 team 協調工具**不保證可用**（舊版環境完全沒有；�
 >
 > 所以不要試圖把 14 個角色各做成 subagent definition 來當 teammate type — teammate 不套用 subagent frontmatter 的 `skills` 欄位，「通用 teammate（依工具需求選 `subagent_type`）+ prompt 指定讀角色檔」才是穩定路線，且與 Mode 1 模板一致。
 
+> **prd-writer 例外（外部 skill）**：PRD 撰寫已抽離為獨立安裝的 `prd-writer` skill，**不**屬於本 pack 的 14 角色、也**不**經由上述路徑式 spawn 編排（本 pack 的 `skills/` 下沒有 prd-writer 角色檔）。需要 PRD 時由 `prd-writer` skill 自行觸發、產出落盤後，本 pack 從 `requirement-analyst` 接手驗核。
+
 ### Task list ↔ 設計流程映射
 
 - **誰建 task**：team lead（主對話）依 routing 計畫一次建立該輪全部 task。

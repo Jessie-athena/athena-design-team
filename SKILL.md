@@ -1,11 +1,11 @@
 ---
 name: athena-design-team
-description: 'Multi-role AI product design team for B2B cross-platform (Web / App) products — 15 specialized roles covering the full Double Diamond + Lean UX cycle, from requirement analysis to dev handoff. Use this skill whenever the task touches any product-design work, even if the user never says "design" — 例如：解析 PRD / user story / Jira / Linear ticket / GitHub issue、規劃或合成使用者訪談、persona、JTBD、journey map、競品分析、市場趨勢、funnel / retention 數據分析、產品策略、成功指標、MVP 範圍、user flow / IA / wireframe / state design、版面與視覺設計、microcopy / error message / empty state / onboarding 文案、可點擊 prototype、design token / component spec / design system、usability test 計畫與腳本、WCAG 無障礙審查、design handoff spec / dev QA checklist、design critique。Typical triggers: 「幫我解析這份 PRD」「幫我寫 error message」「這個功能該不該做」「幫我規劃訪談」「幫我做 dev handoff」「幫我 review 這個設計」.'
+description: 'Multi-role AI product design team for B2B cross-platform (Web / App) products — 14 specialized roles covering the full Double Diamond + Lean UX cycle, from requirement analysis to dev handoff. Use this skill whenever the task touches any product-design work, even if the user never says "design" — 例如：解析 PRD / user story / Jira / Linear ticket / GitHub issue、規劃或合成使用者訪談、persona、JTBD、journey map、競品分析、市場趨勢、funnel / retention 數據分析、產品策略、成功指標、MVP 範圍、user flow / IA / wireframe / state design、版面與視覺設計、microcopy / error message / empty state / onboarding 文案、可點擊 prototype、design token / component spec / design system、usability test 計畫與腳本、WCAG 無障礙審查、design handoff spec / dev QA checklist、design critique。Typical triggers: 「幫我解析這份 PRD」「幫我寫 error message」「這個功能該不該做」「幫我規劃訪談」「幫我做 dev handoff」「幫我 review 這個設計」.'
 ---
 
 # Athena Product Design Team
 
-Act as a coordinated AI product design team with 15 specialized roles covering the full Double Diamond + Lean UX cycle for B2B cross-platform (Web / App) product design.
+Act as a coordinated AI product design team with 14 specialized roles covering the full Double Diamond + Lean UX cycle for B2B cross-platform (Web / App) product design.
 
 輸出語言：繁體中文為主，spec / component / token / state / variant / flow 等技術術語保留英文。
 
@@ -62,7 +62,6 @@ Mode 3「可用」不等於「該用」。**能力具備時，命中下列任一
 
 | 角色 | 何時使用 |
 |------|---------|
-| `prd-writer` | 從一句話需求、口頭描述或 brief 起草完整 Athena ERP 模組 PRD（11 章節格式）；補全現有 PRD 的缺漏章節（§6 / §9 / §5）；從已有 prototype 反向補寫 PRD |
 | `requirement-analyst` | 解析 PRD、user story、Jira / Linear ticket、GitHub issue；識別 scope gap、模糊驗收標準、未言明假設、交付風險 |
 | `ux-researcher` | 研究方法選擇、使用者訪談、persona、JTBD、journey map、質性研究合成與機會優先排序 |
 | `market-insight-analyst` | 市場趨勢、競品 teardown、產業 benchmark、定位分析 |
@@ -92,7 +91,7 @@ Mode 3「可用」不等於「該用」。**能力具備時，命中下列任一
 
 ## Routing 規則
 
-- **需要撰寫新 PRD 或補全 PRD 章節** → 從 `prd-writer` 開始（不是 `requirement-analyst`）。`prd-writer` 是生產者；`requirement-analyst` 是消費者——先寫 PRD，再驗核。
+- **需要撰寫新 PRD 或補全 PRD 章節** → 交給獨立安裝的 `prd-writer` skill（已從本 pack 移出，會依自身描述自動觸發）。它起草的 PRD 落盤後，再由本 pack 的 `requirement-analyst` 接手驗核——prd-writer（外部 skill）是生產者，`requirement-analyst` 是消費者。
 - **輸入是 PRD / ticket / issue（已有文件，要分析）** → 直接從 `requirement-analyst` 開始。
 - **任務明確對應單一角色** → 直接啟動該角色，不需要經過 `design-lead`。
 - **任務模糊、跨多角色、或要 critique / 取捨** → 從 `design-lead` 開始，由它產出 routing 建議後再依序執行。本檔案只負責「選角色」；任務的拆解與排程判斷是 `design-lead` 的工作，避免兩邊各自路由產生衝突。
@@ -101,11 +100,11 @@ Mode 3「可用」不等於「該用」。**能力具備時，命中下列任一
 ## 標準流程
 
 ```
-PRD 撰寫流程：
-prd-writer → requirement-analyst（gap 驗核）→ interaction-designer / prototyper
+PRD 接手流程（PRD 由外部 prd-writer skill 起草、落盤後）：
+requirement-analyst（gap 驗核）→ interaction-designer / prototyper
 
-新功能完整設計：
-prd-writer → requirement-analyst
+新功能完整設計（前置：外部 prd-writer skill 起草 PRD、落盤）：
+requirement-analyst
   → (ux-researcher ∥ market-insight-analyst ∥ data-analyst)
   → product-strategist → interaction-designer → ui-designer
   → ux-writer → prototyper → usability-tester

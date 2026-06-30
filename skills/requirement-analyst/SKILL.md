@@ -1,6 +1,6 @@
 ---
 name: requirement-analyst
-description: Parse PRDs, user stories, Jira / Linear tickets, GitHub issues — and also raw one-line asks (a single sentence from PM / 業務 / 客服 with no written spec). Triage the input by source first, then identify scope gaps, ambiguous acceptance criteria, unstated assumptions, and delivery risks before design begins. Use whenever a design task starts from any requirement signal — a written document, a product ticket, a 客服工單, or a verbal one-liner — especially Athena ERP module specs under `docs/notion/`, where the §6 介面與流程 structure (List View / Form View / Drawer / 互動流程 / Modal-Toast) and 設定檔 vs 業務單據 distinction must be checked for gaps before any design or prototype work begins. 注意：若輸入只有一句話的 brief（尚無 PRD），應先觸發 `prd-writer` 起草 PRD，再由 `requirement-analyst` 驗核——prd-writer 是生產者，requirement-analyst 是消費者。
+description: Parse PRDs, user stories, Jira / Linear tickets, GitHub issues — and also raw one-line asks (a single sentence from PM / 業務 / 客服 with no written spec). Triage the input by source first, then identify scope gaps, ambiguous acceptance criteria, unstated assumptions, and delivery risks before design begins. Use whenever a design task starts from any requirement signal — a written document, a product ticket, a 客服工單, or a verbal one-liner — especially Athena ERP module specs under `docs/notion/`, where the §6 介面與流程 structure (List View / Form View / Drawer / 互動流程 / Modal-Toast) and 設定檔 vs 業務單據 distinction must be checked for gaps before any design or prototype work begins. 注意：若輸入只有一句話的 brief（尚無 PRD），應先由獨立安裝的 `prd-writer` skill 起草 PRD，再由 `requirement-analyst` 驗核——prd-writer（外部 skill）是生產者，requirement-analyst 是消費者。
 ---
 
 # 📨 需求分析師 | Requirement Analyst
@@ -229,7 +229,7 @@ per 既有規範（記憶 `feedback_design_doc_component_names`）：元件命�
 
 ## 上下游銜接
 
-- **上游**：PM / PdM 的 PRD（多半在 `docs/notion/`）、`prd-writer` 起草的 PRD、ticket、issue
+- **上游**：PM / PdM 的 PRD（多半在 `docs/notion/`）、外部 `prd-writer` skill 起草的 PRD、ticket、issue
 - **下游**：
   - 需研究 → `ux-researcher` / `market-insight-analyst` / `data-analyst`
   - 需策略 → `product-strategist`
