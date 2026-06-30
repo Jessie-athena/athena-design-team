@@ -4,8 +4,8 @@ category: 資料展示與表格
 tier: full           # 複合 UI：巢狀條件群組 + 多層 rule 行 + 動態 add/remove 生命週期
 status: ✅ 已產出
 authority: 契約＝本檔；視覺值落地＝prototyper/assets/app.css（canonical CSS，值權威）
-figma-node: —        # 🎨 Figma 補入時填 <FILE_KEY>/<NODE_ID>（FAI2 componentKey: a301840918c4f16747617cfa74db812c71a471e9）
-version: v0.2
+figma-node: JhcpyIEEzSChcEXMRJUiIm/13438:26816
+version: v0.3
 last-synced: 2026-06-30
 ---
 
@@ -22,61 +22,90 @@ last-synced: 2026-06-30
 ```
 .qb                             ← QueryBuilder 根容器
   └─ .qb__group                 ← 條件群組（可巢狀）
-       ├─ .qb__group-header     ← AND/OR 切換 + 操作按鈕組
-       │   ├─ .qb__connector    ← <select> AND/OR；根群組始終存在
-       │   ├─ .qb__btn-add-rule    ← 「新增條件」
-       │   ├─ .qb__btn-add-group   ← 「新增群組」
-       │   └─ .qb__btn-remove      ← 「移除群組」（非根才顯示）
-       └─ .qb__rules             ← 條件列表
-            ├─ .qb__rule         ← 單一條件列
-            │   ├─ .qb__field       ← 欄位下拉
-            │   ├─ .qb__operator    ← 運算子下拉（= / ≠ / > / < / contains…）
-            │   ├─ .qb__value       ← 值輸入（隨欄位型別切換：text/number/date/select）
-            │   └─ .qb__remove      ← 移除本條件按鈕
-            └─ .qb__group (nested) ← 遞迴巢狀群組
+       ├─ .qb__group-header     ← AND/OR ButtonGroup + 操作按鈕
+       │   ├─ .qb__connector    ← ButtonGroup：[AND] [OR]（非 <select>；選中態 = primary 填色）
+       │   ├─ .qb__btn-add-rule    ← + IconButton（新增條件列）
+       │   └─ .qb__btn-remove      ← × IconButton（移除群組；只有巢狀群組才有）
+       └─ .qb__rules             ← 條件列表（左側有樹狀連接線）
+            ├─ .qb__rule         ← 單一條件列（Horizontal container）
+            │   ├─ .qb__field       ← 欄位 DropDownList（Label + input）
+            │   ├─ .qb__operator    ← 運算子 DropDownList（= / ≠ / > / < / Start with…）
+            │   └─ .qb__value       ← 值 DropDownList 或 TextBox（隨欄位型別切換）
+            └─ .qb__group (nested) ← 遞迴巢狀群組（含自己的 group-header）
 ```
+
+> 🎨 個別條件列**無獨立移除按鈕**（Figma 稿無此控件）；群組移除走 `.qb__btn-remove`（× icon）。
 
 ## 3. 視覺規格 Tokens　🎨🔗
 
 ```yaml
 group:
-  bg:         "{color-sf-surface-variant}"              # 🔗 淡灰底，區分巢狀層
-  border:     "{ds-borderwidth-small} {color-sf-outline-variant}"  # 🔗 1px 左側線（縮排視覺錨）
-  border-l:   "4px solid {color-sf-primary}"            # 🔗 左側主色強調線（根群組）
-  radius:     "{ds-radius-large}"                       # 🔗 8px
-  padding:    "{ds-space-padding-large}"                # 🔗 12px
-  gap:        "{ds-space-padding-medium}"               # 🔗 8px 列間距
+  bg:         "rgba({color-sf-primary}, 0.05)"          # 🎨 primary 5% tint over white（非 surface-variant）
+  border:     "{ds-borderwidth-small} {color-sf-outline-variant}"  # 🔗 1px；#D7DAE0
+  gap:        "見 app.css"                               # 🎨 列間距（$border-light 分隔）
 
 group-header:
-  height:     "見 app.css .qb__group-header"            # 🎨 量測值
-  connector:
-    font:     "{font-size-sf-text-sm} / {font-weight-sf-medium}"  # 🔗
-    fg:       "{color-sf-on-surface-variant}"            # 🔗
-    bg-active: "{color-sf-primary}"                     # 🔗 選中態（AND/OR 切換）
-    fg-active: "{color-sf-on-primary}"                  # 🔗
+  height（Small）: "32px"                               # 🎨
+  height（Large）: "40px"                               # 🎨
+
+connector（AND/OR ButtonGroup）:
+  font:           "{font-size-sf-text-md} / {font-weight-sf-medium}"  # 🔗 14px / 500
+  active-bg:      "{color-sf-primary}"                  # 🔗 #2877EE
+  active-fg:      "{color-sf-on-primary}"               # 🔗 white
+  inactive-bg:    "white"                               # 🎨
+  inactive-fg:    "{color-sf-on-surface}"               # 🔗 #0F172A
+  inactive-shadow: "$shadow-sm"                         # 🎨 drop-shadow 0px 1px 1.5px + 1px 1px
 
 rule:
-  height:    "40px"                                     # 🎨 量測值
-  gap:       "{ds-space-padding-medium}"                # 🔗 8px 欄位 / 運算子 / 值 間距
-  field-w:   "見 app.css"                               # 🎨 各欄寬度
-  operator-w: "見 app.css"                              # 🎨
-  value-w:   "見 app.css"                               # 🎨
+  height（Small）: "32px"                               # 🎨
+  height（Large）: "40px"                               # 🎨
+  gap:            "{ds-space-padding-large}"            # 🔗 12px（欄位間距）
+  field-w（Small）: "168px"                             # 🎨
+  field-w（Large）: "179–180px"                         # 🎨
+  label-font:     "{font-size-sf-text-md}"             # 🔗 14px（兩尺寸相同）
+  label-fg:       "{color-sf-on-surface-variant}"      # 🔗 #3C4A5B
+  body-font（Small）: "{font-size-sf-text-md}"          # 🔗 14px
+  body-font（Large）: "{font-size-sf-text-lg}"          # 🔗 16px
+  body-fg:        "{color-sf-on-surface}"              # 🔗 #0F172A
+  placeholder-fg: "{ds-color-placeholder}"             # 🔗 #67717E（Enter Value）
+  input-border-b: "{ds-borderwidth-small} {color-sf-outline}"  # 🔗 #7F8996 底線
 
-remove-btn:
-  icon:      "20px"                                     # 🎨 close icon
-  fg:        "{color-sf-on-surface-variant}"            # 🔗
-  hover-fg:  "{color-sf-danger}"                        # 🔗 hover 警示紅
+remove-group-btn:
+  icon:           "16px（Small）/ 20px（Large）"         # 🎨 close icon（× ）
+  fg:             "{color-sf-on-surface-variant}"       # 🔗
 ```
 
 ## 4. Variants / Types　🎨🔗
 
 ```yaml
+# ── 視覺軸（Figma 兩軸交叉，共 4 variant） ──
+Size=Small:
+  rule-height:  "32px"
+  field-w:      "168px"
+  body-font:    "{font-size-sf-text-md}"    # 14px
+  btn-size:     "32px"
+  icon-size:    "16px"
+
+Size=Large:
+  rule-height:  "40px"
+  field-w:      "179px"
+  body-font:    "{font-size-sf-text-lg}"    # 16px
+  btn-size:     "40px"
+  icon-size:    "20px"
+
+Condition=AND:
+  desc: "AND ButtonGroup 按鈕為 primary 填色；OR 為白底＋shadow"
+
+Condition=OR:
+  desc: "OR ButtonGroup 按鈕為 primary 填色；AND 為白底＋shadow"
+
+# ── 行為軸（非 Figma variant，由 Props 控制） ──
 standard:
-  max-depth: 2      # 預設最多 2 層巢狀群組（ERP 進階搜尋）
+  max-depth:         2      # 預設最多 2 層巢狀群組
   value-type-switch: "欄位切換時 value input 動態換型（text→date→number→select）"
 
 display-only:
-  interactive: false   # 唯讀展示已存條件；隱藏 add/remove 按鈕
+  interactive: false         # 唯讀展示；隱藏 add-rule / remove-group 按鈕
 ```
 
 ## 5. States　🎨🔗
