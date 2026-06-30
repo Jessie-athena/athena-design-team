@@ -4,9 +4,9 @@ category: 佈局與導覽
 tier: full
 status: ✅ 已產出
 authority: 契約＝本檔；視覺值落地＝prototyper/assets/app.css（canonical CSS，值權威）
-figma-node: —       # 🎨 Figma 補入時填 <FILE_KEY>/<NODE_ID>
+figma-node: JhcpyIEEzSChcEXMRJUiIm/f9251a21ca6ed856e0308588c47a1e8b64a9605c
 version: v0.1
-last-synced: —
+last-synced: 2026-03-20
 ---
 
 > 依 `../component-doc-schema.md`（Full 層）產出。ERP nav-rail（`.nav-rail` / `DsSideNavMenu`）為 Sidebar 的客製固定態實作；本檔為通用 Sidebar 設計契約。

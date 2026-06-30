@@ -4,9 +4,9 @@ category: 佈局與導覽
 tier: lite
 status: ✅ 已產出
 authority: 契約＝本檔；視覺值落地＝prototyper/assets/app.css（canonical CSS，值權威）
-figma-node: —       # 🎨 Figma 補入時填 <FILE_KEY>/<NODE_ID>
+figma-node: JhcpyIEEzSChcEXMRJUiIm/ec31be97c852d962747f08ded4ba474d27e4d42f
 version: v0.1
-last-synced: —
+last-synced: 2026-03-20
 ---
 
 > 依 `../component-doc-schema.md`（Lite 層）產出。ERP 實作對應 prototyper `.erp-breadcrumb`；本檔為其設計契約。

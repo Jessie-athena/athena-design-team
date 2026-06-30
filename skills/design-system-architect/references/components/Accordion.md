@@ -4,9 +4,9 @@ category: 佈局與導覽
 tier: lite
 status: ✅ 已產出
 authority: 契約＝本檔；視覺值落地＝prototyper/assets/app.css（canonical CSS，值權威）
-figma-node: —       # 🎨 Figma 補入時填 <FILE_KEY>/<NODE_ID>
+figma-node: JhcpyIEEzSChcEXMRJUiIm/28b4d12d9f7ff11aa8c010ac8f5507183a33428c
 version: v0.1
-last-synced: —
+last-synced: 2026-03-22
 ---
 
 > 依 `../component-doc-schema.md`（Lite 層）產出。視覺字面值權威＝`prototyper/assets/app.css`；本檔＝契約。
