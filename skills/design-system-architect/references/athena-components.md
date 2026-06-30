@@ -273,6 +273,5 @@
 | `DsDialogHeader` | Dialog 頂部列（三配置 A7/A7_CRS/A8；h=46px；含來源單號 / 人員操作 / 縮放歷程 btn） | ✅ 已產出 |
 | `DsSectionHeader` | 區段標題（左側 5px 藍條 + 14px/700/primary 標題；Form / Card 分組用） | ✅ 已產出 |
 | `DsAmountSummaryCard` | 財務模組 SummaryCard（Form 頂部摘要卡；指標區與 Stepper 步數依模組配置；single/dual/formula 三種指標模式） | ✅ 已產出 |
-| `DsCard` | 卡片容器 | ⬜ 待建立 |
 
 > 優先順序：Syncfusion 既有元件 → 客製 `Ds` 元件 → 行內組合。需新增客製元件前，先 audit 上表是否已有可用者（見 SKILL.md §Governance）。
