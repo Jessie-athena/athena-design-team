@@ -77,10 +77,10 @@
 | Chips | [`components/Chips.md`](components/Chips.md) | ✅ 已產出（Lite；Extra Small 20px；Full Rounded/Rounded × Filled/Outlined/Flat；5 狀態） |
 | Avatar | [`components/Avatar.md`](components/Avatar.md) | ✅ 已產出（Lite；5 尺寸 24-56px；Letter bg=#D5E4FF；Status + Notification badge；6 Mode） |
 | DsHeader | [`components/DsHeader.md`](components/DsHeader.md) | ✅ 已產出（Full；ERP 客製 App Shell 頂部列；三版本 A7/A8_V1/A8_V2 × 三狀態 Breadcrumb/Title/BookTable；含 DsHeaderHome / DsUtilityNavigation） |
-| DsSideNavMenu | [`components/DsSideNavMenu.md`](components/DsSideNavMenu.md) | ✅ 已產出（Full；Figma 名 DsNavigationA8；close=72px rail / open=72+260px rail+sidebar；L1/L2/L3 三層導覽） |
+| DsNavigationA8 | [`components/DsNavigationA8.md`](components/DsNavigationA8.md) | ✅ 已產出（Full；Code 名 DsSideNavMenu；close=72px rail / open=72+260px rail+sidebar；L1/L2/L3 三層導覽） |
 | AppBar | — | ⬜ 待建立（Syncfusion AppBar；ERP 以 DsHeader 取代） |
 | Toolbar | — | ⬜ 待建立（FAI2 無對應元件） |
-| Menu | — | ⬜ 待建立（Syncfusion Menu；ERP 導覽以 DsSideNavMenu 取代） |
+| Menu | — | ⬜ 待建立（Syncfusion Menu；ERP 導覽以 DsNavigationA8 取代） |
 | ContextMenu | — | ⬜ 待建立（FAI2 無對應元件） |
 | Breadcrumb | [`components/Breadcrumb.md`](components/Breadcrumb.md) | ✅ 已產出（Lite；3 層固定結構 模組>功能>單號；erp-breadcrumb 對應；aria-current="page"） |
 | Sidebar | [`components/Sidebar.md`](components/Sidebar.md) | ✅ 已產出（Full；Push/Over/Auto 三模式；nav-rail 72px 固定對應；focus trap Over 模式；App Bottom Nav 替代） |
@@ -104,7 +104,7 @@
 | Accordion | 可摺疊區塊、FAQ、設定分組 | ✅ 已產出 |
 | AppBar | 頂部應用列 / header chrome | ⬜ 待建立（Syncfusion AppBar；ERP 以 DsHeader 取代） |
 | Toolbar | 工具列、批次操作列 | ⬜ 待建立 |
-| Menu | 主選單、多層導覽 | ⬜ 待建立（Syncfusion Menu；ERP 導覽以 DsSideNavMenu 取代） |
+| Menu | 主選單、多層導覽 | ⬜ 待建立（Syncfusion Menu；ERP 導覽以 DsNavigationA8 取代） |
 | ContextMenu | 右鍵 / 長按情境選單 | ⬜ 待建立 |
 | Breadcrumb | 階層路徑導覽 | ✅ 已產出 |
 | Sidebar | 側邊抽屜 / 導覽面板 | ✅ 已產出 |
@@ -264,7 +264,7 @@
 | `DsDatePicker` | 含多語系格式的日期選擇（Syncfusion DatePicker 客製包裝） | ✅ 已產出 |
 | `DsColorPicker` | 固定色盤選擇器 | ✅ 已產出 |
 | `DsHeader` | App Shell 頂部列（三版本 A7/A8_V1/A8_V2 × 三狀態 Breadcrumb/Title/BookTable） | ✅ 已產出 |
-| `DsSideNavMenu` | 側邊導覽選單（Figma 名 DsNavigationA8；close/open 兩態；L1/L2/L3 三層導覽） | ✅ 已產出 |
+| `DsSideNavMenu` | 側邊導覽選單（Figma 名 DsNavigationA8；設計文件見 [`DsNavigationA8.md`](components/DsNavigationA8.md)） | ✅ 已產出 |
 | `DsCard` | 卡片容器 | ⬜ 待建立 |
 
 > 優先順序：Syncfusion 既有元件 → 客製 `Ds` 元件 → 行內組合。需新增客製元件前，先 audit 上表是否已有可用者（見 SKILL.md §Governance）。

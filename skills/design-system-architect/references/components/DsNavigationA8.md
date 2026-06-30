@@ -1,8 +1,8 @@
 ---
-name: DsSideNavMenu（側邊導覽選單 / Nav Rail）
+name: DsNavigationA8（側邊導覽選單 / Nav Rail）
 category: 佈局與導覽
 tier: full           # 兩段結構（close/open）× 三層選單 × hover/active/selected 多層 states → Full
-status: ✅ 已產出（ERP 客製複合元件；Figma 元件名 DsNavigationA8；close=72px rail；open=72+260px rail+sidebar）
+status: ✅ 已產出（ERP 客製複合元件；Code 元件名 DsSideNavMenu；close=72px rail；open=72+260px rail+sidebar）
 authority: 契約＝本檔；視覺值落地＝prototyper/assets/app.css（canonical CSS，值權威）
 figma-node: JhcpyIEEzSChcEXMRJUiIm/30206:22044
 version: v0.1
