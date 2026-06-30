@@ -4,8 +4,8 @@ category: 資料展示與表格
 tier: full           # 多欄卡片板 + 拖曳狀態流轉 + 游泳道生命週期
 status: ✅ 已產出
 authority: 契約＝本檔；視覺值落地＝prototyper/assets/app.css（canonical CSS，值權威）
-figma-node: —        # 🎨 Figma 補入時填 <FILE_KEY>/<NODE_ID>（FAI2 componentKey: a875a18b0a6746470418c15aec20d117868691d1）
-version: v0.2
+figma-node: JhcpyIEEzSChcEXMRJUiIm/22767:496679
+version: v0.3
 last-synced: 2026-06-30
 ---
 
@@ -39,15 +39,18 @@ col:
   header-height: "見 app.css .kb__col-header"                  # 🎨
   header-font:  "{font-size-sf-text-md} / {font-weight-sf-medium}"  # 🔗 14px/500
   header-fg:    "{color-sf-on-surface}"                        # 🔗
+  header-bg:    "rgba({color-sf-primary}, 0.05)"               # 🎨 primary-5%+white（Figma 確認）
+  header-pad:   "12px（水平）/ 10px（垂直）"                    # 🎨 px-[12px] py-[10px]
+  header-radius: "4px 頂角"                                     # 🎨 rounded-tl-[4px] rounded-tr-[4px]
   count-chip:   "{font-size-sf-text-sm}; bg:{color-sf-outline}; fg:{color-sf-on-surface-variant}"  # 🔗
   gap:          "{ds-space-padding-medium}"                    # 🔗 8px 欄間距
   padding:      "{ds-space-padding-medium}"                    # 🔗 8px 欄內距
 
 card:
-  bg:           "{color-sf-surface}"                           # 🔗 白卡
+  bg:           "rgba({color-sf-primary}, 0.05)"               # 🎨 primary-5%+white（Figma 確認）
   shadow:       "見 app.css .kb__card"                         # 🎨 sm shadow，單一來源 app.css
   radius:       "{ds-radius-large}"                            # 🔗 8px
-  padding:      "{ds-space-padding-large}"                     # 🔗 12px
+  padding:      "{ds-space-padding-extra-large}"               # 🔗 16px  p-[16px]
   gap:          "{ds-space-padding-medium}"                    # 🔗 8px header/meta/footer 間距
   min-height:   "80px"                                         # 🎨 量測值
   title-font:   "{font-size-sf-text-md} / {font-weight-sf-medium}"  # 🔗 14px / 500
@@ -64,6 +67,16 @@ wip-limit:
 ## 4. Variants / Types　🎨🔗
 
 ```yaml
+# ── Figma Variants（FAI2 node 22767:496679） ──
+Sizes=Small:
+  width:       "1224px（整體）"
+  header-font: "{font-size-sf-text-md}"   # 14px/500
+
+Sizes=Large:
+  width:       "1624px（整體）"
+  header-font: "{font-size-sf-text-lg}"   # 16px（header 字級變大）
+
+# ── 行為 Variants ──
 standard:         "固定欄順序；欄數由 columns 設定決定"
 collapsible-col:  "欄可收合為細條（節省水平空間）；collapsed=chevron-right + 欄名縱向"
 swimlane:         "欄內以 swimlane（如「負責人」）再分組；每 lane 有小標題行"

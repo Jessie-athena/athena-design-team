@@ -4,8 +4,8 @@ category: 資料展示與表格
 tier: full           # 資料密集：多維交叉分析 + drill-down + 欄列動態重組生命週期
 status: ✅ 已產出
 authority: 契約＝本檔；視覺值落地＝prototyper/assets/app.css（canonical CSS，值權威）
-figma-node: —        # 🎨 Figma 補入時填 <FILE_KEY>/<NODE_ID>（FAI2 componentKey: 3bae2bd5b322767b45757e00cafbf11a849155cd）
-version: v0.2
+figma-node: JhcpyIEEzSChcEXMRJUiIm/12736:27887
+version: v0.3
 last-synced: 2026-06-30
 ---
 
@@ -37,9 +37,10 @@ last-synced: 2026-06-30
 
 ```yaml
 table:
-  header-bg:   "見 app.css .pv__col-header / .pv__row-header"  # 🎨 primary 疊白實色
-  header-font: "{font-size-sf-text-md} / {font-weight-sf-medium}"  # 🔗 14px / 500
-  header-fg:   "{color-sf-on-surface}"                         # 🔗
+  header-bg:    "rgba({color-sf-primary}, 0.05)"               # 🎨 primary-5%+white（Figma 確認）
+  header-border: "{ds-borderwidth-small} {color-sf-outline-variant}"  # 🎨 border-l + border-t
+  header-font:  "{font-size-sf-text-md} / {font-weight-sf-medium}"  # 🔗 14px / 500
+  header-fg:    "{color-sf-on-surface-variant}"                # 🎨 #3C4A5B（修正：非 on-surface）
   value-font:  "{font-size-sf-text-md}"                        # 🔗 14px
   value-align: "right"                                         # 數值右對齊
   row-border:  "{ds-borderwidth-small} {color-sf-outline-variant}"  # 🔗 列間 1px
@@ -62,6 +63,17 @@ drill-down:
 ## 4. Variants / Types　🎨🔗
 
 ```yaml
+# ── Figma Variants（FAI2 node 12736:27887） ──
+Sizes=Small:
+  width:  "1047px"
+  height: "360px"
+
+Sizes=Large:
+  width:       "1129px"
+  height:      "480px"
+  expand-icon: "16px {color-sf-on-surface-variant}"   # 🎨 drill-down chevron in header
+
+# ── 行為 Variants ──
 pivot-table:     "預設；交叉表格 + 欄位清單面板"
 pivot-chart:     "切換至圖表模式（Bar/Line/Column）；由 toolbar 切換 icon 控制"
 compact:         "欄位清單收起（側邊面板 slide-in 呼叫）；只顯示 .pv__table-wrap"

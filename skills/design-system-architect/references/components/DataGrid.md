@@ -4,9 +4,9 @@ category: 資料展示與表格
 tier: full           # 承載資料列、多層 states、跨斷點欄位優先級、行內編輯生命週期 → Full
 status: ✅ 已產出（Syncfusion Grid；ERP 落地以 .dg / .dg-lines class）
 authority: 契約＝本檔；視覺值落地＝prototyper/assets/app.css（canonical CSS，值權威）；class·凍結欄·行內編輯行為＝prototyper/profiles/erp-components/DataGrid.md（用法權威）；行為層 DataGrid.vue
-figma-node: —        # 🎨 Figma 補入時填 <FILE_KEY>/<NODE_ID>
-version: v0.1
-last-synced: —
+figma-node: JhcpyIEEzSChcEXMRJUiIm/15680:5422
+version: v0.3
+last-synced: 2026-06-30
 ---
 
 > 依 `../component-doc-schema.md`（Full 層）產出。三權威分工：**視覺值（尺寸 / 互動色 / 疊白實色）權威＝`prototyper/assets/app.css`（canonical CSS，產出時複製不重寫）**；**class 套用 / 凍結欄 / 行內編輯行為權威＝`prototyper/profiles/erp-components/DataGrid.md`**（見 §13）；**本檔＝契約**（what/why/token-reference/state/a11y），重疊處引用、不重寫決策（schema §8）。
@@ -40,19 +40,33 @@ last-synced: —
 # data-dense 元件：以 Default（緊湊）為主；表單內明細可採 Comfortable padding
 # token-ref 的值在此給；無 token 的量測值與疊白實色不重印，指 profile 為單一來源（schema §8）
 header:
-  height:    "見 profile §尺寸"                  # 量測值無 token，單一來源在 profile
-  bg:        "見 profile §表頭"                  # primary 5% 疊白實色，無單一 token，sticky 須實色
+  height（Small）:        "36px"                              # 🎨 h-[36px]（Figma Sizes=Small 確認）
+  height（Small-athena）: "48px"                             # 🎨 h-[48px]（Figma Sizes=Small-athena 確認）
+  bg:        "見 profile §表頭"                              # 🎨 primary 5% + white；sticky 須實色（無單一 token）
   font:      "{font-size-sf-text-md} / {font-weight-sf-medium}"  # 🔗 14px / 500
-  divider:   "{ds-borderwidth-small} {color-sf-outline}"         # 🔗 1px 欄間垂直分隔（高度量測見 profile）
+  divider-h（Small）:        "20px"                          # 🎨 欄間垂直分隔線高度（Figma 確認）
+  divider-h（Small-athena）: "26px"                          # 🎨
+  divider-c:  "{ds-borderwidth-small} {color-sf-outline}"    # 🔗 寬 1px
 row:
-  height:    "見 profile §尺寸"                  # 顯示型 / 行內編輯態量測值，單一來源在 profile
-  cell-pad:  "{ds-space-padding-extra-large}"  # 🔗 水平 16px（padding: 0 16px）
-  font:      "{font-size-sf-text-md}"          # 🔗 14px
-  fg:        "{color-sf-on-surface}"           # 🔗 主要文字 rgb(15 23 42)
+  height（Small）:        "36px"                             # 🎨 h-[36px]（Figma Sizes=Small 確認）
+  height（Small-athena）: "48px"                             # 🎨 h-[48px]（Figma Sizes=Small-athena 確認）
+  cell-pad:  "8px"                                           # 🎨 px-[8px]；水平 8px（Figma 確認，非 16px）
+  font:      "{font-size-sf-text-md}"                        # 🔗 14px
+  fg:        "{color-sf-on-surface}"                         # 🔗 主要文字 rgb(15 23 42)
+zebra（Small-athena）:
+  even:      "{color-sf-on-surface-opacity4}"                # 🎨 rgba(15,23,42,0.04)；Sizes=Small 無斑馬
 border:
-  outer:     none                              # 無圓角、無外框
+  outer:     "{ds-borderwidth-small} {color-sf-outline-variant}"   # 🎨 兩 variant 皆有外框（修正）
+  radius（Small）:        "none"                             # 🎨 無圓角
+  radius（Small-athena）: "{ds-radius-small}"                # 🎨 4px（rounded-[var(--dsradius/small,4px)]）
   top:       "{ds-borderwidth-small} {color-sf-outline-variant}"   # 🔗 1px 頂端分隔線
   row:       "{ds-borderwidth-small} {color-sf-outline-variant}"   # 🔗 列間 border-bottom；最後一列不畫
+pager（Small）:
+  zone-h:   "48px"                                           # 🎨 Figma 確認
+  nav-btn:  "32×32px"                                        # 🎨
+pager（Small-athena）:
+  zone-h:   "56px"                                           # 🎨 Figma 確認
+  nav-btn:  "40×40px"                                        # 🎨
 special-cell:
   code:      "font-mono + tnum + {font-weight-sf-medium}"   # 主鍵 / 代碼欄
   link:      "{color-sf-primary} / {font-weight-sf-medium}"  # 🔗 可點連結 .dg__link；hover 底線
@@ -81,6 +95,43 @@ inline_edit_grid:    # .dg-lines 行內編輯型
 ```
 
 > **凍結欄不使用深度陰影**提示凍結邊（box-shadow 會視覺破碎）；以實色背景區隔即可。z-index：表頭 sticky=3、表身 sticky=1、一般表頭=2。
+
+```yaml
+# ── Figma Variants（FAI2 node 15680:5422；三 variant） ──
+Sizes=Small:                    # 標準 Syncfusion 尺寸
+  row-h:          "36px"
+  header-h:       "36px"
+  divider-h:      "20px"
+  pager-zone:     "48px"
+  pager-nav-btn:  "32×32px"
+  outer-radius:   "none"
+  zebra:          false
+  col-types:      "文字 / 數字 / 狀態（標準欄）"
+
+Sizes=Small-athena:             # ERP 主要 variant；athena 客製
+  row-h:          "48px"
+  header-h:       "48px"
+  divider-h:      "26px"
+  pager-zone:     "56px"
+  pager-nav-btn:  "40×40px"
+  outer-radius:   "{ds-radius-small}"                    # 4px
+  zebra-even:     "{color-sf-on-surface-opacity4}"       # rgba(15,23,42,0.04)
+  col-types:      "Drag（56px）/ Checkbox / Toggle / Text / Edit+Delete / Hex+色票"
+  inline-edit-textbox:
+    bg:           "{color-sf-surface-variant}"           # #EDF0F7（Filled 輸入框）
+    border-b:     "{ds-borderwidth-small} {color-sf-outline}"  # #7F8996
+    radius:       "{ds-radius-small}"                    # 4px 頂角（Filled style）
+
+Sizes=Large:
+  desc:           "1024px 寬；量測值詳 Figma node（未取）"
+```
+
+> 🎨 **Small-athena 欄類型（Figma 確認）**：
+> - `.col-drag`：56px；`drag-indicator` icon（18px），無表頭文字
+> - `.col-check`：Checkbox 18px；`border-2 {color-sf-on-surface-variant}`；radius 2px（`{radius/radius-xs}`）
+> - `.col-toggle`：Toggle Switch（57×28px）
+> - `.col-actions`：表頭 `add-circle`（20px IconButton 40px）；儲存格 `edit-outline`（40×40px `rounded-[24px]`）+ `delete-outline`（40×40px `rounded-[4px]`）
+> - `.col-hex`：Hex 文字（`#RRGGBB`）+ 24×24px 色票（`border {color-sf-outline-variant}`，radius 4px）
 
 ## 5. States　🎨🔗
 
@@ -211,4 +262,4 @@ App ≠ 縮小的 Web。資料表在窄螢幕的替代佈局：
 
 1. **疊白後實色（sticky 配套）**：表頭 / 斑馬 / hover / selected / selected+hover 的不透明版——單一來源：app.css（profile `§表頭` / `§列狀態與 Hover` 導引）。
 2. **互動疊層階梯非標準階**：`.06`（hover）/ `.10`（selected）無 pre-wrap token；落地以 `rgba(var(--color-sf-primary), .06/.10)` 表示（非新 token）。
-3. **元件量測值**：列高 45 / 50px、表頭欄間分隔線高 26px 等——單一來源：app.css（profile `§尺寸` 導引）。
+3. **元件量測值**：列高 36px（Small）/ 48px（Small-athena）、表頭欄間分隔線高 20px / 26px、Pager nav 按鈕 32px / 40px——已由 Figma Sizes=Small / Sizes=Small-athena 確認並標入 §3 / §4；剩餘（行內編輯態、Large variant 等）單一來源在 app.css（profile `§尺寸` 導引）。

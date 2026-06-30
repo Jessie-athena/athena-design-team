@@ -4,8 +4,8 @@ category: 資料展示與表格
 tier: lite           # 單一導航控制，無資料列生命週期
 status: ✅ 已產出
 authority: 契約＝本檔；視覺值落地＝prototyper/assets/app.css（canonical CSS，值權威）；用法＝prototype 各 List View 頁尾
-figma-node: —        # 🎨 Figma 補入時填 <FILE_KEY>/<NODE_ID>
-version: v0.2
+figma-node: JhcpyIEEzSChcEXMRJUiIm/12736:27295
+version: v0.3
 last-synced: 2026-06-30
 ---
 
@@ -31,7 +31,8 @@ last-synced: 2026-06-30
 ## 3. 視覺規格 Tokens　🎨🔗
 
 ```yaml
-height:    "見 app.css .pager"                # 🎨 量測值，單一來源在 app.css
+height（Small-Desktop）: "48px"              # 🎨 h-[48px]（Figma 確認）
+height（Large-Desktop）: "56px"              # 🎨 h-[56px]（Figma 確認）
 bg:        "{color-sf-surface}"               # 🔗 白底，與 DataGrid 連體不畫額外邊框
 border:    "top: none"                        # 與 DataGrid 共用 outer border，不補頂線
 font:      "{font-size-sf-text-md}"           # 🔗 14px
@@ -44,14 +45,35 @@ size-select:
   min-width: "見 app.css"                     # 🎨 量測值
 
 nav-btn:
-  size:    "見 app.css .pager button"         # 🎨 量測值
-  icon:    "20px"                             # 🎨 chevron icon size
+  size（Small）: "32×32px"                    # 🎨 確認
+  size（Large）: "40×40px"                    # 🎨 確認
+  icon（Small）: "16px"                       # 🎨 chevron icon
+  icon（Large）: "20px"                       # 🎨 chevron icon
   radius:  "{ds-radius-small}"                # 🔗 2px
 ```
 
 ## 4. Variants　🎨🔗
 
 ```yaml
+# ── Figma Variants（FAI2 node 12736:27295） ──
+Device=Desktop, Size=Small:
+  zone-h:  "48px"
+  nav-btn: "32×32px"
+  icon:    "16px"
+
+Device=Desktop, Size=Large:
+  zone-h:  "56px"
+  nav-btn: "40×40px"
+  icon:    "20px"
+
+Device=Mobile:
+  desc: "4-button compact strip（first/prev/next/last）；32×32px（S）/ 40×40px（L）"
+
+Device=Customization:
+  desc: "追加 page-size dropdown（Filled 40px, 顯示「20」）+ 筆/每頁 label + summary right-aligned"
+  active-page-bg: "rgba({color-sf-primary}, 0.12)"   # 🎨 primary-12%+white
+
+# ── 行為 Variants ──
 default:     "每頁 20/50/100；右側上下頁"    # 唯一型，無額外 variant
 compact:     "隱藏 .pager__range；只保留 prev/next（嵌入 smart-bar 等窄空間用）"
 ```

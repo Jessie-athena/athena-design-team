@@ -4,8 +4,8 @@ category: 資料展示與表格
 tier: full           # 多視圖日曆（日/週/月/議程）+ 事件拖曳 / resize + 跨斷點佈局切換
 status: ✅ 已產出
 authority: 契約＝本檔；視覺值落地＝prototyper/assets/app.css（canonical CSS，值權威）
-figma-node: —        # 🎨 Figma 補入時填 <FILE_KEY>/<NODE_ID>（FAI2 componentKey: 628c9273754b9ff4fd6baf6f6c95d988024cef4c）
-version: v0.2
+figma-node: JhcpyIEEzSChcEXMRJUiIm/14088:2756
+version: v0.3
 last-synced: 2026-06-30
 ---
 
@@ -50,11 +50,15 @@ last-synced: 2026-06-30
 
 ```yaml
 time-grid:
-  slot-height:   "見 app.css .sc__time-slot"          # 🎨 30 分鐘格高度
-  col-min-width: "120px"                              # 🎨 量測值（週視圖每欄最小寬）
-  time-font:     "{font-size-sf-text-sm}"             # 🔗 12px
-  time-fg:       "{color-sf-on-surface-variant}"      # 🔗
-  grid-line:     "{ds-borderwidth-small} {color-sf-outline-variant}"  # 🔗 時間格分隔線
+  slot-height:    "62px"                              # 🎨 30 分鐘格（Figma 確認）
+  time-axis-w:    "102px"                             # 🎨 時間軸欄寬
+  date-header-h:  "70px"                              # 🎨 日期欄標題高
+  col-min-width:  "120px"                             # 🎨 量測值（週視圖每欄最小寬）
+  time-font:      "{font-size-sf-text-md}"            # 🎨 14px（Figma 確認；非 12px）
+  time-fg:        "{color-sf-on-surface}"             # 🎨 修正：on-surface（非 on-surface-variant）
+  date-label-day: "{font-size-sf-text-sm} / 400"      # 🎨 12px 星期幾標籤
+  date-label-num: "{font-size-sf-text-lg} / 400"      # 🎨 16px 日期數字
+  grid-line:      "0.5px {color-sf-outline-variant}"  # 🎨 0.5px（非 1px）
 
 month-grid:
   cell-min-height: "100px"                            # 🎨 量測值
@@ -73,15 +77,29 @@ event:
     width:       "{ds-borderwidth-medium}"            # 🔗 2px
 
 toolbar:
-  height:        "見 app.css .sc__toolbar"            # 🎨
-  btn-font:      "{font-size-sf-text-md}"             # 🔗 14px
-  active-view-bg: "{color-sf-primary}"               # 🔗 選中視圖底色
-  active-view-fg: "{color-sf-on-primary}"            # 🔗
+  height:        "48px"                               # 🎨 h-[48px]（Figma 確認）
+  bg:            "rgba({color-sf-primary}, 0.08)"     # 🎨 primary-8%+white
+  btn-h:         "32px"                               # 🎨 view button height
+  btn-font:      "{font-size-sf-text-md} / {font-weight-sf-medium}"  # 🔗 14px/500
+  nav-btn-radius: "20px"                              # 🎨 circular chevron buttons
+  active-view-bg: "rgba({color-sf-on-surface}, 0.08)"  # 🎨 on-surface-8%（非 primary！）
+  active-view-fg: "{color-sf-on-surface}"             # 🎨 修正：非 on-primary
 ```
 
 ## 4. Variants / Types　🎨🔗
 
 ```yaml
+# ── Figma Variants（FAI2 node 14088:2756） ──
+Sizes=Small, Mode=Days:
+  viewport:      "1080×648px"
+  toolbar-h:     "48px"
+  date-header-h: "70px"
+  slot-h:        "62px"   # 30 min
+  time-axis-w:   "102px"
+
+modes: "Days / Work Week / Month / Agenda × Size 2 = 8+ variants"
+
+# ── 行為 Variants ──
 day-view:     "單日時間格（0:00–23:59）"
 week-view:    "7 日時間格（預設）"
 month-view:   "月曆格（預設首頁視圖）"

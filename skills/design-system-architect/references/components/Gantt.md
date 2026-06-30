@@ -4,8 +4,8 @@ category: 資料展示與表格
 tier: full           # 雙面板（樹狀 Grid + Timeline）+ 任務依賴連線 + 進度管理生命週期
 status: ✅ 已產出
 authority: 契約＝本檔；視覺值落地＝prototyper/assets/app.css（canonical CSS，值權威）
-figma-node: —        # 🎨 Figma 補入時填 <FILE_KEY>/<NODE_ID>（FAI2 componentKey: c8d75f4b195b55adf22999ed51d24baacaa7baf4）
-version: v0.2
+figma-node: JhcpyIEEzSChcEXMRJUiIm/22852:797471
+version: v0.3
 last-synced: 2026-06-30
 ---
 
@@ -72,12 +72,21 @@ today-line:
 weekend:
   bg:             "見 app.css .gantt__weekend"                 # 🎨 週末淡灰底，app.css 權威
 
-row-height:       "見 app.css .gantt__row"                     # 🎨 量測值（與 grid 列高同步）
+row-height（Small）: "36px"                                    # 🎨 AtomDataCell h-[36px]（Figma 確認）
 ```
 
 ## 4. Variants / Types　🎨🔗
 
 ```yaml
+# ── Figma Variants（FAI2 node 22852:797471） ──
+Sizes=Small:
+  row-h:    "36px"
+  cell-pad: "8px"   # 🎨 px-[8px]
+
+Sizes=Large:
+  desc: "Large variant（node 22852:797198）存在；量測值未取"
+
+# ── 行為 Variants ──
 project-view:     "展示任務條 + 里程碑 + 依賴線（完整甘特圖）"
 resource-view:    "額外顯示 swimlane（負責人維度）；任務條依資源分組"
 read-only:        "隱藏 resize handle / drag cursor；不可修改"

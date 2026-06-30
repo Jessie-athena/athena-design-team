@@ -4,8 +4,8 @@ category: 資料展示與表格
 tier: lite           # 單欄列表，無多欄排序 / 凍結 / 行內編輯生命週期
 status: ✅ 已產出
 authority: 契約＝本檔；視覺值落地＝prototyper/assets/app.css（canonical CSS，值權威）
-figma-node: —        # 🎨 Figma 補入時填 <FILE_KEY>/<NODE_ID>（FAI2 componentKey: 42acc2c4563da884de6cb532acef0417a30d701c）
-version: v0.2
+figma-node: JhcpyIEEzSChcEXMRJUiIm/16575:6061
+version: v0.3
 last-synced: 2026-06-30
 ---
 
@@ -34,15 +34,17 @@ last-synced: 2026-06-30
 
 ```yaml
 item:
-  min-height:  "48px"                                # 🎨 量測值（對應 WCAG 觸控 44px 目標）
-  padding-v:   "{ds-space-padding-medium}"           # 🔗 8px 上下
-  padding-h:   "{ds-space-padding-extra-large}"      # 🔗 16px 左右
+  min-height:  "40px"                                # 🎨 min-h-[40px]（Figma 確認；非 48px）
+  max-height:  "56px"                                # 🎨 max-h-[56px]
+  padding-v:   "4px"                                 # 🎨 py-[4px]（非 8px）
+  padding-h:   "8px（外層）/ 6px（文字區）"          # 🎨 px-[8px] outer, px-[6px] py-[4px] inner
   bg:          "{color-sf-surface}"                  # 🔗 白底
   divider:     "{ds-borderwidth-small} {color-sf-outline-variant}"  # 🔗 1px 列間分隔
   gap:         "{ds-space-padding-large}"            # 🔗 12px（leading ↔ body ↔ trailing）
 
 primary-text:
-  font:        "{font-size-sf-text-md} / {font-weight-sf-medium}"  # 🔗 14px / 500
+  font:        "{font-size-sf-text-md}"              # 🎨 14px / 400 regular（非 medium，Figma 確認）
+  tracking:    "0.24px"                              # 🎨 letter-spacing
   fg:          "{color-sf-on-surface}"               # 🔗
 
 secondary-text:
@@ -61,6 +63,18 @@ trailing:
 ## 4. Variants　🎨🔗
 
 ```yaml
+# ── Figma Variants（FAI2 node 16575:6061） ──
+Sizes=Small:
+  width:      "270px"
+  item-min-h: "40px"
+  item-max-h: "56px"
+  container:  "rounded-[4px]"
+  search-h:   "32px（optional searchbox）"
+
+Sizes=Large:
+  desc: "Large variant 存在於 FAI2；量測值未取"
+
+# ── 行為 Variants ──
 default:       "leading=none；body=primary+secondary；trailing=meta"
 with-avatar:   "leading=40px avatar；適用用戶 / 聯絡人清單"
 with-checkbox: "leading=checkbox；多選場景（選取對話框）"

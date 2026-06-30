@@ -4,8 +4,8 @@ category: 資料展示與表格
 tier: full           # 類 Excel 全功能：儲存格 / 公式 / 多 sheet / 格式設定 + 複雜互動生命週期
 status: ✅ 已產出
 authority: 契約＝本檔；視覺值落地＝prototyper/assets/app.css（canonical CSS，值權威）
-figma-node: —        # 🎨 Figma 補入時填 <FILE_KEY>/<NODE_ID>（FAI2 componentKey: 9d61b6b28f3d0dba10e7c16534c3a8fc35207bb2）
-version: v0.2
+figma-node: JhcpyIEEzSChcEXMRJUiIm/14083:7923
+version: v0.3
 last-synced: 2026-06-30
 ---
 
@@ -37,13 +37,18 @@ last-synced: 2026-06-30
 
 ```yaml
 ribbon:
-  height:        "見 app.css .ss__ribbon"               # 🎨 量測值（含多列按鈕組）
-  bg:            "{color-sf-surface-variant}"            # 🔗 淡灰背景
+  height:        "160px"                                # 🎨 含 Ribbon tabs + 工具列（Figma 確認）
+  bg:            "rgba({color-sf-primary}, 0.08)"       # 🎨 primary-8%+white（非 surface-variant）
+  tab-active-fg: "{color-sf-primary}"                   # 🎨 active tab 主色字
+  tab-active-indicator: "3px {color-sf-primary}"        # 🎨 active tab 底線
+  tab-inactive-fg: "{color-sf-on-surface-variant}"      # 🎨
+  tab-font:      "{font-size-sf-text-md} / {font-weight-sf-medium}"  # 🔗 14px/500
+  icon-btn:      "32×32px rounded-[4px]"               # 🎨 toolbar icon buttons
   separator:     "{ds-borderwidth-small} {color-sf-outline-variant}"  # 🔗
 
 formula-bar:
-  height:        "見 app.css .ss__formula-bar"          # 🎨
-  address-width: "80px"                                 # 🎨 A1 地址寬
+  height:        "48px"                                 # 🎨 p-[4px] wrapper + h-[40px] TextBox
+  address-width: "90px"                                 # 🎨 cell ref dropdown width（修正 80px）
   bg:            "{color-sf-surface}"                   # 🔗
   font:          "{font-size-sf-text-md}"               # 🔗 14px（等寬字型搭配公式）
   font-family:   "font-mono"                            # 等寬（公式可讀性）
@@ -54,24 +59,35 @@ cell:
   font:           "{font-size-sf-text-md}"              # 🔗 14px
   fg:             "{color-sf-on-surface}"               # 🔗
   bg:             "{color-sf-surface}"                  # 🔗 白底
-  border:         "{ds-borderwidth-small} {color-sf-outline-variant}"  # 🔗 1px 格線
+  border:         "0.5px {color-sf-outline-variant}"   # 🎨 half-border（非標準 1px token）
   pad-h:          "{ds-space-padding-medium}"           # 🔗 8px
 
   selection-bg:   "見 app.css .ss__cell--selected"     # 🎨 primary 疊白，app.css 權威
   selection-border: "{ds-borderwidth-medium} {color-sf-primary}"  # 🔗 2px 藍框
   copy-border:    "1px dashed {color-sf-primary}"      # 🔗 複製態虛線框
-  header-bg:      "見 app.css .ss__col-header / .ss__row-header"  # 🎨 primary 疊白實色
+  header-bg:      "rgba({color-sf-primary}, 0.05)"     # 🎨 primary-5%+white（col/row header）
+  header-height:  "26px"                               # 🎨 欄標題列高 h-[26px]（Figma 確認）
+  row-header-w:   "32px"                               # 🎨 列標題欄寬（≈ 31.767px）
 
 sheet-tabs:
-  height:         "見 app.css .ss__sheet-tabs"          # 🎨
-  active-fg:      "{color-sf-primary}"                  # 🔗
-  active-border:  "bottom: 2px {color-sf-primary}"     # 🔗
-  font:           "{font-size-sf-text-sm}"              # 🔗 12px
+  height:         "52px"                               # 🎨 h-[52px]（Figma 確認）
+  active-fg:      "{color-sf-primary}"                 # 🔗
+  active-border:  "bottom: 3px {color-sf-primary}"     # 🎨 3px（Figma 確認）
+  font:           "{font-size-sf-text-md} / {font-weight-sf-medium}"  # 🎨 14px/500（非 12px）
 ```
 
 ## 4. Variants / Types　🎨🔗
 
 ```yaml
+# ── Figma Variants（FAI2 node 14083:7923） ──
+Sizes=Small:
+  viewport:    "1366×768px"
+  ribbon:      "160px height"
+  col-header:  "26px height, 12px/400 `{color-sf-on-surface-variant}`"
+  sheet-tabs:  "52px height"
+  formula-bar: "48px height"
+
+# ── 行為 Variants ──
 editable:          "完整 Ribbon + 公式列；所有儲存格可編輯（預設）"
 readonly:          "隱藏 Ribbon 編輯按鈕；儲存格 cursor=default；保留 scroll / copy / 公式展示"
 limited-edit:      "cellLock 指定可編輯範圍；鎖定格 cursor=not-allowed + bg={color-sf-on-surface-opacity4}（🔗）"

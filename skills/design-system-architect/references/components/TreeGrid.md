@@ -4,8 +4,8 @@ category: 資料展示與表格
 tier: full           # DataGrid 超集：帶 parent-child 展開 / 收合 + 層級縮排生命週期
 status: ✅ 已產出
 authority: 契約＝本檔；視覺值落地＝prototyper/assets/app.css（canonical CSS，值權威）；行為層上游＝DataGrid.md
-figma-node: —        # 🎨 Figma 補入時填 <FILE_KEY>/<NODE_ID>（FAI2 componentKey: 3e633b7a5170a16f42dd7f0e8036aaae2f77b1b0）
-version: v0.2
+figma-node: JhcpyIEEzSChcEXMRJUiIm/22733:617134
+version: v0.3
 last-synced: 2026-06-30
 ---
 
@@ -41,11 +41,11 @@ last-synced: 2026-06-30
 
 ```yaml
 indent:
-  size:      "20px per depth level"            # 🎨 量測值，單一來源在 app.css
+  size:      "32px per depth level"            # 🎨 root px-[8px]，child pl-[40px]；增量=32px
   max-depth: 5                                 # 超過 5 層顯示截斷（UX 建議）
 
 expander:
-  size:      "20px"                            # 🎨 icon 尺寸
+  size:      "16px（Small）/ 18px（Large）"    # 🎨 chevron-right icon
   fg:        "{color-sf-on-surface-variant}"   # 🔗 灰色 chevron
   hover-fg:  "{color-sf-primary}"              # 🔗 hover 主色
 
@@ -60,6 +60,20 @@ loading-child:
 ## 4. Variants / Types　🎨🔗
 
 ```yaml
+# ── Figma Variants（FAI2 node 22733:617134） ──
+Sizes=Small:
+  row-h:     "36px"
+  header-h:  "36px"
+  icon-size: "16px"
+  width:     "900px"
+
+Sizes=Large:
+  row-h:     "48px"
+  header-h:  "48px"
+  icon-size: "18px"
+  width:     "1024px"
+
+# ── 行為 Variants ──
 flat-tree:      "父子同欄；expander 在首欄（預設型）"
 grouped-header: "可選：群組列 .group-row 替代葉前一層（科目群組模式）；參見 DataGrid.md §5 群組列"
 checkable:      "每節點帶 checkbox；父節點 indeterminate（部分子選取）/ checked（全子選取）"
