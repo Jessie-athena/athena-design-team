@@ -16,8 +16,8 @@ last-synced: 2026-06-30
 
 ERP 財務作業模組（出納、應付款等）**Form View 頂部**的**金額摘要卡**：整合主要金額指標、文件狀態 Stepper，及可展開的子金額明細列。
 
-- **何時用**：財務單據（出納收款單、應付款項等）Form View 頂部，作為 SummaryCard 的財務模組特化版本。
-- **何時不用**：進銷存/人事模組（改用通用 `SummaryCard`）；List View 列表行（用 `st-chip`）；無需金額摘要的設定檔頁面。
+- **何時用**：財務單據（出納收款單、應付款項等）/進銷存/人事模組 Form View 頂部，作為 SummaryCard 的特化版本。
+- **何時不用**：List View 列表行（用 `chips`）；無需金額摘要的設定檔頁面。
 - **四種 state（prop 控制）**：
   - `Default`：僅 Block1 主摘要列（完整圓角），無展開面板——最精簡型。
   - `close`：Block1（頂部圓角）+ Block2 收合（顯示「查看明細」link）。
