@@ -10,3 +10,7 @@
 
 # OS
 Thumbs.db
+
+# Eval / iteration workspaces (產出暫存,不應隨 skill 散佈)
+*-workspace/
+skills/*-workspace/
