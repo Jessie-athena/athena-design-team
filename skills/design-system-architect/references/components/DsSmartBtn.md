@@ -2,10 +2,10 @@
 name: DsSmartBtn（關聯單據導覽列）
 category: 財務模組元件
 tier: lite
-status: ✅ 已產出（ERP 客製複合元件；Form View Smart Bar；1–8 個 card-btn；count/unit/label/arrow 四區；⚠️ unit 11px 與 #4287f0 無對應 token）
+status: ✅ 已產出（ERP 客製複合元件；Form View Smart Bar；1–8 個 card-btn；count/unit/label/arrow 四區；⚠️ unit 色 #4287f0 無對應 token）
 authority: 契約＝本檔；視覺值落地＝prototyper/assets/app.css（canonical CSS，值權威）
 figma-node: myT6eqCVioMvVMf4PXnSlS/1029:79839
-version: v0.1
+version: v0.2
 last-synced: 2026-06-30
 ---
 
@@ -33,9 +33,9 @@ DsSmartBtn（.smart-bar）
 │   ├─ flex row items-center，gap-8，pr-12
 │   ├─ border-r 1px primary（右側分隔線）
 │   │
-│   ├─ 混排文字區（count + unit，同一 inline block）
+│   ├─ .number 區（count + unit，兩個獨立 div，gap-2px，items-end 底部對齊）
 │   │   ├─ .card-btn__count（「12」，18px/700/primary）
-│   │   └─ .card-btn__unit（「/筆」，11px/400/#4287f0，tracking 0.2px）[⚠️ token gap]
+│   │   └─ .card-btn__unit（「/筆」，16px/400/#4287f0）[⚠️ 色 token gap]
 │   │
 │   ├─ .card-btn__title（「銷售訂單」，16px/400/primary，nowrap）
 │   │
@@ -78,13 +78,17 @@ count:
   line-height:    "1.5"                                                # 🔗
   color:          "{color-sf-primary}"                                 # 🔗 #2877EE
 
-# ── unit（計數單位，緊接 count 後的小字，同一行）──
+# ── number 區（count + unit 的容器）──
+number-block:
+  layout:         "flex row items-end"                                 # 📋 底部對齊（count 18px 與 unit 16px 視覺基線對齊）
+  gap:            "{ds-space-margin-extrasmall}"                       # 🔗 2px
+
+# ── unit（計數單位，緊接 count 右側）──
 unit:
-  font-size:      "11px"                                               # 🎨 ⚠️ token gap（{font-size-sf-text-sm}=12px，少 1px；待 DS owner 確認是否補 token）
+  font-size:      "{font-size-sf-text-lg}"                             # 🔗 16px（v0.2 由 11px 修正為 16px）
   weight:         "{font-weight-sf-normal}"                            # 🔗 400
   line-height:    "1.5"                                                # 🔗
-  color:          "#4287f0"                                            # 🎨 ⚠️ token gap（primary 淺色變體；待 DS owner 補 token 或對齊至 primary-400）
-  letter-spacing: "0.2px"                                              # 🎨 量測值（無對應 token）
+  color:          "#4287f0"                                            # 🎨 ⚠️ token gap（primary 淺色變體；待 DS owner 補 token）
 
 # ── title（單據名稱）──
 title:
@@ -141,7 +145,7 @@ number=8:  8 個 card-btn
 - 容器根元素：`<nav aria-label="關聯單據">`（提供 landmark 語意）。
 - 各 card-btn：`<a>` 或 `role="link"` + `@click.prevent`；建議 `aria-label="前往 {title}，共 {count} {unit}"` 組合供 SR 朗讀完整資訊。
 - arrow icon：`aria-hidden="true"`（語意已由連結文字傳達，裝飾性）。
-- 色彩對比：`{color-sf-primary}` (#2877EE) on white ≈ 3.5:1，低於 WCAG AA 一般文字要求（4.5:1）；⚠️ title（16px/400）與 unit（11px/400）均未達標。建議 DS owner 評估是否改用 `color-sf-primary-strong`（`colors_and_type.css` 已定義）。count（18px/700）屬大字（≥ 18pt bold），符合大字 3:1 標準 ✅。
+- 色彩對比：`{color-sf-primary}` (#2877EE) on white ≈ 3.5:1，低於 WCAG AA 一般文字要求（4.5:1）；⚠️ title（16px/400）與 unit（16px/400）均未達標。建議 DS owner 評估是否改用 `color-sf-primary-strong`（`colors_and_type.css` 已定義）。count（18px/700）屬大字（≥ 18pt bold），符合大字 3:1 標準 ✅。
 
 ---
 
