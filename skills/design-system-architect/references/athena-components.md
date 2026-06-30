@@ -23,16 +23,16 @@
 |------|---------|------|
 | Button | [`components/Button.md`](components/Button.md) | ✅ 已產出（Lite；v0.3 所有 ⚠️ 項已解，含 disabled bg token、Comfortable 密度 padding） |
 | st-chip（狀態徽章 / `DsStatusBadge`） | [`components/st-chip.md`](components/st-chip.md) | ✅ 已產出（Full；色 / class 落地引用 prototyper DataGrid.md / Stepper.md） |
-| Grid（DataGrid） | [`components/DataGrid.md`](components/DataGrid.md) | ✅ 已產出（Full；class / 尺寸 / 互動色 / 凍結欄 / 行內編輯落地引用 prototyper DataGrid.md） |
-| TreeGrid | [`components/TreeGrid.md`](components/TreeGrid.md) | ✅ 已產出（Full；繼承 DataGrid；tree expander / indent / lazy-load / checkable；keyboard ←→ 展開/收合） |
-| PivotView | [`components/PivotView.md`](components/PivotView.md) | ✅ 已產出（Full；欄位拖放 / drill-down / pivot-chart mode / swimlane；⚠️ DS AA token 待補） |
-| Spreadsheet | [`components/Spreadsheet.md`](components/Spreadsheet.md) | ✅ 已產出（Full；4 variant；Ribbon / 公式列 / cellLock；ERP 場景需限制可編輯範圍） |
-| ListView | [`components/ListView.md`](components/ListView.md) | ✅ 已產出（Lite；4 variant：default / with-avatar / with-checkbox / action-item / dense） |
-| Kanban | [`components/Kanban.md`](components/Kanban.md) | ✅ 已產出（Full；WIP limit / swimlane / collapsible-col；行動端降為 ListView 堆疊） |
-| Gantt | [`components/Gantt.md`](components/Gantt.md) | ✅ 已產出（Full；雙面板 TreeGrid+Timeline；critical-path / resource-view / resize / 依賴連線） |
-| Schedule | [`components/Schedule.md`](components/Schedule.md) | ✅ 已產出（Full；5 視圖 Day/Week/Month/Agenda/TimelineMonth；拖曳 / resize / 重複事件） |
-| QueryBuilder | [`components/QueryBuilder.md`](components/QueryBuilder.md) | ✅ 已產出（Full；巢狀群組 max-depth 2；field type 動態切換 value input；keyboard 替代拖曳） |
-| Pager | [`components/Pager.md`](components/Pager.md) | ✅ 已產出（Lite；20/50/100 / range / prev-next；禁單獨存在，固定配置於 DataGrid/ListView 下方） |
+| Grid（DataGrid） | [`components/DataGrid.md`](components/DataGrid.md) | ✅ 已產出（Full；v0.3 FAI2 對齊；row-h 36px(S)/48px(L)；凍結欄 / 行內編輯 / 斑馬 / 多選） |
+| TreeGrid | [`components/TreeGrid.md`](components/TreeGrid.md) | ✅ 已產出（Full；v0.3 FAI2 對齊；indent 32px（非 20px）、expander 16px(S)/18px(L)；繼承 DataGrid；checkable / lazy-load） |
+| PivotView | [`components/PivotView.md`](components/PivotView.md) | ✅ 已產出（Full；v0.3 FAI2 對齊；header primary-5%、border-l+border-t outline-variant、header-fg on-surface-variant；欄位拖放 / drill-down；⚠️ DS AA token 待補） |
+| Spreadsheet | [`components/Spreadsheet.md`](components/Spreadsheet.md) | ✅ 已產出（Full；v0.3 FAI2 對齊；Ribbon 160px primary-8%、cell border 0.5px、sheet-tabs 52px/14px/500；cellLock；ERP 建議限定可編輯範圍） |
+| ListView | [`components/ListView.md`](components/ListView.md) | ✅ 已產出（Lite；v0.3 FAI2 對齊；item min-h 40px（非 48px）、py 4px、primary-text weight=400（非 500）；default / avatar / checkbox / dense） |
+| Kanban | [`components/Kanban.md`](components/Kanban.md) | ✅ 已產出（Full；v0.3 FAI2 對齊；card padding 16px、header primary-5% rounded-tl/tr-[4px]；S=1224px L=1624px；WIP limit / swimlane） |
+| Gantt | [`components/Gantt.md`](components/Gantt.md) | ✅ 已產出（Full；v0.3 FAI2 對齊；row-h 36px(Small)；雙面板 TreeGrid+Timeline；critical-path / resource-view / 依賴連線） |
+| Schedule | [`components/Schedule.md`](components/Schedule.md) | ✅ 已產出（Full；v0.3 FAI2 對齊；toolbar 48px+primary-8%、active-view-bg on-surface-8%（非 primary）、slot 62px/0.5px；5 視圖） |
+| QueryBuilder | [`components/QueryBuilder.md`](components/QueryBuilder.md) | ✅ 已產出（Full；v0.3 FAI2 對齊；巢狀群組 max-depth 2；field type 動態切換 value input；keyboard 替代拖曳） |
+| Pager | [`components/Pager.md`](components/Pager.md) | ✅ 已產出（Lite；v0.3 FAI2 對齊；h 48px(S)/56px(L)、nav-btn 32×32(S)/40×40(L)；20/50/100；禁單獨存在） |
 | Stepper | [`components/Stepper.md`](components/Stepper.md) | ✅ 已產出（Full；步序狀態 / 語意色 / 判定邏輯 / voided-banner 落地引用 prototyper Stepper.md） |
 | SummaryCard | [`components/SummaryCard.md`](components/SummaryCard.md) | ✅ 已產出（Full；Layout A/B、sticky 無 shadow、4 步動態 stepper 落地引用 prototyper SummaryCard.md） |
 | TextBox | [`components/TextBox.md`](components/TextBox.md) | ✅ 已產出（Lite；Filled Small Default；Layer 1–4 Figma 校準，含 token gap 標注） |
@@ -173,16 +173,16 @@
 
 | 元件 | 用途 | 文件狀態 |
 |------|------|---------|
-| Grid | 資料列表、報表、可排序/篩選表格 | ✅ 已產出 |
-| TreeGrid | 階層式表格 | ✅ 已產出（Full；繼承 DataGrid；tree expander / indent / lazy-load / checkable） |
-| Pivot View | 樞紐分析表 | ✅ 已產出（Full；欄位拖放 / drill-down / pivot-chart / swimlane） |
-| Spreadsheet | 試算表 | ✅ 已產出（Full；4 variant；Ribbon / 公式列 / cellLock；⚠️ ERP 建議限定可編輯範圍） |
-| ListView | 清單檢視 | ✅ 已產出（Lite；4 variant；leading-avatar / checkbox / dense）|
-| Kanban | 看板（拖拉卡片） | ✅ 已產出（Full；WIP limit / swimlane / collapsible-col；行動端降為 ListView）|
-| Gantt | 甘特圖 / 專案排程 | ✅ 已產出（Full；雙面板 TreeGrid+Timeline；critical-path / resource-view）|
-| Schedule | 行事曆 / 排程檢視 | ✅ 已產出（Full；5 視圖；拖曳 / resize；timeline-month swimlane）|
-| QueryBuilder | 視覺化條件查詢建構 | ✅ 已產出（Full；巢狀群組 max-depth 2；field type 動態切換 value input）|
-| Pager | 分頁器 | ✅ 已產出（Lite；20/50/100 / range / prev-next；禁單獨存在）|
+| Grid | 資料列表、報表、可排序/篩選表格 | ✅ 已產出（v0.3 FAI2 對齊） |
+| TreeGrid | 階層式表格 | ✅ 已產出（v0.3 FAI2 對齊；indent 32px、expander 16/18px） |
+| Pivot View | 樞紐分析表 | ✅ 已產出（v0.3 FAI2 對齊；header primary-5%+border；⚠️ DS AA 待補） |
+| Spreadsheet | 試算表 | ✅ 已產出（v0.3 FAI2 對齊；Ribbon primary-8%、cell 0.5px border；⚠️ ERP 建議限定可編輯範圍） |
+| ListView | 清單檢視 | ✅ 已產出（v0.3 FAI2 對齊；item min-h 40px、text weight=400） |
+| Kanban | 看板（拖拉卡片） | ✅ 已產出（v0.3 FAI2 對齊；card p-[16px]、header primary-5%） |
+| Gantt | 甘特圖 / 專案排程 | ✅ 已產出（v0.3 FAI2 對齊；row-h 36px(Small)；雙面板） |
+| Schedule | 行事曆 / 排程檢視 | ✅ 已產出（v0.3 FAI2 對齊；active-view-bg on-surface-8%、slot 62px） |
+| QueryBuilder | 視覺化條件查詢建構 | ✅ 已產出（v0.3 FAI2 對齊；巢狀群組 max-depth 2） |
+| Pager | 分頁器 | ✅ 已產出（v0.3 FAI2 對齊；h 48px(S)/56px(L)、btn 32/40px） |
 
 ## 7. 圖表與視覺化（Charts & Visualization）
 
