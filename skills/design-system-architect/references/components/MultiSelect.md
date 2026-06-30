@@ -317,7 +317,7 @@ chip_remove_hover:                                               # 📋（close 
 - Code：`@syncfusion/ej2-vue-dropdowns`；playground 參考 `syncfusion-playground/app/pages/playground/`（對應 `multiselect.vue` 或 `dropdownlist.vue`）
 - Figma：`https://www.figma.com/design/JhcpyIEEzSChcEXMRJUiIm/` 節點 `22831-939764`（元件集）/ `22831-940580`（Small/Filled/Default 量測節點）/ `22831-940856`（Small/Filled/Filled 量測節點）
 - 同族元件：`DropDownList.md`（單選，同 Filled 族群）、`TextBox.md`（Filled 底線式輸入族群，Anatomy token 高度共用）
-- 相關元件：`st-chip.md`（狀態 chip 獨立使用；MultiSelect chip 為輕量 border-only 版本，非狀態 chip）
+- 相關元件：`.st-chip`（狀態 chip 獨立使用，見 prototyper DataGrid.md §狀態 Chip；MultiSelect chip 為輕量 border-only 版本，非狀態 chip）
 
 ---
 

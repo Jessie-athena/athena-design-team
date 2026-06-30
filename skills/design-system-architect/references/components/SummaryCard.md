@@ -149,7 +149,7 @@ App ≠ 縮小 Web：
 
 - Tokens：`../athena-tokens.md` §Surface / §Shadow（`--ds-shadow-none`）/ §Space / §Primary / §Typography
 - 語意對照：`../athena-design.md` §中性·背景 / §字級（金額用 h5、label 用 text-sm）/ §間距
-- 子元件：`Stepper.md`（內含狀態 stepper，終態步一律 primary 藍）、`st-chip.md`（voided-banner / 已產生傳票 chip）、`DataGrid.md`（合計列 Σ → 單指標金額來源）
+- 子元件：`Stepper.md`（內含狀態 stepper，終態步一律 primary 藍）、`.st-chip`（voided-banner / 已產生傳票 chip，見 prototyper DataGrid.md §狀態 Chip）、`DataGrid.md`（合計列 Σ → 單指標金額來源）
 - **值權威（padding / sticky / 金額字級，勿在此重寫）**：`prototyper/assets/app.css`（canonical CSS）
 - **用法權威（layout class / 4 步動態 stepper 行為）**：`prototyper/profiles/erp-components/SummaryCard.md`
 - Layout A 完整規格：`prototyper/profiles/erp-transaction.md §Summary Bar 結構`

@@ -30,7 +30,7 @@ last-synced: 2026-06-30
   └─ .pager            ← 與 grid 相連，無額外上下邊框
 ```
 
-子元素：表頭 `th` / 資料列 `tr > td` / 凍結欄（`.sticky-l` `.sticky-l-2` `.sticky-r`）/ 選取欄 `.col-check` / 操作欄 `.col-actions` / 狀態欄（`.st-chip`，見 `st-chip.md`）。行內編輯型另含 `.dg-lines__header`（標題列 + 新增鈕）與列內輸入控制元件 `.input--inline` / `.select--inline`。
+子元素：表頭 `th` / 資料列 `tr > td` / 凍結欄（`.sticky-l` `.sticky-l-2` `.sticky-r`）/ 選取欄 `.col-check` / 操作欄 `.col-actions` / 狀態欄（`.st-chip`，見 prototyper DataGrid.md §狀態 Chip）。行內編輯型另含 `.dg-lines__header`（標題列 + 新增鈕）與列內輸入控制元件 `.input--inline` / `.select--inline`。
 
 > 完整 DOM 與 class 命名（含 legacy → 現行收斂表）以 profile 為權威，勿在此重列。
 
@@ -209,7 +209,7 @@ Sizes=Large:
 
 - 編輯列 `role="row"` + `aria-rowindex`；編輯態 `aria-busy="true"` + `aria-label="編輯中：<名稱>"`。
 - 每個行內輸入控制元件保留 `<label>`（視覺 `sr-only`）對應原欄頭。
-- 狀態欄不可僅靠顏色——`.st-chip` label 文字即狀態名（見 `st-chip.md §9`）。
+- 狀態欄不可僅靠顏色——`.st-chip` label 文字即狀態名。
 - 凍結欄對比：實色背景需維持文字對比 ≥ 4.5:1。
 - 動畫尊重 `prefers-reduced-motion: reduce` → 全部改 `0ms`。
 - Checkbox `.cb` focus：`{color-sf-primary-opacity-16}` 3px ring；hover halo `{color-sf-primary-opacity-8}`；邊框 `{color-sf-outline}`、radius `{ds-radius-small}`。
@@ -248,7 +248,7 @@ App ≠ 縮小的 Web。資料表在窄螢幕的替代佈局：
 
 - Tokens：`../athena-tokens.md` §Primary / §Surface / §On-* / §Outline / §Space / §Radius / §Typography
 - 語意對照：`../athena-design.md` §中性·背景·文字·邊框 / §間距（雙密度）
-- 子元件：`st-chip.md`（狀態欄徽章，色 / class 落地引用 app.css / profile）
+- 子元件：`.st-chip`（狀態欄徽章，規格見 prototyper DataGrid.md §狀態 Chip）
 - **值權威（尺寸 / 互動色 / 疊白實色，勿在此重寫）**：`prototyper/assets/app.css`（canonical CSS）
 - **用法權威（class 套用 / 凍結欄 / 行內編輯行為）**：`prototyper/profiles/erp-components/DataGrid.md`
 - 上層 profile：`prototyper/profiles/erp-transaction.md`；同層 `SummaryCard.md` / `Stepper.md` / `FormGroup.md` / `FormFooter.md` / `ListSearch.md`
