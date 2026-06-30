@@ -81,6 +81,7 @@
 | DsDialogHeader | [`components/DsDialogHeader.md`](components/DsDialogHeader.md) | ✅ 已產出（Lite；Dialog 頂部列；三配置 A7 title / A7_CRS 含來源編號 / A8 title+縮放；h=46px） |
 | DsSectionHeader | [`components/DsSectionHeader.md`](components/DsSectionHeader.md) | ✅ 已產出（Lite；左側 5px accent 藍條 + 14px/700/primary 標題文字；用於 Form / Card 區段分組） |
 | DsAmountSummaryCard | [`components/DsAmountSummaryCard.md`](components/DsAmountSummaryCard.md) | ✅ SummaryCard 設計契約（Full；財務模組 Form 頂部摘要區；4 state Default/close/Open/Scrolling；指標區與 Stepper 步數依模組配置；single/dual/formula 三種指標模式；6 Figma 節點）|
+| DsSmartBtn | [`components/DsSmartBtn.md`](components/DsSmartBtn.md) | ✅ 已產出（Lite；Form View 關聯單據導覽列 Smart Bar；1–8 個 card-btn；count/unit/label/arrow；⚠️ unit 11px 與 #4287f0 無對應 token）|
 | AppBar | — | ⬜ 待建立（Syncfusion AppBar；ERP 以 DsHeader 取代） |
 | Toolbar | — | ⬜ 待建立（FAI2 無對應元件） |
 | Menu | — | ⬜ 待建立（Syncfusion Menu；ERP 導覽以 DsNavigationA8 取代） |
@@ -273,5 +274,6 @@
 | `DsDialogHeader` | Dialog 頂部列（三配置 A7/A7_CRS/A8；h=46px；含來源單號 / 人員操作 / 縮放歷程 btn） | ✅ 已產出 |
 | `DsSectionHeader` | 區段標題（左側 5px 藍條 + 14px/700/primary 標題；Form / Card 分組用） | ✅ 已產出 |
 | `DsAmountSummaryCard` | 財務模組 SummaryCard（Form 頂部摘要卡；指標區與 Stepper 步數依模組配置；single/dual/formula 三種指標模式） | ✅ 已產出 |
+| `DsSmartBtn` | Form View 關聯單據導覽列（Smart Bar；card-btn 含 count/unit/label/arrow-outward） | ✅ 已產出 |
 
 > 優先順序：Syncfusion 既有元件 → 客製 `Ds` 元件 → 行內組合。需新增客製元件前，先 audit 上表是否已有可用者（見 SKILL.md §Governance）。
