@@ -2,10 +2,10 @@
 name: DsSmartBtn（關聯單據導覽列）
 category: 財務模組元件
 tier: lite
-status: ✅ 已產出（ERP 客製複合元件；Form View Smart Bar；1–8 個 card-btn；count/unit/label/arrow 四區；⚠️ unit 色 #4287f0 無對應 token）
+status: ✅ 已產出（ERP 客製複合元件；Form View Smart Bar；1–8 個 card-btn；count/unit/label/arrow 四區；零 token gap）
 authority: 契約＝本檔；視覺值落地＝prototyper/assets/app.css（canonical CSS，值權威）
 figma-node: myT6eqCVioMvVMf4PXnSlS/1029:79839
-version: v0.2
+version: v0.3
 last-synced: 2026-06-30
 ---
 
@@ -35,7 +35,7 @@ DsSmartBtn（.smart-bar）
 │   │
 │   ├─ .number 區（count + unit，兩個獨立 div，gap-2px，items-end 底部對齊）
 │   │   ├─ .card-btn__count（「12」，18px/700/primary）
-│   │   └─ .card-btn__unit（「/筆」，16px/400/#4287f0）[⚠️ 色 token gap]
+│   │   └─ .card-btn__unit（「/筆」，16px/400/{primary-btn-primary-bg-color-pressed}→#4287f0）
 │   │
 │   ├─ .card-btn__title（「銷售訂單」，16px/400/primary，nowrap）
 │   │
@@ -85,10 +85,10 @@ number-block:
 
 # ── unit（計數單位，緊接 count 右側）──
 unit:
-  font-size:      "{font-size-sf-text-lg}"                             # 🔗 16px（v0.2 由 11px 修正為 16px）
+  font-size:      "{font-size-sf-text-lg}"                             # 🔗 16px
   weight:         "{font-weight-sf-normal}"                            # 🔗 400
   line-height:    "1.5"                                                # 🔗
-  color:          "#4287f0"                                            # 🎨 ⚠️ token gap（primary 淺色變體；待 DS owner 補 token）
+  color:          "{primary-btn-primary-bg-color-pressed}"             # 🔗 var(--primary-btn-primary-bg-color-pressed, var(--ColorSf-primary, #2877EE)) → 渲染值 #4287f0（primary + white 12% overlay）
 
 # ── title（單據名稱）──
 title:
