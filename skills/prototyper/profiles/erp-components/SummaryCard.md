@@ -9,8 +9,8 @@
 > **三權威分工**：
 > - **值權威＝`../../assets/app.css`（canonical CSS，複製不重寫）**——padding / sticky / 金額字級等字面值以此為準；本檔**不複印 CSS 數值**（要改數值改 app.css）。
 > - **本 profile＝用法權威**——負責 layout class 套用、4 步動態 stepper 行為、app.js 邏輯。
-> - **契約權威＝上游設計文件** `../../../design-system-architect/references/components/SummaryCard.md`（格式見 `component-doc-schema.md`；複合元件，Full 層）：what/why/token-reference/state/a11y。
-> Layout A 的完整規格見 `erp-transaction.md`；內部 Stepper 行為依 `Stepper.md`。遇具體 px/hex 一律指 app.css，避免兩處漂移。
+> - **契約權威＝上游設計文件** `../../../design-system-architect/references/components/DsAmountSummaryCard.md`（SummaryCard 設計契約；格式見 `component-doc-schema.md`；Full 層）：what/why/token-reference/state/a11y；指標模式（single/dual/formula）與 Stepper 步數依模組配置。
+> Layout A = DsAmountSummaryCard；設計契約（指標模式 / Stepper 步數 / Block2 規則）見 `DsAmountSummaryCard.md`；prototype 佈局實作細節見 `erp-transaction.md`；內部 Stepper 行為依 `Stepper.md`。遇具體 px/hex 一律指 app.css，避免兩處漂移。
 
 ---
 
@@ -20,10 +20,10 @@
 
 | Layout | 適用 | 結構 | stepper |
 |---|---|---|---|
-| **A — 多指標（上下兩塊）** | 財務作業檔（如付款 / 請款；金額需拆稅額 / 互抵等多指標） | 上區：標題 + stepper；下區：多個指標（總金額 / 幣別 / 建立者）+「已產生傳票」chip | canonical 3 步（詳 `Stepper.md`） |
+| **A — DsAmountSummaryCard** | 所有財務模組 Form View 頂部（出納、應付請款、沖銷、內部調撥等） | Block1 左區：指標欄（single / dual / formula 三種模式）；Block1 右區：Stepper；Block2 可展開子明細（視模組而定） | 步數依模組（3 步 treasury / 3 步 canonical / 4 步 / 6 步）；詳 `DsAmountSummaryCard.md §Content Configurations` |
 | **B — 單指標 + stepper（左右兩區）** | 進銷存作業檔（如請購單；單一關鍵金額即足） | 左 `summary-card__left`：單一強調金額；右 `summary-card__right`：stepper | 視狀態機而定，6 值用 4 步動態 stepper（見下） |
 
-> Layout A 的完整規格見 `erp-transaction.md §Summary Bar 結構`（本檔不重複）。
+> Layout A = DsAmountSummaryCard；設計契約（指標模式 / Stepper 步數配置 / Block2 規則）見 `DsAmountSummaryCard.md §Content Configurations`；prototype 佈局實作細節見 `erp-transaction.md §Summary Bar 結構`（本檔不重複）。
 > 本檔主述 **Layout B** 與其 **4 步動態 stepper**。
 
 ---
