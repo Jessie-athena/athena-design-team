@@ -69,6 +69,14 @@
 | DateTimePicker | [`components/DateTimePicker.md`](components/DateTimePicker.md) | ✅ 已產出（Lite；132 variant；雙 icon action-container；50 var 零漂移） |
 | TimePicker | [`components/TimePicker.md`](components/TimePicker.md) | ✅ 已產出（Lite；3 軸；clock icon；dropdown list 型；3 token gap） |
 | Accordion | [`components/Accordion.md`](components/Accordion.md) | ✅ 已產出（Lite；Single/Multiple expandMode；展開 chevron 動畫；keyboard Tab/Enter/Space） |
+| PredefinedDialog | [`components/PredefinedDialog.md`](components/PredefinedDialog.md) | ✅ 已產出（Full；Alert/Confirm/Prompt/Image type × Small(360px)/Large(380px)；shadow-lg；3 按鈕色各異） |
+| Message | [`components/Message.md`](components/Message.md) | ✅ 已產出（Full；Mode=Subtle/Ascent/Outline × Type=5色 × Shadow × Button Position；行內固定 520px） |
+| Tooltip | [`components/Tooltip.md`](components/Tooltip.md) | ✅ 已產出（Lite；dark bg #303034；Small 260px/Large 320px；9 pointer 位置；shadow-md） |
+| Spinner | [`components/Spinner.md`](components/Spinner.md) | ✅ 已產出（Lite；固定 36px；8 色型 Primary/Secondary/Info/Success/Warning/Danger/Light/Dark） |
+| ProgressBar | [`components/ProgressBar.md`](components/ProgressBar.md) | ✅ 已產出（Lite；Circle(80px Small)/Linear × Status=Default/Error/Success；10% 步進） |
+| Badge | [`components/Badge.md`](components/Badge.md) | ✅ 已產出（Lite；Small(16px)/Large(20px)；Ascent/Subtle × 8 類型 × Word/Letter/Dot；狀態徽章另有 DsStatusBadge） |
+| Chips | [`components/Chips.md`](components/Chips.md) | ✅ 已產出（Lite；Extra Small 20px；Full Rounded/Rounded × Filled/Outlined/Flat；5 狀態） |
+| Avatar | [`components/Avatar.md`](components/Avatar.md) | ✅ 已產出（Lite；5 尺寸 24-56px；Letter bg=#D5E4FF；Status + Notification badge；6 Mode） |
 | AppBar | — | ⬜ 待建立（FAI2 無對應元件） |
 | Toolbar | — | ⬜ 待建立（FAI2 無對應元件） |
 | Menu | — | ⬜ 待建立（FAI2 無獨立 Menu 元件；有 DsNavigation 子件） |
@@ -215,14 +223,14 @@
 | Toast | 操作結果提示（success / warning / error） | ✅ 已產出 |
 | Skeleton | 載入佔位 | ✅ 已產出 |
 | Dialog | 確認操作、deeplink 跳轉、表單 modal | ✅ 已產出 |
-| Predefined Dialogs | Alert / Confirm / Prompt 預設對話框 | ✅ 已產出（Full；[`components/PredefinedDialog.md`](components/PredefinedDialog.md)） |
-| Message | 行內訊息條 | ✅ 已產出（Full；[`components/Message.md`](components/Message.md)） |
-| Tooltip | 提示氣泡 | ✅ 已產出（Lite；[`components/Tooltip.md`](components/Tooltip.md)） |
-| Spinner | 載入轉圈 | ✅ 已產出（Lite；[`components/Spinner.md`](components/Spinner.md)） |
-| ProgressBar | 進度條 | ✅ 已產出（Lite；[`components/ProgressBar.md`](components/ProgressBar.md)） |
-| Badge | 數字 / 狀態角標 | ✅ 已產出（Lite；[`components/Badge.md`](components/Badge.md)；狀態徽章另有客製 `DsStatusBadge`） |
-| Chips | 標籤 / 篩選 chip | ✅ 已產出（Lite；[`components/Chips.md`](components/Chips.md)） |
-| Avatar | 使用者頭像 | ✅ 已產出（Lite；[`components/Avatar.md`](components/Avatar.md)） |
+| Predefined Dialogs | Alert / Confirm / Prompt 預設對話框 | ✅ 已產出（Full） |
+| Message | 行內訊息條 | ✅ 已產出（Full） |
+| Tooltip | 提示氣泡 | ✅ 已產出（Lite） |
+| Spinner | 載入轉圈 | ✅ 已產出（Lite） |
+| ProgressBar | 進度條 | ✅ 已產出（Lite） |
+| Badge | 數字 / 狀態角標 | ✅ 已產出（Lite；狀態徽章另有客製 `DsStatusBadge`） |
+| Chips | 標籤 / 篩選 chip | ✅ 已產出（Lite） |
+| Avatar | 使用者頭像 | ✅ 已產出（Lite） |
 
 ## 9. 編輯器與富內容（Editors & Rich Content）
 
