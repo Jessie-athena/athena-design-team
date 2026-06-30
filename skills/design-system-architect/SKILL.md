@@ -258,3 +258,34 @@ Component Tokens（元件層）
 - 「Audit 我們目前的 DS 健康度」
 - 「設計一套 semantic color token」
 - 「這個新的需求需要加 component 嗎？先 audit」
+
+## UX & Writing Standards
+
+撰寫元件 spec 時，兩類規範須參照外部來源：
+
+### 行為規範（UX Guidelines）
+定義元件「如何運作」的語意層，參照本 skill 內建的 `references/ux-guidelines.md`：
+- 設計原則（§1）：清晰性 / 一致性 / 層級導向 / 可擴充性 / 回饋性
+- 導覽模式（§2）：Navigation Rail / Breadcrumb / Tabs / Step Bar 等元件的行為規則
+- 資料顯示與互動原則（§3 / §6）：Data Entry / Display / Interaction 三分類 + 8 項原則
+- 表單設計準則（§4）：欄位排列、動態欄位、提交流程、表單類型
+- 系統回饋（§5）：Toast / Alert / Dialog / Loading / Empty State
+
+### 文案規範（Content Guidelines）
+元件 spec §11 Content Guidelines 的所有文案規則 defer 到 `ux-writer` skill：
+
+| 需要 | 查閱 |
+|-----|------|
+| 錯誤訊息公式、空狀態公式、toast 格式 | ux-writer/references/erp-conventions.md |
+| Voice & Tone 矩陣、i18n 格式（日期/貨幣/姓名） | ux-writer/references/Frameworks.md |
+| 多語詞彙對照（繁中/簡中/日/英/越） | ux-writer/references/Terminology.md |
+
+design-system-architect 撰寫 §11 時的最低硬性要求：
+- 按鈕/CTA 動詞開頭（e.g. 儲存變更、建立報表）
+- 錯誤訊息：`無法[Action]：[Reason]`（blocking）或 `[承認] + [解決方案]`（system）
+- 空狀態：`[標題] + [描述] + [CTA（可選）]`，無 emoji
+- 通知型彈窗單一按鈕統一「知道了」，決策型用動詞
+- 中文介面中文詞彙優先（電子郵件，非 Email）
+- 日期/貨幣格式依語系（細節見 ux-writer/Frameworks.md）
+
+**分工界線**：design-system-architect 定義元件需要哪些 content slot（標籤、佔位符、錯誤提示、空狀態）及其規格；ux-writer 撰寫並審查實際文案。
