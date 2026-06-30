@@ -268,7 +268,7 @@
 | `DsDatePicker` | 含多語系格式的日期選擇（Syncfusion DatePicker 客製包裝） | ✅ 已產出 |
 | `DsColorPicker` | 固定色盤選擇器 | ✅ 已產出 |
 | `DsHeader` | App Shell 頂部列（三版本 A7/A8_V1/A8_V2 × 三狀態 Breadcrumb/Title/BookTable） | ✅ 已產出 |
-| `DsSideNavMenu` | 側邊導覽選單（Figma 名 DsNavigationA8；設計文件見 [`DsNavigationA8.md`](components/DsNavigationA8.md)） | ✅ 已產出 |
+| `DsNavigationA8` | 側邊導覽選單（Code 名 DsSideNavMenu；close/open 兩態；L1/L2/L3 三層導覽） | ✅ 已產出 |
 | `DsDialogHeader` | Dialog 頂部列（三配置 A7/A7_CRS/A8；h=46px；含來源單號 / 人員操作 / 縮放歷程 btn） | ✅ 已產出 |
 | `DsSectionHeader` | 區段標題（左側 5px 藍條 + 14px/700/primary 標題；Form / Card 分組用） | ✅ 已產出 |
 | `DsCard` | 卡片容器 | ⬜ 待建立 |
