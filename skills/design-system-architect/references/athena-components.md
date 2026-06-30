@@ -69,17 +69,17 @@
 | DateTimePicker | [`components/DateTimePicker.md`](components/DateTimePicker.md) | ✅ 已產出（Lite；132 variant；雙 icon action-container；50 var 零漂移） |
 | TimePicker | [`components/TimePicker.md`](components/TimePicker.md) | ✅ 已產出（Lite；3 軸；clock icon；dropdown list 型；3 token gap） |
 | Accordion | [`components/Accordion.md`](components/Accordion.md) | ✅ 已產出（Lite；Single/Multiple expandMode；展開 chevron 動畫；keyboard Tab/Enter/Space） |
-| AppBar | [`components/AppBar.md`](components/AppBar.md) | ✅ 已產出（Lite；erp-header 對應；Top sticky 唯一模式；子元件 Breadcrumb+IconButton） |
-| Toolbar | [`components/Toolbar.md`](components/Toolbar.md) | ✅ 已產出（Lite；主 CTA / 批次切換模式；view-switch ButtonGroup；erp prototype .toolbar 對應） |
-| Menu | [`components/Menu.md`](components/Menu.md) | ✅ 已產出（Full；水平 / 垂直 / hamburger；子選單飛出；keyboard ←→↑↓Esc；< 1024px 漢堡降級） |
-| ContextMenu | [`components/ContextMenu.md`](components/ContextMenu.md) | ✅ 已產出（Lite；右鍵觸發；danger-item error token；子選單飛出；Grid row / TreeView 常用目標） |
+| AppBar | — | ⬜ 待建立（FAI2 無對應元件） |
+| Toolbar | — | ⬜ 待建立（FAI2 無對應元件） |
+| Menu | — | ⬜ 待建立（FAI2 無獨立 Menu 元件；有 DsNavigation 子件） |
+| ContextMenu | — | ⬜ 待建立（FAI2 無對應元件） |
 | Breadcrumb | [`components/Breadcrumb.md`](components/Breadcrumb.md) | ✅ 已產出（Lite；3 層固定結構 模組>功能>單號；erp-breadcrumb 對應；aria-current="page"） |
 | Sidebar | [`components/Sidebar.md`](components/Sidebar.md) | ✅ 已產出（Full；Push/Over/Auto 三模式；nav-rail 72px 固定對應；focus trap Over 模式；App Bottom Nav 替代） |
-| Splitter | [`components/Splitter.md`](components/Splitter.md) | ✅ 已產出（Lite；水平 / 垂直；4px split-bar；role="separator" + aria-valuenow；keyboard ←→ 移動） |
-| Card | [`components/Card.md`](components/Card.md) | ✅ 已產出（Lite；CSS class only；無 shadow ERP 設計；DsCard 客製包裝待建立） |
-| DashboardLayout | [`components/DashboardLayout.md`](components/DashboardLayout.md) | ✅ 已產出（Full；12/8/4/2 欄響應；拖動 / resize / serialize；< 768px 禁拖） |
-| Ribbon | [`components/Ribbon.md`](components/Ribbon.md) | ✅ 已產出（Full；Normal/Simplified/Overflow 三模式；僅 Spreadsheet 使用；Alt+F10 焦點進入） |
-| TreeView | [`components/TreeView.md`](components/TreeView.md) | ✅ 已產出（Lite；完整 ARIA Tree Pattern keyboard；drag-drop / checkbox / in-place edit / loadOnDemand） |
+| Splitter | — | ⬜ 待建立（FAI2 無對應元件） |
+| Card | — | ⬜ 待建立（FAI2 無對應元件） |
+| DashboardLayout | — | ⬜ 待建立（FAI2 無對應元件） |
+| Ribbon | — | ⬜ 待建立（FAI2 無對應元件） |
+| TreeView | — | ⬜ 待建立（FAI2 無對應元件） |
 
 > 收編原則：`prototyper` 既有的深度元件規格（DataGrid / Stepper / SummaryCard…）為「prototype 單檔 HTML/CSS 落地層」；設計文件是「what/why/token/state 的權威」。補設計文件時**引用** profile，不重寫 token 決策（見 `component-doc-schema.md §8`）。
 
@@ -93,17 +93,17 @@
 |------|------|---------|
 | Tab | 同一畫面切換多組內容 | ✅ 已產出 |
 | Accordion | 可摺疊區塊、FAQ、設定分組 | ✅ 已產出 |
-| AppBar | 頂部應用列 / header chrome | ✅ 已產出 |
-| Toolbar | 工具列、批次操作列 | ✅ 已產出 |
-| Menu | 主選單、多層導覽 | ✅ 已產出 |
-| ContextMenu | 右鍵 / 長按情境選單 | ✅ 已產出 |
+| AppBar | 頂部應用列 / header chrome | ⬜ 待建立 |
+| Toolbar | 工具列、批次操作列 | ⬜ 待建立 |
+| Menu | 主選單、多層導覽 | ⬜ 待建立 |
+| ContextMenu | 右鍵 / 長按情境選單 | ⬜ 待建立 |
 | Breadcrumb | 階層路徑導覽 | ✅ 已產出 |
 | Sidebar | 側邊抽屜 / 導覽面板 | ✅ 已產出 |
-| Splitter | 可調整比例的分割版面 | ✅ 已產出 |
-| Card | 卡片容器 | ✅ 已產出（另有客製 `DsCard` 待建立） |
-| Dashboard Layout | 可拖拉的儀表板網格 | ✅ 已產出 |
-| Ribbon | Office 風格功能區 | ✅ 已產出 |
-| TreeView | 樹狀導覽 / 階層清單 | ✅ 已產出 |
+| Splitter | 可調整比例的分割版面 | ⬜ 待建立 |
+| Card | 卡片容器 | ⬜ 待建立 |
+| Dashboard Layout | 可拖拉的儀表板網格 | ⬜ 待建立 |
+| Ribbon | Office 風格功能區 | ⬜ 待建立 |
+| TreeView | 樹狀導覽 / 階層清單 | ⬜ 待建立 |
 
 ## 2. 按鈕與動作（Buttons & Actions）
 
