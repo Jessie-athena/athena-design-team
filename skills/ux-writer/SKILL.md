@@ -71,6 +71,18 @@ description: Write and review product microcopy AND field layout for 德安 B2B 
 
 四個一句話心法：**Clear（不用猜）／Concise（能少一字就少）／Useful（給下一步）／Human（不官腔、不裝可愛）**。
 
+### 文案類型分類
+
+撰寫前先判斷類型，類型決定句型策略（詳見 §4 各類型句型）：
+
+| 類型 | 定義 | 典型場景 |
+| :--- | :--- | :--- |
+| **行動類 Action** | 引導使用者完成操作的動詞型文案 | 按鈕、CTA、表單提交 |
+| **解說類 Informational** | 提供背景、說明或輔助資訊 | Tooltip、欄位描述、Help text |
+| **系統回饋類 System Feedback** | 系統告知使用者狀態、結果或錯誤 | Toast、成功訊息、錯誤訊息 |
+| **狀態類 Stateful** | 呈現介面暫時狀態 | Empty state、Loading、Disabled |
+| **導覽類 Navigational** | 指示產品階層與位置 | 導覽列、側欄、Breadcrumb |
+
 ---
 
 ## 4. 通用句型

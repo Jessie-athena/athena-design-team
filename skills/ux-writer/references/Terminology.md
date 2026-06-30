@@ -56,3 +56,53 @@
 - **越南語**: Vui lòng nhập `{FieldName}`.
 
 > 模板皆採 `Label: Value` 或變數置尾，避免句中變數造成翻譯破版（見 SKILL.md「i18n 核心規範」）。
+
+## 5. 使用者與角色 (Users & Roles)
+| Key (概念) | 繁體中文 | 簡體中文 | 日文 | 英文 | 越南語 |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| **User** | 使用者 | 用户 | ユーザー | User | Người dùng |
+| **Admin** | 管理員 | 管理员 | 管理者 | Admin | Quản trị viên |
+| **Permissions** | 權限 | 权限 | 権限 | Permissions | Quyền hạn |
+| **Role** | 角色 | 角色 | ロール | Role | Vai trò |
+| **Organization** | 組織 | 组织 | 組織 | Organization | Tổ chức |
+
+## 6. 訂單與交易 (Orders & Transactions)
+| Key (概念) | 繁體中文 | 簡體中文 | 日文 | 英文 | 越南語 |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| **Order** | 訂單 | 订单 | 注文 | Order | Đơn hàng |
+| **OrderID** | 訂單編號 | 订单编号 | 注文番号 | Order ID | Mã đơn hàng |
+| **Amount** | 金額 | 金额 | 金額 | Amount | Số tiền |
+| **PaymentStatus** | 付款狀態 | 付款状态 | 支払い状況 | Payment Status | Trạng thái thanh toán |
+| **Paid** | 已付款 | 已付款 | 支払い済み | Paid | Đã thanh toán |
+| **Unpaid** | 未付款 | 未付款 | 未払い | Unpaid | Chưa thanh toán |
+| **Invoice** | 發票 | 发票 | 請求書 | Invoice | Hoá đơn |
+
+## 7. 報表與分析 (Reports & Analytics)
+| Key (概念) | 繁體中文 | 簡體中文 | 日文 | 英文 | 越南語 |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| **Report** | 報表 | 报表 | レポート | Report | Báo cáo |
+| **Analytics** | 分析 | 分析 | 分析 | Analytics | Phân tích |
+| **Data** | 數據 | 数据 | データ | Data | Dữ liệu |
+| **Trend** | 趨勢 | 趋势 | トレンド | Trend | Xu hướng |
+| **ExportReport** | 匯出報表 | 导出报表 | レポートをエクスポート | Export Report | Xuất báo cáo |
+
+## 8. 時間與排程 (Time & Schedule)
+| Key (概念) | 繁體中文 | 簡體中文 | 日文 | 英文 | 越南語 |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| **Date** | 日期 | 日期 | 日付 | Date | Ngày |
+| **Time** | 時間 | 时间 | 時間 | Time | Giờ |
+| **StartTime** | 開始時間 | 开始时间 | 開始時間 | Start Time | Giờ bắt đầu |
+| **EndTime** | 結束時間 | 结束时间 | 終了時間 | End Time | Giờ kết thúc |
+| **ScheduledTask** | 排程任務 | 定时任务 | スケジュール | Scheduled Task | Nhiệm vụ theo lịch |
+
+## 9. 表單常見欄位 (Common Form Fields)
+| Key (概念) | 繁體中文 | 簡體中文 | 日文 | 英文 | 越南語 |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| **LastName** | 姓 | 姓 | 姓 | Last Name | Họ |
+| **FirstName** | 名 | 名 | 名 | First Name | Tên |
+| **MiddleName** | 中間名 | 中间名 | ミドルネーム | Middle Name | Tên đệm |
+| **Email** | 電子郵件（B2B）/ Email（B2C） | 电子邮件 | メールアドレス | Email | Email |
+| **PhoneNumber** | 手機號碼 | 手机号码 | 電話番号 | Phone Number | Số điện thoại |
+| **Address** | 地址 | 地址 | 住所 | Address | Địa chỉ |
+
+> Email 顯示規則：B2B 介面用「電子郵件」；B2C 介面用「Email」；越南語維持 Email 原字。
