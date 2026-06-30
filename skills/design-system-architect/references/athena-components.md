@@ -22,7 +22,6 @@
 | 元件 | 設計文件 | 狀態 |
 |------|---------|------|
 | Button | [`components/Button.md`](components/Button.md) | ✅ 已產出（Lite；v0.3 所有 ⚠️ 項已解，含 disabled bg token、Comfortable 密度 padding） |
-| `DsStatusBadge`（狀態徽章） | — | ⬜ 待建立（CSS / 原型規格見 prototyper DataGrid.md §狀態 Chip） |
 | Grid（DataGrid） | [`components/DataGrid.md`](components/DataGrid.md) | ✅ 已產出（Full；v0.3 FAI2 對齊；row-h 36px(S)/48px(L)；凍結欄 / 行內編輯 / 斑馬 / 多選） |
 | TreeGrid | [`components/TreeGrid.md`](components/TreeGrid.md) | ✅ 已產出（Full；v0.3 FAI2 對齊；indent 32px（非 20px）、expander 16px(S)/18px(L)；繼承 DataGrid；checkable / lazy-load） |
 | PivotView | [`components/PivotView.md`](components/PivotView.md) | ✅ 已產出（Full；v0.3 FAI2 對齊；header primary-5%、border-l+border-t outline-variant、header-fg on-surface-variant；欄位拖放 / drill-down；⚠️ DS AA token 待補） |
@@ -74,7 +73,7 @@
 | Tooltip | [`components/Tooltip.md`](components/Tooltip.md) | ✅ 已產出（Lite；dark bg #303034；Small 260px/Large 320px；9 pointer 位置；shadow-md） |
 | Spinner | [`components/Spinner.md`](components/Spinner.md) | ✅ 已產出（Lite；固定 36px；8 色型 Primary/Secondary/Info/Success/Warning/Danger/Light/Dark） |
 | ProgressBar | [`components/ProgressBar.md`](components/ProgressBar.md) | ✅ 已產出（Lite；Circle(80px Small)/Linear × Status=Default/Error/Success；10% 步進） |
-| Badge | [`components/Badge.md`](components/Badge.md) | ✅ 已產出（Lite；Small(16px)/Large(20px)；Ascent/Subtle × 8 類型 × Word/Letter/Dot；狀態徽章另有 DsStatusBadge） |
+| Badge | [`components/Badge.md`](components/Badge.md) | ✅ 已產出（Lite；Small(16px)/Large(20px)；Ascent/Subtle × 8 類型 × Word/Letter/Dot） |
 | Chips | [`components/Chips.md`](components/Chips.md) | ✅ 已產出（Lite；Extra Small 20px；Full Rounded/Rounded × Filled/Outlined/Flat；5 狀態） |
 | Avatar | [`components/Avatar.md`](components/Avatar.md) | ✅ 已產出（Lite；5 尺寸 24-56px；Letter bg=#D5E4FF；Status + Notification badge；6 Mode） |
 | AppBar | — | ⬜ 待建立（FAI2 無對應元件） |
@@ -228,7 +227,7 @@
 | Tooltip | 提示氣泡 | ✅ 已產出（Lite） |
 | Spinner | 載入轉圈 | ✅ 已產出（Lite） |
 | ProgressBar | 進度條 | ✅ 已產出（Lite） |
-| Badge | 數字 / 狀態角標 | ✅ 已產出（Lite；狀態徽章另有客製 `DsStatusBadge`） |
+| Badge | 數字 / 狀態角標 | ✅ 已產出（Lite） |
 | Chips | 標籤 / 篩選 chip | ✅ 已產出（Lite） |
 | Avatar | 使用者頭像 | ✅ 已產出（Lite） |
 
@@ -261,7 +260,6 @@
 | 元件 | 用途 | 文件狀態 |
 |------|------|---------|
 | `DsDatePicker` | 含多語系格式的日期選擇（Syncfusion DatePicker 客製包裝） | ✅ 已產出 |
-| `DsStatusBadge` | 單據狀態徽章 | ⬜ 待建立（CSS / 原型規格見 prototyper DataGrid.md §狀態 Chip） |
 | `DsColorPicker` | 固定色盤選擇器 | ✅ 已產出 |
 | `DsCard` | 卡片容器 | ⬜ 待建立 |
 | `DsSideNavMenu` | 側邊導覽選單 | ⬜ 待建立 |
