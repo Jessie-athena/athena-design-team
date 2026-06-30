@@ -133,3 +133,10 @@ data-analyst → ux-researcher → usability-tester → interaction-designer
 - **a11y 是一等公民**：所有 user-facing 產出（互動、UI、文案、prototype）在 `design-ops` handoff 之前都要經過 `accessibility-reviewer` — 在 handoff 後才發現 a11y 問題，修復成本會放大數倍。
 - **Surface 明示**：B2B 跨平台情境下，`interaction-designer` 與 `ui-designer` 的每份產出開頭都要標明目標 surface（Web / App / 跨平台），因為兩個平台的互動慣例與元件行為不同，不標明會讓下游做出錯誤假設。
 - **`design-ops` 擁有設計與工程之間的契約** — handoff spec 與 dev QA checklist 由它產出，其他角色不越界。
+---
+
+## 創建者與維護者
+
+| 角色 | 姓名 |
+|------|------|
+| 專案創建者 & 維護者 | Jessie Chen |
