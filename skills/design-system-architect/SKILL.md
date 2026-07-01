@@ -264,12 +264,23 @@ Component Tokens（元件層）
 撰寫元件 spec 時，兩類規範須參照外部來源：
 
 ### 行為規範（UX Guidelines）
-定義元件「如何運作」的語意層，參照本 skill 內建的 `references/ux-guidelines.md`：
-- 設計原則（§1）：清晰性 / 一致性 / 層級導向 / 可擴充性 / 回饋性
-- 導覽模式（§2）：Navigation Rail / Breadcrumb / Tabs / Step Bar 等元件的行為規則
-- 資料顯示與互動原則（§3 / §6）：Data Entry / Display / Interaction 三分類 + 8 項原則
-- 表單設計準則（§4）：欄位排列、動態欄位、提交流程、表單類型
-- 系統回饋（§5）：Toast / Alert / Dialog / Loading / Empty State
+元件「如何運作」的語意層分兩類：
+
+**跨元件設計原則**
+
+| 原則 | 實務重點 |
+|-----|---------|
+| **清晰性 Clarity** | 避免僅用圖示代替關鍵操作；狀態（hover / active / disabled）需可辨識 |
+| **一致性 Consistency** | 不同模組共用同一元件樣式；篩選、搜尋、排序的佈局與行為統一 |
+| **層級導向 Hierarchy** | 主導覽（模組層）與子導覽（功能層）需明確分層；表單欄位依重要性排序 |
+| **可擴充性 Scalability** | 元件結構支援功能擴張及權限差異；採可摺疊層級設計 |
+| **回饋性 Feedback** | 所有操作須提供視覺提示；Hover / Active / Focus 狀態需可辨識 |
+
+> 原始規範：Notion 德安 UI/UX Guideline — https://app.notion.com/p/34f023d9a73c8100b24af86f3fdbf0c4
+
+**元件專屬行為**：查各元件 `references/components/<元件>.md §6 行為規範`。
+已含行為規範：`DsNavigationA8` / `Breadcrumb` / `Tab` / `Stepper` / `DataGrid` / `Sidebar` / `Skeleton` / `Spinner`。
+Filter / Search 的跨列表行為模式待 Toolbar / ListSearch 元件文件補入。
 
 ### 文案規範（Content Guidelines）
 元件 spec §11 Content Guidelines 的所有文案規則 defer 到 `ux-writer` skill：

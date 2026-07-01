@@ -68,6 +68,16 @@ loading:   "弧線持續旋轉（animation running）"
 paused:    "animation-play-state: paused（網路斷線時可暫停）"
 ```
 
+## 6. 使用場景　📋
+
+| 模式 | 適用情境 | 規則 |
+|-----|---------|------|
+| **全域式 Loading** | 頁面主內容操作後（如刪除清單、列表重新篩選） | Spinner 置於可互動區域中央；後方加半透明遮罩防止重複觸發 |
+| **面板式 Loading** | 局部 Panel / Drawer 載入（如側欄詳情、彈窗內容） | Spinner 僅限制於該面板範圍，主內容可繼續操作 |
+| **按鈕式 Loading** | 按鈕送出後等待 API 回應 | Spinner 置入按鈕內，按鈕同時 disabled 至完成；不使用頁面全覆蓋 |
+
+> **Skeleton vs Spinner**：首次內容載入（頁面 / Tab 切換）優先用 `Skeleton`（保留版型，減少跳版）；操作型等待（送出、儲存、計算）改用 `Spinner`。
+
 ## 9. a11y　📋
 
 - 元件根節點 `role="status"` + `aria-label="載入中"`（或動態描述「正在提交」）。

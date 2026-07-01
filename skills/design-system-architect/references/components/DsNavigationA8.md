@@ -149,6 +149,7 @@ System:  ERP（深藍）/ FBM（另一產品線，結構相同；本檔僅記錄
 | 點擊 L2 item | 展開/收合該 L2 的 L3 子項（chevron toggle） |
 | 點擊 L3 item | 導向對應功能頁；L3 設為 selected；L1/L2 維持 active |
 | 我的最愛（L1） | 顯示收藏的 L3 清單；空狀態顯示提示文字 |
+| CTA 限制 | Nav Rail 僅作導覽用途，**禁**混置操作型 CTA 按鈕（如「新增」）於 rail 或 sidebar 中 |
 
 ## 7. RWD / 斷點　📋
 
