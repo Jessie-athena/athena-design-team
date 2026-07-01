@@ -282,6 +282,43 @@ Component Tokens（元件層）
 已含行為規範：`DsNavigationA8` / `Breadcrumb` / `Tab` / `Stepper` / `DataGrid` / `Sidebar` / `Skeleton` / `Spinner`。
 Filter / Search 的跨列表行為模式待 Toolbar / ListSearch 元件文件補入。
 
+**導覽元件分類（來源：02.01）**
+
+| 類型 | 定義 | 對應元件 |
+|-----|------|---------|
+| **全域導航 Global** | 系統核心結構，全產品層級導覽 | Navigation Rail、Navigation Drawer、Top Navigation |
+| **返回類 Return** | 幫助使用者回到上一層 | Breadcrumb、Back Button |
+| **頁內導航 In-page** | 同頁內容之間的切換 | Tabs、Tree Control、Anchor、Back to Top |
+| **下鑽類 Drill-down** | 從列表深入內容層 | List → Detail、Nested View |
+| **聯想類 Associative** | 引導完成任務或探索相關 | Step Bar、Previous/Next |
+
+跨頁導覽規則：同層級跳轉透過全域導航；Breadcrumb 與 Back Button 不建議同時使用；任務中斷再回來時須保留篩選條件、分頁位置與捲動狀態；階層切換時 Breadcrumb / 頁面標題需即時更新。
+
+**資料元件分類與 B2B 設計原則（來源：02.02）**
+
+| 類別 | 資料流向 | 使用者角色 | 範例元件 |
+|-----|---------|---------|---------|
+| **Data Entry（資料錄入）** | 使用者 → 系統 | 輸入者 | Input、Select、Date Picker、Form |
+| **Data Display（數據顯示）** | 系統 → 使用者 | 閱讀者 | Table、Card、Tag、Chart |
+| **Data Interaction（資料互動）** | 雙向（使用者 ↔ 系統） | 操作者 | Filter、Search、Sort、Pagination、Editable Table |
+
+B2B 後台額外原則（§1 五大原則之外）：**以使用者為中心**（常用欄位置前；依角色權限顯示可編輯內容；支援快速鍵與批次操作）/ **效率與擴充性**（大型表格支援伺服器端分頁；可複用的表單模組）/ **包容性**（支援鍵盤操作；錯誤提示可被螢幕閱讀器讀取；色彩對比符合 WCAG）/ **語義明確**（動作按鈕文案反映實際結果，如「儲存設定」非「確認」）。
+
+資料互動層額外原則（篩選/搜尋/排序場景）：**即時回饋**（loading state 清晰；篩選變更後列表立即更新或提供「套用」按鈕）/ **可控性**（複雜篩選提供「套用 / 重設」兩步驟；搜尋框支援 Enter 觸發與 debounce）/ **可發現性**（hover 時出現排序提示；篩選 icon 在有條件時顯示 badge；搜尋 placeholder 說明範圍）。
+
+**表單設計 & 系統狀態 Notion 子頁（來源：02.03–02.04）**
+
+| 子頁 | Notion URL | 說明 |
+|-----|-----------|------|
+| 02.03.01 表單結構與通用規範 | https://app.notion.com/p/34f023d9a73c81c3b8dce10b43189089 | 欄位排列、分組、必填標示 |
+| 02.03.02 漸進式披露與動態欄位 | https://app.notion.com/p/34f023d9a73c81ca8a5cc8a1858b07da | 依條件顯示/隱藏欄位 |
+| 02.03.03 表單提交與錯誤處理 | https://app.notion.com/p/34f023d9a73c813cbfd2fcd8b084fbb4 | 送出流程、取消行為、錯誤提示 |
+| 02.03.04 表單類型 | https://app.notion.com/p/34f023d9a73c816a8d12c1a75f5807c2 | 依情境選擇表單容器與呈現方式 |
+| 02.04.01 系統回饋 | https://app.notion.com/p/34f023d9a73c813abfe1ddd2ed7c7094 | Toast、Alert、Dialog 等回饋元件規範 |
+| 02.04.02 系統狀態 | https://app.notion.com/p/34f023d9a73c81028abdd26884d30ccf | Loading、Empty State、Error State 等狀態規範 |
+
+表單設計需結合 Data Entry 的規範原則；錯誤訊息格式見 `ux-writer/references/erp-conventions.md`；Toast / Dialog / Empty State 文案格式見 `ux-writer/references/erp-conventions.md`。
+
 ### 文案規範（Content Guidelines）
 元件 spec §11 Content Guidelines 的所有文案規則 defer 到 `ux-writer` skill：
 
