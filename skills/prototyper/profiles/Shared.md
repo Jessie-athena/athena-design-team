@@ -187,6 +187,18 @@ DsNavigationA8 (72×100%, padding 8, gap 8, radius 12, bg #001D5A)
 
 ---
 
+## 無對應 profile 的頁型
+
+模組不是傳統 ERP 交易單據 / 設定檔（例如跨系統維運主控台、通知中樞、報表儀表板等），沒有現成的 `profiles/<project>.md` 可套時：
+
+- **只有 App Shell（Header + Nav-rail 結構）允許依 PRD 換掉**——例如整合式主控台可能不需要 breadcrumb 三層結構，改用更扁的 topbar。換掉骨架時，handoff 必須註明「App Shell 偏離 Shared.md 標準結構，理由：___」。
+- **List / Form / Modal / Toast / 狀態徽章等元件層永遠沿用 canonical `app.css`**，**不**因為整頁「感覺不像 ERP」就連坐放棄。canonical 裡的按鈕、表格、表單欄位、彈窗、提示訊息本來就是跨頁型通用的元件，只有 App Shell 骨架才跟「是不是傳統 ERP 頁面」有關。
+- 判斷順序：先問「這個具體元件（按鈕/表格/彈窗…）本身有沒有 PRD 明確指定的視覺？」——沒有就用 canonical，不要因為整頁模組類型特殊就跳過這一步逐個元件重新確認。
+
+> **Why**：「這個模組不是傳統 ERP 作業/設定檔」是關於整頁定位的判斷，但很容易被過度推廣成「這個模組不適用 canonical 資產」，導致連跟頁型無關的元件層也被重新手刻一遍（見 `pitfalls.md`）。
+
+---
+
 ## 專案 profile 應補完
 
 每個專案 profile 都應在本檔規則之上補上：

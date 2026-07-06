@@ -1,6 +1,6 @@
 ---
 name: prototyper
-description: Turn an ERP module spec into a clickable single-file HTML prototype (Vue 3 production CDN, no build step) for reviewers. Use this skill whenever the user types「做 prototype」「PM 文件轉 prototype」「參考 [既有].html 做 [新模組]」「PRD 產出前端頁面」「把這份規格做成可以點的頁面」「讀取此份 PRD 並產出互動功能及前端頁面」, asks in English to "build a clickable HTML prototype from this PRD / Notion spec" or "convert this requirement doc into an interactive page", pastes a Figma frame asking for a clickable HTML conversion, references a PM doc path under `docs/notion/`, asks to convert a PRD or Notion page into an interactive prototype page, or explicitly runs `/prototyper`. Skip for Figma motion / interaction design (use `figma-use` / `figma-generate-design`), production Vue SFC / Odoo Python code, or pure requirement parsing without prototype output (use `requirement-analyst`).
+description: Turn an ERP module spec into a clickable prototype for reviewers — either a single-file HTML bundle (Vue 3 production CDN, no build step) or, when the user already has a Claude Design project and no Figma source exists to extract from, the content of that project's `page.html` / `*.dc.html` bundle. Use this skill whenever the user types「做 prototype」「PM 文件轉 prototype」「參考 [既有].html 做 [新模組]」「PRD 產出前端頁面」「把這份規格做成可以點的頁面」「讀取此份 PRD 並產出互動功能及前端頁面」「實作進 Claude Design」「改於 Claude Design 實現」, asks in English to "build a clickable HTML prototype from this PRD / Notion spec", "convert this requirement doc into an interactive page", or "implement this PRD into my Claude Design project", pastes a Figma frame asking for a clickable HTML conversion, references a PM doc path under `docs/notion/`, asks to convert a PRD or Notion page into an interactive prototype page, mentions targeting an existing Claude Design project (`claude.ai/design/p/...`, `page.html`, `*.dc.html`) with no Figma design to port from, or explicitly runs `/prototyper`. Skip for Figma motion / interaction design (use `figma-use` / `figma-generate-design`), production Vue SFC / Odoo Python code, pure requirement parsing without prototype output (use `requirement-analyst`), or porting an actual Figma design into an existing Claude Design project (use `figma-to-claude-design` — it owns the DesignSync read/write mechanics, but should defer to this skill's canonical CSS rules as the styling authority).
 allowed-tools: Read Write Edit Glob Grep
 ---
 
@@ -88,8 +88,22 @@ allowed-tools: Read Write Edit Glob Grep
 2. **專案 profile**（如 ERP；cwd 可推斷則略）
 3. **來源**（PM 文件路徑 / 同類舊模組 / 純 chat 描述）
 4. **輸出路徑**（預設 `prototype/project/<模組中文名>.html`，profile 可覆寫）
+5. **交付目標**：本機單檔 HTML（預設）／ Claude Design bundle（使用者已在 claude.ai/design 建好專案、要求「實作進 Claude Design」「改於 Claude Design 實現」等）。兩者只影響 CSS 落地方式，不影響 §1 資料來源權重與 Pass 0/1/2 抽取流程；Claude Design 情境的規則見下方「交付目標 B」。
 
 > profile 額外要問的項目（如 ERP 的 Odoo model、模組分類、作業檔/設定檔類型）由 profile 內定義。
+
+#### 交付目標 B：Claude Design bundle
+
+當交付目標是 Claude Design bundle（`page.html` 或具名 `*.dc.html`）時，以下規則**覆寫落地方式、不覆寫樣式來源**：
+
+- **canonical 資產仍是唯一樣式來源，換目標不換來源**：`assets/app.css`（元件層）＋ `assets/ds/colors_and_type.css`（語義別名層——`app.css` 實際引用的 `--text-primary` / `--border-default` 等別名定義在此，本機路徑靠 `colors_and_type.css` 的 `@import` 鏈帶到，Claude Design 路徑必須另外確認這條別名鏈有落地）逐字複製，只是落地位置改變：
+  - Claude Design bundle 內容檔慣例是單檔內嵌，本情境**明文豁免**「禁在 `.html` 內嵌 `<style>`」——把 canonical CSS 整段貼進 `<style>`，貼的仍是「複製」，一個字都不改；模組專屬樣式仍是複製完之後**末尾**追加 override 區塊。
+  - 若該 bundle 本身已拆成多檔（既有專案曾拆出獨立 CSS 檔），優先沿用既有拆法，不要為了套這條規則硬併回單檔。
+- **色彩/間距/字級 token 改吃 bundle 綁定的設計系統**：讀 bundle 的 `_ds/` 目錄取得實際 token 檔，**不要**額外把 `assets/ds/design-tokens-*.css` 也複製進去（會造成同名變數兩個來源）。動工前先確認 `_ds/` 的變數名稱與 canonical CSS 假設的一致（如 `--color-sf-*`）；對不上就是下一條的情境。
+- **Token 或元件命名體系對不上時**：不要臆測映射或退回手刻，正式呼叫 `product-design-team` 走 `design-system-architect` 角色做交叉比對。
+- **DesignSync 讀寫機制不屬本 skill**：bundle 結構判讀（哪些是內容檔／runtime 檔）、`finalize_plan`/`write_files`、寫入後 `get_file` 讀回逐字 diff、git 落地慣例，都是 `figma-to-claude-design` skill 的職責——本 skill 只管「canonical CSS 怎麼落進這個目標」，兩邊各司其職。
+
+**Why**：曾有案例交付目標從本機 HTML 換成 Claude Design 後，「canonical CSS 複製」規則字面上撞上「禁內嵌 `<style>`」規則、又沒有明文例外，於是被判斷成「這條規則這裡不適用」，順勢連「複製 canonical」也一起放棄，退化成手刻 `.btn`/`.dg`/`.input`/`.modal`。手刻出來的規格（如 DataGrid 表頭 45px、資料列 50px、表頭 5% primary 底色）恰好就是 canonical 已經編碼好的數值，等於重複造輪還做不齊——覆蓋率只剩 canonical 的一半。矛盾規則沒被明文調和時，AI 容易整組放棄而不是只調和衝突的那一條。
 
 ### 3. 五階段工作流
 
@@ -112,8 +126,6 @@ allowed-tools: Read Write Edit Glob Grep
    - 有 → 把該章節列出的元件當作**本模組的元件命名單一來源**
    - 無 → 落到 profile 內建的「PRD 元件詞彙 → 實作對照」最小集（如 `erp-transaction.md §PRD 元件對照 Table A`）
 2. 記錄本次採用的權威來源（檔名 + 章節），handoff 時要附上
-
-> **元件設計文件上游**：`design-system-architect/references/components/<Name>.md` 由 `figma-to-component-doc` Token Matching workflow 產出。Pass 0 若發現元件有對應 `.md` 設計文件，其 §4 Variants / §12 API 為 prototype HTML 元件命名的更上游 authority（高於 prototyper profile 的 class 名）。
 
 **Pass 1｜純抽取，不選元件 — 輸出五欄 schema 表給使用者確認**
 
@@ -164,10 +176,16 @@ profile 通常會擴充更嚴格的清單；本檔僅列共通底線：
 - [ ] List View 與 Form View 兩種視圖都可切換
 - [ ] 必填欄位有紅色 `*`
 - [ ] 空狀態 / 刪除確認 / 儲存 toast 均能觸發
-- [ ] 無 `@apply`、無 inline hex、無 TypeScript、無 `<style>` / `<script>` 內嵌
+- [ ] 無 `@apply`、無 inline hex、無 TypeScript、無 `<style>` / `<script>` 內嵌（交付目標為 Claude Design bundle 時例外，見「交付目標 B」）
 - [ ] 已掃過 `${CLAUDE_SKILL_DIR}/pitfalls.md`，沒有踩到既知地雷
 - [ ] profile 的 Handoff Checklist 已逐項打勾
 - [ ] R1 + R2 已自檢：未自動補 PRD 沒列的欄位；DS 預設未覆寫 PRD 明確指定的視覺
+- [ ] **互動邏輯自檢**（含 modal / 驗證 / 狀態機的頁面必查；純靜態 List/Form 可略）：
+  - 每個 error flag（如 `xxxErrors.foo`）都有對應的清除路徑（值改回合法、表單重置），不會永久卡在 `true`
+  - 把 template 裡所有 `:class="{...}"` / `v-if` 用到的 state key 列一份清單，逐一回 JS 找賦值語句，確認 key 名**完全一致**（不是「同一組概念」，是同一個字串）——這是最常漏、也最難肉眼看出的死綁定
+  - 每個 `watch()` 都處理「值被清空 / 回復預設」分支，不是只處理「新值有效」分支
+  - dirty / pending 類旗標先判斷「內容是否真的變了」才設定，不要無條件在動作完成後就設 true
+  - 對照 PRD 狀態機逐個 transition 確認 handler 存在，且從 UI 真的可以觸發到（不是寫了函式但沒有按鈕/連結呼叫它）
 
 ## Example
 

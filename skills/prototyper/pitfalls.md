@@ -97,6 +97,24 @@
 - **正確做法**：分隔符一律用 iconify `material-symbols:chevron-right`（`<iconify-icon class="erp-breadcrumb__sep" icon="material-symbols:chevron-right">`）。chevron-right 的 `>` 形狀即「層級」語意；**禁**用 `/`（路徑語意，URL / 檔案系統用，不該用在 navigation breadcrumb），**也不要用 `>` 純文字字元**——統一走 icon。`profiles/Shared.md §Breadcrumb` 是視覺 SoT；`profiles/erp-transaction.md` 層級結構與 Handoff Checklist 須一致；template `module-page.html` / `setup-page.html` 已預設成 chevron-right icon，**不要改回 `/` 或 `>` 文字**。chevron-right 屬筆畫型，無 `-outline` 變體（見 `SKILL.md §4 icon 條`）。
 - **為什麼會反覆犯**：訓練資料中 web app breadcrumb 文字分隔符（Bootstrap `/`、純 `>`）的範例量遠多於 icon 分隔符，AI 沒被提醒就走文字直覺；且早期版本 Athena template 一度用 `/`、後又改 `>` 文字，舊 prototype 看一眼又會被誤導回文字字元。
 
+### [2026-07-06] 交付目標換成 Claude Design bundle 時，canonical CSS 整條被跳過
+
+- **症狀**：本機單檔 HTML 路徑一切正常，但同一份設計改成交付進 Claude Design bundle（`page.html` / `*.dc.html`）後，產出的樣式退化成手刻 `.btn`/`.dg`/`.input`/`.modal` 等元件 class——token（色彩/間距/字級）都還在用，但元件級規格（如 DataGrid 表頭 45px、資料列 50px、5% primary 表頭底色、button padding 10/24 + radius 4）整套被重新刻過一次，覆蓋率只剩 canonical `app.css` 的一半。
+- **正確做法**：canonical `app.css`（元件層）＋ `assets/ds/colors_and_type.css`（語義別名層）**在任何交付目標都是唯一樣式來源**，換目標只換「落地方式」不換「來源」——見 `SKILL.md §2 交付目標 B`：Claude Design bundle 情境下整段貼進 `<style>` 仍算「複製」，token 改吃 bundle 綁定的 `_ds/`。
+- **為什麼會反覆犯**：「禁在 `.html` 內嵌 `<style>`」是本機路徑的規則，字面上跟 Claude Design bundle 慣例（單檔內嵌）互相矛盾；沒有明文例外時，AI 會判斷成「這條規則這裡不適用」，順勢把「canonical CSS 複製」也一起判定成不適用，於是全部改手刻。矛盾規則若沒被明文調和，AI 傾向整組放棄而非只調和衝突的那一條。
+
+### [2026-07-06] 非 ERP 頁型直接跳過整套 canonical 元件層
+
+- **症狀**：模組不是 ERP 交易/設定檔（如通知中樞管理主控台這類跨系統維運工具），AI 判斷「這不是 ERP」後連 `.btn`/`.form-section`/`.st-chip`/`.modal`/`.toast` 等元件層都一起放棄，整頁改自創 class（如 `.notify-topbar`），只在 App Shell 骨架換了新結構的合理範圍內，卻連帶把跟頁型無關的元件層也重新刻了一遍。
+- **正確做法**：`profiles/Shared.md §無對應 profile 的頁型`——只有 App Shell（header/nav-rail 結構）允許依 PRD 換骨架，且要在 handoff 註明偏離；List/Form/Modal/Toast 等**元件層永遠沿用 canonical**，不因為整頁「感覺不像 ERP」就連坐放棄。
+- **為什麼會反覆犯**：「這個模組不是傳統 ERP 作業/設定檔」這個判斷很容易被過度推廣成「這個模組不適用 canonical 資產」，但 canonical `app.css` 裡的元件（按鈕/表格/表單/徽章/彈窗/提示）本來就是跨頁型通用的，只有 App Shell 骨架才跟「是不是 ERP」有關。
+
+### [2026-07-06] Error flag 的 set 路徑跟 template 綁定的 key 對不上（死綁定）
+
+- **症狀**：驗證函式只設定了一個籠統的 flag（如 `settingsErrors.schedule = true`），但 template 的 `:class="{'is-error': settingsErrors.scheduleTime}"` 綁的是更細的 key（`scheduleTime` / `scheduleCustom`）——兩者名稱看起來像同一組，實際上永遠對不上，`is-error` 樣式永遠不會被觸發，錯誤提示視覺上死掉但沒有任何語法錯誤、跑起來也不會報錯，肉眼很難發現。
+- **正確做法**：`SKILL.md §5 輸出前 Checklist` 的「互動邏輯自檢」——把 template 裡所有 `:class` / `v-if` 用到的 error/state key 列一份清單，逐一回 JS 找賦值語句，確認 key 名完全一致（不是「同一組概念」，是同一個字串）。
+- **為什麼會反覆犯**：寫驗證邏輯時容易先想「這個 section 有沒有錯」（粗粒度），template 綁定卻是照著更細的欄位（細粒度）寫的；兩邊是不同時間、不同心智模型寫出來的，命名很容易「意思一樣但字不一樣」，且這類 bug 完全不會在畫面上「看起來壞」，只有真的去觸發那個驗證分支才會發現。
+
 ---
 
 ## ERP profile
