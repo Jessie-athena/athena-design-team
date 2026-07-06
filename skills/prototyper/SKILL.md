@@ -127,6 +127,8 @@ allowed-tools: Read Write Edit Glob Grep
    - 無 → 落到 profile 內建的「PRD 元件詞彙 → 實作對照」最小集（如 `erp-transaction.md §PRD 元件對照 Table A`）
 2. 記錄本次採用的權威來源（檔名 + 章節），handoff 時要附上
 
+> **元件設計文件上游**：`design-system-architect/references/components/<Name>.md` 由 `figma-to-component-doc` Token Matching workflow 產出。Pass 0 若發現元件有對應 `.md` 設計文件，其 §4 Variants / §12 API 為 prototype HTML 元件命名的更上游 authority（高於 prototyper profile 的 class 名）。
+
 **Pass 1｜純抽取，不選元件 — 輸出五欄 schema 表給使用者確認**
 
 把 PRD 拆成五欄表，**先給使用者校對**再進 Pass 2：
