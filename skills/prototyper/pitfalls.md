@@ -103,11 +103,12 @@
 - **正確做法**：canonical `app.css`（元件層）＋ `assets/ds/colors_and_type.css`（語義別名層）**在任何交付目標都是唯一樣式來源**，換目標只換「落地方式」不換「來源」——見 `SKILL.md §2 交付目標 B`：Claude Design bundle 情境下整段貼進 `<style>` 仍算「複製」，token 改吃 bundle 綁定的 `_ds/`。
 - **為什麼會反覆犯**：「禁在 `.html` 內嵌 `<style>`」是本機路徑的規則，字面上跟 Claude Design bundle 慣例（單檔內嵌）互相矛盾；沒有明文例外時，AI 會判斷成「這條規則這裡不適用」，順勢把「canonical CSS 複製」也一起判定成不適用，於是全部改手刻。矛盾規則若沒被明文調和，AI 傾向整組放棄而非只調和衝突的那一條。
 
-### [2026-07-06] 非 ERP 頁型直接跳過整套 canonical 元件層
+### [2026-07-06] 非 ERP 頁型是否會連坐放棄 canonical 元件層——單變數測試未重現，維持觀察
 
-- **症狀**：模組不是 ERP 交易/設定檔（如通知中樞管理主控台這類跨系統維運工具），AI 判斷「這不是 ERP」後連 `.btn`/`.form-section`/`.st-chip`/`.modal`/`.toast` 等元件層都一起放棄，整頁改自創 class（如 `.notify-topbar`），只在 App Shell 骨架換了新結構的合理範圍內，卻連帶把跟頁型無關的元件層也重新刻了一遍。
-- **正確做法**：`profiles/Shared.md §無對應 profile 的頁型`——只有 App Shell（header/nav-rail 結構）允許依 PRD 換骨架，且要在 handoff 註明偏離；List/Form/Modal/Toast 等**元件層永遠沿用 canonical**，不因為整頁「感覺不像 ERP」就連坐放棄。
-- **為什麼會反覆犯**：「這個模組不是傳統 ERP 作業/設定檔」這個判斷很容易被過度推廣成「這個模組不適用 canonical 資產」，但 canonical `app.css` 裡的元件（按鈕/表格/表單/徽章/彈窗/提示）本來就是跨頁型通用的，只有 App Shell 骨架才跟「是不是 ERP」有關。
+- **症狀（原始觀察，來自混合案例）**：模組不是 ERP 交易/設定檔（如通知中樞管理主控台這類跨系統維運工具）**且**交付目標同時是 Claude Design bundle 時，產出的 `.btn`/`.form-section`/`.st-chip`/`.modal`/`.toast` 等元件層被重新手刻，整頁也改自創 class（如 `.notify-topbar`）。
+- **後續驗證（2026-07-06 controlled eval）**：把「非 ERP 頁型」單獨抽出重測（交付目標改回本機單檔 HTML，排除 Claude Design 衝突這個變數），新舊版 SKILL 都正確保留 canonical 元件層、只合理換了 App Shell——**沒有重現**「非 ERP 判斷連坐放棄元件層」這個獨立失效模式。目前找不到證據支持這是一個會獨立發生的問題；原始觀察案例的元件層手刻，更可能完全由同時發生的「交付目標換成 Claude Design bundle」那條規則衝突（見上一條 pitfall）造成，不需要「非 ERP」這個額外原因。
+- **正確做法**：`profiles/Shared.md §無對應 profile 的頁型` 的規則本身無害且方向正確（只有 App Shell 允許換骨架，元件層沿用 canonical），繼續保留當防禦性規範；但**不要**把這條當成「已證實反覆發生」的地雷來引用——目前只有一個混雜案例的間接證據，且單變數控制測試未重現。
+- **後續**：若再遇到類似症狀，優先檢查是否同時符合上一條 pitfall（交付目標為 Claude Design bundle）；只有在排除該變數後仍重現，才算是這條獨立成立。
 
 ### [2026-07-06] Error flag 的 set 路徑跟 template 綁定的 key 對不上（死綁定）
 
